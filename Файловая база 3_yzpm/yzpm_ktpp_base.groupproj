@@ -1,0 +1,170 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{4A4D8DB0-C44B-4889-A472-CCFB7897213C}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="yzpmktpp.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="зона тестов\testing_zone.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="плагины\Разложение числа на простую дробь\drob.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Склад\Sklad_proj.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="конвертирование спецификаций\spconv.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="отчетность\Reports.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="на асу\to_Oasu.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="Перемещалка ярлыков\LinkMover.cbproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="yzpmktpp">
+			<MSBuild Projects="yzpmktpp.cbproj"/>
+		</Target>
+		<Target Name="yzpmktpp:Clean">
+			<MSBuild Projects="yzpmktpp.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="yzpmktpp:Make">
+			<MSBuild Projects="yzpmktpp.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="testing_zone">
+			<MSBuild Projects="зона тестов\testing_zone.cbproj"/>
+		</Target>
+		<Target Name="testing_zone:Clean">
+			<MSBuild Projects="зона тестов\testing_zone.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="testing_zone:Make">
+			<MSBuild Projects="зона тестов\testing_zone.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="drob">
+			<MSBuild Projects="плагины\Разложение числа на простую дробь\drob.cbproj"/>
+		</Target>
+		<Target Name="drob:Clean">
+			<MSBuild Projects="плагины\Разложение числа на простую дробь\drob.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="drob:Make">
+			<MSBuild Projects="плагины\Разложение числа на простую дробь\drob.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="Sklad_proj">
+			<MSBuild Projects="Склад\Sklad_proj.cbproj"/>
+		</Target>
+		<Target Name="Sklad_proj:Clean">
+			<MSBuild Projects="Склад\Sklad_proj.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="Sklad_proj:Make">
+			<MSBuild Projects="Склад\Sklad_proj.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="spconv">
+			<MSBuild Projects="конвертирование спецификаций\spconv.cbproj"/>
+		</Target>
+		<Target Name="spconv:Clean">
+			<MSBuild Projects="конвертирование спецификаций\spconv.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="spconv:Make">
+			<MSBuild Projects="конвертирование спецификаций\spconv.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="Reports">
+			<MSBuild Projects="отчетность\Reports.cbproj"/>
+		</Target>
+		<Target Name="Reports:Clean">
+			<MSBuild Projects="отчетность\Reports.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="Reports:Make">
+			<MSBuild Projects="отчетность\Reports.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="to_Oasu">
+			<MSBuild Projects="на асу\to_Oasu.cbproj"/>
+		</Target>
+		<Target Name="to_Oasu:Clean">
+			<MSBuild Projects="на асу\to_Oasu.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="to_Oasu:Make">
+			<MSBuild Projects="на асу\to_Oasu.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="LinkMover">
+			<MSBuild Projects="Перемещалка ярлыков\LinkMover.cbproj"/>
+		</Target>
+		<Target Name="LinkMover:Clean">
+			<MSBuild Projects="Перемещалка ярлыков\LinkMover.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="LinkMover:Make">
+			<MSBuild Projects="Перемещалка ярлыков\LinkMover.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="yzpmktpp;testing_zone;drob;Sklad_proj;spconv;Reports;to_Oasu;LinkMover"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="yzpmktpp:Clean;testing_zone:Clean;drob:Clean;Sklad_proj:Clean;spconv:Clean;Reports:Clean;to_Oasu:Clean;LinkMover:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="yzpmktpp:Make;testing_zone:Make;drob:Make;Sklad_proj:Make;spconv:Make;Reports:Make;to_Oasu:Make;LinkMover:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+		<ItemGroup Condition="'$(BuildGroup)'=='mainprogram'">
+			<BuildGroupProject Include="Перемещалка ярлыков\LinkMover.cbproj">
+				<ProjectGuid>{44017214-1B2F-47AC-BA5C-C3C50AE3A52E}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms/>
+				<Enabled>False</Enabled>
+			</BuildGroupProject>
+			<BuildGroupProject Include="плагины\Разложение числа на простую дробь\drob.cbproj">
+				<ProjectGuid>{E9D9E08B-64F1-4055-B0DF-528CCE3DA60F}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms/>
+				<Enabled>False</Enabled>
+			</BuildGroupProject>
+			<BuildGroupProject Include="конвертирование спецификаций\spconv.cbproj">
+				<ProjectGuid>{A84B49EF-B0C4-427D-9159-75A52FE39B1F}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms/>
+				<Enabled>False</Enabled>
+			</BuildGroupProject>
+			<BuildGroupProject Include="отчетность\Reports.cbproj">
+				<ProjectGuid>{3106CCB4-A9FA-4AAC-A650-CBD9EA8DBFF2}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms/>
+				<Enabled>False</Enabled>
+			</BuildGroupProject>
+			<BuildGroupProject Include="Склад\Sklad_proj.cbproj">
+				<ProjectGuid>{DE71AF5B-64AA-47B2-AF50-88A16EBB5D99}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms/>
+				<Enabled>False</Enabled>
+			</BuildGroupProject>
+			<BuildGroupProject Include="на асу\to_Oasu.cbproj">
+				<ProjectGuid>{A4823357-3B8F-408F-8083-E72EDC57D8D3}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms/>
+				<Enabled>False</Enabled>
+			</BuildGroupProject>
+			<BuildGroupProject Include="зона тестов\testing_zone.cbproj">
+				<ProjectGuid>{6E36DE8C-263B-45CC-8F2F-E5CE605C7673}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms>Win32</Platforms>
+				<Enabled>False</Enabled>
+			</BuildGroupProject>
+			<BuildGroupProject Include="yzpmktpp.cbproj">
+				<ProjectGuid>{A9A30F62-81FA-416D-98A9-749E840F89E2}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms>Win32</Platforms>
+				<Enabled>True</Enabled>
+			</BuildGroupProject>
+		</ItemGroup>
+	</Project>

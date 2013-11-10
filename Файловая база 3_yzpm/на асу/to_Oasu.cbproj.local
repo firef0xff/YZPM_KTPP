@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.702,D:\документы\RAD Studio\Projects\Project2.cbproj=D:\документы\проекты\Файловая база 3\на асу\to_Oasu.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.396,=D:\документы\проекты\мои классы\Excel.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.832,=D:\документы\проекты\Файловая база 3\общие функции и классы\functions.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.504,D:\документы\RAD Studio\Projects\Unit4.dfm=D:\документы\проекты\Файловая база 3\на асу\main_one.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.013,=D:\документы\проекты\мои классы\SQL.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.161,=D:\документы\RAD Studio\Projects\Unit2.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.114,=D:\документы\RAD Studio\Projects\Project2.res</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.504,D:\документы\RAD Studio\Projects\Unit4.h=D:\документы\проекты\Файловая база 3\на асу\main_one.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.683,=D:\документы\RAD Studio\Projects\Project2.res</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.730,=D:\документы\RAD Studio\Projects\Unit4.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.504,D:\документы\RAD Studio\Projects\Unit4.cpp=D:\документы\проекты\Файловая база 3\на асу\main_one.cpp</Transaction>
+  </Transactions>
+</BorlandProject>

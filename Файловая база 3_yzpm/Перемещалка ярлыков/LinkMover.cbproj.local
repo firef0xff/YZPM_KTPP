@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.318,=D:\документы\RAD Studio\Projects\File1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.161,=D:\документы\RAD Studio\Projects\Unit2.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.114,=D:\документы\RAD Studio\Projects\Project2.res</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.337,D:\документы\проекты\Файловая база 3\Перемещалка ярлыков\LinkMover.cbproj=D:\документы\RAD Studio\Projects\Project2.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.321,D:\документы\проекты\Файловая база 3\Перемещалка ярлыков\LinkMover.cpp=D:\документы\RAD Studio\Projects\File1.cpp</Transaction>
+  </Transactions>
+</BorlandProject>

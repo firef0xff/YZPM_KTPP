@@ -1,0 +1,63 @@
+классы для внедрения
+//#include "main.h"
+//#include "zagotovk.h"
+#include "products.h"
+#include "agreements_main.h"
+#include "User_Data.h"
+
+//#include "technology.h"
+//#include "SearchModule.h"
+#include "Settings_wnd.h"
+#include "BomTree.h"
+#include "main.h"
+
+20	Добавление пользователей	UserADD
+21	Удаление пользователей	UserDel
+22	Редактирование пользователей	UserEdit
+23	Смена пароля пользователя	ChangePSWD
+
+
+String sql="call administration.Get_Rights('"+String(UserID)+"')";
+TADOQuery *rez=DB->SendSQL(sql);
+bool SpView=false, TehRead=false, TehEdit=false, NormEdit=false, plan_pr_va_det=false,
+otbor_po_ceu=false, mat_ved=false, texnologic=false;
+if(rez&&rez->RecordCount)
+{
+	for (rez->First(); !rez->Eof; rez->Next())
+	{
+		const String val=rez->FieldByName("progname")->Value;
+		if (val=="SpView")
+		{
+			SpView=true;
+		}
+		if (val=="TehRead")
+		{
+			TehRead=true;
+		}
+		if (val=="TehEdit")
+		{
+			TehEdit=true;
+		}
+		if (val=="NormEdit")
+		{
+			NormEdit=true;
+		}
+		if (val=="plan_pr_va_det")
+		{
+			plan_pr_va_det=true;
+		}
+		if (val=="otbor_po_ceu")
+		{
+			otbor_po_ceu=true;
+		}
+		if (val=="mat_ved")
+		{
+			mat_ved=true;
+		}
+		if (val=="texnologic")
+		{
+			texnologic=true;
+		}
+	}
+}
+delete rez;

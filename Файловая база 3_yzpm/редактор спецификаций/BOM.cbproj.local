@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.493,D:\документы\RAD Studio\Projects\File1.cpp=D:\документы\проекты\файловая база 2\редактор спецификаций\BOM.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.196,D:\документы\RAD Studio\Projects\Project1.cbproj=D:\документы\проекты\файловая база 2\редактор спецификаций\BOM.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.101,=D:\документы\RAD Studio\Projects\File1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.199,=D:\документы\проекты\файловая база 2\редактор спецификаций\razdel.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.199,=D:\документы\проекты\файловая база 2\редактор спецификаций\SPEdit.cpp</Transaction>
+  </Transactions>
+</BorlandProject>

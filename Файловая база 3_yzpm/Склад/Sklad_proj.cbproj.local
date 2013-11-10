@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.130,D:\документы\проекты\Файловая база 3\Склад\Unit4.h=D:\документы\проекты\Файловая база 3\Склад\Manufacturing_Materials.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.400,D:\документы\проекты\Файловая база 3\Склад\Sklad_Form.h=D:\документы\RAD Studio\Projects\Unit3.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.692,=D:\документы\RAD Studio\Projects\Unit3.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.973,=D:\документы\проекты\Файловая база 3\Склад\EntraseMaterial.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.020,=D:\документы\проекты\мои классы\SQL.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.472,=D:\документы\проекты\Файловая база 3\общие функции и классы\IconsData.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.305,=D:\документы\проекты\Файловая база 3\маркетинг\продукция\Agrements_select.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.593,D:\документы\проекты\Файловая база 3\маркетинг\продукция\Agrements_select.cpp=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.130,D:\документы\проекты\Файловая база 3\Склад\Unit4.dfm=D:\документы\проекты\Файловая база 3\Склад\Manufacturing_Materials.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.161,=D:\документы\RAD Studio\Projects\Unit2.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.400,D:\документы\проекты\Файловая база 3\Склад\Sklad_Form.dfm=D:\документы\RAD Studio\Projects\Unit3.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.281,=D:\документы\проекты\Файловая база 3\общие функции и классы\functions.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.985,=D:\документы\проекты\Файловая база 3\маркетинг\договора\agreements_main.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.130,D:\документы\проекты\Файловая база 3\Склад\Unit4.cpp=D:\документы\проекты\Файловая база 3\Склад\Manufacturing_Materials.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.363,=D:\документы\проекты\Файловая база 3\Склад\Unit4.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.480,=D:\документы\проекты\Файловая база 3\Склад\Unit4.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.799,D:\документы\проекты\Файловая база 3\Склад\Sklad_proj.cbproj=D:\документы\RAD Studio\Projects\Project2.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.863,=D:\документы\проекты\Файловая база 3\Склад\AreaEditor.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.776,D:\документы\проекты\Файловая база 3\Склад\AreaEditor.cpp=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.935,=D:\документы\проекты\Файловая база 3\маркетинг\contractors.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.005,=D:\документы\проекты\Файловая база 3\общие функции и классы\Obd.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.780,D:\документы\проекты\Файловая база 3\маркетинг\договора\agreements_main.cpp=</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.645,=D:\документы\RAD Studio\Projects\Project2.res</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.114,=D:\документы\RAD Studio\Projects\Project2.res</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.400,D:\документы\проекты\Файловая база 3\Склад\Sklad_Form.cpp=D:\документы\RAD Studio\Projects\Unit3.cpp</Transaction>
+  </Transactions>
+</BorlandProject>

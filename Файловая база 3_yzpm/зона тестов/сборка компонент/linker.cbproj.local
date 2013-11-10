@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.230,D:\документы\RAD Studio\Projects\Project2.cbproj=D:\документы\проекты\Файловая база 3\зона тестов\сборка компонент\linker.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.087,D:\документы\RAD Studio\Projects\Unit3.dfm=D:\документы\проекты\Файловая база 3\зона тестов\сборка компонент\link.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.544,=D:\документы\проекты\Файловая база 3\общие функции и классы\functions.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.087,D:\документы\RAD Studio\Projects\Unit3.h=D:\документы\проекты\Файловая база 3\зона тестов\сборка компонент\link.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.923,=D:\документы\проекты\мои классы\SQL.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.617,=D:\документы\проекты\Файловая база 3\общие функции и классы\Obd.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.267,=D:\документы\RAD Studio\Projects\Project2.res</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.114,=D:\документы\RAD Studio\Projects\Project2.res</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.298,=D:\документы\RAD Studio\Projects\Unit3.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.161,=D:\документы\RAD Studio\Projects\Unit2.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.087,D:\документы\RAD Studio\Projects\Unit3.cpp=D:\документы\проекты\Файловая база 3\зона тестов\сборка компонент\link.cpp</Transaction>
+  </Transactions>
+</BorlandProject>

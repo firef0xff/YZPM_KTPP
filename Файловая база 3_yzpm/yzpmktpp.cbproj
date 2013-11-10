@@ -1,0 +1,485 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{A9A30F62-81FA-416D-98A9-749E840F89E2}</ProjectGuid>
+			<ProjectVersion>12.2</ProjectVersion>
+			<MainSource>yzpmktpp.cpp</MainSource>
+			<Base>True</Base>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<Platform>Win32</Platform>
+			<AppType>Application</AppType>
+			<FrameworkType>VCL</FrameworkType>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<BCC_SelectedOptimizations>true</BCC_SelectedOptimizations>
+			<OutputExt>exe</OutputExt>
+			<LinkPackageStatics>rtl.lib;vcl.lib;adortl.lib;dbrtl.lib;vclactnband.lib;vclx.lib;vcldb.lib</LinkPackageStatics>
+			<ILINK_LibraryPath>интерфейс запусков\;редактор заказов\;Логин\диалоги\;подготовка списка деталей\;на асу\;отчетность\;справочник профессий\;редактор спецификаций\;технология\вспомогательные модули\справочник заготовок\;материалы\;Логин\;технология\вспомогательные модули\;..\..\RAD Studio\8.0\Imports\;технология\классы данных\;поиск\;технология\;дерево спецификации\работа с файлами\;дерево спецификации\;общие функции и классы\;дерево спецификации\состояния\;общие функции\;..\мои классы\;..\..\проекты\Файловая база 3\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<PackageImports>vclimg.bpi;vcl.bpi;vclx.bpi;dbrtl.bpi;Rave90VCL.bpi;bdertl.bpi;rtl.bpi;bcbie.bpi;xmlrtl.bpi;vclactnband.bpi;bcbsmp.bpi;VclSmp.bpi;svnui.bpi;svn.bpi;TeeUI.bpi;TeeDB.bpi;Tee.bpi;vcldb.bpi;vcldbx.bpi;vcltouch.bpi;dsnap.bpi;dsnapcon.bpi;vclib.bpi;ibxpress.bpi;adortl.bpi;IndyCore.bpi;IndySystem.bpi;IndyProtocols.bpi;inet.bpi;intrawebdb_110_150.bpi;Intraweb_110_150.bpi;vclie.bpi;websnap.bpi;webdsnap.bpi;inetdb.bpi;inetdbbde.bpi;inetdbxpress.bpi;soaprtl.bpi;vclribbon.bpi;dbexpress.bpi;DbxCommonDriver.bpi;DataSnapIndy10ServerTransport.bpi;DataSnapProviderClient.bpi;DbxClientDriver.bpi;DataSnapClient.bpi;dbxcds.bpi;DataSnapServer.bpi;AzureCloud.bpi;DBXInterBaseDriver.bpi;DBXMySQLDriver.bpi;DBXFirebirdDriver.bpi;DBXSybaseASEDriver.bpi;DBXSybaseASADriver.bpi;DBXOracleDriver.bpi;DBXMSSQLDriver.bpi;DBXInformixDriver.bpi;DBXDb2Driver.bpi;CodeSiteExpressVcl.bpi;volo.bpi</PackageImports>
+			<Multithreaded>true</Multithreaded>
+			<IncludePath>интерфейс запусков\;редактор заказов\;Логин\диалоги\;подготовка списка деталей\;на асу\;отчетность\;справочник профессий\;редактор спецификаций\;технология\вспомогательные модули\справочник заготовок\;материалы\;Логин\;технология\вспомогательные модули\;..\..\RAD Studio\8.0\Imports\;технология\классы данных\;поиск\;технология\;дерево спецификации\работа с файлами\;дерево спецификации\;общие функции и классы\;дерево спецификации\состояния\;общие функции\;..\мои классы\;..\..\проекты\Файловая база 3\;$(IncludePath)</IncludePath>
+			<AllPackageLibs>rtl.lib;vcl.lib;adortl.lib;dbrtl.lib;vclactnband.lib;vclx.lib;vcldb.lib</AllPackageLibs>
+			<ProjectType>CppVCLApplication</ProjectType>
+			<_TCHARMapping>wchar_t</_TCHARMapping>
+			<DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE</DCC_UnitAlias>
+			<DynamicRTL>true</DynamicRTL>
+			<IntermediateOutputDir>.\$(Config)\$(Platform)</IntermediateOutputDir>
+			<FinalOutputDir>.\$(Config)\$(Platform)</FinalOutputDir>
+			<BCC_wpar>false</BCC_wpar>
+			<BCC_ExtendedErrorInfo>true</BCC_ExtendedErrorInfo>
+			<ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\release\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<BCC_SelectedOptimizations>false</BCC_SelectedOptimizations>
+			<BCC_DisableOptimizations>true</BCC_DisableOptimizations>
+			<BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
+			<DynamicRTL>false</DynamicRTL>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+			<Defines>_DEBUG;$(Defines)</Defines>
+			<BCC_UseRegisterVariables>None</BCC_UseRegisterVariables>
+			<DCC_Define>DEBUG</DCC_Define>
+			<BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
+			<TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
+			<BCC_StackFrames>true</BCC_StackFrames>
+			<ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
+			<TASM_Debugging>Full</TASM_Debugging>
+			<BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
+			<ILINK_LibraryPath>$(BDSLIB)\$(PLATFORM)\debug;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\debug\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<Defines>NDEBUG;$(Defines)</Defines>
+			<TASM_Debugging>None</TASM_Debugging>
+		</PropertyGroup>
+		<ItemGroup>
+			<CppCompile Include="..\мои классы\Excel.cpp">
+				<DependentOn>..\мои классы\Excel.h</DependentOn>
+				<BuildOrder>44</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="..\мои классы\SQL.cpp">
+				<DependentOn>..\мои классы\SQL.h</DependentOn>
+				<BuildOrder>5</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="log.cpp">
+				<Form>LogForm</Form>
+				<DependentOn>log.h</DependentOn>
+				<BuildOrder>49</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="main.cpp">
+				<Form>mForm</Form>
+				<DependentOn>main.h</DependentOn>
+				<BuildOrder>2</BuildOrder>
+			</CppCompile>
+			<None Include="ModelSupport_yzpmktpp\default.txaPackage"/>
+			<None Include="ModelSupport_yzpmktpp\default.txvpck"/>
+			<None Include="ModelSupport_yzpmktpp\std\default.txvpck"/>
+			<CppCompile Include="yzpmktpp.cpp">
+				<BuildOrder>0</BuildOrder>
+			</CppCompile>
+			<ResFiles Include="yzpmktpp.res">
+				<BuildOrder>1</BuildOrder>
+			</ResFiles>
+			<CppCompile Include="дерево спецификации\BomTree.cpp">
+				<Form>SpTree</Form>
+				<DesignClass>TFrame</DesignClass>
+				<DependentOn>дерево спецификации\BomTree.h</DependentOn>
+				<BuildOrder>10</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="дерево спецификации\работа с файлами\files.cpp">
+				<Form>FileDisigner</Form>
+				<DependentOn>дерево спецификации\работа с файлами\files.h</DependentOn>
+				<BuildOrder>12</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="дерево спецификации\работа с файлами\FRowData.cpp">
+				<DependentOn>дерево спецификации\работа с файлами\FRowData.h</DependentOn>
+				<BuildOrder>28</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="дерево спецификации\состояния\ComboRow.cpp">
+				<DependentOn>дерево спецификации\состояния\ComboRow.h</DependentOn>
+				<BuildOrder>30</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="дерево спецификации\состояния\Conditions.cpp">
+				<Form>Cond</Form>
+				<DependentOn>дерево спецификации\состояния\Conditions.h</DependentOn>
+				<BuildOrder>11</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="дерево спецификации\состояния\CRowData.cpp">
+				<DependentOn>дерево спецификации\состояния\CRowData.h</DependentOn>
+				<BuildOrder>27</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="дерево спецификации\состояния\selector.cpp">
+				<Form>StSelect</Form>
+				<DependentOn>дерево спецификации\состояния\selector.h</DependentOn>
+				<BuildOrder>10</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="интерфейс запусков\IzdAppender.cpp">
+				<Form>IzdAppenderWnd</Form>
+				<DependentOn>интерфейс запусков\IzdAppender.h</DependentOn>
+				<BuildOrder>64</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="интерфейс запусков\manufacture.cpp">
+				<Form>ManufactureControl</Form>
+				<DesignClass>TFrame</DesignClass>
+				<DependentOn>интерфейс запусков\manufacture.h</DependentOn>
+				<BuildOrder>63</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="интерфейс запусков\ZakazCreator.cpp">
+				<Form>ZakazWnd</Form>
+				<DependentOn>интерфейс запусков\ZakazCreator.h</DependentOn>
+				<BuildOrder>65</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="интерфейс запусков\ZapCreator.cpp">
+				<Form>ZapuskWnd</Form>
+				<DependentOn>интерфейс запусков\ZapCreator.h</DependentOn>
+				<BuildOrder>66</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="Логин\loginwin.cpp">
+				<Form>LogIn</Form>
+				<DependentOn>Логин\loginwin.h</DependentOn>
+				<BuildOrder>35</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="Логин\Settings_wnd.cpp">
+				<Form>Settings</Form>
+				<DependentOn>Логин\Settings_wnd.h</DependentOn>
+				<BuildOrder>54</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="Логин\диалоги\GTUSdialog.cpp">
+				<Form>GTUSGroupSelector</Form>
+				<DependentOn>Логин\диалоги\GTUSdialog.h</DependentOn>
+				<BuildOrder>58</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="Логин\диалоги\Input_wnd.cpp">
+				<Form>newItem</Form>
+				<DependentOn>Логин\диалоги\Input_wnd.h</DependentOn>
+				<BuildOrder>56</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="Логин\диалоги\NextStateSelector.cpp">
+				<Form>Next_State_Selector</Form>
+				<DependentOn>Логин\диалоги\NextStateSelector.h</DependentOn>
+				<BuildOrder>59</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="Логин\диалоги\RightSelect.cpp">
+				<Form>fselRight</Form>
+				<DependentOn>Логин\диалоги\RightSelect.h</DependentOn>
+				<BuildOrder>57</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="Логин\диалоги\User_Data.cpp">
+				<Form>UserData</Form>
+				<DependentOn>Логин\диалоги\User_Data.h</DependentOn>
+				<BuildOrder>55</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="материалы\Add_mat.cpp">
+				<Form>Mater_add</Form>
+				<DependentOn>материалы\Add_mat.h</DependentOn>
+				<BuildOrder>37</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="материалы\material.cpp">
+				<Form>materials</Form>
+				<DependentOn>материалы\material.h</DependentOn>
+				<BuildOrder>36</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="общие функции и классы\ClassConnector.cpp">
+				<DependentOn>общие функции и классы\ClassConnector.h</DependentOn>
+				<BuildOrder>29</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="общие функции и классы\collation.cpp">
+				<DependentOn>общие функции и классы\collation.h</DependentOn>
+				<BuildOrder>22</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="общие функции и классы\DetSelector.cpp">
+				<Form>ObdSelector</Form>
+				<DesignClass>TFrame</DesignClass>
+				<DependentOn>общие функции и классы\DetSelector.h</DependentOn>
+				<BuildOrder>28</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="общие функции и классы\FileRow.cpp">
+				<DependentOn>общие функции и классы\FileRow.h</DependentOn>
+				<BuildOrder>20</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="общие функции и классы\functions.cpp">
+				<DependentOn>общие функции и классы\functions.h</DependentOn>
+				<BuildOrder>8</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="общие функции и классы\IconsData.cpp">
+				<DependentOn>общие функции и классы\IconsData.h</DependentOn>
+				<BuildOrder>23</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="общие функции и классы\Obd.cpp">
+				<DependentOn>общие функции и классы\Obd.h</DependentOn>
+				<BuildOrder>18</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="общие функции и классы\Tabs.cpp">
+				<DependentOn>общие функции и классы\Tabs.h</DependentOn>
+				<BuildOrder>17</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="общие функции и классы\TreeRow.cpp">
+				<DependentOn>общие функции и классы\TreeRow.h</DependentOn>
+				<BuildOrder>19</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="отчетность\otchethost.cpp">
+				<Form>Otchet</Form>
+				<DependentOn>отчетность\otchethost.h</DependentOn>
+				<BuildOrder>50</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="подготовка списка деталей\Izd_Unroll.cpp">
+				<Form>List_Editor</Form>
+				<DependentOn>подготовка списка деталей\Izd_Unroll.h</DependentOn>
+				<BuildOrder>51</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="подготовка списка деталей\List_add.cpp">
+				<Form>ListAdd</Form>
+				<DependentOn>подготовка списка деталей\List_add.h</DependentOn>
+				<BuildOrder>52</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="подготовка списка деталей\select_params.cpp">
+				<Form>List_sel_params</Form>
+				<DependentOn>подготовка списка деталей\select_params.h</DependentOn>
+				<BuildOrder>53</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="поиск\SearchModule.cpp">
+				<Form>Search</Form>
+				<DesignClass>TFrame</DesignClass>
+				<DependentOn>поиск\SearchModule.h</DependentOn>
+				<BuildOrder>16</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="редактор заказов\OrderContent_set.cpp">
+				<Form>ZakazContent_set</Form>
+				<DependentOn>редактор заказов\OrderContent_set.h</DependentOn>
+				<BuildOrder>62</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="редактор заказов\Orders.cpp">
+				<Form>Orders_editor</Form>
+				<DesignClass>TFrame</DesignClass>
+				<DependentOn>редактор заказов\Orders.h</DependentOn>
+				<BuildOrder>61</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="редактор заказов\Order_set.cpp">
+				<Form>Zakaz_set</Form>
+				<DependentOn>редактор заказов\Order_set.h</DependentOn>
+				<BuildOrder>61</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="редактор спецификаций\IspData.cpp">
+				<DependentOn>редактор спецификаций\IspData.h</DependentOn>
+				<BuildOrder>46</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="редактор спецификаций\Isp_editor.cpp">
+				<Form>Form2</Form>
+				<DependentOn>редактор спецификаций\Isp_editor.h</DependentOn>
+				<BuildOrder>47</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="редактор спецификаций\Obd_edt.cpp">
+				<Form>Obd_edit</Form>
+				<DependentOn>редактор спецификаций\Obd_edt.h</DependentOn>
+				<BuildOrder>48</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="редактор спецификаций\razdel.cpp">
+				<Form>rzd</Form>
+				<DependentOn>редактор спецификаций\razdel.h</DependentOn>
+				<BuildOrder>40</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="редактор спецификаций\SPEdit.cpp">
+				<Form>SPEditor</Form>
+				<DependentOn>редактор спецификаций\SPEdit.h</DependentOn>
+				<BuildOrder>41</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="редактор спецификаций\SPROW.cpp">
+				<DependentOn>редактор спецификаций\SPROW.h</DependentOn>
+				<BuildOrder>42</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="редактор спецификаций\sp_params.cpp">
+				<Form>spparams</Form>
+				<DependentOn>редактор спецификаций\sp_params.h</DependentOn>
+				<BuildOrder>45</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="справочник профессий\professions.cpp">
+				<Form>Professinos</Form>
+				<DependentOn>справочник профессий\professions.h</DependentOn>
+				<BuildOrder>43</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\technology.cpp">
+				<Form>TechWnd</Form>
+				<DesignClass>TFrame</DesignClass>
+				<DependentOn>технология\technology.h</DependentOn>
+				<BuildOrder>13</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\TechnologyView.cpp">
+				<Form>TechView</Form>
+				<DesignClass>TFrame</DesignClass>
+				<DependentOn>технология\TechnologyView.h</DependentOn>
+				<BuildOrder>14</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\вспомогательные модули\instrument.cpp">
+				<Form>instr</Form>
+				<DependentOn>технология\вспомогательные модули\instrument.h</DependentOn>
+				<BuildOrder>32</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\вспомогательные модули\symblos.cpp">
+				<Form>Symbol</Form>
+				<DependentOn>технология\вспомогательные модули\symblos.h</DependentOn>
+				<BuildOrder>33</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\вспомогательные модули\tara_and_strop.cpp">
+				<Form>tarandsrop</Form>
+				<DependentOn>технология\вспомогательные модули\tara_and_strop.h</DependentOn>
+				<BuildOrder>34</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\вспомогательные модули\tecniksave.cpp">
+				<Form>TB</Form>
+				<DependentOn>технология\вспомогательные модули\tecniksave.h</DependentOn>
+				<BuildOrder>31</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\вспомогательные модули\справочник заготовок\redaktor_formul.cpp">
+				<Form>Fomul_Editor</Form>
+				<DependentOn>технология\вспомогательные модули\справочник заготовок\redaktor_formul.h</DependentOn>
+				<BuildOrder>38</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\вспомогательные модули\справочник заготовок\zagotovk.cpp">
+				<Form>zagotovka</Form>
+				<DependentOn>технология\вспомогательные модули\справочник заготовок\zagotovk.h</DependentOn>
+				<BuildOrder>39</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\классы данных\DtInfo.cpp">
+				<DependentOn>технология\классы данных\DtInfo.h</DependentOn>
+				<BuildOrder>23</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\классы данных\InstrumRow.cpp">
+				<DependentOn>технология\классы данных\InstrumRow.h</DependentOn>
+				<BuildOrder>27</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\классы данных\NrmRow.cpp">
+				<DependentOn>технология\классы данных\NrmRow.h</DependentOn>
+				<BuildOrder>25</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\классы данных\OperRow.cpp">
+				<DependentOn>технология\классы данных\OperRow.h</DependentOn>
+				<BuildOrder>24</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="технология\классы данных\PerexRow.cpp">
+				<DependentOn>технология\классы данных\PerexRow.h</DependentOn>
+				<BuildOrder>26</BuildOrder>
+			</CppCompile>
+			<FormResources Include="редактор заказов\Orders.dfm"/>
+			<FormResources Include="редактор заказов\Order_set.dfm"/>
+			<FormResources Include="поиск\SearchModule.dfm"/>
+			<FormResources Include="редактор заказов\OrderContent_set.dfm"/>
+			<FormResources Include="редактор спецификаций\Obd_edt.dfm"/>
+			<FormResources Include="редактор спецификаций\razdel.dfm"/>
+			<FormResources Include="редактор спецификаций\Isp_editor.dfm"/>
+			<FormResources Include="подготовка списка деталей\List_add.dfm"/>
+			<FormResources Include="подготовка списка деталей\select_params.dfm"/>
+			<FormResources Include="отчетность\otchethost.dfm"/>
+			<FormResources Include="подготовка списка деталей\Izd_Unroll.dfm"/>
+			<FormResources Include="редактор спецификаций\SPEdit.dfm"/>
+			<FormResources Include="технология\вспомогательные модули\справочник заготовок\zagotovk.dfm"/>
+			<FormResources Include="технология\вспомогательные модули\tecniksave.dfm"/>
+			<FormResources Include="технология\вспомогательные модули\справочник заготовок\redaktor_formul.dfm"/>
+			<FormResources Include="справочник профессий\professions.dfm"/>
+			<FormResources Include="технология\technology.dfm"/>
+			<FormResources Include="редактор спецификаций\sp_params.dfm"/>
+			<FormResources Include="технология\вспомогательные модули\symblos.dfm"/>
+			<FormResources Include="технология\вспомогательные модули\tara_and_strop.dfm"/>
+			<FormResources Include="технология\TechnologyView.dfm"/>
+			<FormResources Include="технология\вспомогательные модули\instrument.dfm"/>
+			<FormResources Include="дерево спецификации\работа с файлами\files.dfm"/>
+			<FormResources Include="дерево спецификации\BomTree.dfm"/>
+			<FormResources Include="дерево спецификации\состояния\selector.dfm"/>
+			<FormResources Include="дерево спецификации\состояния\Conditions.dfm"/>
+			<FormResources Include="log.dfm"/>
+			<FormResources Include="main.dfm"/>
+			<FormResources Include="интерфейс запусков\IzdAppender.dfm"/>
+			<FormResources Include="материалы\Add_mat.dfm"/>
+			<FormResources Include="материалы\material.dfm"/>
+			<FormResources Include="Логин\диалоги\RightSelect.dfm"/>
+			<FormResources Include="Логин\диалоги\User_Data.dfm"/>
+			<FormResources Include="общие функции и классы\DetSelector.dfm"/>
+			<FormResources Include="интерфейс запусков\ZapCreator.dfm"/>
+			<FormResources Include="Логин\loginwin.dfm"/>
+			<FormResources Include="интерфейс запусков\manufacture.dfm"/>
+			<FormResources Include="интерфейс запусков\ZakazCreator.dfm"/>
+			<FormResources Include="Логин\диалоги\Input_wnd.dfm"/>
+			<FormResources Include="Логин\диалоги\NextStateSelector.dfm"/>
+			<FormResources Include="Логин\Settings_wnd.dfm"/>
+			<FormResources Include="Логин\диалоги\GTUSdialog.dfm"/>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')" Project="$(BDS)\Bin\CodeGear.Cpp.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\8.0\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\8.0\UserTools.proj"/>
+		<ProjectExtensions>
+			<Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
+			<Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<CPlusPlusBuilder.Personality>
+					<Source>
+						<Source Name="MainSource">yzpmktpp.cpp</Source>
+					</Source>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
+						<VersionInfo Name="MajorVer">3</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">3</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1049</VersionInfo>
+						<VersionInfo Name="CodePage">1251</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">3.0.0.3</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<ProjectProperties>
+						<ProjectProperties Name="AutoShowDeps">False</ProjectProperties>
+						<ProjectProperties Name="ManagePaths">True</ProjectProperties>
+						<ProjectProperties Name="VerifyPackages">True</ProjectProperties>
+					</ProjectProperties>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\bcboffice2k150.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\bcbofficexp150.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k150.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclofficexp150.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
+				</CPlusPlusBuilder.Personality>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
+				<ModelSupport>True</ModelSupport>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

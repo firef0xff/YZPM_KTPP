@@ -1,0 +1,20 @@
+﻿#временные файлы
+*~
+#история изменений 
+__history
+#папки Debud Release
+Debug/
+Release/
+#eventlog
+eventlog*.txt
+eventLog*.txt
+*.log
+*.bak
+
+#Thumbs
+Thumbs.db*
+
+#LibrarySupport
+LibrarySupport*/
+#ModelSupport
+ModelSupport*/

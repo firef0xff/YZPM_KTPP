@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.565,=D:\документы\проекты\Файловая база 3\общие функции и классы\functions.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.161,=D:\документы\RAD Studio\Projects\Unit2.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.739,D:\документы\RAD Studio\Projects\Unit3.dfm=D:\документы\проекты\Файловая база 3\плагины\Разложение числа на простую дробь\main.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.739,D:\документы\RAD Studio\Projects\Unit3.h=D:\документы\проекты\Файловая база 3\плагины\Разложение числа на простую дробь\main.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.026,=D:\документы\проекты\мои классы\SQL.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.176,D:\документы\RAD Studio\Projects\Project2.cbproj=D:\документы\проекты\Файловая база 3\плагины\Разложение числа на простую дробь\drob.cbproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.294,=D:\документы\проекты\Файловая база 3\плагины\Разложение числа на простую дробь\Unit1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.739,D:\документы\RAD Studio\Projects\Unit3.cpp=D:\документы\проекты\Файловая база 3\плагины\Разложение числа на простую дробь\main.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.925,=D:\документы\RAD Studio\Projects\Project2.res</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.114,=D:\документы\RAD Studio\Projects\Project2.res</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.982,D:\документы\проекты\Файловая база 3\плагины\Разложение числа на простую дробь\Z_Data.cpp=D:\документы\проекты\Файловая база 3\плагины\Разложение числа на простую дробь\Unit1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.982,D:\документы\проекты\Файловая база 3\плагины\Разложение числа на простую дробь\Z_Data.h=D:\документы\проекты\Файловая база 3\плагины\Разложение числа на простую дробь\Unit1.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.316,=D:\документы\RAD Studio\Projects\Unit3.cpp</Transaction>
+  </Transactions>
+</BorlandProject>
