@@ -9,6 +9,9 @@
 			<Projects Include="reports\Reports.cbproj">
 				<Dependencies/>
 			</Projects>
+			<Projects Include="un_used\зона тестов\testing_zone.cbproj">
+				<Dependencies/>
+			</Projects>
 		</ItemGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,19 +38,34 @@
 		<Target Name="Reports:Make">
 			<MSBuild Projects="reports\Reports.cbproj" Targets="Make"/>
 		</Target>
+		<Target Name="testing_zone">
+			<MSBuild Projects="un_used\зона тестов\testing_zone.cbproj"/>
+		</Target>
+		<Target Name="testing_zone:Clean">
+			<MSBuild Projects="un_used\зона тестов\testing_zone.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="testing_zone:Make">
+			<MSBuild Projects="un_used\зона тестов\testing_zone.cbproj" Targets="Make"/>
+		</Target>
 		<Target Name="Build">
-			<CallTarget Targets="yzpmktpp;Reports"/>
+			<CallTarget Targets="yzpmktpp;Reports;testing_zone"/>
 		</Target>
 		<Target Name="Clean">
-			<CallTarget Targets="yzpmktpp:Clean;Reports:Clean"/>
+			<CallTarget Targets="yzpmktpp:Clean;Reports:Clean;testing_zone:Clean"/>
 		</Target>
 		<Target Name="Make">
-			<CallTarget Targets="yzpmktpp:Make;Reports:Make"/>
+			<CallTarget Targets="yzpmktpp:Make;Reports:Make;testing_zone:Make"/>
 		</Target>
 		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
 		<ItemGroup Condition="'$(BuildGroup)'=='mainprogram'">
 			<BuildGroupProject Include="reports\Reports.cbproj">
 				<ProjectGuid>{3106CCB4-A9FA-4AAC-A650-CBD9EA8DBFF2}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms/>
+				<Enabled>False</Enabled>
+			</BuildGroupProject>
+			<BuildGroupProject Include="un_used\зона тестов\testing_zone.cbproj">
+				<ProjectGuid>{6E36DE8C-263B-45CC-8F2F-E5CE605C7673}</ProjectGuid>
 				<Configurations>Debug</Configurations>
 				<Platforms/>
 				<Enabled>False</Enabled>
