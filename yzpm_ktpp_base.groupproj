@@ -1,0 +1,62 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{4A4D8DB0-C44B-4889-A472-CCFB7897213C}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="yzpmktpp.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="reports\Reports.cbproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="yzpmktpp">
+			<MSBuild Projects="yzpmktpp.cbproj"/>
+		</Target>
+		<Target Name="yzpmktpp:Clean">
+			<MSBuild Projects="yzpmktpp.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="yzpmktpp:Make">
+			<MSBuild Projects="yzpmktpp.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="Reports">
+			<MSBuild Projects="reports\Reports.cbproj"/>
+		</Target>
+		<Target Name="Reports:Clean">
+			<MSBuild Projects="reports\Reports.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="Reports:Make">
+			<MSBuild Projects="reports\Reports.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="yzpmktpp;Reports"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="yzpmktpp:Clean;Reports:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="yzpmktpp:Make;Reports:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+		<ItemGroup Condition="'$(BuildGroup)'=='mainprogram'">
+			<BuildGroupProject Include="reports\Reports.cbproj">
+				<ProjectGuid>{3106CCB4-A9FA-4AAC-A650-CBD9EA8DBFF2}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms/>
+				<Enabled>False</Enabled>
+			</BuildGroupProject>
+			<BuildGroupProject Include="yzpmktpp.cbproj">
+				<ProjectGuid>{A9A30F62-81FA-416D-98A9-749E840F89E2}</ProjectGuid>
+				<Configurations>Debug</Configurations>
+				<Platforms>Win32</Platforms>
+				<Enabled>True</Enabled>
+			</BuildGroupProject>
+		</ItemGroup>
+	</Project>
