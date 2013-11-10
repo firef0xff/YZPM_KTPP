@@ -12,14 +12,14 @@
 //---------------------------------------------------------------------------
 class TnewItem : public TForm
 {
-__published:	// IDE-managed Components
-	TLabeledEdit *leItem;
-	TBitBtn *BitBtn2;
-	TBitBtn *BitBtn1;
-	void __fastcall BitBtn1Click(TObject *Sender);
-private:	// User declarations
-public:		// User declarations
-	__fastcall TnewItem(TComponent* Owner);
+__published:    // IDE-managed Components
+    TLabeledEdit *leItem;
+    TBitBtn *BitBtn2;
+    TBitBtn *BitBtn1;
+    void __fastcall BitBtn1Click(TObject *Sender);
+private:    // User declarations
+public:        // User declarations
+    __fastcall TnewItem(TComponent* Owner);
 };
 
 #endif

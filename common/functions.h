@@ -38,25 +38,25 @@ void insertSort (T a[], long size);
 
 class Transaction
 {
-	public:
-	Transaction(cSQL *db):commited(false),DB(db)
-	{
-    	DB->SendCommand("START TRANSACTION");
-	}
-	~Transaction()
-	{
-		if (!commited)
-		{
-			DB->SendCommand("ROLLBACK");
-		}
-	}
-	void Commit(void)
-	{
-		DB->SendCommand("COMMIT");
-		commited = true;
-	}
-	private:
-	bool commited;
-	cSQL *DB;
+    public:
+    Transaction(cSQL *db):commited(false),DB(db)
+    {
+        DB->SendCommand("START TRANSACTION");
+    }
+    ~Transaction()
+    {
+        if (!commited)
+        {
+            DB->SendCommand("ROLLBACK");
+        }
+    }
+    void Commit(void)
+    {
+        DB->SendCommand("COMMIT");
+        commited = true;
+    }
+    private:
+    bool commited;
+    cSQL *DB;
 };
 #endif

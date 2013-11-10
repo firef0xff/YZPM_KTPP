@@ -17,15 +17,11 @@ object Form1: TForm1
     Top = 0
     Width = 877
     Height = 639
-    ActivePage = ts2
+    ActivePage = TabSheet2
     Align = alClient
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'TabSheet1'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         869
         611)
@@ -126,10 +122,6 @@ object Form1: TForm1
     object ts: TTabSheet
       Caption = 'ts'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ComboBox1: TComboBox
         Left = 16
         Top = 200
@@ -159,34 +151,18 @@ object Form1: TForm1
     object ts1: TTabSheet
       Caption = 'ts1'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object ts3: TTabSheet
       Caption = 'ts3'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object TabSheet4: TTabSheet
       Caption = 'TabSheet4'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object TabSheet2: TTabSheet
       Caption = 'TabSheet2'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Edit2: TEdit
         Left = 208
         Top = 152

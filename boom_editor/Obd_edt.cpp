@@ -10,6 +10,6 @@
 
 //---------------------------------------------------------------------------
 __fastcall TObd_edit::TObd_edit(TComponent* Owner)
-	: TForm(Owner)
+    : TForm(Owner)
 {
 }

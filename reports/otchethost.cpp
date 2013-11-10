@@ -5,16 +5,16 @@
 #pragma resource "*.dfm"
 
 __fastcall TOtchet::TOtchet(TComponent* Owner,String obd)
-	: TForm(Owner)
+    : TForm(Owner)
 {
 LE1->Text=obd;
 }
 void __fastcall TOtchet::BitBtn1Click(TObject *Sender)
 {
 if (LE1->Text.Trim()!="")
-	{
-	ModalResult=mrOk;
-	CloseModal();
-	}else {ShowMessage("¬ведите обозначение узла.");}
+    {
+    ModalResult=mrOk;
+    CloseModal();
+    }else {ShowMessage("¬ведите обозначение узла.");}
 }
 //---------------------------------------------------------------------------

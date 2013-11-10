@@ -12,16 +12,16 @@
 //---------------------------------------------------------------------------
 class Tparametr : public TForm
 {
-__published:	// IDE-managed Components
-	TLabeledEdit *cex;
-	TLabeledEdit *zak;
-	TLabeledEdit *part;
-	TLabeledEdit *kol;
-	TBitBtn *BitBtn1;
-	void __fastcall FormShow(TObject *Sender);
-private:	// User declarations
-public:		// User declarations
+__published:    // IDE-managed Components
+    TLabeledEdit *cex;
+    TLabeledEdit *zak;
+    TLabeledEdit *part;
+    TLabeledEdit *kol;
+    TBitBtn *BitBtn1;
+    void __fastcall FormShow(TObject *Sender);
+private:    // User declarations
+public:        // User declarations
 int type;
-	__fastcall Tparametr(TComponent* Owner);
+    __fastcall Tparametr(TComponent* Owner);
 };
 #endif

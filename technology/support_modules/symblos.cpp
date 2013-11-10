@@ -9,7 +9,7 @@
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
 __fastcall TSymbol::TSymbol(TComponent* Owner)
-	: TForm(Owner)
+    : TForm(Owner)
 {
 //цифры верхний регистр
 SG1->Cells[0][0]="›";
@@ -80,18 +80,18 @@ void __fastcall TSymbol::SG1DblClick(TObject *Sender)
 {
 TStringGrid *sg=(TStringGrid *)Sender;
 if (sg->Cells[sg->Selection.Left][sg->Selection.Top]!="")
-	{
-	if (E1->Text!="")
-		{
-		int pos=E1->SelStart+1;
-		int cur=E1->SelStart;
-		UnicodeString msg=sg->Cells[sg->Selection.Left][sg->Selection.Top];
-		E1->Text=E1->Text.Insert(msg,pos);
-		} else
-		{
-		E1->Text=E1->Text+sg->Cells[sg->Selection.Left][sg->Selection.Top];
-		}
-	}
+    {
+    if (E1->Text!="")
+        {
+        int pos=E1->SelStart+1;
+        int cur=E1->SelStart;
+        UnicodeString msg=sg->Cells[sg->Selection.Left][sg->Selection.Top];
+        E1->Text=E1->Text.Insert(msg,pos);
+        } else
+        {
+        E1->Text=E1->Text+sg->Cells[sg->Selection.Left][sg->Selection.Top];
+        }
+    }
 E1->SetFocus();
 E1->SelStart=E1->Text.Length();
 }

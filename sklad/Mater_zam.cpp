@@ -10,7 +10,7 @@
 #pragma resource "*.dfm"
 
 __fastcall TMat_zam::TMat_zam(TComponent* Owner)
-	: TForm(Owner)
+    : TForm(Owner)
 {
 }
 //---------------------------------------------------------------------------

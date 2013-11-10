@@ -3,7 +3,7 @@
 
 #include "test.h"
 #include "otchetnost.h"
-#include "manufacture.h"
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -15,10 +15,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 {
 DB=new cSQL(ADC);
 DB->Connect();
-TManufactureControl *ptr=new TManufactureControl(this, DB);
-ptr->Parent = ts2;
-ptr->Align = alClient;
-ptr->Show();
+
 /*//забика данных
 LUser=35;
 new TAgreements(this,ts2,LUser,DB);

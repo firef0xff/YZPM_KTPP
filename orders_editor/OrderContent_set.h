@@ -12,13 +12,13 @@
 //---------------------------------------------------------------------------
 class TZakazContent_set : public TForm
 {
-__published:	// IDE-managed Components
-	TLabeledEdit *Kol;
-	TLabeledEdit *Obd;
-	TBitBtn *BitBtn1;
-	TBitBtn *BitBtn2;
-private:	// User declarations
-public:		// User declarations
-	__fastcall TZakazContent_set(TComponent* Owner);
+__published:    // IDE-managed Components
+    TLabeledEdit *Kol;
+    TLabeledEdit *Obd;
+    TBitBtn *BitBtn1;
+    TBitBtn *BitBtn2;
+private:    // User declarations
+public:        // User declarations
+    __fastcall TZakazContent_set(TComponent* Owner);
 };
 #endif

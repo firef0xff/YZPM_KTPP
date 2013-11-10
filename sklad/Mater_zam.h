@@ -13,17 +13,17 @@
 //---------------------------------------------------------------------------
 class TMat_zam : public TForm
 {
-__published:	// IDE-managed Components
-	TLabeledEdit *old_mat;
-	TLabeledEdit *new_mat;
-	TLabel *Label1;
-	TBitBtn *BitBtn1;
-	TBitBtn *BitBtn2;
-	TCheckBox *CB1;
-	void __fastcall BitBtn2Click(TObject *Sender);
-private:	// User declarations
+__published:    // IDE-managed Components
+    TLabeledEdit *old_mat;
+    TLabeledEdit *new_mat;
+    TLabel *Label1;
+    TBitBtn *BitBtn1;
+    TBitBtn *BitBtn2;
+    TCheckBox *CB1;
+    void __fastcall BitBtn2Click(TObject *Sender);
+private:    // User declarations
 cSQL *Db;
-public:		// User declarations
-	__fastcall TMat_zam(TComponent* Owner);
+public:        // User declarations
+    __fastcall TMat_zam(TComponent* Owner);
 };
 #endif

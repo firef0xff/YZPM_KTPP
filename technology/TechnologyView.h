@@ -14,10 +14,10 @@
 //---------------------------------------------------------------------------
 class TTechView : public TFrame
 {
-__published:	// IDE-managed Components
-private:	// User declarations
+__published:    // IDE-managed Components
+private:    // User declarations
 
-public:		// User declarations
-	__fastcall TTechView(TComponent* Owner,TWinControl *_p,String _name, int user,cSQL *db);
+public:        // User declarations
+    __fastcall TTechView(TComponent* Owner,TWinControl *_p,String _name, int user,cSQL *db);
 };
 #endif

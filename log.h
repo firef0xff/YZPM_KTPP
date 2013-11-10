@@ -11,10 +11,10 @@
 //---------------------------------------------------------------------------
 class TLogForm : public TForm
 {
-__published:	// IDE-managed Components
-	TMemo *Memo1;
-private:	// User declarations
-public:		// User declarations
-	__fastcall TLogForm(TComponent* Owner,vector <String> log);
+__published:    // IDE-managed Components
+    TMemo *Memo1;
+private:    // User declarations
+public:        // User declarations
+    __fastcall TLogForm(TComponent* Owner,vector <String> log);
 };
 #endif

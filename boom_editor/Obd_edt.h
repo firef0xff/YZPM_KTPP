@@ -11,12 +11,12 @@
 //---------------------------------------------------------------------------
 class TObd_edit : public TForm
 {
-__published:	// IDE-managed Components
-	TEdit *Edit1;
-	TBitBtn *BitBtn2;
-	TBitBtn *BitBtn1;
-private:	// User declarations
-public:		// User declarations
-	__fastcall TObd_edit(TComponent* Owner);
+__published:    // IDE-managed Components
+    TEdit *Edit1;
+    TBitBtn *BitBtn2;
+    TBitBtn *BitBtn1;
+private:    // User declarations
+public:        // User declarations
+    __fastcall TObd_edit(TComponent* Owner);
 };
 #endif

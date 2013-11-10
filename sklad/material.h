@@ -21,44 +21,44 @@
 //---------------------------------------------------------------------------
 class Tmaterials : public TForm
 {
-__published:	// IDE-managed Components
-	TPanel *Panel1;
-	TStringGrid *SG;
-	TTreeView *TV;
-	TSplitter *Splitter1;
-	TPopupActionBar *PAB;
-	TMenuItem *N1;
-	TMenuItem *N2;
-	TRadioGroup *RG;
-	TLabeledEdit *LE1;
-	TLabeledEdit *LE2;
-	TLabeledEdit *LE3;
-	TButton *Button1;
-	TSpeedButton *next;
-	TEdit *E2;
-	TSpeedButton *prev;
-	TLabeledEdit *E3;
-	TBitBtn *BB1;
-	TButton *Add;
-	TButton *Del;
-	TButton *Button2;
-	void __fastcall TVExpanding(TObject *Sender, TTreeNode *Node, bool &AllowExpansion);
-	void __fastcall N1Click(TObject *Sender);
-	void __fastcall N2Click(TObject *Sender);
-	void __fastcall TVClick(TObject *Sender);
-	void __fastcall Find(void);
-	void __fastcall RGClick(TObject *Sender);
-	void __fastcall Button1Click(TObject *Sender);
-	void __fastcall nextClick(TObject *Sender);
-	void __fastcall prevClick(TObject *Sender);
-	void __fastcall E2Change(TObject *Sender);
-	void __fastcall E3Change(TObject *Sender);
-	void __fastcall BB1Click(TObject *Sender);
-	void __fastcall AddClick(TObject *Sender);
-	void __fastcall DelClick(TObject *Sender);
-	void __fastcall Button2Click(TObject *Sender);
+__published:    // IDE-managed Components
+    TPanel *Panel1;
+    TStringGrid *SG;
+    TTreeView *TV;
+    TSplitter *Splitter1;
+    TPopupActionBar *PAB;
+    TMenuItem *N1;
+    TMenuItem *N2;
+    TRadioGroup *RG;
+    TLabeledEdit *LE1;
+    TLabeledEdit *LE2;
+    TLabeledEdit *LE3;
+    TButton *Button1;
+    TSpeedButton *next;
+    TEdit *E2;
+    TSpeedButton *prev;
+    TLabeledEdit *E3;
+    TBitBtn *BB1;
+    TButton *Add;
+    TButton *Del;
+    TButton *Button2;
+    void __fastcall TVExpanding(TObject *Sender, TTreeNode *Node, bool &AllowExpansion);
+    void __fastcall N1Click(TObject *Sender);
+    void __fastcall N2Click(TObject *Sender);
+    void __fastcall TVClick(TObject *Sender);
+    void __fastcall Find(void);
+    void __fastcall RGClick(TObject *Sender);
+    void __fastcall Button1Click(TObject *Sender);
+    void __fastcall nextClick(TObject *Sender);
+    void __fastcall prevClick(TObject *Sender);
+    void __fastcall E2Change(TObject *Sender);
+    void __fastcall E3Change(TObject *Sender);
+    void __fastcall BB1Click(TObject *Sender);
+    void __fastcall AddClick(TObject *Sender);
+    void __fastcall DelClick(TObject *Sender);
+    void __fastcall Button2Click(TObject *Sender);
 
-private:	// User declarations
+private:    // User declarations
 cSQL *const DB;
 String obm;
 String SQL;
@@ -68,8 +68,8 @@ static String list;
 static String _obm;
 static String _name;
 static String _prof;
-public:		// User declarations
-	__fastcall Tmaterials(TComponent* Owner,cSQL *db,bool ReadOnly,const int &_LUser);
+public:        // User declarations
+    __fastcall Tmaterials(TComponent* Owner,cSQL *db,bool ReadOnly,const int &_LUser);
 String Get_obm(void)const {return obm;}
 };
 String Tmaterials::rowcount="20";

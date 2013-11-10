@@ -9,7 +9,7 @@
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
 __fastcall Tkoldet::Tkoldet(TComponent* Owner)
-	: TForm(Owner)
+    : TForm(Owner)
 {
 }
 //---------------------------------------------------------------------------
@@ -24,10 +24,10 @@ rez->First();
 CB2->Items->Clear();
 CB2->Items->Add("");
 while (!rez->Eof)
-	{
-	CB2->Items->Add(rez->FieldByName("zakaz")->Value);
-	rez->Next();
-	}
+    {
+    CB2->Items->Add(rez->FieldByName("zakaz")->Value);
+    rez->Next();
+    }
 delete rez;
 }
 //---------------------------------------------------------------------------
@@ -42,10 +42,10 @@ rez->First();
 CB1->Items->Clear();
 CB1->Items->Add("");
 while (!rez->Eof)
-	{
-	CB1->Items->Add(VinToGost(rez->FieldByName("obd")->Value));
-	rez->Next();
-	}	
+    {
+    CB1->Items->Add(VinToGost(rez->FieldByName("obd")->Value));
+    rez->Next();
+    }    
 delete rez;
 }
 void __fastcall Tkoldet::GetKol(void)
@@ -53,24 +53,24 @@ void __fastcall Tkoldet::GetKol(void)
 // вывод количества деталей  
 String sql;
 if (CB1->Text.Trim()!="") 
-	{
-	sql="call temporary_tables.kol_det_obu('"+GostToVin(CB1->Text)+"','"+obd+"')";
-	}else
-	{
-	if (CB2->Text!="")
-		{
-		sql="call temporary_tables.kol_det('"+CB2->Text+"','"+obd+"')";
-		}else {E1->Text=""; return;}
-	}
+    {
+    sql="call temporary_tables.kol_det_obu('"+GostToVin(CB1->Text)+"','"+obd+"')";
+    }else
+    {
+    if (CB2->Text!="")
+        {
+        sql="call temporary_tables.kol_det('"+CB2->Text+"','"+obd+"')";
+        }else {E1->Text=""; return;}
+    }
 TADOQuery *rez=DB->SendSQL(sql);
 rez->First();
 if (rez->RecordCount)
-	{
-	E1->Text=rez->FieldByName("kol")->Value;
-	}else
-	{
-	E1->Text="";
-	}
+    {
+    E1->Text=rez->FieldByName("kol")->Value;
+    }else
+    {
+    E1->Text="";
+    }
 delete rez;
 
 }
@@ -82,10 +82,10 @@ TADOQuery *rez=DB->SendSQL(sql);
 rez->First();
 CB1->Items->Clear();
 while (!rez->Eof)
-	{
-	CB1->Items->Add(VinToGost(rez->FieldByName("obu")->Value));
-	rez->Next();
-	}
+    {
+    CB1->Items->Add(VinToGost(rez->FieldByName("obu")->Value));
+    rez->Next();
+    }
 CB2->Text="";
 CB1->ItemIndex=0;
 CB1Click(0);

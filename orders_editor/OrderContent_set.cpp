@@ -9,7 +9,7 @@
 #pragma resource "*.dfm"
 
 __fastcall TZakazContent_set::TZakazContent_set(TComponent* Owner)
-	: TForm(Owner)
+    : TForm(Owner)
 {
 }
 //---------------------------------------------------------------------------

@@ -3,128 +3,128 @@
 #include "Tabs.h"
 #pragma package(smart_init)
 
-		Tab::Tab	(void)
+        Tab::Tab    (void)
 {
 tab=0;
 last_tab=false;
 }
-		Tab::Tab	(const Tab &r)
+        Tab::Tab    (const Tab &r)
 {
 tab=r.tab;
 last_tab=r.last_tab;
 }
-		Tab::~Tab	(void)
+        Tab::~Tab    (void)
 {
 if (tab)
-	{
-	tab->Tag=-1;
-	delete tab;
-	}
+    {
+    tab->Tag=-1;
+    delete tab;
+    }
 }
 
-		TreeTab::TreeTab	(void):Tab(),module(0)
+        TreeTab::TreeTab    (void):Tab(),module(0)
 {
 }
-		TreeTab::TreeTab	(const TreeTab &r):Tab(r)
+        TreeTab::TreeTab    (const TreeTab &r):Tab(r)
 {
 module=r.module;
 }
-		TreeTab::~TreeTab	(void)
+        TreeTab::~TreeTab    (void)
 {
 if (module)
-	{
-	module->Parent=0;
-	delete module;
-	}
+    {
+    module->Parent=0;
+    delete module;
+    }
 }
 
-		TechTab::TechTab	(void):Tab(),module(0)
+        TechTab::TechTab    (void):Tab(),module(0)
 {
 }
-		TechTab::TechTab	(const TechTab &r):Tab(r)
+        TechTab::TechTab    (const TechTab &r):Tab(r)
 {
 module=r.module;
 }
-		TechTab::~TechTab	(void)
+        TechTab::~TechTab    (void)
 {
 if (module)
-	{
-	module->Parent=0;
-	delete module;
-	}
+    {
+    module->Parent=0;
+    delete module;
+    }
 }
 
-		TechViewTab::TechViewTab	(void):Tab(),module(0)
+        TechViewTab::TechViewTab    (void):Tab(),module(0)
 {}
-		TechViewTab::TechViewTab	(const TechViewTab &r):Tab(r)
+        TechViewTab::TechViewTab    (const TechViewTab &r):Tab(r)
 {
 module=r.module;
 }
-		TechViewTab::~TechViewTab	(void)
+        TechViewTab::~TechViewTab    (void)
 {
 if (module)
-	{
-	module->Parent=0;
-	delete module;
-	}
+    {
+    module->Parent=0;
+    delete module;
+    }
 }
 
-		SearchTab::SearchTab	(void):Tab(),module(0)
+        SearchTab::SearchTab    (void):Tab(),module(0)
 {}
-		SearchTab::SearchTab	(const SearchTab &r):Tab(r)
+        SearchTab::SearchTab    (const SearchTab &r):Tab(r)
 {
 module=r.module;
 }
-		SearchTab::~SearchTab	(void)
+        SearchTab::~SearchTab    (void)
 {
 if (module)
-	{
-	module->Parent=0;
-	delete module;
-	}
+    {
+    module->Parent=0;
+    delete module;
+    }
 }
 
-		ProcessingTab::ProcessingTab	(void):Tab(),module(0)
+        ProcessingTab::ProcessingTab    (void):Tab(),module(0)
 {}
-		ProcessingTab::ProcessingTab	(const ProcessingTab &r):Tab(r)
+        ProcessingTab::ProcessingTab    (const ProcessingTab &r):Tab(r)
 {
-	module=r.module;
+    module=r.module;
 }
-		ProcessingTab::~ProcessingTab	(void)
+        ProcessingTab::~ProcessingTab    (void)
 {
 if (module)
-	{
-	module->Parent=0;
-	delete module;
-	}
+    {
+    module->Parent=0;
+    delete module;
+    }
 }
 
-		OrdersTab::OrdersTab	(void):Tab(),module(0)
+        OrdersTab::OrdersTab    (void):Tab(),module(0)
 {}
-		OrdersTab::OrdersTab	(const OrdersTab &r):Tab(r)
+        OrdersTab::OrdersTab    (const OrdersTab &r):Tab(r)
 {
-	module=r.module;
+    module=r.module;
 }
-		OrdersTab::~OrdersTab	(void)
+        OrdersTab::~OrdersTab    (void)
 {
 if (module)
-	{
-	module->Parent=0;
-	delete module;
-	}
+    {
+    module->Parent=0;
+    delete module;
+    }
 }
 
-		ManufactureTab::ManufactureTab	(void):Tab(),module(0)
+        ManufactureTab::ManufactureTab    (void):Tab(),module(0)
 {}
-		ManufactureTab::ManufactureTab	(const ManufactureTab &r):Tab(r)
+        ManufactureTab::ManufactureTab    (const ManufactureTab &r):Tab(r)
 {
-	module=r.module;
+    module=r.module;
 }
-		ManufactureTab::~ManufactureTab	(void)
+        ManufactureTab::~ManufactureTab    (void)
 {
-	if (module)
-	{
-		module->Parent=0;
-		delete module;
-	}
+    if (module)
+    {
+        module->Parent=0;
+        delete module;
+    }
 }

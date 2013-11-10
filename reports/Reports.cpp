@@ -10,7 +10,7 @@
 
 int WINAPI DllEntryPoint(HINSTANCE hinst, unsigned long reason, void* lpReserved)
 {
-	return 1;
+    return 1;
 }
 extern "C" __export  void Init (AnsiString user,cSQL *DB);
 extern "C" __export  bool Report (AnsiString type,AnsiString param);
