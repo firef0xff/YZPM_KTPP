@@ -102,6 +102,10 @@ public:
     {
         return true;
     }
+    double getCount(void)
+    {
+        return kol_used;
+    }
 protected:
     String name;
     String sp_name;
@@ -193,15 +197,15 @@ __published:    // IDE-managed Components
     TSplitter *Splitter2;
     TPanel *Panel1;
     TStringGrid *detSG;
-    TPageControl *PageControl1;
-    TTabSheet *TabSheet1;
+	TPageControl *DetDetailControl;
+	TTabSheet *OperationsSheet;
     TRadioGroup *RadioGroup1;
     TTabSheet *TabSheet2;
     TStringGrid *operSG;
     TStringGrid *det_matSG;
     TTabSheet *TabSheet3;
     TStringGrid *makeSG;
-    TTabSheet *TabSheet4;
+	TTabSheet *ObourSheet;
     TStringGrid *det_oborudSG;
     TTabSheet *Oborud;
     TTabSheet *TabSheet6;
@@ -242,19 +246,17 @@ __published:    // IDE-managed Components
     void __fastcall contentTVMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);
     void __fastcall detSGSelectCell(TObject *Sender, int ACol, int ARow, bool &CanSelect);
-
-
-
-
+	void __fastcall DetDetailControlChange(TObject *Sender);
 
 private:    // User declarations
     void LoadZapusk(String zapusk, String zakaz, String det);
     void LoadZakaz (String zap_id, String zakaz, String det);
     void LoadIzd   (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, String det);
 
-    void LoadDetailData            (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
-    void LoadDetailParts         (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
+    void LoadDetailData         (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
+    void LoadDetailParts        (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
     void LoadTechDetails        (String det_id);
+    void LoadOborudDetails      (String det_id);
 
     void LoadDetailStandartParts(String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
     void LoadDetailMaterials    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);

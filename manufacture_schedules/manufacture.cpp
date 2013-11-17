@@ -206,7 +206,8 @@ void TManufactureControl::LoadIzd   (String zap_id, unsigned __int64 zak_id, uns
 {
     contentTV->Items->Clear();
 
-    String zap_sql = "select b.obd, b.name, a.det_id, a.kol, count(b1.det_idp) have_childs, b.sp_id, b.sp_name from manufacture.part_content a "
+    String zap_sql = "select b.obd, b.name, a.det_id, a.kol, count(b1.det_idp) have_childs, b.sp_id, "
+                     " b.sp_name from manufacture.part_content a "
                      " join manufacture.det_names b on a.det_id = b.det_id "
                      " left join manufacture.det_tree b1 on a.det_id = b1.det_idp ";
     if (zap_id.Length()||zak_id)
@@ -246,7 +247,7 @@ void TManufactureControl::LoadIzd   (String zap_id, unsigned __int64 zak_id, uns
             unsigned int sp_id = (unsigned int)rez->FieldByName("sp_id")->Value.operator int();
             String sp_name = rez->FieldByName("sp_name")->Value;
             IzdNode *ptr = new IzdNode(name, obd, det_id, kol, sp_id, sp_name);
-            node = contentTV->Items->AddObject(node, VinToGost(ptr->getDetObd())+" "+ptr->getDetName(), (void*)ptr);
+            node = contentTV->Items->AddObject(node, VinToGost(ptr->getDetObd())+" "+ptr->getDetName()+" - "+String(ptr->getCount())+" шт.", (void*)ptr);
             Set_img(node);
             if (have_childs)
             {
@@ -315,7 +316,7 @@ void TManufactureControl::LoadDetailParts          (String zap_id, unsigned __in
     DB->SendCommand(tmp_drop);
     DB->SendCommand(tmp_create + sql + joins + where);
 
-    //развернуть детали до составов учитывая разделы спецификации 0,2,3,4
+    //развернуть детали до составов учитывая разделы спецификации 0,2,3,4,8
     String tmp2_drop = "drop temporary table if exists manufacture.dets";
     String tmp2_create = "create temporary table if not exists manufacture.dets "
                         "( "
@@ -341,7 +342,7 @@ void TManufactureControl::LoadDetailParts          (String zap_id, unsigned __in
     int lvl = 0;
     DB->SendCommand("insert into manufacture.dets select a.det_id, null, '"+String(lvl)+"' "
                     "from manufacture.idc a "
-                    "where a.sp_id in (0,2,3,4)");
+                    "where a.sp_id in (0,2,3,4,8)");
 
     while (lvl < 100)
     {
@@ -362,7 +363,7 @@ void TManufactureControl::LoadDetailParts          (String zap_id, unsigned __in
                         "from manufacture.det_tree a "
                         "join manufacture.dets_tmp b on a.det_idp = b.det_idc "
                         "join manufacture.det_names c on a.det_idc = c.det_id "
-                        "where c.sp_id in (0,2,3,4)");
+                        "where c.sp_id in (0,2,3,4,8)");
         ++lvl;
     }
     DB->SendCommand(tmp_drop);
@@ -429,10 +430,13 @@ void TManufactureControl::LoadDetailParts          (String zap_id, unsigned __in
     return;
 }
 
-void TManufactureControl::LoadTechDetails(String det_id)
+void TManufactureControl::LoadTechDetails   (String det_id)
 {
    SGClear(operSG);
-   String sql = "select a.cex, a.utch, a.opr, a.oprid, a.OboID, c.name oper_name, d.name obo_name, round(sum(b.tsht*b.ksht*b.krop/b.kolod),3) as trud_ed "
+   String sql = "select a.cex, a.utch, a.opr, a.oprid, a.OboID,"
+                " ifnull(c.name, '') oper_name, "
+                " ifnull(d.name, '') obo_name, "
+                " ifnull(round(sum(b.tsht*b.ksht*b.krop/b.kolod),3), 0) as trud_ed "
                 " from manufacture.operation_list a "
                 " left join manufacture.operation_norms b on a.OpUUID = b.OpUUID "
                 " left join equipment.opr_names c on c.OprID = a.oprid "
@@ -482,6 +486,60 @@ void TManufactureControl::LoadTechDetails(String det_id)
     }
     AutoWidthSG(operSG);
 }
+void TManufactureControl::LoadOborudDetails (String det_id)
+{
+    SGClear(det_oborudSG);
+    String sql = "select a.cex, a.utch, a.OboID,"
+                 " ifnull(d.name, '') obo_name, "
+                 " ifnull(round(sum(b.tsht*b.ksht*b.krop/b.kolod),3), 0) as trud_ed, "
+                 " 0 as schedule, "
+                 " 0 as maked "
+                 " from manufacture.operation_list a "
+                 " left join manufacture.operation_norms b on a.OpUUID = b.OpUUID "
+                 " left join equipment.obor_list d on d.oboID = a.oboID "
+                 " where a.det_id = '"+det_id+"'"
+                 " group by a.cex, a.utch, a.oboid  order by a.cex, a.utch, a.oboid ";
+    TADOQuery *rez = DB->SendSQL(sql);
+    if (rez)
+    {
+        for (rez->First(); !rez->Eof; rez->Next())
+        {
+            int row = det_oborudSG->RowCount - 1;
+            String podr;
+            if (rez->FieldByName("cex")->Value.IsNull())
+            {
+                podr += "XX";
+            }
+            else
+            {
+                podr += rez->FieldByName("cex")->Value.operator UnicodeString();
+            }
+
+            if (rez->FieldByName("utch")->Value.IsNull())
+            {
+                podr += "XX";
+            }
+            else
+            {
+                podr += rez->FieldByName("utch")->Value.operator UnicodeString();
+            }
+            det_oborudSG->Cells[1][row] = rez->FieldByName("trud_ed")->Value;
+            det_oborudSG->Cells[2][row] = podr;
+            det_oborudSG->Cells[3][row] = rez->FieldByName("OboID")->Value;
+            det_oborudSG->Cells[4][row] = rez->FieldByName("obo_name")->Value;
+            det_oborudSG->Cells[5][row] = rez->FieldByName("schedule")->Value;
+            det_oborudSG->Cells[6][row] = rez->FieldByName("maked")->Value;
+
+            ++det_oborudSG->RowCount;
+        }
+        if (det_oborudSG->RowCount > 2)
+        {
+            --det_oborudSG->RowCount;
+        }
+        delete rez;
+    }
+    AutoWidthSG(det_oborudSG);
+}
 
 void __fastcall TManufactureControl::detSGSelectCell(TObject *Sender, int ACol, int ARow,
           bool &CanSelect)
@@ -490,8 +548,17 @@ void __fastcall TManufactureControl::detSGSelectCell(TObject *Sender, int ACol, 
     {
         return;
     }
-    LoadTechDetails(detSG->Cells[8][ARow]);
+    if (DetDetailControl->ActivePage == OperationsSheet)
+        LoadTechDetails(detSG->Cells[8][ARow]);
+    if (DetDetailControl->ActivePage == ObourSheet)
+        LoadOborudDetails(detSG->Cells[8][ARow]);
 }
+void __fastcall TManufactureControl::DetDetailControlChange(TObject *Sender)
+{
+    bool t;
+    detSGSelectCell(0, detSG->Col, detSG->Row, t);
+}
+
 
 void TManufactureControl::LoadDetailStandartParts(String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id)
 {
@@ -882,4 +949,6 @@ void             TManufactureControl::Update       (TTreeNode *node)
         Update(i);
     }
 }
+
+//---------------------------------------------------------------------------
 
