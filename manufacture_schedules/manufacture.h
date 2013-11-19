@@ -222,6 +222,7 @@ __published:    // IDE-managed Components
     TLabeledEdit *LabeledEdit5;
     TLabeledEdit *LabeledEdit12;
     TBitBtn *BitBtn1;
+	TStringGrid *OborudSG;
     void __fastcall CreateZapusk(TObject *Sender);
     void __fastcall RemoveZapusk(TObject *Sender);
     void __fastcall InWorkZapusk(TObject *Sender);
@@ -260,7 +261,7 @@ private:    // User declarations
 
     void LoadDetailStandartParts(String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
     void LoadDetailMaterials    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
-    void LoadDetailOborud        (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
+    void LoadDetailOborud       (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
 
     void Set_img   (TTreeNode *node);
     void Update       (TTreeNode *node);
