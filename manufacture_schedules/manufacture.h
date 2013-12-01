@@ -24,9 +24,20 @@
 class NodeData
 {
     public:
-            NodeData(){}
+    NodeData():locked(false){}
     virtual ~NodeData(){}
+
+    bool Locked(void)
+    {
+        return locked;
+    }
+    void SetLock(bool r = true)
+    {
+        locked = r;
+    }
+
     private:
+        bool locked;
 };
 
 class ZakazNode : public NodeData
@@ -223,6 +234,7 @@ __published:    // IDE-managed Components
     TLabeledEdit *LabeledEdit12;
     TBitBtn *BitBtn1;
 	TStringGrid *OborudSG;
+	TImageList *marks;
     void __fastcall CreateZapusk(TObject *Sender);
     void __fastcall RemoveZapusk(TObject *Sender);
     void __fastcall InWorkZapusk(TObject *Sender);
@@ -242,14 +254,22 @@ __published:    // IDE-managed Components
     void __fastcall zakTVDeletion(TObject *Sender, TTreeNode *Node);
     void __fastcall zapSGSelectCell(TObject *Sender, int ACol, int ARow, bool &CanSelect);
     void __fastcall contentTVDeletion(TObject *Sender, TTreeNode *Node);
-    void __fastcall zakTVClick(TObject *Sender);
     void __fastcall contentTVExpanding(TObject *Sender, TTreeNode *Node, bool &AllowExpansion);
     void __fastcall contentTVMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);
     void __fastcall detSGSelectCell(TObject *Sender, int ACol, int ARow, bool &CanSelect);
 	void __fastcall DetDetailControlChange(TObject *Sender);
+	void __fastcall zakTVMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
+	void __fastcall zapSGDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect,
+          TGridDrawState State);
 
 private:    // User declarations
+
+    void StartOrder(const std::vector<unsigned __int64> &parts);
+    void StopOrder(const std::vector<unsigned __int64> &parts);
+
+
     void LoadZapusk(String zapusk, String zakaz, String det);
     void LoadZakaz (String zap_id, String zakaz, String det);
     void LoadIzd   (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, String det);
@@ -264,7 +284,9 @@ private:    // User declarations
     void LoadDetailOborud       (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
 
     void Set_img   (TTreeNode *node);
-    void Update       (TTreeNode *node);
+    void Update    (TTreeNode *node);
+    void UpdateOrderStatus (void);
+    void UpdatePartsStatus (void);
     int **selected;
 
     const int &LUser;
@@ -280,3 +302,4 @@ int TManufactureControl::count=0;
 IconsData *TManufactureControl::IcoData=0;
 cSQL *TManufactureControl::DB=0;
 #endif
+

@@ -13,6 +13,7 @@
 #pragma resource "*.dfm"
 
 #define ZAP_ID_COL 4
+#define ZAP_IN_WORK_COL 5
 __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinControl *_p, int &_LUser,cSQL *db,IconsData *_IcoData,int **_selected)
     : TFrame(Owner),LUser(_LUser),selected(_selected)
 {
@@ -99,11 +100,11 @@ __fastcall    TManufactureControl::~TManufactureControl(void)
 
 void TManufactureControl::LoadZapusk(String zapusk, String zakaz, String det)
 {
-    SGClear(zapSG,1);
+    SGClear(zapSG,2);
     zakTV->Items->Clear();
     contentTV->Items->Clear();
 
-    String zap_sql = "select a.name, a.begin, a.end, a.zap_id from manufacture.manufacture_orders a ";
+    String zap_sql = "select a.name, a.begin, a.end, a.zap_id, (a.in_work is not null) started from manufacture.manufacture_orders a ";
     if (zakaz.Length() || det.Length())
     {
         zap_sql +=     " join manufacture.parts b on a.zap_id = b.zap_id "
@@ -140,6 +141,7 @@ void TManufactureControl::LoadZapusk(String zapusk, String zakaz, String det)
             zapSG->Cells[2][row] = rez->FieldByName("begin")->Value;
             zapSG->Cells[3][row] = rez->FieldByName("end")->Value;
             zapSG->Cells[ZAP_ID_COL][row] = rez->FieldByName("zap_id")->Value;
+            zapSG->Cells[ZAP_IN_WORK_COL][row] = rez->FieldByName("started")->Value;
             zapSG->RowCount ++;
         }
         if (zapSG->RowCount > 2)
@@ -156,7 +158,7 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
 {
     zakTV->Items->Clear();
 
-    String zap_sql = "select a.zap_id, a.zak_id, a.part_no, a.part_id, b.zakaz from manufacture.parts a "
+    String zap_sql = "select a.zap_id, a.zak_id, a.part_no, a.part_id, b.zakaz, (a.in_work is not null) started  from manufacture.parts a "
                      " join manufacture.zakaz_list b on a.zak_id = b.zak_id ";
     if (zap_id.Length())
     {
@@ -188,23 +190,87 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
     {
         String prev_zakaz;
         TTreeNode *node = 0;
+        int started_count(0);
+        int summary_count(0);
         for (rez->First(); !rez->Eof; rez->Next())
         {
             TTreeNode *ch_node = 0;
+            ++summary_count;
+
             String zak = rez->FieldByName("zakaz")->Value;
             unsigned int part_no = rez->FieldByName("part_no")->Value;
             unsigned __int64 zak_id = (unsigned __int64)rez->FieldByName("zak_id")->Value.operator __int64();
             unsigned __int64 zap_id = (unsigned __int64)rez->FieldByName("zap_id")->Value.operator __int64();
             unsigned __int64 part_id = (unsigned __int64)rez->FieldByName("part_id")->Value.operator __int64();
+            bool started = (int)rez->FieldByName("started")->Value;
 
             if (zak != prev_zakaz)
             {
+
+                if (node)
+                {
+                    if (started_count > 0)
+                    {
+                        if (started_count == summary_count -1)
+                        {
+                            node->ImageIndex = 1;
+                        }
+                        else
+                        {
+                            node->ImageIndex = 2;
+                        }
+                    }
+                    else
+                    {
+                        node->ImageIndex = 0;
+                    }
+
+                    node->SelectedIndex=node->ImageIndex;
+                    node->ExpandedImageIndex=node->ImageIndex;
+                    summary_count = 1;
+                }
+
                 ZakazNode *ptr = new ZakazNode(zak_id, zap_id, zak);
                 node = zakTV->Items->AddObject(node, ptr->getZakaz(), (void *)ptr);
                 prev_zakaz = zak;
             }
             PartNode *ptr = new PartNode(part_id, part_no);
+            ptr->SetLock(!started);
             ch_node = zakTV->Items->AddChildObject(node, ptr->getPartNo(), (void*)ptr);
+
+            if (started)
+            {
+                ++started_count;
+                ch_node->ImageIndex = 1;
+            }
+            else
+            {
+                ch_node->ImageIndex = 0;
+            }
+
+            ch_node->SelectedIndex = ch_node->ImageIndex;
+            ch_node->ExpandedImageIndex = ch_node->ImageIndex;
+        }
+        if (node)
+        {
+            if (started_count > 0)
+            {
+                if (started_count == summary_count)
+                {
+                    node->ImageIndex = 1;
+                }
+                else
+                {
+                    node->ImageIndex = 2;
+                }
+            }
+            else
+            {
+                node->ImageIndex = 0;
+            }
+
+            node->SelectedIndex=node->ImageIndex;
+            node->ExpandedImageIndex=node->ImageIndex;
         }
     }
     delete rez;
@@ -214,7 +280,8 @@ void TManufactureControl::LoadIzd   (String zap_id, unsigned __int64 zak_id, uns
     contentTV->Items->Clear();
 
     String zap_sql = "select b.obd, b.name, a.det_id, a.kol, count(b1.det_idp) have_childs, b.sp_id, "
-                     " b.sp_name from manufacture.part_content a "
+                     " b.sp_name, (a.in_work is not null) started  "
+                     " from manufacture.part_content a "
                      " join manufacture.det_names b on a.det_id = b.det_id "
                      " left join manufacture.det_tree b1 on a.det_id = b1.det_idp ";
     if (zap_id.Length()||zak_id)
@@ -253,7 +320,9 @@ void TManufactureControl::LoadIzd   (String zap_id, unsigned __int64 zak_id, uns
             bool have_childs = int(rez->FieldByName("have_childs")->Value);
             unsigned int sp_id = (unsigned int)rez->FieldByName("sp_id")->Value.operator int();
             String sp_name = rez->FieldByName("sp_name")->Value;
+            bool started = (int)rez->FieldByName("started")->Value;
             IzdNode *ptr = new IzdNode(name, obd, det_id, kol, sp_id, sp_name);
+            ptr->SetLock(started);
             node = contentTV->Items->AddObject(node, VinToGost(ptr->getDetObd())+" "+ptr->getDetName()+" - "+String(ptr->getCount())+" шт.", (void*)ptr);
             Set_img(node);
             if (have_childs)
@@ -276,7 +345,7 @@ void TManufactureControl::LoadDetailData    (String zap_id, unsigned __int64 zak
         LoadDetailStandartParts(zap_id, zak_id, part_id, det_id);
     }
     else if (Content_detail->ActivePage == Materials)
-    {
+	{
         LoadDetailMaterials(zap_id, zak_id, part_id, det_id);
     }
     else if (Content_detail->ActivePage == Oborud)
@@ -781,8 +850,23 @@ void __fastcall TManufactureControl::RemoveZapusk(TObject *Sender)
 void __fastcall TManufactureControl::InWorkZapusk(TObject *Sender)
 {
     if ( MessageBoxA(this->Handle, "Запустить в работу?", "Запустить в работу?",MB_YESNO|MB_ICONQUESTION) == mrYes )
-    {
-        return;
+	{
+		//получить список партий для запуска
+        std::vector<unsigned __int64> parts;
+        TADOQuery *rez = DB->SendSQL("Select part_id from manufacture.manufacture_orders a "
+                                     " join manufacture.parts b on a.zap_id = b.zap_id "
+                                     " where a.zap_id ='"+zapSG->Cells[ZAP_ID_COL][zapSG->Row]+"'");
+        if (rez)
+		{
+            for (rez->First(); !rez->Eof; rez->Next())
+			{
+				parts.push_back((unsigned __int64)((__int64)rez->FieldByName("part_id")->Value));
+            }
+            delete rez;
+        }
+
+        StartOrder(parts);
+        UpdateOrderStatus();
     }
     return;
 }
@@ -790,7 +874,22 @@ void __fastcall TManufactureControl::ToEditZapusk(TObject *Sender)
 {
     if ( MessageBoxA(this->Handle, "Вернуть в разработку?", "Вернуть в разработку?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
-        return;
+        //получить список партий для запуска
+        std::vector<unsigned __int64> parts;
+        TADOQuery *rez = DB->SendSQL("Select part_id from manufacture.manufacture_orders a "
+                                     " join manufacture.parts b on a.zap_id = b.zap_id "
+                                     " where a.zap_id ='"+zapSG->Cells[ZAP_ID_COL][zapSG->Row]+"'");
+        if (rez)
+        {
+            for (rez->First(); !rez->Eof; rez->Next())
+            {
+                parts.push_back((unsigned __int64)((__int64)rez->FieldByName("part_id")->Value));
+            }
+            delete rez;
+        }
+
+        StopOrder(parts);
+        UpdateOrderStatus();
     }
     return;
 }
@@ -837,7 +936,7 @@ void __fastcall TManufactureControl::RemoveZakaz(TObject *Sender)
 {
     if ( MessageBoxA(this->Handle, "Удалить заказ/партию из запуска?", "Удалить заказ/партию из запуска?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
-        DB->SendCommand("BEGIN");
+        DB->SendCommand("START TRANSACTION");
         try
         {
             for (size_t i = 0; i < zakTV->SelectionCount; ++i)
@@ -872,7 +971,26 @@ void __fastcall TManufactureControl::InWorkZakaz(TObject *Sender)
 {
     if ( MessageBoxA(this->Handle, "Запустить в работу?", "Запустить в работу?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
-        return;
+        std::vector<unsigned __int64> parts;
+        for (size_t i = 0; i < zakTV->SelectionCount; ++i)
+        {
+            TTreeNode *node = zakTV->Selections[i];
+            if (node->Level == 0)
+            {//запустить заказ
+                for (TTreeNode *ch_node = node->getFirstChild(); ch_node; ch_node = node->GetNextChild(ch_node))
+                {
+                    PartNode *ptr = (PartNode *)ch_node->Data;
+                    parts.push_back(ptr->getPartID());
+                }
+            }
+            else
+            {//запустить партию
+                PartNode *ptr = (PartNode *)node->Data;
+                parts.push_back(ptr->getPartID());
+            }
+        }
+        StartOrder(parts);
+        UpdateOrderStatus();
     }
     return;
 }
@@ -880,14 +998,34 @@ void __fastcall TManufactureControl::ToEditZakaz(TObject *Sender)
 {
     if ( MessageBoxA(this->Handle, "Вернуть в разработку?", "Вернуть в разработку?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
-        return;
+        std::vector<unsigned __int64> parts;
+        for (size_t i = 0; i < zakTV->SelectionCount; ++i)
+        {
+            TTreeNode *node = zakTV->Selections[i];
+            if (node->Level == 0)
+            {//запустить заказ
+                for (TTreeNode *ch_node = node->getFirstChild(); ch_node; ch_node = node->GetNextChild(ch_node))
+                {
+                    PartNode *ptr = (PartNode *)ch_node->Data;
+                    parts.push_back(ptr->getPartID());
+                }
+            }
+            else
+            {//запустить партию
+                PartNode *ptr = (PartNode *)node->Data;
+                parts.push_back(ptr->getPartID());
+            }
+        }
+        StopOrder(parts);
+        UpdateOrderStatus();
     }
     return;
 }
-void __fastcall TManufactureControl::zakTVClick(TObject *Sender)
+void __fastcall TManufactureControl::zakTVMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y)
 {
-    TTreeNode *node = zakTV->Selected;
-    if (node)
+    TTreeNode *node = zakTV->GetNodeAt(X, Y);;
+    if (node && Button == TMouseButton::mbLeft)
     {
         if (!node->Level)
         {
@@ -902,7 +1040,6 @@ void __fastcall TManufactureControl::zakTVClick(TObject *Sender)
             LoadDetailData("", 0, ptr->getPartID(), 0);
         }
     }
-
     return;
 }
 
@@ -993,8 +1130,8 @@ void __fastcall TManufactureControl::contentTVExpanding(TObject *Sender, TTreeNo
             unsigned int sp_id = (unsigned int)rez->FieldByName("sp_id")->Value.operator int();
             String sp_name = rez->FieldByName("sp_name")->Value;
             bool using_ = rez->FieldByName("using")->Value;
-            IzdPartNode *ptr = new IzdPartNode(name, obd, det_id, kol_using, det_idp, kol_sp, sp_id, sp_name, using_);
-
+            IzdPartNode *ch_ptr = new IzdPartNode(name, obd, det_id, kol_using, det_idp, kol_sp, sp_id, sp_name, using_);
+            ch_ptr->SetLock(ptr->Locked());
             if (prev_sp_id != sp_id)
             {
                 sp_node = contentTV->Items->AddChildObject(Node, sp_name, 0);
@@ -1004,7 +1141,7 @@ void __fastcall TManufactureControl::contentTVExpanding(TObject *Sender, TTreeNo
                 prev_sp_id = sp_id;
                 Set_img(sp_node);
             }
-            node= contentTV->Items->AddChildObject(sp_node, VinToGost(ptr->getDetObd())+" "+ptr->getDetName(), (void*)ptr);
+            node= contentTV->Items->AddChildObject(sp_node, VinToGost(ch_ptr->getDetObd())+" "+ch_ptr->getDetName(), (void*)ch_ptr);
             Set_img(node);
             if (have_childs)
             {
@@ -1089,20 +1226,27 @@ void __fastcall TManufactureControl::contentTVMouseDown(TObject *Sender, TMouseB
                     MenuItem12->Enabled = false;
                 }
             }
-            else
-            {
+			else
+			{
                 contentTV->PopupMenu = 0;
-            }
-        }
-        if (node->Data)
+			}
+		}
+		if (node->Data)
         {
-            IzdNode *ptr = (IzdNode *)node->Data;
-            LoadDetailData("",0,0,ptr->getDetID());
+			IzdNode *ptr = (IzdNode *)node->Data;
+            if (Button == TMouseButton::mbLeft)
+            {
+                LoadDetailData("",0,0,ptr->getDetID());
+            }
+
+			MenuItem5->Enabled = !ptr->Locked();
+			MenuItem11->Enabled = !ptr->Locked();
+            MenuItem12->Enabled = !ptr->Locked();
         }
     }
     return;
 }
-void             TManufactureControl::Update       (TTreeNode *node)
+void TManufactureControl::Update       (TTreeNode *node)
 {
     if (node->Data)
     {
@@ -1115,6 +1259,77 @@ void             TManufactureControl::Update       (TTreeNode *node)
         Update(i);
     }
 }
+void TManufactureControl::UpdateOrderStatus (void)
+{
+	if (zapSG->Cells[ZAP_ID_COL][zapSG->Row] == "")
+        return;
+    TADOQuery *rez = DB->SendSQL("select (a.in_work is not null) started "
+                                 " from manufacture.manufacture_orders a "
+                                 " where a.zap_id = '"+zapSG->Cells[ZAP_ID_COL][zapSG->Row]+"'");
+    if (rez)
+    {
+		zapSG->Cells[ZAP_IN_WORK_COL][zapSG->Row] = rez->FieldByName("started")->Value;
+		delete rez;
+    }
+    zapSG->Repaint();
+    UpdatePartsStatus();
+}
+void TManufactureControl::UpdatePartsStatus (void)
+{
+    if (zapSG->Cells[ZAP_ID_COL][zapSG->Row] == "")
+        return;
+    bool t;
 
+    LoadZakaz(zapSG->Cells[ZAP_ID_COL][zapSG->Row], "", "");
+    LoadIzd(zapSG->Cells[ZAP_ID_COL][zapSG->Row], 0, 0, "");
+}
+
+void TManufactureControl::StartOrder(const std::vector<unsigned __int64> &parts)
+{
+    Transaction tr(DB);
+	for (std::vector<unsigned __int64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
+    {
+		DB->SendCommand("call manufacture.zapusk_starter('"+String(*it)+"')");
+	}
+	tr.Commit();
+}
+void TManufactureControl::StopOrder(const std::vector<unsigned __int64> &parts)
+{
+	Transaction tr(DB);
+	for (std::vector<unsigned __int64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
+	{
+        DB->SendCommand("call manufacture.zapusk_stopper('"+String(*it)+"')");
+    }
+    tr.Commit();
+}
+
+void __fastcall TManufactureControl::zapSGDrawCell(TObject *Sender, int ACol, int ARow,
+		  TRect &Rect, TGridDrawState State)
+{
+	TStringGrid *sg = dynamic_cast<TStringGrid *>(Sender);
+	if (!sg)
+	{
+    	return;
+	}
+	TColor cur_color = sg->Canvas->Brush->Color;
+
+	if (ACol == 0 && ARow !=0)
+	{
+		int caser = zapSG->Cells[ZAP_IN_WORK_COL][ARow].ToIntDef(0);
+		TColor color = clRed;
+		switch (caser)
+		{
+			case 0: {color = clRed; break;}
+			case 1: {color = clGreen; break;}
+		default: color = clRed;
+		}
+
+		sg->Canvas->Brush->Color = color;
+		sg->Canvas->FillRect(Rect);
+	}
+
+
+    sg->Canvas->Brush->Color = cur_color;
+}
 //---------------------------------------------------------------------------
 

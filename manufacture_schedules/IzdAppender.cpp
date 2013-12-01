@@ -14,7 +14,7 @@ __fastcall TIzdAppenderWnd::TIzdAppenderWnd(TComponent* Owner, cSQL *db, String 
 {
     String sql = " select a.zakaz, a.zak_id from manufacture.zakaz_list a "
                  " join manufacture.parts b on b.zak_id = a.zak_id "
-                 " where b.zap_id = '"+zap_id+"' group by a.zak_id ";
+                 " where b.zap_id = '"+zap_id+"' and b.in_work is null group by a.zak_id ";
     TADOQuery *rez = DB->SendSQL(sql);
     if (rez)
     {
@@ -37,7 +37,7 @@ void __fastcall TIzdAppenderWnd::ZakazListChange(TObject *Sender)
     }
     ZakazData *ptr = (ZakazData *)ZakazList->Items->Objects[ZakazList->ItemIndex];
     String sql = " select a.part_no, a.part_id from manufacture.parts a "
-                 " where a.zap_id = '"+zap_id+"' and a.zak_id = '"+String(ptr->getZakID())+"'";
+                 " where a.in_work is null and a.zap_id = '"+zap_id+"' and a.zak_id = '"+String(ptr->getZakID())+"'";
     TADOQuery *rez = DB->SendSQL(sql);
     if (rez)
     {
