@@ -1,20 +1,32 @@
 ﻿#временные файлы
 *~
-#история изменений 
 __history
-#папки Debud Release
 Debug/
 Release/
-#eventlog
 eventlog*.txt
 eventLog*.txt
 *.log
 *.bak
 
-#Thumbs
 Thumbs.db*
 
-#LibrarySupport
 LibrarySupport*/
-#ModelSupport
 ModelSupport*/
+yzpm_ktpp.pro.user
+yzpmktpp.cbproj
+yzpmktpp.cbproj.local
+yzpmktpp.cpp
+__history
+Debug
+ModelSupport_yzpmktpp
+Thumbs.db
+Thumbs.db:encryptable
+Работа программы.docx
+документация.dox
+документация.doxdb
+изменения.txt
+комментарии.dtx
+комментарии.dtx.bak
+тз.doc
+шаблоны и илюстрации.rar
+un_used
