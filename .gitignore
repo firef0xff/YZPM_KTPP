@@ -8,19 +8,15 @@ eventLog*.txt
 *.log
 *.bak
 
-Thumbs.db*
 
 LibrarySupport*/
 ModelSupport*/
 yzpm_ktpp.pro.user
 yzpmktpp.cbproj
 yzpmktpp.cbproj.local
-yzpmktpp.cpp
-__history
 Debug
 ModelSupport_yzpmktpp
-Thumbs.db
-Thumbs.db:encryptable
+Thumbs*
 Работа программы.docx
 документация.dox
 документация.doxdb
