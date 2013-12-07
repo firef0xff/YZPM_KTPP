@@ -8,6 +8,7 @@
 #include "ZakazCreator.h"
 #include "IzdAppender.h"
 #include "functions.h"
+#include "ReportBuilder.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -1330,6 +1331,14 @@ void __fastcall TManufactureControl::zapSGDrawCell(TObject *Sender, int ACol, in
 
 
     sg->Canvas->Brush->Color = cur_color;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TManufactureControl::N5Click(TObject *Sender)
+{
+	TReports *wnd = new TReports(this);
+	wnd->ShowModal();
+	delete wnd;
 }
 //---------------------------------------------------------------------------
 

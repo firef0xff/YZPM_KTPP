@@ -263,6 +263,7 @@ __published:    // IDE-managed Components
           int X, int Y);
 	void __fastcall zapSGDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect,
           TGridDrawState State);
+	void __fastcall N5Click(TObject *Sender);
 
 private:    // User declarations
 
