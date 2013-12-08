@@ -36,6 +36,10 @@ object ManufactureControl: TManufactureControl
       TabOrder = 0
       object Parts: TTabSheet
         Caption = #1044#1077#1090#1072#1083#1080
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Splitter2: TSplitter
           Left = 304
           Top = 0
@@ -96,6 +100,10 @@ object ManufactureControl: TManufactureControl
           OnChange = DetDetailControlChange
           object OperationsSheet: TTabSheet
             Caption = #1054#1087#1077#1088#1072#1094#1080#1080
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object operSG: TStringGrid
               Left = 0
               Top = 0
@@ -113,6 +121,10 @@ object ManufactureControl: TManufactureControl
           object ObourSheet: TTabSheet
             Caption = #1054#1073#1086#1088#1091#1076#1086#1074#1072#1085#1080#1077
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object det_oborudSG: TStringGrid
               Left = 0
               Top = 0
@@ -129,6 +141,10 @@ object ManufactureControl: TManufactureControl
           object TabSheet2: TTabSheet
             Caption = #1052#1072#1090#1077#1088#1080#1072#1083#1099
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object det_matSG: TStringGrid
               Left = 0
               Top = 0
@@ -145,6 +161,10 @@ object ManufactureControl: TManufactureControl
           object TabSheet3: TTabSheet
             Caption = #1048#1079#1075#1086#1090#1086#1074#1083#1077#1085#1080#1077
             ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object makeSG: TStringGrid
               Left = 0
               Top = 0
@@ -163,6 +183,10 @@ object ManufactureControl: TManufactureControl
       object StandartParts: TTabSheet
         Caption = #1057#1090#1072#1085#1076#1072#1088#1090#1085#1099#1077
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object stSG: TStringGrid
           Left = 0
           Top = 0
@@ -180,6 +204,10 @@ object ManufactureControl: TManufactureControl
       object Materials: TTabSheet
         Caption = #1052#1072#1090#1077#1088#1080#1072#1083#1099
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object matSG: TStringGrid
           Left = 0
           Top = 0
@@ -197,6 +225,10 @@ object ManufactureControl: TManufactureControl
       object Oborud: TTabSheet
         Caption = #1054#1073#1086#1088#1091#1076#1086#1074#1072#1085#1080#1077
         ImageIndex = 3
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object OborudSG: TStringGrid
           Left = 0
           Top = 0
@@ -213,6 +245,10 @@ object ManufactureControl: TManufactureControl
       object TabSheet6: TTabSheet
         Caption = #1054#1090#1095#1077#1090' '#1087#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1072
         ImageIndex = 4
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object LabeledEdit1: TLabeledEdit
           Left = 3
           Top = 24
@@ -795,7 +831,7 @@ object ManufactureControl: TManufactureControl
     Left = 224
     Top = 208
     Bitmap = {
-      494C0101030005004C0018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000500500018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000600000001800000001002000000000000024
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1103,7 +1139,7 @@ object ManufactureControl: TManufactureControl
     Left = 224
     Top = 136
     Bitmap = {
-      494C010103005400800010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103005400840010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       000000000000000000000000000000000000241CED00241CED00241CED00241C
       ED00241CED00241CED00241CED00241CED00241CED00241CED00241CED00241C

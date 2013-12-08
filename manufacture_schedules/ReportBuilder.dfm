@@ -1,9 +1,10 @@
 object Reports: TReports
   Left = 0
   Top = 0
+  BorderStyle = bsSizeToolWin
   Caption = #1054#1090#1095#1077#1090#1099
-  ClientHeight = 237
-  ClientWidth = 233
+  ClientHeight = 226
+  ClientWidth = 270
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,67 +12,51 @@ object Reports: TReports
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poMainFormCenter
   PixelsPerInch = 96
   TextHeight = 13
-  object Panel1: TPanel
-    Left = 0
-    Top = 0
-    Width = 233
-    Height = 89
-    Align = alTop
-    Caption = 'Panel1'
-    TabOrder = 0
-    ExplicitWidth = 312
-    object CatalogSG: TStringGrid
-      Left = 1
-      Top = 1
-      Width = 231
-      Height = 87
-      Align = alClient
-      ColCount = 3
-      DefaultColWidth = 16
-      DefaultRowHeight = 16
-      RowCount = 2
-      ScrollBars = ssVertical
-      TabOrder = 0
-    end
-  end
   object Panel2: TPanel
     Left = 0
-    Top = 124
-    Width = 233
-    Height = 113
-    Align = alBottom
+    Top = 68
+    Width = 270
+    Height = 158
+    Align = alClient
     Caption = 'Panel1'
-    TabOrder = 1
-    ExplicitTop = 144
+    TabOrder = 0
+    ExplicitWidth = 280
+    ExplicitHeight = 168
     object ScheduleSG: TStringGrid
       Left = 1
       Top = 1
-      Width = 231
-      Height = 111
+      Width = 268
+      Height = 156
       Align = alClient
       ColCount = 3
       DefaultColWidth = 16
       DefaultRowHeight = 16
       RowCount = 2
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect]
       ScrollBars = ssVertical
       TabOrder = 0
+      OnDrawCell = ScheduleSGDrawCell
+      ExplicitWidth = 278
+      ExplicitHeight = 166
     end
   end
   object Panel3: TPanel
     Left = 0
-    Top = 89
-    Width = 233
-    Height = 35
-    Align = alClient
-    TabOrder = 2
-    ExplicitTop = 156
-    ExplicitWidth = 312
-    ExplicitHeight = 37
+    Top = 0
+    Width = 270
+    Height = 68
+    Align = alTop
+    TabOrder = 1
+    ExplicitWidth = 280
+    DesignSize = (
+      270
+      68)
     object Add: TSpeedButton
-      Left = 6
-      Top = 5
+      Left = 1
+      Top = 35
       Width = 23
       Height = 22
       Glyph.Data = {
@@ -101,10 +86,11 @@ object Reports: TReports
         FFFFFFFFFFFFFFFFFF0000800000FF0000FF0000FF0000FF000080FFFFFFFFFF
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00008000008000
         0080000080000080000080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+      OnClick = AddClick
     end
     object Del: TSpeedButton
       Left = 30
-      Top = 5
+      Top = 35
       Width = 23
       Height = 22
       Glyph.Data = {
@@ -134,24 +120,28 @@ object Reports: TReports
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
         FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+      OnClick = DelClick
     end
     object BitBtn2: TBitBtn
-      Left = 67
-      Top = 6
+      Left = 109
+      Top = 35
       Width = 75
       Height = 25
+      Anchors = [akTop, akRight]
       Caption = #1054#1090#1084#1077#1085#1072
       DoubleBuffered = True
       Kind = bkCancel
       NumGlyphs = 2
       ParentDoubleBuffered = False
       TabOrder = 0
+      ExplicitLeft = 119
     end
     object BitBtn1: TBitBtn
-      Left = 148
-      Top = 6
+      Left = 190
+      Top = 35
       Width = 75
       Height = 25
+      Anchors = [akTop, akRight]
       Caption = #1055#1088#1080#1085#1103#1090#1100
       Default = True
       DoubleBuffered = True
@@ -175,6 +165,17 @@ object Reports: TReports
       NumGlyphs = 2
       ParentDoubleBuffered = False
       TabOrder = 1
+      ExplicitLeft = 200
+    end
+    object ReportsList: TComboBox
+      Left = 1
+      Top = 8
+      Width = 264
+      Height = 22
+      Style = csOwnerDrawFixed
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 2
+      ExplicitWidth = 274
     end
   end
 end

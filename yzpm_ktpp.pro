@@ -4,6 +4,10 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH += \
+    ../win_includes/vcl\
+    ../win_includes/rtl\
+    ../win_includes/crtl\
+    ../win_includes/sdk\
     ../mylib/Excel\
     ../mylib/SQL\
     common\
