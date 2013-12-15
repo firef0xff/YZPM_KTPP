@@ -23,8 +23,6 @@ object Reports: TReports
     Align = alClient
     Caption = 'Panel1'
     TabOrder = 0
-    ExplicitWidth = 280
-    ExplicitHeight = 168
     object ScheduleSG: TStringGrid
       Left = 1
       Top = 1
@@ -38,9 +36,10 @@ object Reports: TReports
       Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect]
       ScrollBars = ssVertical
       TabOrder = 0
+      OnDblClick = ScheduleSGDblClick
       OnDrawCell = ScheduleSGDrawCell
-      ExplicitWidth = 278
-      ExplicitHeight = 166
+      ExplicitLeft = 0
+      ExplicitTop = -2
     end
   end
   object Panel3: TPanel
@@ -50,7 +49,6 @@ object Reports: TReports
     Height = 68
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 280
     DesignSize = (
       270
       68)
@@ -134,9 +132,8 @@ object Reports: TReports
       NumGlyphs = 2
       ParentDoubleBuffered = False
       TabOrder = 0
-      ExplicitLeft = 119
     end
-    object BitBtn1: TBitBtn
+    object Build: TBitBtn
       Left = 190
       Top = 35
       Width = 75
@@ -165,7 +162,7 @@ object Reports: TReports
       NumGlyphs = 2
       ParentDoubleBuffered = False
       TabOrder = 1
-      ExplicitLeft = 200
+      OnClick = BuildClick
     end
     object ReportsList: TComboBox
       Left = 1
@@ -175,7 +172,6 @@ object Reports: TReports
       Style = csOwnerDrawFixed
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 2
-      ExplicitWidth = 274
     end
   end
 end

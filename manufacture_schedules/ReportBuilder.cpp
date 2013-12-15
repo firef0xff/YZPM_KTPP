@@ -1,52 +1,84 @@
-//---------------------------------------------------------------------------
+п»ї//---------------------------------------------------------------------------
 
 #include <vcl.h>
 #pragma hdrstop
 
 #include "ReportBuilder.h"
+#include "report_params.h"
 #include <functions.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 
-ReportList::Report test_report0("rep_4056", "Маршрутные ведомости1",STARTUP|ORDER|PART|PRODUCT);
-ReportList::Report test_report1("rep_4057", "Маршрутные ведомости2",STARTUP|ORDER|PART);
-ReportList::Report test_report2("rep_4058", "Маршрутные ведомости3",STARTUP|ORDER|PART|PRODUCT);
-ReportList::Report test_report3("rep_4059", "Маршрутные ведомости4",STARTUP|ORDER|PART);
-ReportList::Report test_report4("rep_40510","Маршрутные ведомости5",STARTUP|ORDER|PART);
-ReportList::Report test_report5("rep_40511","Маршрутные ведомости6",STARTUP|ORDER|PART|PRODUCT);
-ReportList::Report test_report6("rep_40512","Маршрутные ведомости7",STARTUP|ORDER|PART);
-ReportList::Report test_report7("rep_40513","Маршрутные ведомости8",STARTUP|ORDER|PART|PRODUCT);
+fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
+fake::FakeReport test_report1(STARTUP|ORDER|PART);
+fake::FakeReport test_report2(STARTUP|ORDER|PART|PRODUCT);
+fake::FakeReport test_report3(STARTUP|ORDER|PART);
+fake::FakeReport test_report4(STARTUP|ORDER|PART);
+fake::FakeReport test_report5(STARTUP|ORDER|PART|PRODUCT);
+fake::FakeReport test_report6(STARTUP|ORDER|PART);
+fake::FakeReport test_report7(STARTUP|ORDER|PART|PRODUCT);
 
 
 __fastcall TReports::TReports(TComponent* Owner, Reports_set set, __uint64  id )
 	: TForm(Owner)
 {
-    ReportList::ReportsSet reps = ReportList::Instance().GetReports(set);
-
+    rep::ReportList::ConstReportsSet reps = rep::ReportList::Instance().GetReports(set);
 	ReportsList->Items->Clear();
-	for (ReportList::ReportsSet::const_iterator it = reps.begin(); it != reps.end(); ++it)
+
+    for (rep::ReportList::ConstReportsSet::const_iterator it = reps.begin(); it != reps.end(); ++it)
 	{
-		ReportsList->Items->AddObject((*it)->rep_name.c_str(),(TObject *)*it);
+		ReportsList->Items->AddObject((*it)->Name().c_str(),(TObject *)*it);
 	}
 	if (ReportsList->Items->Count)
 	{
 		ReportsList->ItemIndex = 0;
 	}
+
+    SGClear(ScheduleSG);
+	ScheduleSG->Cells[1][0] = "РћС‚С‡РµС‚";
+    ScheduleSG->Cells[2][0] = "РџР°СЂР°РјРµС‚СЂС‹";
+    AutoWidthSG(ScheduleSG);
 }
 //---------------------------------------------------------------------------
 void __fastcall TReports::AddClick(TObject *Sender)
 {
 	if (ReportsList->ItemIndex >= 0)
 	{
-        ReportList::Report *ptr = (ReportList::Report *)ReportsList->Items->Objects[ReportsList->ItemIndex];
+        rep::Report *ptr = (rep::Report *)ReportsList->Items->Objects[ReportsList->ItemIndex];
 
-        boost::shared_ptr<TSchedule> t(new TSchedule(ptr->func_name,ptr->rep_name));
-        t->AddVar("var1","val1");
-        t->AddVar("var2","val2");
-        t->AddVar("var3","val3");
-        schedules.push_back(t);
+        boost::shared_ptr<rep::Report> t(ptr->SelfCopy());
+
+        TRepParams *wnd = new TRepParams(this,t->Params());
+        if (wnd->NoParams() || wnd->ShowModal() == mrOk)
+        {
+            schedules.push_back(t);
+        }
+        delete wnd;
 	}
+    UpdateRepListSG();
+}
+
+void __fastcall TReports::ScheduleSGDblClick(TObject *Sender)
+{
+    int ofset = ScheduleSG->Row - 1;
+
+    if (ofset >= 0 && ofset < schedules.size())
+    {
+        ScheduleList::iterator it = schedules.begin() + ofset;
+
+        if (it != schedules.end())
+        {
+            boost::shared_ptr<rep::Report> t = *it;
+            rep::Report::ParamList tmp = t->Params();
+            TRepParams *wnd = new TRepParams(this,tmp);
+            if (wnd->NoParams() || wnd->ShowModal() == mrOk)
+            {
+                t->Params() = tmp;
+            }
+            delete wnd;
+        }
+    }
     UpdateRepListSG();
 }
 
@@ -72,10 +104,10 @@ void TReports::UpdateRepListSG (void)
 
     for (ScheduleList::const_iterator it = schedules.begin(); it != schedules.end(); ++it)
     {
-        boost::shared_ptr<TSchedule> ptr= *it;
+        boost::shared_ptr<rep::Report> ptr= *it;
         int row = ScheduleSG->RowCount-1;
-        ScheduleSG->Cells[1][row] = ptr->ReportName().c_str();
-        ScheduleSG->Cells[2][row] = ptr->GetVariables().c_str();
+        ScheduleSG->Cells[1][row] = ptr->Name().c_str();
+        ScheduleSG->Cells[2][row] = ptr->ParamsValues().c_str();
 
         ++ScheduleSG->RowCount;
     }
@@ -98,6 +130,17 @@ void __fastcall TReports::ScheduleSGDrawCell(TObject *Sender, int ACol, int ARow
           TRect &Rect, TGridDrawState State)
 {
 //
+}
+
+void __fastcall TReports::BuildClick(TObject *Sender)
+{
+    for (ScheduleList::const_iterator it = schedules.begin(),end = schedules.end(); it!=end; ++it)
+    {
+        const boost::shared_ptr<rep::Report> ptr = *it;
+        ptr->Params()[REPORT_OBJECT_ID] = AnsiString(object_id).c_str();
+        ptr->Params()[REPORT_OBJECT_TYPE] = AnsiString(selected_set).c_str();
+        ptr->Build();
+    }
 }
 //---------------------------------------------------------------------------
 

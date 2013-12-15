@@ -77,6 +77,7 @@ HEADERS += \
     prepare_products_list/*.h\
     searcher/*h\
     orders_editor/*h\
+    manufacture_schedules/report.h
 
 OTHER_FILES += \
     *.dfm\
