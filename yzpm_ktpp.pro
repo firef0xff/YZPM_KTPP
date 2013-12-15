@@ -18,6 +18,8 @@ INCLUDEPATH += \
     Login\
     Login/dialogs\
     manufacture_schedules\
+    manufacture_schedules/reports\
+    manufacture_schedules/reports/exemplars\
     sklad\
     oasu_moover\
     reports\
@@ -42,6 +44,8 @@ SOURCES += \
     Login/*.cpp\
     Login/dialogs/*.cpp\
     manufacture_schedules/*cpp\
+    manufacture_schedules/reports/*.cpp\
+    manufacture_schedules/reports/exemplars/*.cpp\
     sklad/*cpp\
     oasu_moover/*cpp\
     reports/*cpp\
@@ -66,6 +70,8 @@ HEADERS += \
     Login/*.h\
     Login/dialogs/*.h\
     manufacture_schedules/*h\
+    manufacture_schedules/reports/*.h\
+    manufacture_schedules/reports/exemplars/*.h\
     sklad/*h\
     oasu_moover/*h\
     reports/*h\
