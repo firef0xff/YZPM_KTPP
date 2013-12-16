@@ -85,7 +85,6 @@ namespace rep
 
 namespace  fake
 {
-
     FakeReport::FakeReport (int set): rep::Report("Fake Report",set)
     {
         params["Цех"]="05";

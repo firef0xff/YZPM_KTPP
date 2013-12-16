@@ -11,14 +11,6 @@
 #pragma resource "*.dfm"
 
 fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
-fake::FakeReport test_report1(STARTUP|ORDER|PART);
-fake::FakeReport test_report2(STARTUP|ORDER|PART|PRODUCT);
-fake::FakeReport test_report3(STARTUP|ORDER|PART);
-fake::FakeReport test_report4(STARTUP|ORDER|PART);
-fake::FakeReport test_report5(STARTUP|ORDER|PART|PRODUCT);
-fake::FakeReport test_report6(STARTUP|ORDER|PART);
-fake::FakeReport test_report7(STARTUP|ORDER|PART|PRODUCT);
-
 
 __fastcall TReports::TReports(TComponent* Owner, Reports_set set, __uint64  id )
 	: TForm(Owner)
