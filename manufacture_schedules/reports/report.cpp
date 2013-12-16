@@ -31,6 +31,14 @@ namespace rep
         return res;
     }
 
+    void ReportList::DbConnection (cSQL *db_)
+    {
+        db = db_;
+    }
+    cSQL * ReportList::DbConnection (void)
+    {
+        return db;
+    }
 
     Report::Report(std::string r_nm, int set_):name(r_nm),set(set_)
     {
@@ -101,7 +109,7 @@ namespace  fake
 
     }
 
-    void FakeReport::Build(void) const
+    void FakeReport::Build(void)
     {
         throw std::runtime_error("it is a fake report");
     }

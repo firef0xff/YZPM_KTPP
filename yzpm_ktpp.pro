@@ -57,6 +57,7 @@ SOURCES += \
     prepare_products_list/*.cpp\
     searcher/*cpp\
     orders_editor/*cpp\
+    manufacture_schedules/reports/exsemplars/routelist.cpp
 
 HEADERS += \
     ../mylib/Excel/*.h \
@@ -83,7 +84,8 @@ HEADERS += \
     prepare_products_list/*.h\
     searcher/*h\
     orders_editor/*h\
-    manufacture_schedules/report.h
+    manufacture_schedules/report.h \
+    manufacture_schedules/reports/exsemplars/routelist.h
 
 OTHER_FILES += \
     *.dfm\

@@ -6,16 +6,20 @@
 #include "ReportBuilder.h"
 #include "report_params.h"
 #include <functions.h>
+#include <reports/exsemplars/routelist.h>o
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 
-fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
+rep::RouteList per1(STARTUP|ORDER|PART|PRODUCT);
+//fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
 
-__fastcall TReports::TReports(TComponent* Owner, Reports_set set, __uint64  id )
+__fastcall TReports::TReports(TComponent* Owner,cSQL *DB, Reports_set set, __uint64  id )
 	: TForm(Owner)
 {
     rep::ReportList::ConstReportsSet reps = rep::ReportList::Instance().GetReports(set);
+    rep::ReportList::Instance().DbConnection(DB);
+
 	ReportsList->Items->Clear();
 
     for (rep::ReportList::ConstReportsSet::const_iterator it = reps.begin(); it != reps.end(); ++it)
@@ -131,7 +135,15 @@ void __fastcall TReports::BuildClick(TObject *Sender)
         const boost::shared_ptr<rep::Report> ptr = *it;
         ptr->Params()[REPORT_OBJECT_ID] = AnsiString(object_id).c_str();
         ptr->Params()[REPORT_OBJECT_TYPE] = AnsiString(selected_set).c_str();
-        ptr->Build();
+
+        try
+        {
+            ptr->Build();
+        }
+        catch (std::runtime_error &e)
+        {
+            ShowMessage(e.what());
+        }
     }
 }
 //---------------------------------------------------------------------------

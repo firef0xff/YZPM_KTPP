@@ -6,6 +6,7 @@
 #include <list>
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
+#include <SQL.h>
 
 #define REPORT_PATH         "report_path"
 #define REPORT_LIST_COUNT   "report_list_count"
@@ -32,11 +33,15 @@ public:
     void Register(Report *r);
     void UnRegister(Report *r);
     ConstReportsSet GetReports(int set) const;
+
+    void DbConnection (cSQL *db_);
+    cSQL * DbConnection (void);
 private:
-    ReportList(){}
+    ReportList():db(0){}
     ReportList(const ReportList &){}
     void operator = (const ReportList &){}
 
+    cSQL *db;
     ReportsSet reports;
 };
 
@@ -49,7 +54,7 @@ public:
     Report(std::string r_nm, int set_);
     virtual ~Report();
 
-    virtual void Build (void) const = 0;
+    virtual void Build (void) = 0;
     ParamList& Params(void);
     std::string Name(void) const;
     std::string ParamsValues(void) const;
@@ -79,7 +84,7 @@ public:
 
     FakeReport(const FakeReport &r);
 
-    void Build(void) const;
+    void Build(void);
 	boost::shared_ptr<rep::Report> SelfCopy (void) const;
 };
 

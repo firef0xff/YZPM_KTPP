@@ -48,7 +48,7 @@ __published:	// IDE-managed Components
 	void __fastcall BuildClick(TObject *Sender);
 	void __fastcall ScheduleSGDblClick(TObject *Sender);
 public:		// User declarations
-    __fastcall TReports(TComponent* Owner, Reports_set set, __uint64  id);
+    __fastcall TReports(TComponent* Owner,cSQL *DB, Reports_set set, __uint64  id);
 
 
 private:	// User declarations

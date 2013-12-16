@@ -81,12 +81,15 @@ __fastcall TRepParams::TRepParams(TComponent* Owner, rep::Report::ParamList &par
 
 void __fastcall TRepParams::okClick(TObject *Sender)
 {
-	for (size_t i = 1; i<OptionsSG->RowCount; ++i)
-	{
-		AnsiString key = OptionsSG->Cells[0][i];
-		AnsiString val = OptionsSG->Cells[1][i];
-		params[key.c_str()] = val.c_str();
-	}
+    if (use_params)
+    {
+        for (size_t i = 1; i<OptionsSG->RowCount; ++i)
+        {
+            AnsiString key = OptionsSG->Cells[0][i];
+            AnsiString val = OptionsSG->Cells[1][i];
+            params[key.c_str()] = val.c_str();
+        }
+    }
     if (use_path)
     {
         AnsiString t = FileName->Text;

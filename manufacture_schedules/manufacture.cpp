@@ -1336,7 +1336,7 @@ void __fastcall TManufactureControl::zapSGDrawCell(TObject *Sender, int ACol, in
 
 void __fastcall TManufactureControl::N5Click(TObject *Sender)
 {
-    TReports *wnd = new TReports(this,PRODUCT,0);
+    TReports *wnd = new TReports(this,DB,PRODUCT,0);
 	wnd->ShowModal();
 	delete wnd;
 }
