@@ -25,6 +25,7 @@ private:
     size_t lists_by_file;
     //объект построения отчета
     std::string object;
+    std::string element;
     std::string type;
 
     //шаблоны

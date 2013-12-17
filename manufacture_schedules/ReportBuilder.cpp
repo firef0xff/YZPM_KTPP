@@ -14,8 +14,8 @@
 rep::RouteList per1(STARTUP|ORDER|PART|PRODUCT);
 //fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
 
-__fastcall TReports::TReports(TComponent* Owner,cSQL *DB, Reports_set set, __uint64  id )
-	: TForm(Owner)
+__fastcall TReports::TReports(TComponent* Owner,cSQL *DB, Reports_set set, __uint64  id, __uint64  sub_id )
+    : TForm(Owner),selected_set(set),object_id(id),element_id(sub_id)
 {
     rep::ReportList::ConstReportsSet reps = rep::ReportList::Instance().GetReports(set);
     rep::ReportList::Instance().DbConnection(DB);
@@ -134,6 +134,7 @@ void __fastcall TReports::BuildClick(TObject *Sender)
     {
         const boost::shared_ptr<rep::Report> ptr = *it;
         ptr->Params()[REPORT_OBJECT_ID] = AnsiString(object_id).c_str();
+        ptr->Params()[REPORT_ELEMENT_ID] = AnsiString(element_id).c_str();
         ptr->Params()[REPORT_OBJECT_TYPE] = AnsiString(selected_set).c_str();
 
         try

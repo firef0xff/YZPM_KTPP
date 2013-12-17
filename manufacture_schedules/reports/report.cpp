@@ -84,6 +84,7 @@ namespace rep
             system_params.insert(REPORT_USE_LISTING);
             system_params.insert(REPORT_OBJECT_ID);
             system_params.insert(REPORT_OBJECT_TYPE);
+            system_params.insert(REPORT_ELEMENT_ID);
         }
 
         return system_params.find(param) != system_params.end();

@@ -6,7 +6,7 @@ namespace rep
 {
 
 RouteList::RouteList (int set): rep::Report("Маршрутные листы",set),
-    DB(0),path(""),use_listing(false),lists_by_file(0),object(""),type(""),template_path(""),
+    DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
     cur_lists(0)
 {
     params[REPORT_PATH];
@@ -17,7 +17,7 @@ RouteList::~RouteList()
 {}
 
 RouteList::RouteList(const RouteList &r):rep::Report(r),
-    DB(0),path(""),use_listing(false),lists_by_file(0),object(""),type(""),template_path(""),
+    DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
     cur_lists(0)
 {
 
@@ -56,6 +56,7 @@ void RouteList::ParseParams(void)
     //переменные указывающие на цель отчета
     object = params[REPORT_OBJECT_ID];
     type   = params[REPORT_OBJECT_TYPE];
+    element = params[REPORT_ELEMENT_ID];
 
     if (object.empty())
         throw std::runtime_error("Не указан объект для построения отчета");
@@ -81,10 +82,56 @@ void RouteList::LoadSettings()
 void RouteList::BuildReport()
 {
     //получить список маршрутных листов по заданию
-    //если есть данные то строим файл
-        BuildData();//для каждой строчки данных подгружаем детализацию
-    //иначе с ошибкой на вылет
+    std::stringstream sql;
+    sql << "select a.part_id, a.det_id, a.list_no from manufacture.marsh_lists a ";
 
+    if (type == "1")
+    {//запуск
+        sql << "join manufacture.parts b on a.part_id = b.part_id ";
+        sql << "where a.zap_id = '"<< object <<"'";
+    }
+    else if (type == "2")
+    {//заказ
+        sql << "join manufacture.parts b on a.part_id = b.part_id ";
+        sql << "where b.zap_id = '"<< object <<"' and b.zak_id = '"<< element <<"'";
+    }
+    else if (type == "4")
+    {//партия
+        sql << "where a.part_id = '"<< object <<"'";
+    }
+    else if (type == "8")
+    {//продукт
+        sql << "where a.part_id = '"<< object <<"' and a.det_id = '"<< element <<"'";
+    }
+    else
+        throw std::runtime_error("Не известный тип объекта");
+
+    TADOQuery *rez = DB->SendSQL(sql.str().c_str());
+    if (rez)
+    {
+        //включаем ексель
+        cExcel ex;
+        ex.Connect();
+        ex.Visible(false);
+        ex.DisplayAlerts(false);
+
+
+        for (rez->First(); !rez->Eof(); rez->Next())
+        {
+            BuildData();//для каждой строчки данных подгружаем детализацию
+
+            //проверяем количество страниц, если выставлена опция
+        }
+        //закрываем Excel в зависимости от опции сохранения в файл
+
+        ex.Visible(true);
+        ex.Disconnect();
+        delete rez;
+    }
+    else
+    {
+        throw std::runtime_error("Ошибка соединения с базой данных");
+    }
 }
 void RouteList::BuildData(size_t det_id)
 {

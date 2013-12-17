@@ -48,7 +48,7 @@ __published:	// IDE-managed Components
 	void __fastcall BuildClick(TObject *Sender);
 	void __fastcall ScheduleSGDblClick(TObject *Sender);
 public:		// User declarations
-    __fastcall TReports(TComponent* Owner,cSQL *DB, Reports_set set, __uint64  id);
+    __fastcall TReports(TComponent* Owner, cSQL *DB, Reports_set set, __uint64  id, __uint64 sub_id = 0);
 
 
 private:	// User declarations
@@ -57,6 +57,7 @@ private:	// User declarations
     typedef std::vector<boost::shared_ptr<rep::Report> > ScheduleList;
     Reports_set selected_set;
     __uint64  object_id;
+    __uint64  element_id;
     ScheduleList schedules;
 };
 

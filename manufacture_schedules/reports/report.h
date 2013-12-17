@@ -12,6 +12,7 @@
 #define REPORT_LIST_COUNT   "report_list_count"
 #define REPORT_USE_LISTING  "report_use_listing"
 #define REPORT_OBJECT_ID    "report_object_id"
+#define REPORT_ELEMENT_ID   "report_element_id"
 #define REPORT_OBJECT_TYPE  "report_object_type"
 #define REP_TRUE    "1"
 #define REP_FALSE   "0"
