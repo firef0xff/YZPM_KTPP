@@ -19,7 +19,7 @@ INCLUDEPATH += \
     Login/dialogs\
     manufacture_schedules\
     manufacture_schedules/reports\
-    manufacture_schedules/reports/exemplars\
+    manufacture_schedules/reports/exsemplars\
     sklad\
     oasu_moover\
     reports\
@@ -45,7 +45,7 @@ SOURCES += \
     Login/dialogs/*.cpp\
     manufacture_schedules/*cpp\
     manufacture_schedules/reports/*.cpp\
-    manufacture_schedules/reports/exemplars/*.cpp\
+    manufacture_schedules/reports/exsemplars/*.cpp\
     sklad/*cpp\
     oasu_moover/*cpp\
     reports/*cpp\
@@ -57,7 +57,6 @@ SOURCES += \
     prepare_products_list/*.cpp\
     searcher/*cpp\
     orders_editor/*cpp\
-    manufacture_schedules/reports/exsemplars/routelist.cpp
 
 HEADERS += \
     ../mylib/Excel/*.h \
@@ -72,7 +71,7 @@ HEADERS += \
     Login/dialogs/*.h\
     manufacture_schedules/*h\
     manufacture_schedules/reports/*.h\
-    manufacture_schedules/reports/exemplars/*.h\
+    manufacture_schedules/reports/exsemplars/*.h\
     sklad/*h\
     oasu_moover/*h\
     reports/*h\
@@ -84,8 +83,6 @@ HEADERS += \
     prepare_products_list/*.h\
     searcher/*h\
     orders_editor/*h\
-    manufacture_schedules/report.h \
-    manufacture_schedules/reports/exsemplars/routelist.h
 
 OTHER_FILES += \
     *.dfm\

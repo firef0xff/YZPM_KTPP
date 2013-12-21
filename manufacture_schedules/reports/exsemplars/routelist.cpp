@@ -1,6 +1,6 @@
 ﻿#include "routelist.h"
 #include "sstream.h"
-#include "Excel.h"
+#include "xl_operations.h"
 
 namespace rep
 {
@@ -138,7 +138,7 @@ void RouteList::BuildData(size_t det_id)
     //для каждой строчки данных подгружаем детализацию
 }
 
-/*
+/*0
 
 void cReports::OpenTemplate (AnsiString templ)
 {
