@@ -1336,9 +1336,36 @@ void __fastcall TManufactureControl::zapSGDrawCell(TObject *Sender, int ACol, in
 
 void __fastcall TManufactureControl::N5Click(TObject *Sender)
 {
-    TReports *wnd = new TReports(this,DB,PRODUCT,0);
-	wnd->ShowModal();
-	delete wnd;
+	int zap_id = zapSG->Cells[ZAP_ID_COL][zapSG->Row].ToIntDef(0);
+	if (zap_id)
+	{
+		TReports *wnd = new TReports(this,DB,STARTUP,zap_id);
+		wnd->ShowModal();
+		delete wnd;
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TManufactureControl::MenuItem8Click(TObject *Sender)
+{
+// ORDER - идентификатор заказа, идентификатор запуска PART  - идентификатор партии
+sql << "where b.zap_id = '"<< object <<"' and b.zak_id = '"<< element <<"'";
+
+sql << "where a.part_id = '"<< object <<"'";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TManufactureControl::N7Click(TObject *Sender)
+{
+// PRODUCT - идентификатор детали
+sql << "where a.part_id = '"<< object <<"' and a.det_id = '"<< element <<"'";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TManufactureControl::MenuItem13Click(TObject *Sender)
+{
+// PRODUCT  - идентификатор детали
+
 }
 //---------------------------------------------------------------------------
 

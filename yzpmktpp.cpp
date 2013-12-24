@@ -5,19 +5,18 @@
 #include <tchar.h>
 //---------------------------------------------------------------------------
 
-USEFORM("orders_editor\Order_set.cpp", Zakaz_set);
-USEFORM("prepare_products_list\Izd_Unroll.cpp", List_Editor);
-USEFORM("orders_editor\OrderContent_set.cpp", ZakazContent_set);
 USEFORM("orders_editor\Orders.cpp", Orders_editor); /* TFrame: File Type */
-USEFORM("prepare_products_list\List_add.cpp", ListAdd);
-USEFORM("reports\otchethost.cpp", Otchet);
-USEFORM("searcher\SearchModule.cpp", Search); /* TFrame: File Type */
-USEFORM("prepare_products_list\select_params.cpp", List_sel_params);
+USEFORM("orders_editor\Order_set.cpp", Zakaz_set);
+USEFORM("orders_editor\OrderContent_set.cpp", ZakazContent_set);
+USEFORM("prepare_products_list\Izd_Unroll.cpp", List_Editor);
 USEFORM("professions\professions.cpp", Professinos);
-USEFORM("manufacture_schedules\ReportBuilder.cpp", Reports);
+USEFORM("reports\otchethost.cpp", Otchet);
+USEFORM("prepare_products_list\List_add.cpp", ListAdd);
+USEFORM("prepare_products_list\select_params.cpp", List_sel_params);
 USEFORM("manufacture_schedules\report_params.cpp", RepParams);
 USEFORM("manufacture_schedules\ZakazCreator.cpp", ZakazWnd);
 USEFORM("manufacture_schedules\ZapCreator.cpp", ZapuskWnd);
+USEFORM("searcher\SearchModule.cpp", Search); /* TFrame: File Type */
 USEFORM("technology\support_modules\symblos.cpp", Symbol);
 USEFORM("technology\support_modules\tara_and_strop.cpp", tarandsrop);
 USEFORM("technology\support_modules\catalog_workpieces\zagotovk.cpp", zagotovka);
@@ -38,18 +37,19 @@ USEFORM("boom_editor\Obd_edt.cpp", Obd_edit);
 USEFORM("boom_editor\sp_params.cpp", spparams);
 USEFORM("boom_editor\razdel.cpp", rzd);
 USEFORM("boom_editor\SPEdit.cpp", SPEditor);
-USEFORM("Login\dialogs\RightSelect.cpp", fselRight);
-USEFORM("Login\dialogs\User_Data.cpp", UserData);
-USEFORM("Login\dialogs\Input_wnd.cpp", newItem);
-USEFORM("Login\dialogs\NextStateSelector.cpp", Next_State_Selector);
-USEFORM("Login\loginwin.cpp", LogIn);
-USEFORM("manufacture_schedules\IzdAppender.cpp", IzdAppenderWnd);
-USEFORM("manufacture_schedules\manufacture.cpp", ManufactureControl); /* TFrame: File Type */
-USEFORM("Login\Settings_wnd.cpp", Settings);
-USEFORM("main.cpp", mForm);
 USEFORM("common\DetSelector.cpp", ObdSelector); /* TFrame: File Type */
-USEFORM("log.cpp", LogForm);
+USEFORM("Login\dialogs\User_Data.cpp", UserData);
+USEFORM("Login\loginwin.cpp", LogIn);
+USEFORM("Login\dialogs\NextStateSelector.cpp", Next_State_Selector);
+USEFORM("Login\dialogs\RightSelect.cpp", fselRight);
+USEFORM("Login\Settings_wnd.cpp", Settings);
+USEFORM("manufacture_schedules\manufacture.cpp", ManufactureControl); /* TFrame: File Type */
+USEFORM("manufacture_schedules\ReportBuilder.cpp", Reports);
+USEFORM("main.cpp", mForm);
+USEFORM("manufacture_schedules\IzdAppender.cpp", IzdAppenderWnd);
 USEFORM("Login\dialogs\GTUSdialog.cpp", GTUSGroupSelector);
+USEFORM("Login\dialogs\Input_wnd.cpp", newItem);
+USEFORM("log.cpp", LogForm);
 //---------------------------------------------------------------------------
 WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

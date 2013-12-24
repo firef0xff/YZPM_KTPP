@@ -1,4 +1,4 @@
-#include "xl_operations.h"
+﻿#include "xl_operations.h"
 
 void OpenTemplate  (cExcel &xl,const std::string &templ)
 {
@@ -8,16 +8,20 @@ void OpenTemplate  (cExcel &xl,const std::string &templ)
     xl.SetActiveSheets(xl.GetSheets());
     xl.SetActiveSheet(xl.GetFirstSheet());
 }
-void SaveFile       (cExcel &xl, const std::string &name, const std::string &ext, const int &lists)
+void RemoveTemplates(cExcel &xl,const size_t &lists)
 {
     while(lists&&lists<xl.GetSheetsCount())
     {
         xl.Sheet_Del(xl.GetSheet(xl.GetSheetsCount()));
     }
     xl.Sheet_activate(xl.GetFirstSheet());
-    xl.Books_Save(name+ext);
 }
-void TrimFile       (cExcel &xl,const std::string &name, const std::string &ext, int &lists, int max_list_no, const std::string &templ)
+void SaveFile       (cExcel &xl, const std::string &name, const std::string &ext, const size_t &lists)
+{
+    RemoveTemplates(xl,lists);
+    xl.Books_Save((name+ext).c_str());
+}
+void TrimFile       (cExcel &xl,const std::string &name, const std::string &ext, size_t &lists, int max_list_no, const std::string &templ)
 {
     static std::string prev_file_name="";
     static int file_no=0;
@@ -34,12 +38,12 @@ void TrimFile       (cExcel &xl,const std::string &name, const std::string &ext,
             ++file_no;
         }
 
-        String addin;
+		std::stringstream addin;
         if (file_no)
-        {
-            addin="_"+String(file_no);
+		{
+			addin << "_" << file_no;
         }
-        SaveFile(name+addin,ext,lists);
+        SaveFile(xl, name+addin.str(),ext,lists);
         xl.Book_Close(xl.GetBook(1));
         OpenTemplate(xl, templ);
         lists=0;

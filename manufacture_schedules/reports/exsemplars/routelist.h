@@ -1,7 +1,7 @@
-#ifndef ROUTELIST_H
+﻿#ifndef ROUTELIST_H
 #define ROUTELIST_H
 #include <reports/report.h>
-
+#include <xl_operations.h>
 namespace rep
 {
 
@@ -30,6 +30,7 @@ private:
 
     //шаблоны
     std::string template_path;//путь к файлу шаблона
+    std::string templ;
 
     //глобальные переменные
     size_t cur_lists;
@@ -37,7 +38,7 @@ private:
     void ParseParams    (void);
     void LoadSettings   (void);
     void BuildReport    (void);
-    void BuildData      (size_t det_id);
+    void BuildData      (cExcel &xl, size_t det_id, std::string part_no, std::string list_no, std::string zakaz);
 };
 
 }
