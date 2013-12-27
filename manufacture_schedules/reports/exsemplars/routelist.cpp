@@ -1,5 +1,6 @@
 ﻿#include "routelist.h"
 #include "xl_operations.h"
+#include "functions.h"
 
 namespace rep
 {
@@ -87,7 +88,7 @@ void RouteList::BuildReport()
         << "join manufacture.zakaz_list c on b.zak_id = c.zak_id ";
     if (type == "1")
     {//запуск
-        sql << "where a.zap_id = '"<< object <<"'";
+        sql << "where b.zap_id = '"<< object <<"'";
     }
     else if (type == "2")
     {//заказ
@@ -98,52 +99,55 @@ void RouteList::BuildReport()
         sql << "where a.part_id = '"<< object <<"'";
     }
     else if (type == "8")
-    {//продукт
-        sql << "where a.part_id = '"<< object <<"' and a.det_id = '"<< element <<"'";
+	{//продукт
+        sql << "where a.det_id = '"<< object <<"'";
     }
     else
         throw std::runtime_error("Не известный тип объекта");
 
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
-    if (rez)
-    {
-        //включаем ексель
-        cExcel ex;
-        ex.Connect();
-        ex.Visible(false);
-        ex.DisplayAlerts(false);
+	if (rez)
+	{
+		if (rez->RecordCount)
+		{
+			//включаем ексель
+			cExcel ex;
+			ex.Connect();
+			ex.Visible(false);
+			ex.DisplayAlerts(false);
 
-        std::string teml_file = template_path + templ;
+			std::string teml_file = template_path + templ;
 
-        OpenTemplate(ex, teml_file);
+			OpenTemplate(ex, teml_file);
 
-		for (rez->First(); !rez->Eof; rez->Next())
-        {
-            size_t det_id  = rez->FieldByName("det_id")->Value.operator int();
-            std::string part_no = (rez->FieldByName("part_no")->Value.operator AnsiString()).c_str();
-            std::string list_no = (rez->FieldByName("list_no")->Value.operator AnsiString()).c_str();
-            std::string zakaz = (rez->FieldByName("zakaz")->Value.operator AnsiString()).c_str();
+			for (rez->First(); !rez->Eof; rez->Next())
+			{
+				size_t det_id  = rez->FieldByName("det_id")->Value.operator int();
+				std::string part_no = (rez->FieldByName("part_no")->Value.operator AnsiString()).c_str();
+				std::string list_no = (rez->FieldByName("list_no")->Value.operator AnsiString()).c_str();
+				std::string zakaz = (rez->FieldByName("zakaz")->Value.operator AnsiString()).c_str();
 
-            BuildData(ex, det_id, part_no, list_no, zakaz);//для каждой строчки данных подгружаем детализацию
+				BuildData(ex, det_id, part_no, list_no, zakaz);//для каждой строчки данных подгружаем детализацию
 
-            if (use_listing && !path.empty())
-            {//проверяем количество страниц, если выставлена опция
-                TrimFile(ex,"name","ext",cur_lists,lists_by_file,teml_file);
-            }
+				if (use_listing && !path.empty())
+				{//проверяем количество страниц, если выставлена опция
+					TrimFile(ex,path,"",cur_lists,lists_by_file,teml_file);
+				}
 
-        }
-        if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
-        {
-            SaveFile(ex,"name","ext",lists_by_file);
-            ex.Book_Close(ex.GetBook(1));
-        }
-        else
-        {
-            RemoveTemplates(ex,lists_by_file);
-            ex.Visible(true);
-        }
-        ex.Disconnect();
-        delete rez;
+			}
+			if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
+			{
+				SaveFile(ex,path,"",cur_lists);
+				ex.Book_Close(ex.GetBook(1));
+				ex.Disconnect();
+			}
+			else
+			{
+				RemoveTemplates(ex,cur_lists);
+				ex.Visible(true);
+			}
+		}
+		delete rez;
     }
     else
     {
@@ -157,11 +161,11 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
     sql << "select "
            //для шапки
         << "date_format(now(),'%d.%m.%Y') date, "
-        << "ceil(sum(`b`.`kol_using`)/`g`.`kdz`) kol_zag, "
+        << "ceil(sum(IFNULL(`b`.`kol_using`, `b1`.`kol`))/`g`.`kdz`) kol_zag, "
         << "`g`.`nrm` norm, "
-        << "`g`.`nrm` * sum(`b`.`kol_using`) norm_summ, "
+        << "`g`.`nrm` * sum(IFNULL(`b`.`kol_using`, `b1`.`kol`)) norm_summ, "
         << "`g`.`masz` mass, "
-        << "`g`.`masz` * sum(`b`.`kol_using`) mass_summ, "
+        << "`g`.`masz` * sum(IFNULL(`b`.`kol_using`, `b1`.`kol`)) mass_summ, "
         << "`g`.`razz` razz, "
         << "`g`.`vz`   zag_code, "
         << "trim(concat(`g`.`pm`,' ',`g`.`napr`)) marshrut, "
@@ -171,7 +175,7 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
            //отрывные
         << "`a`.`obd`   det_code, "
         << "`a`.`name`  det_name, "
-        << "sum(`b`.`kol_using`) kol, "
+        << "sum(IFNULL(`b`.`kol_using`, `b1`.`kol`) ) kol, "
         << "`c`.`cex`   cex, "
         << "`c`.`utch`  utch, "
         << "`c`.`opr`   oper_no, "
@@ -185,8 +189,9 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
         << "IFNULL(`f`.`tpz`, '') tpz, "
         << "IFNULL(round(`f`.`tsht`*`f`.`ksht`*`f`.`krop`/`f`.`kolod`, 5), '') tsht "
 
-        << "from        `manufacture`.`det_names` a"
-        << "join        `manufacture`.`det_tree` b        on `b`.`det_idc`        = `a`.`det_id` "
+        << "from        `manufacture`.`det_names` a "
+        << "left join   `manufacture`.`det_tree` b        on `b`.`det_idc`        = `a`.`det_id` "
+        << "left join   `manufacture`.`part_content` b1   on `b1`.`det_id`        = `a`.`det_id` "
         << "join        `manufacture`.`operation_list` c  on `c`.`det_id`         = `a`.`det_id` "
         << "left join   `equipment`.`opr_names` d         on `d`.`oprid`          = `c`.`oprid`  "
         << "left join   `manufacture`.`orders` e          on `e`.`operation_id`   = `c`.`OpUUID` "
@@ -195,10 +200,10 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
         << "left join   `manufacture`.`materials` h       on `h`.`obmid`          = `g`.`obmid`  "
         << "left join   `manufacture`.`det_names` h1      on `h1`.`det_id`        = `g`.`obmid`  "
 
-        << "where `a`.`det_id` = '" << det_id <<"'"
+        << "where `a`.`det_id` = '" << det_id <<"' "
 
-        << "group by `a`.`obd`,`c`.`opr`,`c`.`oboid`"
-        << "order by `c`.`opr` desc, `c`.`oboID` asc";
+		<< "group by `a`.`obd`,`c`.`opr`,`c`.`oboid` "
+		<< "order by `c`.`opr` desc, `c`.`oboID` asc ";
 
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
     if (rez)
@@ -208,7 +213,7 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
             bool new_page = true;
             bool first_page = true;
             size_t cur_row = 0;
-            size_t start_row = 0, end_row = 75, row_size = 0, template_row = 0;
+            size_t start_row = 0, end_row = 69, row_size = 0, template_row = 0;
             size_t first_page_start = 17;
             size_t second_page_start = 4;
             size_t summary_row_size = 2;
@@ -218,7 +223,7 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
             bool summary_info = true;
 
             //расчитать количество листов
-            size_t rows_count = rez->RecordCount * (summary_row_size + data_row_size);
+            size_t rows_count = rez->RecordCount * (summary_row_size + data_row_size)+1;
             size_t page_count = 1;
             if (rows_count > end_row - first_page_start)
             {
@@ -230,7 +235,7 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
             }
 
             std::stringstream buf;
-            for (size_t i = 0; i != 1; ++i)
+            for (size_t i = 0; i < 2; ++i)
             {
                 if (summary_info)
                 {
@@ -243,6 +248,7 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
                     template_row = 20;
                 }
 
+				std::string last_podr ="";
 				for (rez->First(); !rez->Eof; rez->Next())
 				{
                     //считать данные запроса
@@ -263,7 +269,8 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
 
 
 					std::string date        =(rez->FieldByName("date")->Value.operator AnsiString()).c_str();
-					std::string det_code    =(rez->FieldByName("det_code")->Value.operator AnsiString()).c_str();
+
+					std::string det_code    =VinToGost(rez->FieldByName("det_code")->Value.operator AnsiString()).c_str();
 					std::string det_name    =(rez->FieldByName("det_name")->Value.operator AnsiString()).c_str();
 					std::string kol         =(rez->FieldByName("kol")->Value.operator AnsiString()).c_str();
 
@@ -280,9 +287,10 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
 					std::string tpz     =(rez->FieldByName("tpz")->Value.operator AnsiString()).c_str();
 					std::string tsht    =(rez->FieldByName("tsht")->Value.operator AnsiString()).c_str();
 
-
+                    new_page = new_page + (cur_row + row_size > end_row);//проанализировать количестко оставшихся строк
                     if (new_page)
-                    {
+					{
+						new_page = false;
                         //создать страницу
                         xl.Sheet_Copy(xl.GetSheet(cur_lists+7), xl.GetSheet(cur_lists+1), Variant().NoParam());
                         cur_lists++ ;
@@ -311,8 +319,8 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
 
                             //убрать лишние строки шаблона
                             // копирование
-                            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+7), 25, 50));
-                            // вставка
+							xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+7), 30, 70));
+							// вставка
                             xl.Sheet_activate();
                             xl.Range_Paste(xl.GetRows(17, 30));
 
@@ -376,9 +384,17 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
                             xl.toCells(13,    14, kol.c_str()       );
                             xl.toCells(13,    15, razz.c_str()      );
 
-                            const size_t delim_pos = marshrut.find_last_of(" ",25);
-                            xl.toCells(13,    4, marshrut.substr(0, delim_pos).c_str());//26 знаков
-                            xl.toCells(14,    1, marshrut.substr(delim_pos+1, marshrut.size()).c_str());
+							const size_t delim_pos = marshrut.find_last_of(" ",25);
+							if (delim_pos != std::string::npos)
+							{
+								xl.toCells(13,    4, marshrut.substr(0, delim_pos).c_str());//26 знаков
+								xl.toCells(14,    1, marshrut.substr(delim_pos+1, marshrut.size()).c_str());
+							}
+							else
+							{
+								xl.toCells(13,    4, marshrut.c_str());//26 знаков
+								xl.toCells(14,    1, "");
+							}
                         }
                         else
                         {
@@ -386,7 +402,7 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
 
                             //убрать лишние строки шаблона
                             // копирование
-                            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+7), 25, 60));
+                            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+7), 30, 70));
                             // вставка
                             xl.Sheet_activate();
                             xl.Range_Paste(xl.GetRows(2, 30));
@@ -428,9 +444,16 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
                         xl.toCells(cur_row,     11,  tpz.c_str()        );
                         xl.toCells(cur_row,     13,  tsht.c_str()       );
                     }
-                    else
-                    {
-                        xl.toCells(cur_row,     5,  list_no.c_str()     );
+					else
+					{
+						std::string curr_podr = cex + utch;
+						if (last_podr == curr_podr)
+						{
+							xl.toCells(cur_row,     2,  "");
+						}
+						last_podr = curr_podr;
+
+						xl.toCells(cur_row,     5,  list_no.c_str()     );
                         xl.toCells(cur_row,     14,  zakaz.c_str()      );
                         xl.toCells(cur_row,     15,  part_no.c_str()    );
                         xl.toCells(cur_row,     7,  det_code.c_str()    );
@@ -438,7 +461,7 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
 
                         xl.toCells(cur_row+1,   3,  det_name.c_str()    );
 
-                        xl.toCells(cur_row+3,   3,  (cex + utch).c_str());
+						xl.toCells(cur_row+3,   3,  (cex + utch).c_str());
                         xl.toCells(cur_row+3,   5,  obo.c_str()         );
                         xl.toCells(cur_row+3,   7,  oper_no.c_str()     );
                         xl.toCells(cur_row+3,   8,  opr_code.c_str()    );
@@ -452,12 +475,13 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
                         for (size_t i = 1; i < row_size-1; ++i)
                         {
                             xl.toCells(cur_row+i,   26, order_no.c_str());
-                        }
-                    }
-                    new_page = cur_row + row_size > end_row;//проанализировать окличестко оставшихся строк
+						}
+					}
+					cur_row += row_size;
                 }
-                summary_info = false;
-            }
+				summary_info = false;
+				++cur_row;
+			}
         }
         delete rez;
     }

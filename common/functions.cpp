@@ -4,9 +4,9 @@
 #pragma package(smart_init)
 
 
-void MkPjDir(String subpart,String part)
+void MkPjDir(AnsiString subpart,AnsiString part)
 {
-String newfold,fold="";
+AnsiString newfold,fold="";
 while (subpart.Pos("\\")!=0)
     {
     newfold=subpart.SubString(1,subpart.Pos("\\"));
@@ -15,7 +15,7 @@ while (subpart.Pos("\\")!=0)
     fold=fold+newfold;
     }
 }
-String GetDirName (void)
+AnsiString GetDirName (void)
 {
 randomize();
 String part="";
@@ -26,10 +26,10 @@ part=part+IntToStr(random(40))+"\\";
 }
 return part;
 }
-String GetFileName (void)
+AnsiString GetFileName (void)
 {
 randomize();
-String name=IntToStr(random(99999999))+".bdf";
+AnsiString name=IntToStr(random(99999999))+".bdf";
 return name;
 }
 bool DeleteDir(AnsiString DirName)
@@ -61,7 +61,7 @@ RemoveDir(DirName);
 return true;
 }
 
-String ekran (String inpstr)
+AnsiString ekran (AnsiString inpstr)
 {
 int i;
 for (i = 1; i<=inpstr.Length(); i++)
@@ -84,7 +84,7 @@ for (i = 1; i<=inpstr.Length(); i++)
     }
 return inpstr;
 }
-String Replace (String st,String Old,String New)
+AnsiString Replace (AnsiString st,AnsiString Old,AnsiString New)
 {
 int i;
 String sub;
@@ -100,7 +100,7 @@ for (i=1; i <=st.Length(); i++)
     }
 return st;
 }
-String Replace (String st,String Old,String New,int pos,int count)
+AnsiString Replace (AnsiString st,AnsiString Old,AnsiString New,int pos,int count)
 {
 int i,cnt=0;
 String sub;
@@ -117,7 +117,7 @@ for (i=pos; i <=st.Length()&&cnt<count; i++)
     }
 return st;
 }
-String GetOnlyNum(String st)
+AnsiString GetOnlyNum(String st)
 {
 int i;
 for (i = 1; i <=st.Length(); i++)
@@ -153,7 +153,7 @@ if (str.Pos(LowerCase(ch)))
     }
 }
 
-String GostToVin(AnsiString Gost)
+AnsiString GostToVin(AnsiString Gost)
 {
 String tmp=Gost;
 Gost=Replace(Gost," ","");
@@ -209,7 +209,7 @@ if (Trim(Gost)==""){return "";} else
     }
  return Gost;
 }
-String GostToInt(AnsiString Gost)
+AnsiString GostToInt(AnsiString Gost)
 {
 String tmp=Gost;
 Gost=Replace(Gost," ","");    // показывает может ли отсутствовать исполнение в обозначении
@@ -247,7 +247,7 @@ if (Trim(Gost)==""){return "";} else
     return Gost;
     }
 }
-String GetGostNum(String st)
+AnsiString GetGostNum(AnsiString st)
 {
 int i;
 for (i = 1; i <=st.Length(); i++)
@@ -264,7 +264,7 @@ for (i = 1; i <=st.Length(); i++)
     }
 return st;
 }
-String VinToGost (String Vin)
+AnsiString VinToGost (AnsiString Vin)
 {
 if (Vin.Length()!=15||GetOnlyNum(Vin).Length()!=Vin.Length()) {return Vin;}
 if (Vin.SubString(1,6)=="000000")

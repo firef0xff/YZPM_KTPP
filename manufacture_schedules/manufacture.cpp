@@ -1087,7 +1087,7 @@ void __fastcall TManufactureControl::RemoveIzdelie(TObject *Sender)
 }
 void __fastcall TManufactureControl::IncludePath(TObject *Sender)
 {
-    TTreeNode *node = contentTV->Selected;
+	TTreeNode *node = contentTV->Selected;
     IzdPartNode *ptr = (IzdPartNode *)node->Data;
     DB->SendCommand("call manufacture.SetUsage ('"+String(ptr->getDetID())+"', '1')");
     Update(node);
@@ -1344,28 +1344,41 @@ void __fastcall TManufactureControl::N5Click(TObject *Sender)
 		delete wnd;
 	}
 }
-//---------------------------------------------------------------------------
-
 void __fastcall TManufactureControl::MenuItem8Click(TObject *Sender)
 {
-// ORDER - идентификатор заказа, идентификатор запуска PART  - идентификатор партии
-sql << "where b.zap_id = '"<< object <<"' and b.zak_id = '"<< element <<"'";
+	TTreeNode *node = zakTV->Selected;
+	if (node->Data)
+	{
+		if (node->Level == 0)
+		{//запустить заказ
+			ZakazNode *ptr = (ZakazNode *)node->Data;
 
-sql << "where a.part_id = '"<< object <<"'";
+			TReports *wnd = new TReports(this,DB,ORDER,ptr->getZapID(),ptr->getZakID());
+			wnd->ShowModal();
+			delete wnd;
+		}
+		else
+		{//запустить партию
+			PartNode *ptr = (PartNode *)node->Data;
+
+			TReports *wnd = new TReports(this,DB,PART,ptr->getPartID());
+			wnd->ShowModal();
+			delete wnd;
+		}
+	}
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TManufactureControl::N7Click(TObject *Sender)
 {
-// PRODUCT - идентификатор детали
-sql << "where a.part_id = '"<< object <<"' and a.det_id = '"<< element <<"'";
+	TTreeNode *node = contentTV->Selected;
+	if (node&& node->Data)
+	{
+		IzdNode *ptr = (IzdNode *)node->Data;
+
+		TReports *wnd = new TReports(this,DB,PRODUCT,ptr->getDetID());
+		wnd->ShowModal();
+		delete wnd;
+	}
 }
 //---------------------------------------------------------------------------
-
-void __fastcall TManufactureControl::MenuItem13Click(TObject *Sender)
-{
-// PRODUCT  - идентификатор детали
-
-}
-//---------------------------------------------------------------------------
-

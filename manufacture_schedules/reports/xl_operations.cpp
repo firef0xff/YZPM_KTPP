@@ -18,8 +18,13 @@ void RemoveTemplates(cExcel &xl,const size_t &lists)
 }
 void SaveFile       (cExcel &xl, const std::string &name, const std::string &ext, const size_t &lists)
 {
-    RemoveTemplates(xl,lists);
-    xl.Books_Save((name+ext).c_str());
+	RemoveTemplates(xl,lists);
+	std::string file_name = name;
+	if (!ext.empty())
+	{
+		file_name += "."+name;
+	}
+	xl.Books_Save(file_name.c_str());
 }
 void TrimFile       (cExcel &xl,const std::string &name, const std::string &ext, size_t &lists, int max_list_no, const std::string &templ)
 {

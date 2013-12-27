@@ -7,22 +7,22 @@
 #include <Grids.hpp>
 #include "SQL.h"
 
-void MkPjDir(String subpart,String part);
-String GetDirName (void);
-String GetFileName (void);
+void MkPjDir(AnsiString subpart,AnsiString part);
+AnsiString GetDirName (void);
+AnsiString GetFileName (void);
 bool  DeleteDir(AnsiString DirName);
 
-String ekran (String inpstr);
-String Replace (String st,String Old,String New);
-String Replace (String st,String Old,String New,int pos,int count);
-String GetOnlyNum(String st);
+AnsiString ekran (AnsiString inpstr);
+AnsiString Replace (AnsiString st,AnsiString Old,AnsiString New);
+AnsiString Replace (AnsiString st,AnsiString Old,AnsiString New,int pos,int count);
+AnsiString GetOnlyNum(String st);
 bool   ischar (const char ch);
 bool   isdigit(const char ch);
 
-String GostToVin(AnsiString Gost);
-String GostToInt(AnsiString Gost);
-String VinToGost (String Vin);
-String GetGostNum(String st);
+AnsiString GostToVin(AnsiString Gost);
+AnsiString GostToInt(AnsiString Gost);
+AnsiString VinToGost (AnsiString Vin);
+AnsiString GetGostNum(AnsiString st);
 
 void AutoWidthSG(TStringGrid *sg,int minwdth=40);
 void  SGClear (TStringGrid *SG,int RightOfset=0);
