@@ -1,4 +1,4 @@
-#include <reports/exsemplars/label.h>
+﻿#include <reports/exsemplars/label.h>
 #include <xl_operations.h>
 #include "functions.h"
 
@@ -89,15 +89,15 @@ void Lable::BuildReport()
         << "a.det_id, "
         << "a.list_no, "
         << "b.part_no, "
-        << "c.zakaz "
-        << "sum(IFNULL(`e`.`kol_using`, `d`.`kol`)) kol "
-        << "f.name det_name "
+        << "c.zakaz, "
+        << "sum(IFNULL(`e`.`kol_using`, `d`.`kol`)) kol, "
+        << "f.name det_name, "
         << "f.obd det_code "
         << "from manufacture.marsh_lists a "
         << "join manufacture.parts b on a.part_id = b.part_id "
         << "join manufacture.zakaz_list c on b.zak_id = c.zak_id "
         << "left join manufacture.part_content d on d.det_id = a.det_id "
-        << "left join manufacture.det_tree e on d.det_idc = a.det_id "
+        << "left join manufacture.det_tree e on e.det_idc = a.det_id "
         << "join manufacture.det_names f on f.det_id = a.det_id ";
     //сюда добавить:
     //количество деталей
@@ -121,6 +121,9 @@ void Lable::BuildReport()
     else
         throw std::runtime_error("Не известный тип объекта");
 
+    sql << "group by a.det_id";
+    sql << "order by f.obd";
+
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
     if (rez)
     {
@@ -129,7 +132,7 @@ void Lable::BuildReport()
             //включаем ексель
             cExcel xl;
             xl.Connect();
-            xl.Visible(false);
+			xl.Visible(false);
             xl.DisplayAlerts(false);
 
             std::string teml_file = template_path + templ;
@@ -138,7 +141,7 @@ void Lable::BuildReport()
 
             bool new_page = true;
             size_t cur_row = 0;
-            size_t start_row = 1, end_row = 69, row_size = 14, template_row = 0;
+            size_t start_row = 1, end_row = 69, row_size = 14, template_row = 1;
             size_t template_page = 6;
 
             bool add_row = true;
@@ -168,7 +171,9 @@ void Lable::BuildReport()
                     xl.Sheet_Copy(xl.GetSheet(cur_lists+template_page), xl.GetSheet(cur_lists+1), Variant().NoParam());
                     cur_lists++ ;
                     xl.SetActiveSheet(xl.GetSheet(cur_lists));
-                    xl.Set_Sheet_Name(xl.GetSheet(cur_lists),"Ярлыки лист-"+IntToStr(cur_lists));
+                    std::stringstream buf;
+                    buf<<cur_lists;
+                    xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("Ярлыки лист-"+buf.str()).c_str());
 
                     cur_row = start_row;
                 }
@@ -184,8 +189,8 @@ void Lable::BuildReport()
                     xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size));
                 }
                 else
-                {
-                    column_ofset = 8;
+				{
+					column_ofset = 8;
                 }
 
                 xl.toCells(cur_row+4,     column_ofset+4,  zakaz.c_str()    );
@@ -195,8 +200,12 @@ void Lable::BuildReport()
                 xl.toCells(cur_row+8,     column_ofset+4,  kol.c_str()      );
                 xl.toCells(cur_row+10,    column_ofset+3,  det_code.c_str() );
 
-                add_row = !add_row;
-                cur_row += row_size;
+				add_row = !add_row;
+				if (add_row)
+				{
+                	cur_row += row_size;
+				}
+
             }
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
             {
