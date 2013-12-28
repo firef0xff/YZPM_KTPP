@@ -82,7 +82,7 @@ HEADERS += \
     technology/support_modules/catalog_workpieces/*h\
     prepare_products_list/*.h\
     searcher/*h\
-    orders_editor/*h\
+    orders_editor/*h \
 
 OTHER_FILES += \
     *.dfm\

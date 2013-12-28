@@ -6,12 +6,14 @@
 #include "ReportBuilder.h"
 #include "report_params.h"
 #include <functions.h>
-#include <reports/exsemplars/routelist.h>o
+#include <reports/exsemplars/routelist.h>
+#include <reports/exsemplars/label.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 
-rep::RouteList per1(STARTUP|ORDER|PART|PRODUCT);
+rep::RouteList rep1(STARTUP|ORDER|PART|PRODUCT);
+rep::Lable rep2(STARTUP|ORDER|PART|PRODUCT);
 //fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
 
 __fastcall TReports::TReports(TComponent* Owner,cSQL *DB, Reports_set set, __uint64  id, __uint64  sub_id )
