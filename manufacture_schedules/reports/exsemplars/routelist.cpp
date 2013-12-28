@@ -85,7 +85,8 @@ void RouteList::BuildReport()
     std::stringstream sql;
     sql << "select a.part_id, a.det_id, a.list_no, b.part_no, c.zakaz from manufacture.marsh_lists a "
         << "join manufacture.parts b on a.part_id = b.part_id "
-        << "join manufacture.zakaz_list c on b.zak_id = c.zak_id ";
+        << "join manufacture.zakaz_list c on b.zak_id = c.zak_id "
+        << "join manufacture.det_names d on d.det_id = a.det_id ";
     if (type == "1")
     {//запуск
         sql << "where b.zap_id = '"<< object <<"'";
@@ -104,7 +105,7 @@ void RouteList::BuildReport()
     }
     else
         throw std::runtime_error("Не известный тип объекта");
-
+    sql << "order by d.obd";
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
 	if (rez)
 	{
