@@ -105,7 +105,7 @@ void RouteList::BuildReport()
     }
     else
         throw std::runtime_error("Не известный тип объекта");
-    sql << "order by a.list_no, d.obd ";
+    sql << "order by d.obd, a.list_no ";
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
 	if (rez)
 	{
