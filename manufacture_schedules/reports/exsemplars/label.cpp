@@ -122,7 +122,7 @@ void Lable::BuildReport()
         throw std::runtime_error("Не известный тип объекта");
 
     sql << "group by a.det_id ";
-    sql << "order by a.list_no, f.obd ";
+    sql << "order by f.obd, a.list_no ";
 
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
     if (rez)
