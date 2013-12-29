@@ -89,13 +89,14 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
     OborudSG->Cells[6][0] = "Выполнено";
     AutoWidthSG(OborudSG);
 
-    detDetails->Cells[1][0] = "Обозначение";
-    detDetails->Cells[2][0] = "Наименование";
-    detDetails->Cells[3][0] = "Кол - во";
-    detDetails->Cells[4][0] = "Труд. Ед.";
-    detDetails->Cells[5][0] = "Труд.";
-    detDetails->Cells[6][0] = "Изготовлено";
-    detDetails->Cells[7][0] = "Брак";
+    detDetails->Cells[1][0] = "Входит в";
+    detDetails->Cells[2][0] = "Обозначение";
+    detDetails->Cells[3][0] = "Наименование";
+    detDetails->Cells[4][0] = "Кол - во";
+    detDetails->Cells[5][0] = "Труд. Ед.";
+    detDetails->Cells[6][0] = "Труд.";
+    detDetails->Cells[7][0] = "Изготовлено";
+    detDetails->Cells[8][0] = "Брак";
     AutoWidthSG(detDetails);
 }
 __fastcall    TManufactureControl::~TManufactureControl(void)
@@ -366,7 +367,8 @@ void TManufactureControl::LoadDetailData    (String zap_id, unsigned __int64 zak
 }
 void TManufactureControl::LoadDetailParts   (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id)
 {
-    SGClear(detSG, 1);
+    SGClear(detSG, 5);
+    SGClear(detDetails, 1);
     SGClear(operSG);
     SGClear(det_oborudSG);
     SGClear(det_matSG);
@@ -490,6 +492,10 @@ void TManufactureControl::LoadDetailParts   (String zap_id, unsigned __int64 zak
                                  //TODO место для постранички
     DB->SendCommand(tmp4_drop);
     DB->SendCommand(tmp2_drop);
+    String out_zap_id   (zap_id);
+    String out_zak_id   (zak_id);
+    String out_part_id  (part_id);
+    String out_det_id   (det_id);
     //вывести результат
     if (rez)
     {
@@ -503,8 +509,14 @@ void TManufactureControl::LoadDetailParts   (String zap_id, unsigned __int64 zak
             detSG->Cells[5][row] = rez->FieldByName("trud")->Value;
             detSG->Cells[6][row] = rez->FieldByName("maked")->Value;
             detSG->Cells[7][row] = rez->FieldByName("broken")->Value;
-            detSG->Cells[8][row] = rez->FieldByName("det_id")->Value;  //ID FIELD
-            detSG->Cells[9][row] = rez->FieldByName("id")->Value;          //ID FIELD
+
+            //ID FIELDS
+            detSG->Cells[8][row] = rez->FieldByName("id")->Value;
+            detSG->Cells[9][row] = out_zap_id;
+            detSG->Cells[10][row] = out_zak_id;
+            detSG->Cells[11][row] = out_part_id;
+            detSG->Cells[12][row] = out_det_id;
+
             ++detSG->RowCount;
         }
         delete rez;
@@ -517,6 +529,158 @@ void TManufactureControl::LoadDetailParts   (String zap_id, unsigned __int64 zak
     return;
 }
 
+void TManufactureControl::LoadPartDetails   (String id, String zap_id, String zak_id, String part_id, String det_id)
+{
+    SGClear(detDetails, 1);
+
+    //получить список деталей для развертки
+    String tmp_drop = "drop temporary table if exists manufacture.idc";
+    String tmp_create = "create temporary table if not exists manufacture.idc as ";
+    String sql = "select a.det_id, a.sp_id from manufacture.det_names a ";
+    String where = " where true ";
+    String joins;
+    if (det_id.ToIntDef(0) > 0)
+    {
+        where+= " and a.det_id = '"+det_id+"' ";
+    }
+    if (part_id.ToIntDef(0)  > 0 || zak_id.ToIntDef(0)  > 0 || zap_id!="")
+    {
+        joins += " join manufacture.part_content b on b.det_id = a.det_id "
+                 " join manufacture.parts c on c.part_id = b.part_id ";
+        if (part_id > 0)
+        {
+            where += " and c.part_id = '"+part_id+"' ";
+        }
+        if (zak_id > 0)
+        {
+            where += " and c.zak_id = '"+zak_id+"' ";
+        }
+        if (zap_id > 0)
+        {
+            where += " and c.zap_id = '"+zap_id+"' ";
+        }
+    }
+    DB->SendCommand(tmp_drop);
+    DB->SendCommand(tmp_create + sql + joins + where);
+
+    //развернуть детали до составов учитывая разделы спецификации 0,2,3,4,8
+    String tmp2_drop = "drop temporary table if exists manufacture.dets";
+    String tmp2_create = "create temporary table if not exists manufacture.dets "
+                        "( "
+                        " det_idc bigint(20) unsigned not null, "
+                        " det_idp bigint(20) unsigned default null, "
+                        " lvl int(10) unsigned not null, "
+                        " key det_idc(`det_idc`), "
+                        " key det_idp(`det_idp`) "
+                        " )";
+    String tmp3_drop = "drop temporary table if exists manufacture.dets_tmp";
+    String tmp3_create = "create temporary table if not exists manufacture.dets_tmp "
+                        "( "
+                        " det_idc bigint(20) unsigned not null, "
+                        " det_idp bigint(20) unsigned default null, "
+                        " lvl int(10) unsigned not null, "
+                        " key det_idc(`det_idc`), "
+                        " key det_idp(`det_idp`) "
+                        " )";
+
+    //инициализация
+    DB->SendCommand(tmp2_drop);
+    DB->SendCommand(tmp2_create);
+    int lvl = 0;
+    DB->SendCommand("insert into manufacture.dets select a.det_id, null, '"+String(lvl)+"' "
+                    "from manufacture.idc a "
+                    "where a.sp_id in (0,2,3,4,8)");
+
+    while (lvl < 100)
+    {
+        TADOQuery *rez = DB->SendSQL("select count(1) cnt from manufacture.dets where lvl = '"+String(lvl)+"'");
+        if (rez&&rez->RecordCount)
+        {
+            if (!(int)rez->FieldByName("cnt")->Value)
+            {
+                break;
+            }
+            delete rez;
+        }
+        DB->SendCommand(tmp3_drop);
+        DB->SendCommand(tmp3_create);
+        DB->SendCommand("insert into manufacture.dets_tmp select * from manufacture.dets where lvl = '"+String(lvl)+"'");
+
+        DB->SendCommand("insert into manufacture.dets select a.det_idc, a.det_idp ,'"+String(lvl+1)+"' "
+                        "from manufacture.det_tree a "
+                        "join manufacture.dets_tmp b on a.det_idp = b.det_idc "
+                        "join manufacture.det_names c on a.det_idc = c.det_id "
+                        "where c.sp_id in (0,2,3,4,8)");
+        ++lvl;
+    }
+    DB->SendCommand(tmp_drop);
+    DB->SendCommand(tmp3_drop);
+
+    //посчитать трудоемкости по списку
+    String tmp4_drop = "drop temporary table if exists manufacture.dets_trud";
+    String tmp4_create = "create temporary table if not exists manufacture.dets_trud as "
+                         " select a.det_idc as det_id, sum(c.tsht*c.ksht*c.krop/c.kolod ) as trud_ed, "
+                         " sum(c.tsht*c.ksht*c.krop/c.kolod )*d.kol_using as trud, d.kol_using "
+                         " from manufacture.dets a "
+                         " join manufacture.operation_list b on a.det_idc = b.det_id "
+                         " join manufacture.operation_norms c on b.OpUUID = c.OpUUID "
+                         " join manufacture.det_tree d on d.det_idc = a.det_idc "
+                         " group by a.det_idc";
+    DB->SendCommand(tmp4_drop);
+    DB->SendCommand(tmp4_create);
+
+    DB->SendCommand("insert into manufacture.dets_trud "
+                    " select a.det_idc as det_id, sum(c.tsht*c.ksht*c.krop/c.kolod ) as trud_ed, "
+                    " sum(c.tsht*c.ksht*c.krop/c.kolod )*d.kol as trud, d.kol "
+                    " from manufacture.dets a "
+                    " join manufacture.operation_list b on a.det_idc = b.det_id "
+                    " join manufacture.operation_norms c on b.OpUUID = c.OpUUID "
+                    " join manufacture.part_content d on d.det_id = a.det_idc and a.det_idp is null "
+                    " group by a.det_idc");
+    //посчитать количества по списку
+
+    //соеденить данные
+    TADOQuery *rez = DB->SendSQL("select a.det_idc det_id, IFNULL(d.obd,'') parent_obd, round(sum(b.trud_ed),3) trud_ed, "
+                                 " round(sum(b.trud),3) trud, sum(b.kol_using) kol, c.obd, c.name, c.id id, "
+                                 " 0 maked, 0 broken "
+                                 " from manufacture.dets a "
+                                 " join manufacture.dets_trud b on a.det_idc = b.det_id "
+                                 " join manufacture.det_names c on a.det_idc = c.det_id "
+                                 " left join manufacture.det_names d on a.det_idp = d.det_id "
+                                 " where c.id = '"+id+"' "
+                                 " group by c.det_id ");
+                                 //TODO место для постранички
+    DB->SendCommand(tmp4_drop);
+    DB->SendCommand(tmp2_drop);
+    //вывести результат
+    if (rez)
+    {
+        for (rez->First(); !rez->Eof; rez->Next())
+        {
+            int row = detDetails->RowCount-1;
+            detDetails->Cells[1][row] = VinToGost(rez->FieldByName("parent_obd")->Value);
+            detDetails->Cells[2][row] = VinToGost(rez->FieldByName("obd")->Value);
+            detDetails->Cells[3][row] = rez->FieldByName("name")->Value;
+            detDetails->Cells[4][row] = rez->FieldByName("kol")->Value;
+            detDetails->Cells[5][row] = rez->FieldByName("trud_ed")->Value;
+            detDetails->Cells[6][row] = rez->FieldByName("trud")->Value;
+            detDetails->Cells[7][row] = rez->FieldByName("maked")->Value;
+            detDetails->Cells[8][row] = rez->FieldByName("broken")->Value;
+
+            //ID FIELDS
+            detDetails->Cells[9][row] = rez->FieldByName("det_id")->Value;
+
+            ++detDetails->RowCount;
+        }
+        delete rez;
+        if (detDetails->RowCount>2)
+        {
+            --detDetails->RowCount;
+        }
+        AutoWidthSG(detDetails);
+    }
+    return;
+}
 void TManufactureControl::LoadTechDetails   (String det_id)
 {
    SGClear(operSG);
@@ -635,15 +799,25 @@ void __fastcall TManufactureControl::detSGSelectCell(TObject *Sender, int ACol, 
     {
         return;
     }
+    LoadPartDetails(detSG->Cells[8][ARow],detSG->Cells[9][ARow],detSG->Cells[10][ARow],detSG->Cells[11][ARow],detSG->Cells[12][ARow]);
+
+}
+void __fastcall TManufactureControl::detDetailsSelectCell(TObject *Sender, int ACol,
+          int ARow, bool &CanSelect)
+{
+    if (detDetails->Cells[9][ARow] == "")
+    {
+        return;
+    }
     if (DetDetailControl->ActivePage == OperationsSheet)
-        LoadTechDetails(detSG->Cells[8][ARow]);
+        LoadTechDetails(detDetails->Cells[9][ARow]);
     if (DetDetailControl->ActivePage == ObourSheet)
-        LoadOborudDetails(detSG->Cells[8][ARow]);
+        LoadOborudDetails(detDetails->Cells[9][ARow]);
 }
 void __fastcall TManufactureControl::DetDetailControlChange(TObject *Sender)
 {
     bool t;
-    detSGSelectCell(0, detSG->Col, detSG->Row, t);
+    detDetailsSelectCell(0, detDetails->Col, detDetails->Row, t);
 }
 
 
@@ -1405,4 +1579,4 @@ void __fastcall TManufactureControl::N7Click(TObject *Sender)
 		delete wnd;
 	}
 }
-//---------------------------------------------------------------------------
+

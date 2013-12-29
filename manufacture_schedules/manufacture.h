@@ -268,6 +268,8 @@ __published:    // IDE-managed Components
 	void __fastcall N5Click(TObject *Sender);
 	void __fastcall MenuItem8Click(TObject *Sender);
 	void __fastcall N7Click(TObject *Sender);
+	void __fastcall detDetailsSelectCell(TObject *Sender, int ACol, int ARow, bool &CanSelect);
+
 
 private:    // User declarations
 
@@ -281,6 +283,7 @@ private:    // User declarations
 
     void LoadDetailData         (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
     void LoadDetailParts        (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
+    void LoadPartDetails        (String id,String zap_id, String zak_id, String part_id, String det_id);
     void LoadTechDetails        (String det_id);
     void LoadOborudDetails      (String det_id);
 

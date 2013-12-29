@@ -111,7 +111,9 @@ object ManufactureControl: TManufactureControl
             RowCount = 2
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
             TabOrder = 2
-            ExplicitWidth = 305
+            OnSelectCell = detDetailsSelectCell
+            ExplicitLeft = -1
+            ExplicitTop = 171
           end
         end
         object DetDetailControl: TPageControl
