@@ -235,6 +235,8 @@ __published:    // IDE-managed Components
     TBitBtn *BitBtn1;
 	TStringGrid *OborudSG;
 	TImageList *marks;
+	TStringGrid *detDetails;
+	TSplitter *Splitter3;
     void __fastcall CreateZapusk(TObject *Sender);
     void __fastcall RemoveZapusk(TObject *Sender);
     void __fastcall InWorkZapusk(TObject *Sender);

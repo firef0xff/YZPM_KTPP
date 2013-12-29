@@ -88,6 +88,15 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
     OborudSG->Cells[5][0] = "Заданий";
     OborudSG->Cells[6][0] = "Выполнено";
     AutoWidthSG(OborudSG);
+
+    detDetails->Cells[1][0] = "Обозначение";
+    detDetails->Cells[2][0] = "Наименование";
+    detDetails->Cells[3][0] = "Кол - во";
+    detDetails->Cells[4][0] = "Труд. Ед.";
+    detDetails->Cells[5][0] = "Труд.";
+    detDetails->Cells[6][0] = "Изготовлено";
+    detDetails->Cells[7][0] = "Брак";
+    AutoWidthSG(detDetails);
 }
 __fastcall    TManufactureControl::~TManufactureControl(void)
 {

@@ -30,36 +30,48 @@ object ManufactureControl: TManufactureControl
       Top = 0
       Width = 665
       Height = 252
-      ActivePage = Oborud
+      ActivePage = Parts
       Align = alClient
       Constraints.MinHeight = 100
       TabOrder = 0
       object Parts: TTabSheet
         Caption = #1044#1077#1090#1072#1083#1080
-        object Splitter2: TSplitter
-          Left = 304
+        object Splitter3: TSplitter
+          Left = 342
           Top = 0
           Height = 224
           Align = alRight
-          ExplicitLeft = 368
-          ExplicitTop = 152
+          ExplicitLeft = 344
+          ExplicitTop = 56
           ExplicitHeight = 100
         end
         object Panel1: TPanel
           Left = 0
           Top = 0
-          Width = 304
+          Width = 342
           Height = 224
           Align = alClient
           BevelKind = bkTile
           BevelOuter = bvNone
           Caption = 'Panel1'
           TabOrder = 0
+          ExplicitWidth = 304
+          object Splitter2: TSplitter
+            Left = 0
+            Top = 165
+            Width = 338
+            Height = 3
+            Cursor = crVSplit
+            Align = alBottom
+            ExplicitLeft = 305
+            ExplicitTop = 33
+            ExplicitWidth = 135
+          end
           object detSG: TStringGrid
             Left = 0
             Top = 33
-            Width = 300
-            Height = 187
+            Width = 338
+            Height = 132
             Align = alClient
             ColCount = 8
             DefaultColWidth = 16
@@ -68,11 +80,13 @@ object ManufactureControl: TManufactureControl
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
             TabOrder = 0
             OnSelectCell = detSGSelectCell
+            ExplicitWidth = 300
+            ExplicitHeight = 187
           end
           object RadioGroup1: TRadioGroup
             Left = 0
             Top = 0
-            Width = 300
+            Width = 338
             Height = 33
             Align = alTop
             Caption = #1043#1086#1090#1086#1074#1085#1086#1089#1090#1100
@@ -83,23 +97,44 @@ object ManufactureControl: TManufactureControl
               #1047#1072#1074#1077#1088#1096#1077#1085#1085#1099#1077
               #1053#1077#1079#1072#1074#1077#1088#1096#1077#1085#1085#1099#1077)
             TabOrder = 1
+            ExplicitWidth = 300
+          end
+          object detDetails: TStringGrid
+            Left = 0
+            Top = 168
+            Width = 338
+            Height = 52
+            Align = alBottom
+            ColCount = 8
+            DefaultColWidth = 16
+            DefaultRowHeight = 16
+            RowCount = 2
+            Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
+            TabOrder = 2
+            ExplicitWidth = 305
           end
         end
         object DetDetailControl: TPageControl
-          Left = 307
+          Left = 345
           Top = 0
-          Width = 350
+          Width = 312
           Height = 224
-          ActivePage = ObourSheet
+          ActivePage = OperationsSheet
           Align = alRight
           TabOrder = 1
           OnChange = DetDetailControlChange
+          ExplicitLeft = 1
+          ExplicitTop = 1
+          ExplicitWidth = 343
+          ExplicitHeight = 222
           object OperationsSheet: TTabSheet
             Caption = #1054#1087#1077#1088#1072#1094#1080#1080
+            ExplicitWidth = 335
+            ExplicitHeight = 194
             object operSG: TStringGrid
               Left = 0
               Top = 0
-              Width = 342
+              Width = 304
               Height = 196
               Align = alClient
               ColCount = 8
@@ -108,6 +143,8 @@ object ManufactureControl: TManufactureControl
               RowCount = 2
               Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
               TabOrder = 0
+              ExplicitWidth = 335
+              ExplicitHeight = 194
             end
           end
           object ObourSheet: TTabSheet
@@ -116,7 +153,7 @@ object ManufactureControl: TManufactureControl
             object det_oborudSG: TStringGrid
               Left = 0
               Top = 0
-              Width = 342
+              Width = 304
               Height = 196
               Align = alClient
               ColCount = 7
@@ -132,7 +169,7 @@ object ManufactureControl: TManufactureControl
             object det_matSG: TStringGrid
               Left = 0
               Top = 0
-              Width = 342
+              Width = 304
               Height = 196
               Align = alClient
               ColCount = 6
@@ -148,7 +185,7 @@ object ManufactureControl: TManufactureControl
             object makeSG: TStringGrid
               Left = 0
               Top = 0
-              Width = 342
+              Width = 304
               Height = 196
               Align = alClient
               ColCount = 7
@@ -798,7 +835,7 @@ object ManufactureControl: TManufactureControl
     Left = 224
     Top = 208
     Bitmap = {
-      494C0101030005005C0018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000500600018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000600000001800000001002000000000000024
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1106,7 +1143,7 @@ object ManufactureControl: TManufactureControl
     Left = 224
     Top = 136
     Bitmap = {
-      494C010103005400900010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103005400940010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       000000000000000000000000000000000000241CED00241CED00241CED00241C
       ED00241CED00241CED00241CED00241CED00241CED00241CED00241CED00241C
