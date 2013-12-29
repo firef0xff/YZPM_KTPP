@@ -905,6 +905,8 @@ void __fastcall TManufactureControl::zapSGSelectCell(TObject *Sender, int ACol, 
     LoadZakaz(zapSG->Cells[ZAP_ID_COL][ARow], "", "");
     LoadIzd(zapSG->Cells[ZAP_ID_COL][ARow], 0, 0, "");
     LoadDetailData(zapSG->Cells[ZAP_ID_COL][ARow], 0, 0, 0);
+
+    N2->Enabled = !zapSG->Cells[ZAP_IN_WORK_COL][ARow].ToIntDef(0);
 }
 
 void __fastcall TManufactureControl::AddZakaz(TObject *Sender)
@@ -1027,21 +1029,33 @@ void __fastcall TManufactureControl::zakTVMouseDown(TObject *Sender, TMouseButto
           TShiftState Shift, int X, int Y)
 {
     TTreeNode *node = zakTV->GetNodeAt(X, Y);;
-    if (node && Button == TMouseButton::mbLeft)
+    if (node )
     {
-        if (!node->Level)
+        if (Button == TMouseButton::mbLeft)
         {
-            ZakazNode *ptr = (ZakazNode *)node->Data;
-            LoadIzd(String(ptr->getZapID()), ptr->getZakID(), 0, "");
-            LoadDetailData(String(ptr->getZapID()), ptr->getZakID(), 0, 0);
+            if (!node->Level)
+            {
+                ZakazNode *ptr = (ZakazNode *)node->Data;
+                LoadIzd(String(ptr->getZapID()), ptr->getZakID(), 0, "");
+                LoadDetailData(String(ptr->getZapID()), ptr->getZakID(), 0, 0);
+            }
+            else
+            {
+                PartNode *ptr = (PartNode *)node->Data;
+                LoadIzd("", 0, ptr->getPartID(), "");
+                LoadDetailData("", 0, ptr->getPartID(), 0);
+            }
         }
-        else
+        else if (Button == TMouseButton::mbRight)
         {
-            PartNode *ptr = (PartNode *)node->Data;
-            LoadIzd("", 0, ptr->getPartID(), "");
-            LoadDetailData("", 0, ptr->getPartID(), 0);
+            NodeData *ptr = (NodeData *)node->Data;
+            if (ptr)
+            {
+                 MenuItem2->Enabled = ptr->Locked();
+            }
         }
     }
+
     return;
 }
 
