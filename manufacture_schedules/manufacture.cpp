@@ -229,6 +229,7 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
                     node->SelectedIndex=node->ImageIndex;
                     node->ExpandedImageIndex=node->ImageIndex;
                     summary_count = 1;
+                    started_count = 0;
                 }
 
                 ZakazNode *ptr = new ZakazNode(zak_id, zap_id, zak);
