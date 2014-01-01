@@ -222,6 +222,7 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
                 {
                     if (started_count > 0)
                     {
+                        ((NodeData *)node->Data)->SetLock();
                         if (started_count == summary_count -1)
                         {
                             node->ImageIndex = 1;
@@ -233,6 +234,7 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
                     }
                     else
                     {
+                        ((NodeData *)node->Data)->SetLock(false);
                         node->ImageIndex = 0;
                     }
 
@@ -247,7 +249,7 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
                 prev_zakaz = zak;
             }
             PartNode *ptr = new PartNode(part_id, part_no);
-            ptr->SetLock(!started);
+            ptr->SetLock(started);
             ch_node = zakTV->Items->AddChildObject(node, ptr->getPartNo(), (void*)ptr);
 
             if (started)
@@ -267,6 +269,7 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
         {
             if (started_count > 0)
             {
+                ((NodeData *)node->Data)->SetLock();
                 if (started_count == summary_count)
                 {
                     node->ImageIndex = 1;
@@ -278,6 +281,7 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
             }
             else
             {
+                ((NodeData *)node->Data)->SetLock(false);
                 node->ImageIndex = 0;
             }
 
@@ -1112,7 +1116,7 @@ void __fastcall TManufactureControl::AddZakaz(TObject *Sender)
             }
             DB->SendCommand("insert into manufacture.parts (zap_id,zak_id,part_no) values "
                             "('"+zapSG->Cells[ZAP_ID_COL][zapSG->Row]+"','"+rez->FieldByName("zak_id")->Value+"','"+wnd->part->Text+"')" );
-            LoadZakaz(zapSG->Cells[ZAP_ID_COL][zapSG->Row], wnd->zakaz->Text, "");
+            LoadZakaz(zapSG->Cells[ZAP_ID_COL][zapSG->Row], "", "");
         }
         delete rez;
     }
@@ -1151,6 +1155,10 @@ void __fastcall TManufactureControl::RemoveZakaz(TObject *Sender)
             DB->SendCommand("ROLLBACK");
         }
         DB->SendCommand("COMMIT");
+        if (zapSG->Cells[ZAP_ID_COL][zapSG->Row] != "")
+        {
+            LoadZakaz(zapSG->Cells[ZAP_ID_COL][zapSG->Row], "", "");
+        }
     }
     return;
 }
@@ -1234,7 +1242,7 @@ void __fastcall TManufactureControl::zakTVMouseDown(TObject *Sender, TMouseButto
             NodeData *ptr = (NodeData *)node->Data;
             if (ptr)
             {
-                 MenuItem2->Enabled = ptr->Locked();
+                 MenuItem2->Enabled = !ptr->Locked();
             }
         }
     }
@@ -1438,8 +1446,8 @@ void __fastcall TManufactureControl::contentTVMouseDown(TObject *Sender, TMouseB
                 LoadDetailData("",0,0,ptr->getDetID());
             }
 
-			MenuItem5->Enabled = !ptr->Locked();
-			MenuItem11->Enabled = !ptr->Locked();
+            MenuItem5->Enabled = !ptr->Locked();
+            MenuItem11->Enabled = !ptr->Locked();
             MenuItem12->Enabled = !ptr->Locked();
         }
     }
