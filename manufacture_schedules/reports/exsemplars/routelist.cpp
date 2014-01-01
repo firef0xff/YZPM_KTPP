@@ -385,7 +385,9 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
                             xl.toCells(13,    14, kol.c_str()       );
                             xl.toCells(13,    15, razz.c_str()      );
 
-							const size_t delim_pos = marshrut.find_last_of(" ",25);
+                            size_t delim_pos = std::string::npos;
+                            if (marshrut.size() > 25 )
+                                delim_pos = marshrut.find_last_of(" ",25);
 							if (delim_pos != std::string::npos)
 							{
 								xl.toCells(13,    4, marshrut.substr(0, delim_pos).c_str());//26 знаков
