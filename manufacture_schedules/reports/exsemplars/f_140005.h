@@ -17,6 +17,32 @@ public:
     boost::shared_ptr<rep::Report> SelfCopy (void) const;
 
 private:
+    struct ReportData
+    {
+        std::string ml_no;
+        std::string obd;
+        std::string name;
+        std::string kol;
+        std::string ost;
+        int prizn;
+        std::string nama;
+        std::string prma;
+        double tpz;
+        double tsht;
+        double tpz_part;
+        double tsht_part;
+        std::string order_no;
+        std::list<std::string> pm;
+        size_t Rows(void)
+        {
+            return 2 > pm.size()?2:pm.size();
+        }
+        void SetPm(std::string)
+        {
+
+        }
+    };
+    typedef std::list<ReportData> DataList;
 
     //соединение в бд
     cSQL *DB;
@@ -29,6 +55,10 @@ private:
     std::string element;
     std::string type;
 
+    //доп параметры
+    std::string ceh;
+    std::string utch;
+
     //шаблоны
     std::string template_path;//путь к файлу шаблона
     std::string templ;
@@ -38,8 +68,10 @@ private:
 
     void ParseParams    (void);
     void LoadSettings   (void);
-    void BuildReport    (void){}
+    void BuildReport    (void);
+    void BuildData      (std::string part_id, std::string zakaz, std::string part_no);
 };
 
 }
+
 #endif // F_140005_H
