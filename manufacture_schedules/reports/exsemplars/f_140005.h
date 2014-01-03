@@ -1,6 +1,7 @@
 #ifndef F_140005_H
 #define F_140005_H
 #include <reports/report.h>
+#include "functions.h"
 
 namespace rep
 {
@@ -33,13 +34,14 @@ private:
         double tsht_part;
         std::string order_no;
         std::list<std::string> pm;
-        size_t Rows(void)
+
+        size_t Rows(void) const
         {
             return 2 > pm.size()?2:pm.size();
         }
-        void SetPm(std::string)
+        void SetPm(std::string pm_)
         {
-
+            WordWrap(pm, pm_, 29, " ");
         }
     };
     typedef std::list<ReportData> DataList;

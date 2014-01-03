@@ -5,6 +5,8 @@
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
 #include <Grids.hpp>
+#include <list>
+#include <string>
 #include "SQL.h"
 
 void MkPjDir(AnsiString subpart,AnsiString part);
@@ -59,4 +61,7 @@ class Transaction
     bool commited;
     cSQL *DB;
 };
+
+void    WordWrap        (std::list<std::string> &out,std::string in,const size_t max_len, std::string delimeter = " ");
+
 #endif

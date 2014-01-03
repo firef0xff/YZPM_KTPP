@@ -383,7 +383,7 @@ return s > 0 ? --s : 0;
 template<typename T>
 void change (T &el1,T &el2)
 {
-   int temp=el1;
+   T temp=el1;
     el1=el2;
     el2=temp;
 }
@@ -402,3 +402,30 @@ for (curr=1; curr < size; curr++)
 
 }
 
+void    WordWrap        (std::list<std::string> &out,std::string in,const size_t max_len, std::string delimeter)
+{
+    out.clear();
+    while (size_t len=in.size())
+    {
+        if (max_len>=len)
+        {
+            out.push_back(in);
+            in="";
+        }
+        else
+        {
+            size_t pos = in.find_last_of(delimeter, max_len);
+            size_t delim_ofset = delimeter.size();
+            if (pos == std::string::npos)
+            {
+                //обрезаем по сайзу
+                pos = max_len-1;
+                delim_ofset = 0;
+            }
+            //обрезаем по разделителю
+
+            out.push_back(in.substr(0, pos));
+            in = in.substr(pos+delim_ofset, in.size());
+        }
+    }
+}

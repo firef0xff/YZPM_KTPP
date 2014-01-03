@@ -1,6 +1,5 @@
 ﻿#include <reports/exsemplars/f_140005.h>
 #include <xl_operations.h>
-#include "functions.h"
 
 namespace rep
 {
@@ -115,10 +114,13 @@ void F140005::BuildReport()
     {
         if (rez->RecordCount)
         {
-            std::string part_id =   (rez->FieldByName("part_id")->Value.operator AnsiString()).c_str();
-            std::string zakaz =     (rez->FieldByName("zakaz")->Value.operator AnsiString()).c_str();
-            std::string part_no =   (rez->FieldByName("part_no")->Value.operator AnsiString()).c_str();
-            BuildData(part_id,zakaz,part_no);
+            for (rez->First(); !rez->Eof; rez->Next())
+            {
+                std::string part_id =   (rez->FieldByName("part_id")->Value.operator AnsiString()).c_str();
+                std::string zakaz =     (rez->FieldByName("zakaz")->Value.operator AnsiString()).c_str();
+                std::string part_no =   (rez->FieldByName("part_no")->Value.operator AnsiString()).c_str();
+                BuildData(part_id,zakaz,part_no);
+            }
         }
         delete rez;
     }
@@ -129,6 +131,7 @@ void F140005::BuildReport()
 }
 void F140005::BuildData      (std::string part_id, std::string zakaz, std::string part_no)
 {
+    cur_lists = 0;
     std::string drop_step_1 = "drop temporary table if exists `manufacture`.`step_1`";
     std::string drop_step_2 = "drop temporary table if exists `manufacture`.`step_2`";
     std::string drop_step_3 = "drop temporary table if exists `manufacture`.`step_3`";
@@ -141,7 +144,7 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
     create_step_1   << "create temporary table if not exists `manufacture`.`step_1` as "
                        "select "
                        "`a`.`det_id`as det_id, "
-                       "`a`.`sp_id` as sp_id, "
+                       "`b`.`sp_id` as sp_id, "
                        "`a`.`list_no` as ml_no, "
                        "`b`.`obd`   as obd, "
                        "`b`.`name`  as name, "
@@ -245,36 +248,76 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
             //включаем ексель
             cExcel xl;
             xl.Connect();
-            xl.Visible(false);
+            xl.Visible(true);
             xl.DisplayAlerts(false);
 
             std::string teml_file = template_path + templ;
+            std::string file_name = path + "(" + zakaz + " - " + part_no + ")";
 
             OpenTemplate(xl, teml_file);
 
             bool new_page = true;
             size_t cur_row = 0;
-            size_t start_row = 4, end_row = 55, row_size = 2, template_row = 5,template_empty_row = 8,template_final_row = 10;
+            size_t start_row = 4, end_row = 53, row_size = 2,
+                    template_row = 5,
+                    template_empty_row = 8,
+                    template_final_row = 10,
+                    template_summary_row = 12;
             size_t template_page = 3;
             size_t max_page_no=0;
             //подсчет строк
+            int last_prizn(-1);
+            size_t need_rows(0);
+
+            DataList data;
             for (rez->First(); !rez->Eof; rez->Next())
             {
+                ReportData tmp;
+                tmp.ml_no = (rez->FieldByName("ml_no")->Value.operator AnsiString()).c_str();
+                tmp.obd   = VinToGost(rez->FieldByName("obd")->Value.operator AnsiString()).c_str();
+                tmp.name  = (rez->FieldByName("name")->Value.operator AnsiString()).c_str();
+                tmp.kol   = (rez->FieldByName("kol")->Value.operator AnsiString()).c_str();
+                tmp.ost   = (rez->FieldByName("ost")->Value.operator AnsiString()).c_str();
+                tmp.prizn = rez->FieldByName("prizn")->Value.operator int();
+                tmp.nama  = (rez->FieldByName("nama")->Value.operator AnsiString()).c_str();
+                tmp.prma  = (rez->FieldByName("prma")->Value.operator AnsiString()).c_str();
+                tmp.tpz         = rez->FieldByName("tpz")->Value.operator double();
+                tmp.tsht        = rez->FieldByName("tsht")->Value.operator double();
+                tmp.tpz_part    = rez->FieldByName("tpz_part")->Value.operator double();
+                tmp.tsht_part   = rez->FieldByName("tsht_part")->Value.operator double();
+                tmp.order_no    = (rez->FieldByName("order_no")->Value.operator AnsiString()).c_str();
+                tmp.SetPm((rez->FieldByName("pm")->Value.operator AnsiString()).c_str());
+
                 //считать все данные в структуры спрогнозировать разметку
+
+                //правила построения
+                //при смене признака вставляется доп строчка
+                //группировать по вхождениям детали пока не буду, но возможно потребуется в будущем
+                need_rows += tmp.Rows();
+                if (last_prizn != tmp.prizn)
+                {
+                    need_rows += 1;
+                    last_prizn = tmp.prizn;
+                }
+                data.push_back(tmp);
             }
             //пробежаться по списку структур, заполнить шаблон
-
-            for (rez->First(); !rez->Eof; rez->Next())
+            max_page_no = need_rows/(end_row-start_row);
+            if (need_rows%(end_row-start_row))
             {
-                //считать данные
-                std::string part_no =   (rez->FieldByName("part_no")->Value.operator AnsiString()).c_str();
-                std::string list_no =   (rez->FieldByName("list_no")->Value.operator AnsiString()).c_str();
-                std::string zakaz =     (rez->FieldByName("zakaz")->Value.operator AnsiString()).c_str();
-                std::string det_name =  (rez->FieldByName("det_name")->Value.operator AnsiString()).c_str();
-                std::string det_code =  VinToGost(rez->FieldByName("det_code")->Value.operator AnsiString()).c_str();
-                std::string kol =       (rez->FieldByName("kol")->Value.operator AnsiString()).c_str();
+                ++max_page_no;
+            }
 
-                new_page = new_page + (cur_row + row_size > end_row);//проанализировать количестко оставшихся строк
+            size_t pp_no(0);
+            double tsht_summary(0);
+            for (DataList::const_iterator it = data.begin(), end = data.end() ; it!=end; ++it)
+            {
+
+                ++pp_no;
+                const ReportData &lnk = *it;
+
+                size_t cur_row_size = lnk.Rows() + (last_prizn != lnk.prizn ? 2 : 0);
+                new_page = new_page + (cur_row + cur_row_size > end_row);//проанализировать количестко оставшихся строк
 
                 if (new_page)
                 {
@@ -282,7 +325,7 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
                     {
                         if (use_listing && !path.empty())
                         {//проверяем количество страниц, если выставлена опция
-                            TrimFile(xl,path,"",cur_lists,lists_by_file,teml_file);
+                            TrimFile(xl,file_name,"",cur_lists,lists_by_file,teml_file);
                         }
                     }
                     new_page = false;
@@ -292,43 +335,119 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
                     xl.SetActiveSheet(xl.GetSheet(cur_lists));
                     std::stringstream buf;
                     buf<<cur_lists;
-                    xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("Ярлыки лист-"+buf.str()).c_str());
+                    xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("Ф140005-"+buf.str()).c_str());
+
+                    // почистить лист
+                    // копирование
+                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), 14, 23));
+                    // вставка
+                    xl.Sheet_activate();
+                    xl.Range_Paste(xl.GetRows(4, 13));
+
+                    //заполнить шапку
+
+                    xl.toCells(1,   3,   Now().FormatString("dd.mm.yyyy")           );
+                    xl.toCells(1,   10,  (ceh+utch).c_str()                         );
+                    xl.toCells(1,   12,  (std::string("Заказ ") + zakaz).c_str()    );
+                    xl.toCells(1,   13,  (std::string("Партия ") + part_no).c_str() );
+                    xl.toCells(1,   17,  cur_lists                                  );
+                    xl.toCells(1,   20,  max_page_no                                );
 
                     cur_row = start_row;
                 }
-                //добавить строку если нужно
-                size_t column_ofset = 0;
-                if (add_row)
+
+                if (last_prizn != lnk.prizn)
                 {
-                    //вставить строку в отчет
+                    //вставка пустой строки
                     // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_empty_row, template_empty_row));
                     // вставка
                     xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size));
-                }
-                else
-                {
-                    column_ofset = 8;
+                    xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                    // копирование
+                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_empty_row, template_empty_row));
+                    // вставка
+                    xl.Sheet_activate();
+                    xl.Range_Paste(xl.GetRows(cur_row+1, cur_row+1));
+
+                    //напишем в этой строке что-то
+                    switch(lnk.prizn)
+                    {
+                    case 1:
+                        {
+                            xl.toCells(cur_row+1, 1, "Детати кот. сборок и кот. сборки");
+                            break;
+                        }
+                    case 2:
+                        {
+                            xl.toCells(cur_row+1, 1, "Оригинальные, заим., обезлич. детали");
+                            break;
+                        }
+                    default:
+                        break;
+                    }
+
+                    cur_row += 2;
+                    last_prizn = lnk.prizn;
                 }
 
-                xl.toCells(cur_row+4,     column_ofset+4,  zakaz.c_str()    );
-                xl.toCells(cur_row+4,     column_ofset+6,  part_no.c_str()  );
-                xl.toCells(cur_row+4,     column_ofset+8,  list_no.c_str()  );
-                xl.toCells(cur_row+6,     column_ofset+2,  det_name.c_str() );
-                xl.toCells(cur_row+8,     column_ofset+4,  kol.c_str()      );
-                xl.toCells(cur_row+10,    column_ofset+3,  det_code.c_str() );
+                //вставить строку в отчет
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size));
 
-                add_row = !add_row;
-                if (add_row)
+                for (size_t i = 0; i < lnk.Rows() - row_size; ++i)
                 {
-                    cur_row += row_size;
+                    // копирование
+                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row+1, template_row +1));
+                    // вставка
+                    xl.Sheet_activate();
+                    xl.Range_Paste(xl.GetRows(cur_row + row_size + i, cur_row + row_size + i));
                 }
+
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_final_row, template_final_row));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row + lnk.Rows(), cur_row + lnk.Rows()));
+
+                xl.toCells(cur_row,     1,  pp_no               );
+                xl.toCells(cur_row,     2,  lnk.obd.c_str()     );
+                xl.toCells(cur_row+1,   2,  lnk.name.c_str()    );
+                xl.toCells(cur_row,     6,  lnk.kol.c_str()     );
+                xl.toCells(cur_row,     7,  lnk.nama.c_str()    );
+                xl.toCells(cur_row+1,   7,  lnk.prma.c_str()    );
+                xl.toCells(cur_row,     8,  lnk.tsht            );
+                xl.toCells(cur_row+1,   8,  lnk.tsht_part       );
+                tsht_summary += lnk.tsht_part;
+                xl.toCells(cur_row,     9,  lnk.ml_no.c_str()   );
+                xl.toCells(cur_row+1,   9,  lnk.order_no.c_str());
+                xl.toCells(cur_row,     14, lnk.ost.c_str()     );
+
+                size_t ofset(0);
+                for (std::list<std::string>::const_iterator it2 = lnk.pm.begin(); it2!=lnk.pm.end(); ++it2)
+                {
+                    xl.toCells(cur_row+ofset,   11, it2->c_str() );
+                    ++ofset;
+                }
+
+                cur_row += lnk.Rows();
             }
+
+            // копирование
+            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_summary_row, template_summary_row));
+            // вставка
+            xl.Sheet_activate();
+            xl.Range_Paste(xl.GetRows(cur_row+1, cur_row+1));
+
+            xl.toCells(cur_row+1,   8, tsht_summary );
 
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
             {
-                SaveFile(xl,path + "(" + zakaz + " - " + part_no + ")" ,"",cur_lists);
+                SaveFile(xl,file_name ,"",cur_lists);
                 xl.Book_Close(xl.GetBook(1));
                 xl.Disconnect();
             }
