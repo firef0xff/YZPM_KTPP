@@ -121,6 +121,8 @@ void RouteList::BuildReport()
 
 			OpenTemplate(ex, teml_file);
 
+			size_t file_no = 0;
+
 			for (rez->First(); !rez->Eof; rez->Next())
 			{
 				size_t det_id  = rez->FieldByName("det_id")->Value.operator int();
@@ -132,13 +134,13 @@ void RouteList::BuildReport()
 
 				if (use_listing && !path.empty())
 				{//проверяем количество страниц, если выставлена опция
-					TrimFile(ex,path,"",cur_lists,lists_by_file,teml_file);
+					TrimFile(ex,path,"",cur_lists,lists_by_file,teml_file,file_no);
 				}
 
 			}
 			if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
 			{
-				SaveFile(ex,path,"",cur_lists);
+				SaveFile(ex,path,"",cur_lists,file_no);
 				ex.Book_Close(ex.GetBook(1));
 				ex.Disconnect();
 			}

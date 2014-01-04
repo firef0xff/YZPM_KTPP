@@ -39,16 +39,19 @@ __fastcall TRepParams::TRepParams(TComponent* Owner, rep::Report::ParamList &par
 				Count->Text = "1";
             }
         }
-        else if (itm.first == REPORT_USE_LISTING)
+		else if (itm.first == REPORT_USE_LISTING)
         {
 			ActiveDelimiter->Checked = itm.second != REP_NULL && itm.second!=REP_FALSE;
         }
         else
-        {
-            use_params = true;
-			OptionsSG->Cells[0][row] = itm.first.c_str();
-            OptionsSG->Cells[1][row] = itm.second.c_str();
-            ++OptionsSG->RowCount;
+		{
+			if ( itm.first!= REPORT_OBJECT_ID && itm.first!= REPORT_ELEMENT_ID && itm.first!=REPORT_OBJECT_TYPE)
+			{
+				use_params = true;
+				OptionsSG->Cells[0][row] = itm.first.c_str();
+				OptionsSG->Cells[1][row] = itm.second.c_str();
+				++OptionsSG->RowCount;
+			}
         }
     }
 	if (OptionsSG->RowCount > 2)

@@ -1,5 +1,3 @@
-
-
 #ifndef functionsH
 #define functionsH
 #include <Controls.hpp>

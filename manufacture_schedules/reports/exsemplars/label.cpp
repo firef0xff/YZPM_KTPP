@@ -144,7 +144,9 @@ void Lable::BuildReport()
             size_t start_row = 1, end_row = 85, row_size = 14, template_row = 1;
             size_t template_page = 6;
 
-            bool add_row = true;
+			bool add_row = true;
+
+			size_t file_no = 0;
             for (rez->First(); !rez->Eof; rez->Next())
             {
                 //считать данные
@@ -163,7 +165,7 @@ void Lable::BuildReport()
                     {
                         if (use_listing && !path.empty())
                         {//проверяем количество страниц, если выставлена опция
-                            TrimFile(xl,path,"",cur_lists,lists_by_file,teml_file);
+							TrimFile(xl,path,"",cur_lists,lists_by_file,teml_file,file_no);
                         }
                     }
                     new_page = false;
@@ -188,7 +190,7 @@ void Lable::BuildReport()
                     xl.Sheet_activate();
                     xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size));
                 }
-                else
+				else
 				{
 					column_ofset = 8;
                 }
@@ -209,7 +211,7 @@ void Lable::BuildReport()
             }
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
             {
-                SaveFile(xl,path,"",cur_lists);
+                SaveFile(xl,path,"",cur_lists,file_no);
                 xl.Book_Close(xl.GetBook(1));
                 xl.Disconnect();
             }

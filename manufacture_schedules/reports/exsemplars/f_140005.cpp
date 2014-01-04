@@ -212,16 +212,16 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
             "`a`.`obd`, "
             "`a`.`name`, "
             "`a`.`kol`, "
-            "`a`.`pm`, "
-            "`a`.`ost`, "
+            "trim(`a`.`pm`) as pm, "
+			"CONVERT(`a`.`ost`, CHAR) as ost, "
             "`a`.`prizn`, "
             "`a`.`nama`, "
             "`a`.`prma`, "
-            "`b`.`tpz`, "
-            "`b`.`tsht`, "
-            "`b`.`tpz` * `a`.`kol` as tpz_part, "
-            "`b`.`tsht`* `a`.`kol` as tsht_part, "
-            "`c`.`order_no` "
+			"CONVERT(`b`.`tpz`, DECIMAL(40,6)) as tpz, "
+			"CONVERT(`b`.`tsht`, DECIMAL(40,6)) as tsht, "
+			"CONVERT(`b`.`tpz` * `a`.`kol`, DECIMAL(40,6)) as tpz_part, "
+            "CONVERT(`b`.`tsht`* `a`.`kol`, DECIMAL(40,6)) as tsht_part, "
+            "CONVERT (`c`.`order_no`, CHAR) as  order_no "
             "from `manufacture`.`step_1` a "
             "join `manufacture`.`step_2` b on `b`.`det_id` = `a`.`det_id` "
             "join `manufacture`.`step_3` c on `c`.`det_id` = `a`.`det_id` "
@@ -248,7 +248,7 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
             //включаем ексель
             cExcel xl;
             xl.Connect();
-            xl.Visible(true);
+            xl.Visible(false);
             xl.DisplayAlerts(false);
 
             std::string teml_file = template_path + templ;
@@ -264,7 +264,10 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
                     template_final_row = 10,
                     template_summary_row = 12;
             size_t template_page = 3;
-            size_t max_page_no=0;
+			size_t max_page_no=0;
+
+            size_t file_no = 0;
+
             //подсчет строк
             int last_prizn(-1);
             size_t need_rows(0);
@@ -325,7 +328,7 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
                     {
                         if (use_listing && !path.empty())
                         {//проверяем количество страниц, если выставлена опция
-                            TrimFile(xl,file_name,"",cur_lists,lists_by_file,teml_file);
+                            TrimFile(xl,file_name,"",cur_lists,lists_by_file,teml_file,file_no);
                         }
                     }
                     new_page = false;
@@ -447,7 +450,7 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
 
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
             {
-                SaveFile(xl,file_name ,"",cur_lists);
+                SaveFile(xl,file_name ,"",cur_lists,file_no);
                 xl.Book_Close(xl.GetBook(1));
                 xl.Disconnect();
             }
