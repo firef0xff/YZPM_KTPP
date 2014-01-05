@@ -60,6 +60,6 @@ class Transaction
     cSQL *DB;
 };
 
-void    WordWrap        (std::list<std::string> &out,std::string in,const size_t max_len, std::string delimeter = " ");
+void    WordWrap        (std::list<std::string> &out,std::string in,const size_t max_len, std::string delimeter);
 
 #endif

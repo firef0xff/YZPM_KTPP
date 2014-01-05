@@ -402,7 +402,7 @@ for (curr=1; curr < size; curr++)
 
 }
 
-void    WordWrap        (std::list<std::string> &out,std::string in,const size_t max_len, std::string delimeter)
+void    WordWrap        (std::list<std::string> &out,std::string in,const size_t max_len, std::string delimeter = " ")
 {
     out.clear();
     while (size_t len=in.size())

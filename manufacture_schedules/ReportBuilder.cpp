@@ -9,6 +9,7 @@
 #include <reports/exsemplars/routelist.h>
 #include <reports/exsemplars/label.h>
 #include <reports/exsemplars/f_140005.h>
+#include <reports/exsemplars/y09102.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -16,6 +17,7 @@
 rep::RouteList rep1(STARTUP|ORDER|PART|PRODUCT);
 rep::Lable rep2(STARTUP|ORDER|PART|PRODUCT);
 rep::F140005 rep3(STARTUP|ORDER|PART);
+rep::Y09102 rep4(STARTUP|ORDER|PART);
 //fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
 
 __fastcall TReports::TReports(TComponent* Owner,cSQL *DB, Reports_set set, __uint64  id, __uint64  sub_id )
