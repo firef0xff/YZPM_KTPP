@@ -135,10 +135,12 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
     std::string drop_step_1 = "drop temporary table if exists `manufacture`.`step_1`";
     std::string drop_step_2 = "drop temporary table if exists `manufacture`.`step_2`";
     std::string drop_step_3 = "drop temporary table if exists `manufacture`.`step_3`";
+    std::string drop_step_4 = "drop temporary table if exists `manufacture`.`step_4`";
 
     std::stringstream create_step_1;
     std::stringstream create_step_2;
     std::stringstream create_step_3;
+    std::stringstream create_step_4;
     std::stringstream sql;
 {
     create_step_1   << "create temporary table if not exists `manufacture`.`step_1` as "
@@ -185,25 +187,33 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
     }
     create_step_2 <<   "group by `a`.`det_id` ";
 
-    create_step_3 <<    "create temporary table if not exists `manufacture`.`step_3` as "
+
+    create_step_3 <<    "create temporary table if not exists `manufacture`.`step_3` "
+                        "( "
+                        "det_id bigint (20) not null, "
+                        "opr char (3) not null, "
+
+                        "Key `k1` (`det_id`), "
+                         "Key `k2` (`det_id`,`opr`) "
+                        ") engine = MYISAM as "
+                        "select "
+                        "`a`.`det_id` as det_id, "
+                        "max(`b`.`opr`) as opr "
+                        "from `manufacture`.`marsh_lists` a "
+                        "join `manufacture`.`operation_list` b on `b`.`det_id` = `a`.`det_id` "
+
+                        "where `a`.`part_id` = '"<< part_id <<"' "
+                        "group by `a`.`det_id` ";
+
+    create_step_4 <<    "create temporary table if not exists `manufacture`.`step_4` as "
                         "select "
                         "`a`.`det_id` as det_id, "
                         "IFNULL(max(`c`.`order_id`),'') as order_no "
                         "from `manufacture`.`marsh_lists` a "
-                        "join `manufacture`.`operation_list` b on `b`.`det_id` = `a`.`det_id` "
-                        "left join `manufacture`.`orders` c on `c`.`operation_id` = `b`.`OpUUID` "
+                        "join `manufacture`.`step_3` b on `b`.`det_id` = `a`.`det_id` "
+                        "join `manufacture`.`operation_list` b1 on `b1`.`det_id` = `a`.`det_id`  and `b1`.`opr` = `b`.`opr` "
+                        "left join `manufacture`.`orders` c on `c`.`operation_id` = `b1`.`OpUUID` "
 
-                        "where (`b`.`det_id`,`b`.`opr`) in "
-                            "( "
-                                "select "
-                                "`a`.`det_id` as det_id, "
-                                "max(`b`.`opr`) as opr "
-                                "from `manufacture`.`marsh_lists` a "
-                                "join `manufacture`.`operation_list` b on `b`.`det_id` = `a`.`det_id` "
-
-                                "where `a`.`part_id` = '"<< part_id <<"' "
-                                "group by `a`.`det_id` "
-                            ") "
                         "group by `a`.`det_id` ";
 
 
@@ -224,7 +234,7 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
             "CONVERT (`c`.`order_no`, CHAR) as  order_no "
             "from `manufacture`.`step_1` a "
             "join `manufacture`.`step_2` b on `b`.`det_id` = `a`.`det_id` "
-            "join `manufacture`.`step_3` c on `c`.`det_id` = `a`.`det_id` "
+            "join `manufacture`.`step_4` c on `c`.`det_id` = `a`.`det_id` "
             "order by `a`.`prizn`,`a`.`sp_id`,`a`.`obd`";
 
 }
@@ -235,12 +245,15 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
     DB->SendCommand(create_step_2.str().c_str());
     DB->SendCommand(drop_step_3.c_str());
     DB->SendCommand(create_step_3.str().c_str());
+    DB->SendCommand(drop_step_4.c_str());
+    DB->SendCommand(create_step_4.str().c_str());
 
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
 
     DB->SendCommand(drop_step_1.c_str());
     DB->SendCommand(drop_step_2.c_str());
     DB->SendCommand(drop_step_3.c_str());
+    DB->SendCommand(drop_step_4.c_str());
     if (rez)
     {
         if (rez->RecordCount)
