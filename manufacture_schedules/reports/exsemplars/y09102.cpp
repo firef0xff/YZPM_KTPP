@@ -304,11 +304,6 @@ void Y09102::CheckList (cExcel &xl, size_t &row, size_t row_size)
         //заполнить шапку
 
         xl.toCells(2,   1,   Now().FormatString("dd.mm.yyyy")           );
-//        xl.toCells(1,   10,  (ceh+utch).c_str()                         );
-//        xl.toCells(1,   12,  (std::string("Заказ ") + zakaz).c_str()    );
-//        xl.toCells(1,   13,  (std::string("Партия ") + part_no).c_str() );
-//        xl.toCells(1,   17,  cur_lists                                  );
-//        xl.toCells(1,   20,  max_page_no                                );
 
         row = start_row;
     }
