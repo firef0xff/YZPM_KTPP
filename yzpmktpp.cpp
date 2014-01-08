@@ -6,15 +6,15 @@
 //---------------------------------------------------------------------------
 
 USEFORM("orders_editor\OrderContent_set.cpp", ZakazContent_set);
-USEFORM("orders_editor\Orders.cpp", Orders_editor); /* TFrame: File Type */
-USEFORM("prepare_products_list\select_params.cpp", List_sel_params);
-USEFORM("professions\professions.cpp", Professinos);
-USEFORM("prepare_products_list\List_add.cpp", ListAdd);
-USEFORM("orders_editor\Order_set.cpp", Zakaz_set);
-USEFORM("prepare_products_list\Izd_Unroll.cpp", List_Editor);
-USEFORM("manufacture_schedules\ZakazCreator.cpp", ZakazWnd);
 USEFORM("manufacture_schedules\ZapCreator.cpp", ZapuskWnd);
+USEFORM("prepare_products_list\List_add.cpp", ListAdd);
+USEFORM("prepare_products_list\select_params.cpp", List_sel_params);
+USEFORM("prepare_products_list\Izd_Unroll.cpp", List_Editor);
+USEFORM("orders_editor\Orders.cpp", Orders_editor); /* TFrame: File Type */
+USEFORM("orders_editor\Order_set.cpp", Zakaz_set);
 USEFORM("manufacture_schedules\report_params.cpp", RepParams);
+USEFORM("manufacture_schedules\ZakazCreator.cpp", ZakazWnd);
+USEFORM("professions\professions.cpp", Professinos);
 USEFORM("technology\support_modules\symblos.cpp", Symbol);
 USEFORM("technology\support_modules\tara_and_strop.cpp", tarandsrop);
 USEFORM("technology\support_modules\instrument.cpp", instr);
@@ -38,18 +38,18 @@ USEFORM("boom_editor\sp_params.cpp", spparams);
 USEFORM("boom_tree\BomTree.cpp", SpTree); /* TFrame: File Type */
 USEFORM("boom_editor\razdel.cpp", rzd);
 USEFORM("boom_editor\SPEdit.cpp", SPEditor);
-USEFORM("main.cpp", mForm);
 USEFORM("manufacture_schedules\IzdAppender.cpp", IzdAppenderWnd);
-USEFORM("Login\Settings_wnd.cpp", Settings);
-USEFORM("Login\dialogs\User_Data.cpp", UserData);
-USEFORM("Login\loginwin.cpp", LogIn);
 USEFORM("manufacture_schedules\manufacture.cpp", ManufactureControl); /* TFrame: File Type */
+USEFORM("main.cpp", mForm);
+USEFORM("Login\loginwin.cpp", LogIn);
+USEFORM("Login\Settings_wnd.cpp", Settings);
 USEFORM("manufacture_schedules\ReportBuilder.cpp", Reports);
-USEFORM("Login\dialogs\NextStateSelector.cpp", Next_State_Selector);
-USEFORM("Login\dialogs\RightSelect.cpp", fselRight);
-USEFORM("Login\dialogs\Input_wnd.cpp", newItem);
 USEFORM("log.cpp", LogForm);
+USEFORM("Login\dialogs\RightSelect.cpp", fselRight);
+USEFORM("Login\dialogs\User_Data.cpp", UserData);
+USEFORM("Login\dialogs\NextStateSelector.cpp", Next_State_Selector);
 USEFORM("Login\dialogs\GTUSdialog.cpp", GTUSGroupSelector);
+USEFORM("Login\dialogs\Input_wnd.cpp", newItem);
 //---------------------------------------------------------------------------
 WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
