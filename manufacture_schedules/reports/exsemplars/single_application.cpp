@@ -209,24 +209,10 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
     DB->SendCommand(create_step_1.str().c_str());
     DB->SendCommand(drop_step_2.c_str());
     DB->SendCommand(create_step_2.str().c_str());
-
-    if (!group_by_obd)
-    {
-        DB->SendCommand(drop_step_3.c_str());
-        DB->SendCommand(insert_step_2.str().c_str());
-        DB->SendCommand(drop_step_4.c_str());
-        DB->SendCommand(create_step_4.str().c_str());
-    }
+    DB->SendCommand(insert_step_2.str().c_str());
 
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
 
-    DB->SendCommand(drop_step_1.c_str());
-    DB->SendCommand(drop_step_2.c_str());
-    if (!group_by_obd)
-    {
-        DB->SendCommand(drop_step_3.c_str());
-        DB->SendCommand(drop_step_4.c_str());
-    }
     if (rez)
     {
         if (rez->RecordCount)
