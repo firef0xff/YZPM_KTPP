@@ -20,41 +20,16 @@ public:
 
 private:
     struct ReportData
-    {
-        std::string vz;
-
+    {      
         std::string obd;
-        std::string name;
 
-        std::string kol_det;
-        std::string kol_zag;
-
-        std::string razz;
-
-        std::string ml_no;
-        std::string order_no;
+        std::string ei_kode;
+        std::string norm;
 
         std::string nama;
         std::string prma;
 
-        double mass;
-        double norm;
-
-        double trud;
-        double trud_part;
-
-        std::list<std::string> pm;
-
-        int prizn;
-
-        size_t Rows(void) const
-        {
-            return 2 > pm.size()?2:pm.size();
-        }
-        void SetPm(std::string pm_)
-        {
-            WordWrap(pm, pm_, 33, " ");
-        }
+        std::string ei_name;
     };
     typedef std::list<ReportData> DataList;
 

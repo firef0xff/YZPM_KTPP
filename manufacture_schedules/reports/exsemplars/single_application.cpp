@@ -6,18 +6,19 @@ namespace rep
 
 SingleApplication::SingleApplication (int set): rep::Report("Материальная ведомость: Единичная заявка",set),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_forms.xlt")
+    cur_lists(0),templ("materials.xlt")
 {
     params[REPORT_PATH];
     params[REPORT_LIST_COUNT] = "10";
     params[REPORT_USE_LISTING] = REP_TRUE;
+    params["Производственный признак"];
 }
 SingleApplication::~SingleApplication()
 {}
 
 SingleApplication::SingleApplication(const SingleApplication &r):rep::Report(r),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_forms.xlt")
+    cur_lists(0),templ("materials.xlt")
 {
 
 }
@@ -61,6 +62,7 @@ void SingleApplication::ParseParams(void)
         throw std::runtime_error("Не указан объект для построения отчета");
     if (type.empty())
         throw std::runtime_error("Не указан тип объекта для отчета");
+    pp = params["Производственный признак"];
 }
 void SingleApplication::LoadSettings()
 {
@@ -151,7 +153,7 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                        "left join `manufacture`.`det_tree` c on `c`.`det_idc` = `a`.`det_id` "
                        "left join `manufacture`.`part_content` d on `d`.`det_id` = `a`.`det_id` "
 
-                       "where `a`.`part_id` = ' << part_id << ' "
+                       "where `a`.`part_id` = '" << part_id << "' "
                        "group by `a`.`det_id` ";
 
     //получить нормы для деталей
@@ -167,12 +169,12 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                        ") engine = myiasm "
                        "as "
                        "select "
-                       "`a`.`det_id`, "
-                       "`b`.`obmid`, "
-                       "`b`.`ei`, "
+                       "`a`.`det_id` as det_id, "
+                       "`b`.`obmid` as obm_id, "
+                       "`b`.`ei` as ei, "
                        "`b`.`nrm` * `a`.`kol_det` as norm "
                        "from `manufacture`.`step_1` a "
-                       "join `manufacture`.`det_info` b ";
+                       "join `manufacture`.`det_info` b on `a`.`det_id` = `b`.`det_id`";
 
 
     insert_step_2 <<    "insert into `manufacture`.`step_2` (`det_id`,`obm_id`,`ei`,`norm`) "
@@ -189,20 +191,20 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
 
 
     sql <<  "select "
-            "`b`.`obd` as obd, "
-            "`a`.`ei` as ei_kode, "
-            "round(sum(`a`.`norm`),3) as norm, "
-            "IFNULL(`c`.`nama`,IFNULL(`b`.`name`,'')) as nama, "
-            "IFNULL(`c`.`prma`,'') prma, "
-            "IFNULL(`d`.`snameei`,'') ei_name "
+            "CONVERT(`b`.`obd`, CHAR)                                   as obd, "
+            "CONVERT(`a`.`ei`, CHAR)                                    as ei_kode, "
+            "CONVERT(round(sum(`a`.`norm`),3), CHAR)                    as norm, "
+            "CONVERT(IFNULL(`c`.`nama`,IFNULL(`b`.`name`,'')), CHAR)    as nama, "
+            "CONVERT(IFNULL(`c`.`prma`,''), CHAR)                       as prma, "
+            "CONVERT(IFNULL(`d`.`snameei`,''), CHAR)                    as ei_name "
             "from `manufacture`.`step_2` a "
             "join `manufacture`.`det_names` b on `b`.`det_id` = `a`.`obm_id` "
             "left join `manufacture`.`materials` c on `c`.`obmid` = `a`.`obm_id` "
             "left join `catalogs`.`dimensionality` d on `d`.`kodei` = `a`.`ei` ";
 
     if (!pp.empty())
-        sql <<  "where b.pp = '05' ";
-    sql <<  "GROUP BY `b`.`id`,`a`.`ei` ";
+        sql <<  "where b.pp = '"<<pp<<"' ";
+    sql <<  "GROUP BY `b`.`id`,`a`.`ei` order by `b`.`obd`";
 }
 
     DB->SendCommand(drop_step_1.c_str());
@@ -212,6 +214,9 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
     DB->SendCommand(insert_step_2.str().c_str());
 
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
+
+    DB->SendCommand(drop_step_1.c_str());
+    DB->SendCommand(drop_step_2.c_str());
 
     if (rez)
     {
@@ -230,18 +235,27 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
 
             bool new_page = true;
             size_t cur_row = 0;
-            size_t start_row = 4, end_row = 62, row_size = 2,
-                    template_row = 5,
-                    template_empty_row = 8,
-                    template_final_row = 10,
-                    template_summary_row = 12;
+            size_t start_row = 5, end_row = 35, row_size = 1,
+                    template_row = 5;
             size_t template_page = 1;
             size_t max_page_no=0;
 
             size_t file_no = 0;
 
+            std::string pp_name;
+            if (!pp.empty())
+            {
+                TADOQuery *rez2 = DB->SendSQL(("select `a`.`napp` as pp_name from `catalogs`.`proizv_prizn` a where `a`.`pp` = '"+pp+"'").c_str() );
+                if (rez2)
+                {
+                    if (rez2->RecordCount)
+                    {
+                        pp_name = (rez2->FieldByName("pp_name")->Value.operator AnsiString()).c_str();
+                    }
+                    delete rez2;
+                }
+            }
             //подсчет строк
-            int last_prizn(-1);
             size_t need_rows(0);
 
             DataList data;
@@ -250,38 +264,13 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                 ReportData tmp;
 
                 tmp.obd     = VinToGost(rez->FieldByName("obd")->Value.operator AnsiString()).c_str();
-                tmp.name    = (rez->FieldByName("name")->Value.operator AnsiString()).c_str();
-                tmp.kol_det = (rez->FieldByName("kol_det")->Value.operator AnsiString()).c_str();
-                tmp.kol_zag = (rez->FieldByName("kol_zag")->Value.operator AnsiString()).c_str();
-                tmp.mass    = rez->FieldByName("mass")->Value.operator double();
-                tmp.norm    = rez->FieldByName("norm")->Value.operator double();
-                tmp.prizn   = rez->FieldByName("prizn")->Value.operator int();
-                tmp.vz      = (rez->FieldByName("vz")->Value.operator AnsiString()).c_str();
-                tmp.razz    = (rez->FieldByName("razz")->Value.operator AnsiString()).c_str();
+                tmp.ei_kode = (rez->FieldByName("ei_kode")->Value.operator AnsiString()).c_str();
+                tmp.ei_name = (rez->FieldByName("ei_name")->Value.operator AnsiString()).c_str();
+                tmp.norm    = (rez->FieldByName("norm")->Value.operator AnsiString()).c_str();
                 tmp.nama    = (rez->FieldByName("nama")->Value.operator AnsiString()).c_str();
                 tmp.prma    = (rez->FieldByName("prma")->Value.operator AnsiString()).c_str();
 
-                tmp.trud        = rez->FieldByName("trud")->Value.operator double();
-                tmp.trud_part   = rez->FieldByName("trud_part")->Value.operator double();
-
-                if (!group_by_obd)
-                {
-                    tmp.ml_no       = (rez->FieldByName("ml_no")->Value.operator AnsiString()).c_str();
-                    tmp.order_no    = (rez->FieldByName("order_no")->Value.operator AnsiString()).c_str();
-                }
-                tmp.SetPm((rez->FieldByName("pm")->Value.operator AnsiString()).c_str());
-
-                //считать все данные в структуры спрогнозировать разметку
-
-                //правила построения
-                //при смене признака вставляется доп строчка
-                //группировать по вхождениям детали пока не буду, но возможно потребуется в будущем
-                need_rows += tmp.Rows();
-                if (last_prizn != tmp.prizn)
-                {
-                    need_rows += 1;
-                    last_prizn = tmp.prizn;
-                }
+                ++need_rows;
                 data.push_back(tmp);
             }
             //пробежаться по списку структур, заполнить шаблон
@@ -292,15 +281,12 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
             }
 
             size_t pp_no(0);
-            double trud_summary(0);
-            double mass_summary(0);
             for (DataList::const_iterator it = data.begin(), end = data.end() ; it!=end; ++it)
             {
-
                 ++pp_no;
                 const ReportData &lnk = *it;
 
-                size_t cur_row_size = lnk.Rows() + (last_prizn != lnk.prizn ? 2 : 0);
+                size_t cur_row_size = 1;
                 new_page = new_page + (cur_row + cur_row_size > end_row);//проанализировать количестко оставшихся строк
 
                 if (new_page)
@@ -319,63 +305,24 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                     xl.SetActiveSheet(xl.GetSheet(cur_lists));
                     std::stringstream buf;
                     buf<<cur_lists;
-                    xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("Ф140003-"+buf.str()).c_str());
+                    xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("ЕЗ-"+buf.str()).c_str());
 
                     // почистить лист
                     // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), 14, 23));
+                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), 15, 24));
                     // вставка
                     xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(4, 13));
+                    xl.Range_Paste(xl.GetRows(5, 14));
 
                     //заполнить шапку
 
-                    xl.toCells(1,   3,   Now().FormatString("dd.mm.yyyy")   );
-                    xl.toCells(1,   9,  (ceh+utch).c_str()                  );
-                    xl.toCells(1,   11,  zakaz.c_str()                      );
-                    xl.toCells(1,   13,  part_no.c_str()                    );
+                    xl.toCells(1,   4,  pp_name.c_str() );
+                    xl.toCells(1,   8,  cur_lists       );
+                    xl.toCells(1,   10, max_page_no     );
+                    xl.toCells(2,   6,  zakaz.c_str()   );
+                    xl.toCells(2,   8,  part_no.c_str() );
 
-                    buf.str("");
-                    buf<<cur_lists<<"/"<<max_page_no;
-
-                    xl.toCells(1,   16,  buf.str().c_str()                  );
                     cur_row = start_row;
-                }
-
-                if (last_prizn != lnk.prizn)
-                {
-                    //вставка пустой строки
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_empty_row, template_empty_row));
-                    // вставка
-                    xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_empty_row, template_empty_row));
-                    // вставка
-                    xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(cur_row+1, cur_row+1));
-
-                    //напишем в этой строке что-то
-                    switch(lnk.prizn)
-                    {
-                    case 1:
-                        {
-                            xl.toCells(cur_row+1, 1, "Детати кот. сборок и кот. сборки");
-                            break;
-                        }
-                    case 2:
-                        {
-                            xl.toCells(cur_row+1, 1, "Оригинальные, заим., обезлич. детали");
-                            break;
-                        }
-                    default:
-                        break;
-                    }
-
-                    cur_row += 2;
-                    last_prizn = lnk.prizn;
                 }
 
                 //вставить строку в отчет
@@ -385,63 +332,15 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                 xl.Sheet_activate();
                 xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size));
 
-                for (size_t i = 0; i < lnk.Rows() - row_size; ++i)
-                {
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row+1, template_row +1));
-                    // вставка
-                    xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(cur_row + row_size + i, cur_row + row_size + i));
-                }
-
-                // копирование
-                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_final_row, template_final_row));
-                // вставка
-                xl.Sheet_activate();
-                xl.Range_Paste(xl.GetRows(cur_row + lnk.Rows(), cur_row + lnk.Rows()));
-
-                xl.toCells(cur_row,     1,  lnk.vz.c_str()      );
                 xl.toCells(cur_row,     2,  lnk.obd.c_str()     );
-                xl.toCells(cur_row+1,   2,  lnk.name.c_str()    );
+                xl.toCells(cur_row,     3,  lnk.prma.c_str()    );
+                xl.toCells(cur_row,     4,  lnk.nama.c_str()    );
 
-                xl.toCells(cur_row,     5,  lnk.kol_zag.c_str() );
-                xl.toCells(cur_row+1,   5,  lnk.kol_det.c_str() );
+                xl.toCells(cur_row,     6,  lnk.norm.c_str()    );
+                xl.toCells(cur_row,     7,  lnk.ei_name.c_str() );
 
-                xl.toCells(cur_row,     6,  lnk.razz.c_str()    );
-
-                xl.toCells(cur_row,     7,  lnk.nama.c_str()    );
-                xl.toCells(cur_row+1,   7,  lnk.prma.c_str()    );
-
-                xl.toCells(cur_row,     8,  lnk.mass            );
-                xl.toCells(cur_row+1,   8,  lnk.norm            );
-                mass_summary += lnk.norm;
-
-                xl.toCells(cur_row,     9,  lnk.trud            );
-                xl.toCells(cur_row+1,   9,  lnk.trud_part       );
-                trud_summary += lnk.trud_part;
-
-                xl.toCells(cur_row,     10, lnk.ml_no.c_str()   );
-                xl.toCells(cur_row+1,   10, lnk.order_no.c_str());
-
-                size_t ofset(0);
-                for (std::list<std::string>::const_iterator it2 = lnk.pm.begin(); it2!=lnk.pm.end(); ++it2)
-                {
-                    xl.toCells(cur_row+ofset,   11, it2->c_str() );
-                    ++ofset;
-                }
-
-                cur_row += lnk.Rows();
+                ++cur_row;
             }
-
-            // копирование
-            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_summary_row, template_summary_row));
-            // вставка
-            xl.Sheet_activate();
-            xl.Range_Paste(xl.GetRows(cur_row+1, cur_row+1));
-
-            xl.toCells(cur_row+1,   8, mass_summary );
-            xl.toCells(cur_row+1,   9, trud_summary );
-
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
             {
                 SaveFile(xl,file_name ,"",cur_lists,file_no);
