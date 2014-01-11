@@ -271,7 +271,7 @@ void F140003::BuildData      (std::string part_id, std::string zakaz, std::strin
     else
         sql << "`det_id` ";
 
-    sql << "order by `a`.`prizn`,`a`.`sp_id`,`a`.`obd`";
+    sql << "order by `a`.`prizn`,`a`.`prma`,`a`.`nama`,`a`.`sp_id`,`a`.`obd`";
 
 }
 
