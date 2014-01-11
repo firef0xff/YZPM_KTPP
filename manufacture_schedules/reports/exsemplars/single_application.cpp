@@ -1,4 +1,4 @@
-#include <reports/exsemplars/single_application.h>
+﻿#include <reports/exsemplars/single_application.h>
 #include <xl_operations.h>
 
 namespace rep
@@ -6,7 +6,7 @@ namespace rep
 
 SingleApplication::SingleApplication (int set): rep::Report("Материальная ведомость: Единичная заявка",set),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("materials.xlt")
+    cur_lists(0),templ("manufacture_materials.xlt")
 {
     params[REPORT_PATH];
     params[REPORT_LIST_COUNT] = "10";
@@ -18,7 +18,7 @@ SingleApplication::~SingleApplication()
 
 SingleApplication::SingleApplication(const SingleApplication &r):rep::Report(r),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("materials.xlt")
+    cur_lists(0),templ("manufacture_materials.xlt")
 {
 
 }
@@ -330,7 +330,7 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                 xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
                 // вставка
                 xl.Sheet_activate();
-                xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size));
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
 
                 xl.toCells(cur_row,     2,  lnk.obd.c_str()     );
                 xl.toCells(cur_row,     3,  lnk.prma.c_str()    );
