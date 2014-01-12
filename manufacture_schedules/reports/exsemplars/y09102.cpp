@@ -1,23 +1,25 @@
 ﻿#include <reports/exsemplars/y09102.h>
 #include "functions.h"
+#include "boost/lexical_cast.hpp"
 
 namespace rep
 {
 
 Y09102::Y09102 (int set): rep::Report("Загрузка оборудования по сводным группам",set),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("Y09102.xlt"),template_page(1)
+    cur_lists(0),templ("Y09102.xlt"),template_page(1),sm(1)
 {
     params[REPORT_PATH];
     params[REPORT_LIST_COUNT] = "10";
-    params[REPORT_USE_LISTING] = REP_TRUE;
+	params[REPORT_USE_LISTING] = REP_TRUE;
+	params["Количество смен"] = "22";
 }
 Y09102::~Y09102()
 {}
 
 Y09102::Y09102(const Y09102 &r):rep::Report(r),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("Y09102.xlt"),template_page(1)
+    cur_lists(0),templ("Y09102.xlt"),template_page(1),sm(1)
 {
 
 }
@@ -61,7 +63,10 @@ void Y09102::ParseParams(void)
     if (object.empty())
         throw std::runtime_error("Не указан объект для построения отчета");
     if (type.empty())
-        throw std::runtime_error("Не указан тип объекта для отчета");
+		throw std::runtime_error("Не указан тип объекта для отчета");
+
+	sm = boost::lexical_cast<double>(params["Количество смен"]);
+
 }
 void Y09102::LoadSettings()
 {
@@ -227,14 +232,14 @@ void Y09102::BuildReport()
                         }
                         //добавляем данные по группе
 
-                        xl.toCells(row, 1, group.c_str()        );
-                        xl.toCells(row, 3, lnk.getOboCount()    );
-                        xl.toCells(row, 4, lnk.getKsm()         );
-                        xl.toCells(row, 5, lnk.getPlanLoad()    );
-                        xl.toCells(row, 6, lnk.getDificitLoad() );
-                        xl.toCells(row, 7, lnk.getMaximimLoad() );
-                        xl.toCells(row, 8, lnk.getDelta()       );
-                        xl.toCells(row, 9, ""                   );
+                        xl.toCells(row, 1, group.c_str()         );
+						xl.toCells(row, 3, lnk.getOboCount()     );
+						xl.toCells(row, 4, lnk.getKsm()          );
+						xl.toCells(row, 5, lnk.getPlanLoad()     );
+						xl.toCells(row, 6, lnk.getDificitLoad()  );
+						xl.toCells(row, 7, lnk.getMaximimLoad(sm));
+						xl.toCells(row, 8, lnk.getDelta(sm)      );
+						xl.toCells(row, 9, ""                    );
 
                         std::list<std::string> dt = lnk.getZakazStrings();
                         size_t ofset = 1;

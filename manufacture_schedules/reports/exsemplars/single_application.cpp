@@ -166,7 +166,7 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                        "    key `det_id`(`det_id`), "
                        "    key `obm_id`(`obm_id`), "
                        "    key `ei`(`ei`) "
-                       ") engine = myiasm "
+                       ") engine = MYISAM "
                        "as "
                        "select "
                        "`a`.`det_id` as det_id, "

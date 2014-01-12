@@ -63,13 +63,14 @@ private:
         {
             return dificit;
         }
-        double getMaximimLoad   (void) const
-        {
-            return boost::math::round(8*22*getOboCount()*getKsm()*0.92*1000)/1000;
+		double getMaximimLoad   (double sm) const
+		{
+			double res = 8.0*sm*getOboCount()*getKsm()*0.92;
+			return boost::math::round(res*1000)/1000;
         }
-        double getDelta         (void) const
+        double getDelta         (double sm) const
         {
-            return boost::math::round((getMaximimLoad() - plan)*1000)/1000;;
+            return boost::math::round((getMaximimLoad(sm) - plan)*1000)/1000;;
         }
 
         std::list<std::string> getZakazStrings(void) const
@@ -119,7 +120,8 @@ private:
     //глобальные переменные
     size_t cur_lists;
     size_t file_no;
-    size_t template_page;
+	size_t template_page;
+	double sm;
 
     void ParseParams    (void);
     void LoadSettings   (void);
