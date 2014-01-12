@@ -90,14 +90,12 @@ void Lable::BuildReport()
         << "a.list_no, "
         << "b.part_no, "
         << "c.zakaz, "
-        << "sum(IFNULL(`e`.`kol_using`, `d`.`kol`)) kol, "
+        << "sum(IFNULL(`a`.`kol_det`, 0)) kol, "
         << "f.name det_name, "
         << "f.obd det_code "
         << "from manufacture.marsh_lists a "
         << "join manufacture.parts b on a.part_id = b.part_id "
         << "join manufacture.zakaz_list c on b.zak_id = c.zak_id "
-        << "left join manufacture.part_content d on d.det_id = a.det_id "
-        << "left join manufacture.det_tree e on e.det_idc = a.det_id "
         << "join manufacture.det_names f on f.det_id = a.det_id ";
     //сюда добавить:
     //количество деталей

@@ -148,15 +148,12 @@ void MaterialsDetail::BuildData      (std::string part_id, std::string zakaz, st
 
                        "`b`.`obd`   as obd, "
                        "`b`.`name`  as name, "
-                       "sum(IFNULL(`c`.`kol_using`,`d`.`kol`)) as kol_det "
+                       "IFNULL(`a`.`kol_det`,0) as kol_det "
 
                        "from `manufacture`.`marsh_lists` a "
                        "join `manufacture`.`det_names` b on `b`.`det_id` = `a`.`det_id` "
-                       "left join `manufacture`.`det_tree` c on `c`.`det_idc` = `a`.`det_id` "
-                       "left join `manufacture`.`part_content` d on `d`.`det_id` = `a`.`det_id` "
 
-                       "where `a`.`part_id` = '" << part_id << "' "
-                       "group by `a`.`det_id` ";
+                       "where `a`.`part_id` = '" << part_id << "' ";
 
     //получить нормы для деталей
     create_step_2   << "create temporary table if not exists `manufacture`.`step_2` "

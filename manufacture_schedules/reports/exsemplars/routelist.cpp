@@ -126,11 +126,12 @@ void RouteList::BuildReport()
 			for (rez->First(); !rez->Eof; rez->Next())
 			{
 				size_t det_id  = rez->FieldByName("det_id")->Value.operator int();
+                std::string part_id = (rez->FieldByName("part_id")->Value.operator AnsiString()).c_str();
 				std::string part_no = (rez->FieldByName("part_no")->Value.operator AnsiString()).c_str();
 				std::string list_no = (rez->FieldByName("list_no")->Value.operator AnsiString()).c_str();
 				std::string zakaz = (rez->FieldByName("zakaz")->Value.operator AnsiString()).c_str();
 
-				BuildData(ex, det_id, part_no, list_no, zakaz);//для каждой строчки данных подгружаем детализацию
+                BuildData(ex, det_id,part_id, part_no, list_no, zakaz);//для каждой строчки данных подгружаем детализацию
 
 				if (use_listing && !path.empty())
 				{//проверяем количество страниц, если выставлена опция
@@ -157,18 +158,18 @@ void RouteList::BuildReport()
         throw std::runtime_error("Ошибка соединения с базой данных");
     }
 }
-void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::string list_no, std::string zakaz)
+void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_id, std::string part_no, std::string list_no, std::string zakaz)
 {
     //для каждой строчки данных подгружаем детализацию
     std::stringstream sql;
     sql << "select "
            //для шапки
         << "date_format(now(),'%d.%m.%Y') date, "
-        << "ceil(sum(IFNULL(`b`.`kol_using`, `b1`.`kol`))/`g`.`kdz`) kol_zag, "
+        << "ceil(IFNULL(`b`.`kol_det`, 0)/`g`.`kdz`) kol_zag, "
         << "`g`.`nrm` norm, "
-        << "`g`.`nrm` * sum(IFNULL(`b`.`kol_using`, `b1`.`kol`)) norm_summ, "
+        << "`g`.`nrm` * IFNULL(`b`.`kol_det`, 0) norm_summ, "
         << "`g`.`masz` mass, "
-        << "`g`.`masz` * sum(IFNULL(`b`.`kol_using`, `b1`.`kol`)) mass_summ, "
+        << "`g`.`masz` * IFNULL(`b`.`kol_det`, 0) mass_summ, "
         << "`g`.`razz` razz, "
         << "`g`.`vz`   zag_code, "
         << "trim(concat(`g`.`pm`,' ',`g`.`napr`)) marshrut, "
@@ -178,7 +179,7 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
            //отрывные
         << "`a`.`obd`   det_code, "
         << "`a`.`name`  det_name, "
-        << "sum(IFNULL(`b`.`kol_using`, `b1`.`kol`) ) kol, "
+        << "IFNULL(`b`.`kol_det`, 0) kol, "
         << "`c`.`cex`   cex, "
         << "`c`.`utch`  utch, "
         << "`c`.`opr`   oper_no, "
@@ -193,8 +194,7 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_no, std::s
         << "IFNULL(round(`f`.`tsht`*`f`.`ksht`*`f`.`krop`/`f`.`kolod`, 5), '') tsht "
 
         << "from        `manufacture`.`det_names` a "
-        << "left join   `manufacture`.`det_tree` b        on `b`.`det_idc`        = `a`.`det_id` "
-        << "left join   `manufacture`.`part_content` b1   on `b1`.`det_id`        = `a`.`det_id` "
+        << "join        `manufacture`.`marsh_lists` b on `b`.`det_id` = `a`.`det_id` and `b`.`part_id` = '"<<part_id<<"'"
         << "join        `manufacture`.`operation_list` c  on `c`.`det_id`         = `a`.`det_id` "
         << "left join   `equipment`.`opr_names` d         on `d`.`oprid`          = `c`.`oprid`  "
         << "left join   `manufacture`.`orders` e          on `e`.`operation_id`   = `c`.`OpUUID` "

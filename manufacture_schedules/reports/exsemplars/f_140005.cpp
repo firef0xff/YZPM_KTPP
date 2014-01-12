@@ -150,7 +150,7 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
                        "`a`.`list_no` as ml_no, "
                        "`b`.`obd`   as obd, "
                        "`b`.`name`  as name, "
-                       "sum(IFNULL(`c`.`kol_using`,`d`.`kol`)) as kol, "
+                       "IFNULL(`a`.`kol_det`,0) as kol, "
                        "IFNULL(concat(TRIM(e.pm),' ',TRIM(e.napr)),'') as pm, "
                        "IFNULL(ROUND(e.nrm-e.masd,3),'') as ost, "
                        "if (left(concat(e.pm,' ',e.napr),4)='0303'or right(concat(e.pm,' ',e.napr),4)='0303',1,2) as prizn, "
@@ -159,14 +159,11 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
 
                        "from `manufacture`.`marsh_lists` a "
                        "join `manufacture`.`det_names` b on `b`.`det_id` = `a`.`det_id` "
-                       "left join `manufacture`.`det_tree` c on `c`.`det_idc` = `a`.`det_id` "
-                       "left join `manufacture`.`part_content` d on `d`.`det_id` = `a`.`det_id` "
                        "join `manufacture`.`det_info` e on `e`.`det_id` = `a`.`det_id` "
                        "left join `manufacture`.`materials` f1 on `f1`.`obmid` = `e`.`obmid` "
                        "left join `manufacture`.`det_names` f2 on `f2`.`det_id` = `e`.`obmid` "
 
-                       "where `a`.`part_id` = '" << part_id << "' "
-                       "group by `a`.`det_id`";
+                       "where `a`.`part_id` = '" << part_id << "' ";
 
     //получить нормы для деталей
     create_step_2   << "create temporary table if not exists `manufacture`.`step_2` as "

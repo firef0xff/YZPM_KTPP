@@ -158,8 +158,8 @@ void F140003::BuildData      (std::string part_id, std::string zakaz, std::strin
                        "`a`.`list_no` as ml_no, "
                        "`b`.`obd`   as obd, "
                        "`b`.`name`  as name, "
-                       "sum(IFNULL(`c`.`kol_using`,`d`.`kol`)) as kol_det, "
-                       "ceil(sum(IFNULL(`c`.`kol_using`, `d`.`kol`))/`e`.`kdz`) as kol_zag, "
+                       "IFNULL(`a`.`kol_det`,0) as kol_det, "
+                       "ceil(`a`.`kol_det`/`e`.`kdz`) as kol_zag, "
                        "IFNULL(concat(TRIM(e.pm),' ',TRIM(e.napr)),'') as pm, "
                        "ROUND(`e`.`nrm`,3) as norm, "
                        "ROUND(`e`.`masd`,3) as mass, "
@@ -175,14 +175,11 @@ void F140003::BuildData      (std::string part_id, std::string zakaz, std::strin
 
                        "from `manufacture`.`marsh_lists` a "
                        "join `manufacture`.`det_names` b on `b`.`det_id` = `a`.`det_id` "
-                       "left join `manufacture`.`det_tree` c on `c`.`det_idc` = `a`.`det_id` "
-                       "left join `manufacture`.`part_content` d on `d`.`det_id` = `a`.`det_id` "
                        "join `manufacture`.`det_info` e on `e`.`det_id` = `a`.`det_id` "
                        "left join `manufacture`.`materials` f1 on `f1`.`obmid` = `e`.`obmid` "
                        "left join `manufacture`.`det_names` f2 on `f2`.`det_id` = `e`.`obmid` "
 
-                       "where `a`.`part_id` = '" << part_id << "' "
-                       "group by `a`.`det_id`";
+                       "where `a`.`part_id` = '" << part_id << "' ";
 
     //получить нормы для деталей
     create_step_2   << "create temporary table if not exists `manufacture`.`step_2` as "
@@ -212,7 +209,7 @@ void F140003::BuildData      (std::string part_id, std::string zakaz, std::strin
                         "opr char (3) not null, "
 
                         "Key `k1` (`det_id`), "
-                         "Key `k2` (`det_id`,`opr`) "
+                        "Key `k2` (`det_id`,`opr`) "
                         ") engine = MYISAM as "
                         "select "
                         "`a`.`det_id` as det_id, "

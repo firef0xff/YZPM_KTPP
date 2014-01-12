@@ -38,7 +38,7 @@ private:
     void ParseParams    (void);
     void LoadSettings   (void);
     void BuildReport    (void);
-    void BuildData      (cExcel &xl, size_t det_id, std::string part_no, std::string list_no, std::string zakaz);
+    void BuildData      (cExcel &xl, size_t det_id, string part_id, std::string part_no, std::string list_no, std::string zakaz);
 };
 
 }
