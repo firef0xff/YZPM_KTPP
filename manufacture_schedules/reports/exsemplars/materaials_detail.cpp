@@ -195,7 +195,7 @@ void MaterialsDetail::BuildData      (std::string part_id, std::string zakaz, st
             "CONVERT(sum(`a1`.`kol_det`), char)                         as kol_det, "
             "CONVERT(`b`.`obd`, CHAR)                                   as obm, "
             "CONVERT(round(sum(`a`.`norm`),3), decimal(40,6))           as norm, "
-            "CONVERT(trim(concat(IFNULL(`c`.`nama`,IFNULL(`b`.`name`,'')),' ', IFNULL(`c`.`prma`,''))), CHAR) as material, "
+            "CONVERT(trim(concat(IFNULL(concat(`c`.`nama`,' ',`c`.`goma`),IFNULL(`b`.`name`,'')),' ', IFNULL(concat(`c`.`prma`,' ',`c`.`gopr`),''))), CHAR) as material, "
             "CONVERT(`a`.`ei`, CHAR)                                    as ei_kode, "
             "CONVERT(IFNULL(`d`.`snameei`,''), CHAR)                    as ei_name, "
 
