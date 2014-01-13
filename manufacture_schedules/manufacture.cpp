@@ -118,12 +118,12 @@ void TManufactureControl::LoadZapusk(String zapusk, String zakaz, String det)
     String zap_sql = "select a.name, a.begin, a.end, a.zap_id, (a.in_work is not null) started from manufacture.manufacture_orders a ";
     if (zakaz.Length() || det.Length())
     {
-        zap_sql +=     " join manufacture.parts b on a.zap_id = b.zap_id "
+        zap_sql +=  " join manufacture.parts b on a.zap_id = b.zap_id "
                     " join manufacture.zakaz_list e on b.zak_id = e.zak_id ";
 
         if (det.Length())
         {
-            zap_sql +=     " join manufacture.part_content c on b.part_id = c.part_id "
+            zap_sql +=  " join manufacture.part_content c on b.part_id = c.part_id "
                         " join manufacture.det_names d on d.det_id = c.det_id ";
         }
     }
@@ -177,7 +177,7 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
     }
     if (det.Length())
     {
-        zap_sql +=     " join manufacture.part_content d on a.part_id = d.part_id "
+        zap_sql +=  " join manufacture.part_content d on a.part_id = d.part_id "
                     " join manufacture.det_names e on e.det_id = d.det_id ";
     }
 
@@ -1295,15 +1295,19 @@ void __fastcall TManufactureControl::IncludePath(TObject *Sender)
 {
 	TTreeNode *node = contentTV->Selected;
     IzdPartNode *ptr = (IzdPartNode *)node->Data;
-    DB->SendCommand("call manufacture.SetUsage ('"+String(ptr->getDetID())+"', '1')");
-    Update(node);
+    if (ptr && node->Level && ((IzdPartNode *)node->Parent->Parent->Data)->IsUsed())
+    {
+        DB->SendCommand("call manufacture.SetUsage ('"+String(ptr->getInstIDc())+"', '1')");
+        Update(node);
+    }
+
     return;
 }
 void __fastcall TManufactureControl::UnIncludePath(TObject *Sender)
 {
     TTreeNode *node = contentTV->Selected;
     IzdPartNode *ptr = (IzdPartNode *)node->Data;
-    DB->SendCommand("call manufacture.SetUsage ('"+String(ptr->getDetID())+"', '0')");
+    DB->SendCommand("call manufacture.SetUsage ('"+String(ptr->getInstIDc())+"', '0')");
     Update(node);
     return;
 }
@@ -1314,14 +1318,40 @@ void __fastcall TManufactureControl::contentTVExpanding(TObject *Sender, TTreeNo
     {
         return;
     }
-    IzdNode *ptr = (IzdNode *)Node->Data;
+
     Node->DeleteChildren();
-    String sql = " select a.det_idp, a.using, b.det_id, b.obd, b.name, a.kol_sp, a.kol_using, count(b1.det_idp) have_childs, b.sp_id, b.sp_name from manufacture.det_tree a "
-                 " left join manufacture.det_tree b1 on a.det_idc = b1.det_idp "
-                 " join manufacture.det_names b on a.det_idc = b.det_id where a.det_idp = '"+String(ptr->getDetID())+"'group by a.det_idc order by b.sp_id, b.obd";
-    TADOQuery *rez = DB->SendSQL(sql);
-    if (rez && rez->RecordCount)
+    String sql = " select "
+                 " a.det_idp, "
+                 " a.inst_idc, "
+                 " IFNULL(a.inst_idp,0) inst_idp, "
+                 " a.using, "
+                 " b.det_id, "
+                 " b.obd, "
+                 " b.name, "
+                 " a.kol_sp, "
+                 " a.kol_using,"
+                 " count(b1.inst_idp) have_childs, "
+                 " b.sp_id, b.sp_name "
+                 " from manufacture.det_tree a "
+                 " left join manufacture.det_tree b1 on a.inst_idc = b1.inst_idp "
+                 " join manufacture.det_names b on a.det_idc = b.det_id ";
+    if (Node->Level)
     {
+        IzdPartNode *ptr = (IzdPartNode *)Node->Data;
+        sql += " where a.inst_idp = '"+String(ptr->getInstIDc())+"' ";
+    }
+    else
+    {
+        IzdNode *ptr = (IzdNode *)Node->Data;
+        sql += " where a.det_idp = '"+String(ptr->getDetID())+"' ";
+    }
+    sql += " group by a.inst_idc "
+           " order by b.sp_id, b.obd";
+
+	TADOQuery *rez = DB->SendSQL(sql);
+    if (rez && rez->RecordCount)
+	{
+		NodeData *ptr = (NodeData *)Node->Data;
         TTreeNode *node = 0;
         TTreeNode *sp_node = 0;
         unsigned int prev_sp_id = -1;
@@ -1331,13 +1361,15 @@ void __fastcall TManufactureControl::contentTVExpanding(TObject *Sender, TTreeNo
             String name = rez->FieldByName("name")->Value;
             unsigned __int64 det_id = (unsigned __int64)rez->FieldByName("det_id")->Value.operator __int64();
             unsigned __int64 det_idp = (unsigned __int64)rez->FieldByName("det_idp")->Value.operator __int64();
+            unsigned __int64 inst_idc = (unsigned __int64)rez->FieldByName("inst_idc")->Value.operator __int64();
+            unsigned __int64 inst_idp = (unsigned __int64)rez->FieldByName("inst_idp")->Value.operator __int64();
             unsigned int kol_using = (unsigned int)rez->FieldByName("kol_using")->Value.operator int();
             unsigned int kol_sp = (unsigned int)rez->FieldByName("kol_sp")->Value.operator int();
             bool have_childs = int(rez->FieldByName("have_childs")->Value);
             unsigned int sp_id = (unsigned int)rez->FieldByName("sp_id")->Value.operator int();
             String sp_name = rez->FieldByName("sp_name")->Value;
             bool using_ = rez->FieldByName("using")->Value;
-            IzdPartNode *ch_ptr = new IzdPartNode(name, obd, det_id, kol_using, det_idp, kol_sp, sp_id, sp_name, using_);
+            IzdPartNode *ch_ptr = new IzdPartNode(name, obd, det_id, kol_using, det_idp, inst_idc, inst_idp, kol_sp, sp_id, sp_name, using_);
             ch_ptr->SetLock(ptr->Locked());
             if (prev_sp_id != sp_id)
             {
@@ -1485,7 +1517,6 @@ void TManufactureControl::UpdatePartsStatus (void)
 {
     if (zapSG->Cells[ZAP_ID_COL][zapSG->Row] == "")
         return;
-    bool t;
 
     LoadZakaz(zapSG->Cells[ZAP_ID_COL][zapSG->Row], "", "");
     LoadIzd(zapSG->Cells[ZAP_ID_COL][zapSG->Row], 0, 0, "");

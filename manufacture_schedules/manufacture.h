@@ -130,8 +130,8 @@ class IzdPartNode : public IzdNode
 {
 public:
     IzdPartNode(String name_, String obd_, unsigned __int64 det_id_, double kol_used_,
-        unsigned __int64 det_idp_ ,double kol_sp_, unsigned int sp_id_, String sp_name_, bool used_):
-    IzdNode(name_, obd_, det_id_, kol_used_, sp_id_, sp_name_), det_idp(det_idp_), kol_sp(kol_sp_), used(used_)
+        unsigned __int64 det_idp_ ,unsigned __int64 inst_idc_,unsigned __int64 inst_idp_,double kol_sp_, unsigned int sp_id_, String sp_name_, bool used_):
+    IzdNode(name_, obd_, det_id_, kol_used_, sp_id_, sp_name_), det_idp(det_idp_), kol_sp(kol_sp_), used(used_),inst_idc(inst_idc_),inst_idp(inst_idp_)
     {}
     ~IzdPartNode()
     {}
@@ -143,9 +143,17 @@ public:
     {
         return det_idp;
     }
+    unsigned __int64 getInstIDc(void)
+    {
+        return inst_idc;
+    }
+    unsigned __int64 getInstIDp(void)
+    {
+        return inst_idp;
+    }
     void Update (cSQL *DB)
     {
-        TADOQuery *rez = DB->SendSQL("select `using` from manufacture.det_tree where det_idp = '"+String(det_idp)+"' and det_idc = '"+String(det_id)+"'");
+        TADOQuery *rez = DB->SendSQL("select `using` from manufacture.det_tree where inst_idc = '"+String(inst_idc)+"'");
         if (rez)
         {
             used = int(rez->FieldByName("using")->Value);
@@ -154,6 +162,8 @@ public:
     }
 private:
     unsigned __int64 det_idp;
+    unsigned __int64 inst_idc;
+    unsigned __int64 inst_idp;
     double kol_sp;
     bool used;
 };
