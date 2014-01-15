@@ -21,6 +21,10 @@
 #include "IconsData.h"
 #include <ImgList.hpp>
 //---------------------------------------------------------------------------
+#ifndef __int64
+#define __int64 long long
+#endif
+
 class NodeData
 {
     public:
@@ -291,15 +295,15 @@ private:    // User declarations
     void LoadZakaz (String zap_id, String zakaz, String det);
     void LoadIzd   (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, String det);
 
-    void LoadDetailData         (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
-    void LoadDetailParts        (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
-    void LoadPartDetails        (String id,String zap_id, String zak_id, String part_id, String det_id);
+    void LoadDetailData         (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
+    void LoadDetailParts        (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
+    void LoadPartDetails        (String id, String zap_id, String zak_id, String part_id, String det_id, String inst_id);
     void LoadTechDetails        (String det_id);
     void LoadOborudDetails      (String det_id);
 
-    void LoadDetailStandartParts(String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
-    void LoadDetailMaterials    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
-    void LoadDetailOborud       (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id);
+    void LoadDetailStandartParts(String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
+    void LoadDetailMaterials    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
+    void LoadDetailOborud       (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
 
     void Set_img   (TTreeNode *node);
     void Update    (TTreeNode *node);
