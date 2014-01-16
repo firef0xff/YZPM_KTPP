@@ -670,123 +670,39 @@ void TManufactureControl::LoadDetailOborud       (String zap_id, unsigned __int6
 {
     SGClear(OborudSG);
 
-    //получить список деталей для развертки
-    String tmp_drop = "drop temporary table if exists manufacture.idc";
-    String tmp_create = "create temporary table if not exists manufacture.idc as ";
-    String sql = "select a.det_id, a.sp_id from manufacture.det_names a ";
-    String where = " where true ";
-    String joins;
-    if (det_id > 0)
-    {
-        where+= " and a.det_id = '"+String(det_id)+"' ";
-    }
-    if (part_id > 0 || zak_id > 0 || zap_id!="")
-    {
-        joins += " join manufacture.part_content b on b.det_id = a.det_id "
-                 " join manufacture.parts c on c.part_id = b.part_id ";
-        if (part_id > 0)
-        {
-            where += " and c.part_id = '"+String(part_id)+"' ";
-        }
-        if (zak_id > 0)
-        {
-            where += " and c.zak_id = '"+String(zak_id)+"' ";
-        }
-        if (zap_id > 0)
-        {
-            where += " and c.zap_id = '"+zap_id+"' ";
-        }
-    }
-    DB->SendCommand(tmp_drop);
-    DB->SendCommand(tmp_create + sql + joins + where);
-
-    //развернуть детали до составов учитывая разделы спецификации 0,2,3,4,8
-    String tmp2_drop = "drop temporary table if exists manufacture.dets";
-    String tmp2_create = "create temporary table if not exists manufacture.dets "
-                        "( "
-                        " det_idc bigint(20) unsigned not null, "
-                        " det_idp bigint(20) unsigned default null, "
-                        " lvl int(10) unsigned not null, "
-                        " key det_idc(`det_idc`), "
-                        " key det_idp(`det_idp`) "
-                        " )";
-    String tmp3_drop = "drop temporary table if exists manufacture.dets_tmp";
-    String tmp3_create = "create temporary table if not exists manufacture.dets_tmp "
-                        "( "
-                        " det_idc bigint(20) unsigned not null, "
-                        " det_idp bigint(20) unsigned default null, "
-                        " lvl int(10) unsigned not null, "
-                        " key det_idc(`det_idc`), "
-                        " key det_idp(`det_idp`) "
-                        " )";
-
-    //инициализация
-    DB->SendCommand(tmp2_drop);
-    DB->SendCommand(tmp2_create);
-    int lvl = 0;
-    DB->SendCommand("insert into manufacture.dets select a.det_id, null, '"+String(lvl)+"' "
-                    "from manufacture.idc a "
-                    "where a.sp_id in (0,2,3,4,8)");
-
-    while (lvl < 100)
-    {
-        TADOQuery *rez = DB->SendSQL("select count(1) cnt from manufacture.dets where lvl = '"+String(lvl)+"'");
-        if (rez&&rez->RecordCount)
-        {
-            if (!(int)rez->FieldByName("cnt")->Value)
-            {
-                break;
-            }
-            delete rez;
-        }
-        DB->SendCommand(tmp3_drop);
-        DB->SendCommand(tmp3_create);
-        DB->SendCommand("insert into manufacture.dets_tmp select * from manufacture.dets where lvl = '"+String(lvl)+"'");
-
-        DB->SendCommand("insert into manufacture.dets select a.det_idc, a.det_idp ,'"+String(lvl+1)+"' "
-                        "from manufacture.det_tree a "
-                        "join manufacture.dets_tmp b on a.det_idp = b.det_idc "
-                        "join manufacture.det_names c on a.det_idc = c.det_id "
-                        "where c.sp_id in (0,2,3,4,8)");
-        ++lvl;
-    }
-    DB->SendCommand(tmp_drop);
-    DB->SendCommand(tmp3_drop);
+    //получить список инстов
+    std::stringstream get_ids;
+    get_ids << "Call manufacture.GetContent("<<zap_id.ToIntDef(0)<<","<<zak_id<<","<<part_id<<","<<det_id<<","<<inst_id<<")";
+    //отрезать от инстов не используемые
+    //отрезать все детали не из разделов 0,2,3,4,8
+    std::string step_1_drop =   "drop temporary table if exists manufacture.step_1";
+    std::string step_1_init =   "create temporary table if not exists manufacture.step_1 as "
+                                "select a.det_id as det_id, sum(b.kol_using) as det_kol from manufacture.output a "
+                                "left join manufacture.det_tree b on a.inst_id = b.inst_idc "
+                                "join manufacture.det_names c on c.det_id = a.det_id "
+                                "where b.inst_idc is null or b.using != 0 and c.sp_id in (0,2,3,4,8) "
+                                "group by a.det_id ";
+    //получить количества деталей
+    std::string step_2 = "update manufacture.step_1 a join manufacture.part_content b on a.det_id = b.det_id set a.det_kol = IFNULL(a.det_kol,0)+IFNULL(b.kol,0)";
 
     //посчитать трудоемкости по списку
-    String tmp4_drop = "drop temporary table if exists manufacture.dets_trud";
-    String tmp4_create = "create temporary table if not exists manufacture.dets_trud as "
-                         " select b.cex, b.utch, b.oboID, "
-                         " sum(c.tsht*c.ksht*c.krop/c.kolod )*d.kol_using as trud "
-                         " from manufacture.dets a "
-                         " join manufacture.operation_list b on a.det_idc = b.det_id "
-                         " join manufacture.operation_norms c on b.OpUUID = c.OpUUID "
-                         " join manufacture.det_tree d on d.det_idc = a.det_idc "
+    std::string step_3 = " select "
+                         " b.cex, b.utch, b.oboID, d.name obo_name,"
+                         " round(sum(c.tsht*c.ksht*c.krop/c.kolod)*a.det_kol,3) as trud, "
+                         " sum(IFNULL(kol_request-kol_unmaked,0)) maked, sum(IFNULL(kol_request,0)) schedule "
+                         " from manufacture.step_1 a "
+                         " join manufacture.operation_list b on b.det_id = a.det_id "
+                         " join manufacture.operation_norms c on c.OpUUID = b.OpUUID "
+                         " left join equipment.obor_list d on d.oboID = b.oboID "
+                         " left join manufacture.orders e on e.operation_id = b.OpUUID "
                          " group by b.cex, b.utch, b.oboID";
-    DB->SendCommand(tmp4_drop);
-    DB->SendCommand(tmp4_create);
+    DB->SendCommand(get_ids.str().c_str());
+    DB->SendCommand(step_1_drop.c_str());
+    DB->SendCommand(step_1_init.c_str());
+    DB->SendCommand(step_2.c_str());
+    TADOQuery *rez = DB->SendSQL(step_3.c_str());
+    DB->SendCommand(step_1_drop.c_str());
 
-    DB->SendCommand("insert into manufacture.dets_trud "
-                    " select b.cex, b.utch, b.oboID, "
-                    " sum(c.tsht*c.ksht*c.krop/c.kolod )*d.kol as trud "
-                    " from manufacture.dets a "
-                    " join manufacture.operation_list b on a.det_idc = b.det_id "
-                    " join manufacture.operation_norms c on b.OpUUID = c.OpUUID "
-                    " join manufacture.part_content d on d.det_id = a.det_idc and a.det_idp is null "
-                    " group by b.cex, b.utch, b.oboID");
-    //посчитать количества по списку
-
-    //соеденить данные
-    TADOQuery *rez = DB->SendSQL("select a.cex, a.utch, a.oboID, "
-                                 " round(sum(a.trud),3) trud, b.name obo_name, "
-                                 " 0 as schedule, "
-                                 " 0 as maked "
-                                 " from manufacture.dets_trud a "
-                                 " left join equipment.obor_list b on b.oboID = a.oboID "
-                                 " group by a.cex, a.utch, a.oboID order by a.cex, a.utch, a.oboID");
-                                 //TODO место для постранички
-    DB->SendCommand(tmp4_drop);
-    DB->SendCommand(tmp2_drop);
     //вывести результат
     if (rez)
     {
