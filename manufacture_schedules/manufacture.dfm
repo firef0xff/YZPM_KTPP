@@ -30,7 +30,7 @@ object ManufactureControl: TManufactureControl
       Top = 0
       Width = 665
       Height = 252
-      ActivePage = Parts
+      ActivePage = TabSheet6
       Align = alClient
       Constraints.MinHeight = 100
       TabOrder = 0
@@ -59,7 +59,6 @@ object ManufactureControl: TManufactureControl
           BevelOuter = bvNone
           Caption = 'Panel1'
           TabOrder = 0
-          ExplicitWidth = 304
           object Splitter2: TSplitter
             Left = 0
             Top = 165
@@ -84,8 +83,6 @@ object ManufactureControl: TManufactureControl
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
             TabOrder = 0
             OnSelectCell = detSGSelectCell
-            ExplicitWidth = 300
-            ExplicitHeight = 187
           end
           object RadioGroup1: TRadioGroup
             Left = 0
@@ -101,7 +98,6 @@ object ManufactureControl: TManufactureControl
               #1047#1072#1074#1077#1088#1096#1077#1085#1085#1099#1077
               #1053#1077#1079#1072#1074#1077#1088#1096#1077#1085#1085#1099#1077)
             TabOrder = 1
-            ExplicitWidth = 300
           end
           object detDetails: TStringGrid
             Left = 0
@@ -116,8 +112,6 @@ object ManufactureControl: TManufactureControl
             Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
             TabOrder = 2
             OnSelectCell = detDetailsSelectCell
-            ExplicitLeft = -1
-            ExplicitTop = 171
           end
         end
         object DetDetailControl: TPageControl
@@ -129,16 +123,12 @@ object ManufactureControl: TManufactureControl
           Align = alRight
           TabOrder = 1
           OnChange = DetDetailControlChange
-          ExplicitLeft = 1
-          ExplicitTop = 1
-          ExplicitWidth = 343
-          ExplicitHeight = 222
           object OperationsSheet: TTabSheet
             Caption = #1054#1087#1077#1088#1072#1094#1080#1080
             ExplicitLeft = 0
             ExplicitTop = 0
-            ExplicitWidth = 335
-            ExplicitHeight = 194
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object operSG: TStringGrid
               Left = 0
               Top = 0
@@ -151,8 +141,6 @@ object ManufactureControl: TManufactureControl
               RowCount = 2
               Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goRowSelect]
               TabOrder = 0
-              ExplicitWidth = 335
-              ExplicitHeight = 194
             end
           end
           object ObourSheet: TTabSheet
@@ -286,7 +274,77 @@ object ManufactureControl: TManufactureControl
         ExplicitTop = 0
         ExplicitWidth = 0
         ExplicitHeight = 0
-        object LabeledEdit1: TLabeledEdit
+        DesignSize = (
+          657
+          224)
+        object prev: TSpeedButton
+          Tag = -1
+          Left = 484
+          Top = 15
+          Width = 24
+          Height = 22
+          Anchors = [akTop, akRight]
+          Flat = True
+          Glyph.Data = {
+            9E020000424D9E0200000000000036000000280000000E0000000E0000000100
+            18000000000068020000C40E0000C40E00000000000000000001EDE9EBEDE9EB
+            EDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9
+            EBEDE9EB0000EDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB313131EDE9EBEDE9
+            EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB0000EDE9EBEDE9EBEDE9EBEDE9EBEDE9
+            EB313131292929EDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB0000EDE9
+            EBEDE9EBEDE9EBEDE9EB393939313131292929EDE9EBEDE9EBEDE9EBEDE9EBED
+            E9EBEDE9EBEDE9EB0000EDE9EBEDE9EBEDE9EB4A4A4A42424239393931313129
+            2929292929292929292929292929292929EDE9EB0000EDE9EBEDE9EB6363635A
+            5A5A5252524A4A4A424242393939393939313131292929292929313131EDE9EB
+            0000EDE9EB6B6B6B6B6B6B6B6B6B6B6B6B6363635A5A5A5252525252524A4A4A
+            424242424242393939EDE9EB0000EDE9EB7B7B7B7B7B7B7B7B7B7B7B7B737373
+            6B6B6B6B6B6B6B6B6B6363635A5A5A5252524A4A4AEDE9EB0000EDE9EBEDE9EB
+            8484848484848484848484847B7B7B7B7B7B7373737373736B6B6B6363635A5A
+            5AEDE9EB0000EDE9EBEDE9EBEDE9EB8C8C8C8C8C8C8C8C8C8484848484847B7B
+            7B7B7B7B7373737373736B6B6BEDE9EB0000EDE9EBEDE9EBEDE9EBEDE9EB8C8C
+            8C8C8C8C848484EDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB0000EDE9
+            EBEDE9EBEDE9EBEDE9EBEDE9EB8C8C8C848484EDE9EBEDE9EBEDE9EBEDE9EBED
+            E9EBEDE9EBEDE9EB0000EDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB848484ED
+            E9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB0000EDE9EBEDE9EBEDE9EBED
+            E9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB
+            0000}
+          OnClick = pagerClick
+        end
+        object next: TSpeedButton
+          Tag = 1
+          Left = 544
+          Top = 15
+          Width = 24
+          Height = 22
+          AllowAllUp = True
+          Anchors = [akTop, akRight]
+          Flat = True
+          Glyph.Data = {
+            9E020000424D9E0200000000000036000000280000000E0000000E0000000100
+            18000000000068020000C40E0000C40E00000000000000000001EDE9EBEDE9EB
+            EDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9
+            EBEDE9EB0000EDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB393939EDE9
+            EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB0000EDE9EBEDE9EBEDE9EBEDE9EBEDE9
+            EBEDE9EBEDE9EB313131292929EDE9EBEDE9EBEDE9EBEDE9EBEDE9EB0000EDE9
+            EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB292929292929292929EDE9EBED
+            E9EBEDE9EBEDE9EB0000EDE9EB52525242424239393931313131313131313131
+            3131292929292929292929EDE9EBEDE9EBEDE9EB0000EDE9EB5A5A5A5252524A
+            4A4A4A4A4A424242424242424242393939313131292929292929EDE9EBEDE9EB
+            0000EDE9EB6B6B6B6B6B6B6B6B6B6363636363635A5A5A5A5A5A525252424242
+            393939393939393939EDE9EB0000EDE9EB7B7B7B7B7B7B7B7B7B7B7B7B737373
+            7373736B6B6B6363635A5A5A5252524A4A4A4A4A4AEDE9EB0000EDE9EB848484
+            8484848484848484848484848484847B7B7B7373736B6B6B6363635A5A5AEDE9
+            EBEDE9EB0000EDE9EB8C8C8C8C8C8C8C8C8C8C8C8C8C8C8C8C8C8C8484847B7B
+            7B7373736B6B6BEDE9EBEDE9EBEDE9EB0000EDE9EBEDE9EBEDE9EBEDE9EBEDE9
+            EBEDE9EBEDE9EB8484847B7B7B737373EDE9EBEDE9EBEDE9EBEDE9EB0000EDE9
+            EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB8484847B7B7BEDE9EBEDE9EBED
+            E9EBEDE9EBEDE9EB0000EDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB84
+            8484EDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB0000EDE9EBEDE9EBEDE9EBED
+            E9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EBEDE9EB
+            0000}
+          OnClick = pagerClick
+        end
+        object leZak: TLabeledEdit
           Left = 3
           Top = 24
           Width = 46
@@ -298,7 +356,7 @@ object ManufactureControl: TManufactureControl
           NumbersOnly = True
           TabOrder = 0
         end
-        object LabeledEdit2: TLabeledEdit
+        object lePart: TLabeledEdit
           Left = 55
           Top = 24
           Width = 53
@@ -309,106 +367,19 @@ object ManufactureControl: TManufactureControl
           NumbersOnly = True
           TabOrder = 1
         end
-        object LabeledEdit3: TLabeledEdit
+        object leIzd: TLabeledEdit
           Left = 114
           Top = 24
-          Width = 129
+          Width = 119
           Height = 21
           EditLabel.Width = 43
           EditLabel.Height = 13
           EditLabel.Caption = #1048#1079#1076#1077#1083#1080#1077
           TabOrder = 2
         end
-        object LabeledEdit6: TLabeledEdit
-          Left = 138
-          Top = 64
-          Width = 46
-          Height = 21
-          EditLabel.Width = 30
-          EditLabel.Height = 13
-          EditLabel.Caption = #1055#1086#1076#1088'.'
-          NumbersOnly = True
-          TabOrder = 4
-        end
-        object LabeledEdit7: TLabeledEdit
-          Left = 194
-          Top = 64
-          Width = 76
-          Height = 21
-          EditLabel.Width = 43
-          EditLabel.Height = 13
-          EditLabel.Caption = #1054#1073#1086#1088#1091#1076'.'
-          NumbersOnly = True
-          TabOrder = 5
-        end
-        object LabeledEdit8: TLabeledEdit
-          Left = 276
-          Top = 64
-          Width = 50
-          Height = 21
-          EditLabel.Width = 42
-          EditLabel.Height = 13
-          EditLabel.Caption = #8470' '#1054#1087#1077#1088
-          NumbersOnly = True
-          TabOrder = 6
-        end
-        object LabeledEdit9: TLabeledEdit
-          Left = 332
-          Top = 64
-          Width = 50
-          Height = 21
-          EditLabel.Width = 47
-          EditLabel.Height = 13
-          EditLabel.Caption = #1050#1086#1076' '#1086#1087#1077#1088
-          NumbersOnly = True
-          TabOrder = 7
-        end
-        object LabeledEdit10: TLabeledEdit
-          Left = 3
-          Top = 104
-          Width = 50
-          Height = 21
-          EditLabel.Width = 38
-          EditLabel.Height = 13
-          EditLabel.Caption = #1058#1072#1073'. '#8470
-          NumbersOnly = True
-          TabOrder = 8
-        end
-        object LabeledEdit11: TLabeledEdit
-          Left = 59
-          Top = 104
-          Width = 184
-          Height = 21
-          EditLabel.Width = 94
-          EditLabel.Height = 13
-          EditLabel.Caption = #1060#1072#1084#1080#1083#1080#1103' '#1088#1072#1073#1086#1095#1077#1075#1086
-          TabOrder = 9
-        end
-        object LabeledEdit4: TLabeledEdit
-          Left = 249
-          Top = 104
-          Width = 72
-          Height = 21
-          EditLabel.Width = 65
-          EditLabel.Height = 13
-          EditLabel.Caption = #1048#1079#1075#1086#1090#1086#1074#1083#1077#1085#1086
-          NumbersOnly = True
-          TabOrder = 10
-        end
-        object LabeledEdit5: TLabeledEdit
-          Left = 327
-          Top = 104
-          Width = 55
-          Height = 21
-          EditLabel.Width = 24
-          EditLabel.Height = 13
-          EditLabel.Caption = #1041#1088#1072#1082
-          NumbersOnly = True
-          TabOrder = 11
-        end
-        object LabeledEdit12: TLabeledEdit
-          Left = 3
-          Top = 64
+        object leDet: TLabeledEdit
+          Left = 239
+          Top = 24
           Width = 129
           Height = 21
           EditLabel.Width = 38
@@ -416,12 +387,12 @@ object ManufactureControl: TManufactureControl
           EditLabel.Caption = #1044#1077#1090#1072#1083#1100
           TabOrder = 3
         end
-        object BitBtn1: TBitBtn
-          Left = 307
-          Top = 131
-          Width = 75
+        object btSearch: TBitBtn
+          Left = 3
+          Top = 59
+          Width = 82
           Height = 25
-          Caption = #1055#1088#1080#1085#1103#1090#1100
+          Caption = #1054#1090#1086#1073#1088#1072#1090#1100
           Default = True
           DoubleBuffered = True
           Glyph.Data = {
@@ -443,7 +414,129 @@ object ManufactureControl: TManufactureControl
             0000}
           NumGlyphs = 2
           ParentDoubleBuffered = False
-          TabOrder = 12
+          TabOrder = 4
+          OnClick = btSearchClick
+        end
+        object leNar: TLabeledEdit
+          Left = 374
+          Top = 24
+          Width = 85
+          Height = 21
+          EditLabel.Width = 32
+          EditLabel.Height = 13
+          EditLabel.Caption = #1053#1072#1088#1103#1076
+          NumbersOnly = True
+          TabOrder = 5
+        end
+        object SGNarList: TStringGrid
+          Left = 1
+          Top = 90
+          Width = 657
+          Height = 131
+          Align = alCustom
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          ColCount = 11
+          DefaultColWidth = 16
+          DefaultRowHeight = 16
+          FixedCols = 0
+          RowCount = 2
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing]
+          TabOrder = 6
+          OnDrawCell = SGNarListDrawCell
+          OnMouseDown = SGNarListMouseDown
+          OnSelectCell = SGNarListSelectCell
+          OnSetEditText = SGNarListSetEditText
+        end
+        object RG2: TRadioGroup
+          Left = 185
+          Top = 51
+          Width = 319
+          Height = 33
+          Align = alCustom
+          Caption = #1043#1086#1090#1086#1074#1085#1086#1089#1090#1100
+          Columns = 3
+          ItemIndex = 0
+          Items.Strings = (
+            #1042#1089#1077
+            #1047#1072#1074#1077#1088#1096#1077#1085#1085#1099#1077
+            #1053#1077#1079#1072#1074#1077#1088#1096#1077#1085#1085#1099#1077)
+          TabOrder = 7
+          OnClick = RG2Click
+        end
+        object btSave: TBitBtn
+          Left = 91
+          Top = 59
+          Width = 88
+          Height = 25
+          Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+          DoubleBuffered = True
+          Glyph.Data = {
+            36040000424D3604000000000000360000002800000010000000100000000100
+            2000000000000004000000000000000000000000000000000000FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00000000000000000000000000000000000000000000000000000000000000
+            00000000000000000000000000000000000000000000FF00FF00FF00FF000000
+            0000008080000080800000000000000000000000000000000000000000000000
+            0000C0C0C000C0C0C000000000000080800000000000FF00FF00FF00FF000000
+            0000008080000080800000000000000000000000000000000000000000000000
+            0000C0C0C000C0C0C000000000000080800000000000FF00FF00FF00FF000000
+            0000008080000080800000000000000000000000000000000000000000000000
+            0000C0C0C000C0C0C000000000000080800000000000FF00FF00FF00FF000000
+            0000008080000080800000000000000000000000000000000000000000000000
+            00000000000000000000000000000080800000000000FF00FF00FF00FF000000
+            0000008080000080800000808000008080000080800000808000008080000080
+            80000080800000808000008080000080800000000000FF00FF00FF00FF000000
+            0000008080000080800000000000000000000000000000000000000000000000
+            00000000000000000000008080000080800000000000FF00FF00FF00FF000000
+            00000080800000000000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+            C000C0C0C000C0C0C000000000000080800000000000FF00FF00FF00FF000000
+            00000080800000000000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+            C000C0C0C000C0C0C000000000000080800000000000FF00FF00FF00FF000000
+            00000080800000000000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+            C000C0C0C000C0C0C000000000000080800000000000FF00FF00FF00FF000000
+            00000080800000000000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+            C000C0C0C000C0C0C000000000000080800000000000FF00FF00FF00FF000000
+            00000080800000000000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+            C000C0C0C000C0C0C000000000000000000000000000FF00FF00FF00FF000000
+            00000080800000000000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
+            C000C0C0C000C0C0C00000000000C0C0C00000000000FF00FF00FF00FF000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            00000000000000000000000000000000000000000000FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00
+            FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00}
+          ParentDoubleBuffered = False
+          TabOrder = 8
+          OnClick = btSaveClick
+        end
+        object E2: TLabeledEdit
+          Left = 514
+          Top = 16
+          Width = 24
+          Height = 21
+          Anchors = [akTop, akRight]
+          EditLabel.Width = 24
+          EditLabel.Height = 13
+          EditLabel.Caption = #1051#1080#1089#1090
+          NumbersOnly = True
+          TabOrder = 9
+          Text = '1'
+          OnChange = E2Change
+        end
+        object E3: TLabeledEdit
+          Left = 574
+          Top = 16
+          Width = 80
+          Height = 21
+          Anchors = [akTop, akRight]
+          EditLabel.Width = 78
+          EditLabel.Height = 13
+          EditLabel.Caption = #1057#1090#1088#1086#1082' '#1085#1072' '#1083#1080#1089#1090#1077
+          MaxLength = 4
+          NumbersOnly = True
+          TabOrder = 10
+          Text = '20'
+          OnChange = E3Change
         end
       end
     end
@@ -871,7 +964,7 @@ object ManufactureControl: TManufactureControl
     Left = 224
     Top = 208
     Bitmap = {
-      494C010103000500640018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000500880018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000600000001800000001002000000000000024
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1179,7 +1272,7 @@ object ManufactureControl: TManufactureControl
     Left = 224
     Top = 136
     Bitmap = {
-      494C010103005400980010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103005400BC0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       000000000000000000000000000000000000241CED00241CED00241CED00241C
       ED00241CED00241CED00241CED00241CED00241CED00241CED00241CED00241C

@@ -234,23 +234,23 @@ __published:    // IDE-managed Components
     TStringGrid *det_oborudSG;
     TTabSheet *Oborud;
     TTabSheet *TabSheet6;
-    TLabeledEdit *LabeledEdit1;
-    TLabeledEdit *LabeledEdit2;
-    TLabeledEdit *LabeledEdit3;
-    TLabeledEdit *LabeledEdit6;
-    TLabeledEdit *LabeledEdit7;
-    TLabeledEdit *LabeledEdit8;
-    TLabeledEdit *LabeledEdit9;
-    TLabeledEdit *LabeledEdit10;
-    TLabeledEdit *LabeledEdit11;
-    TLabeledEdit *LabeledEdit4;
-    TLabeledEdit *LabeledEdit5;
-    TLabeledEdit *LabeledEdit12;
-    TBitBtn *BitBtn1;
+	TLabeledEdit *leZak;
+	TLabeledEdit *lePart;
+	TLabeledEdit *leIzd;
+	TLabeledEdit *leDet;
+	TBitBtn *btSearch;
 	TStringGrid *OborudSG;
 	TImageList *marks;
 	TStringGrid *detDetails;
 	TSplitter *Splitter3;
+	TLabeledEdit *leNar;
+	TStringGrid *SGNarList;
+	TRadioGroup *RG2;
+	TBitBtn *btSave;
+	TSpeedButton *prev;
+	TLabeledEdit *E2;
+	TSpeedButton *next;
+	TLabeledEdit *E3;
     void __fastcall CreateZapusk(TObject *Sender);
     void __fastcall RemoveZapusk(TObject *Sender);
     void __fastcall InWorkZapusk(TObject *Sender);
@@ -283,6 +283,21 @@ __published:    // IDE-managed Components
 	void __fastcall MenuItem8Click(TObject *Sender);
 	void __fastcall N7Click(TObject *Sender);
 	void __fastcall detDetailsSelectCell(TObject *Sender, int ACol, int ARow, bool &CanSelect);
+	void __fastcall btSearchClick(TObject *Sender);
+	void __fastcall SGNarListMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
+	void __fastcall SGNarListSelectCell(TObject *Sender, int ACol, int ARow, bool &CanSelect);
+	void __fastcall btSaveClick(TObject *Sender);
+	void __fastcall SGNarListDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect,
+          TGridDrawState State);
+	void __fastcall pagerClick(TObject *Sender);
+	void __fastcall E2Change(TObject *Sender);
+	void __fastcall E3Change(TObject *Sender);
+	void __fastcall RG2Click(TObject *Sender);
+    void __fastcall SGNarListSetEditText(TObject *Sender, int ACol, int ARow, const UnicodeString Value);
+
+
+
 
 
 private:    // User declarations
@@ -309,6 +324,9 @@ private:    // User declarations
     void Update    (TTreeNode *node);
     void UpdateOrderStatus (void);
     void UpdatePartsStatus (void);
+
+    void NarUpdate (int Row);
+
     int **selected;
 
     const int &LUser;

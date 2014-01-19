@@ -50,6 +50,10 @@ class Transaction
             DB->SendCommand("ROLLBACK");
         }
     }
+    void Rollback(void)
+    {
+        DB->SendCommand("ROLLBACK");
+    }
     void Commit(void)
     {
         DB->SendCommand("COMMIT");
