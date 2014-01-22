@@ -1356,7 +1356,7 @@ void __fastcall TManufactureControl::N5Click(TObject *Sender)
 void __fastcall TManufactureControl::MenuItem8Click(TObject *Sender)
 {
 	TTreeNode *node = zakTV->Selected;
-	if (node->Data)
+	if (node && node->Data)
 	{
 		if (node->Level == 0)
 		{//запустить заказ

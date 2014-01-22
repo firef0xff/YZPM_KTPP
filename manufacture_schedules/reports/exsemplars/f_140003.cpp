@@ -185,8 +185,6 @@ void F140003::BuildData      (std::string part_id, std::string zakaz, std::strin
     create_step_2   << "create temporary table if not exists `manufacture`.`step_2` as "
                        "select "
                        "`a`.`det_id` as det_id, "
-//                       "IFNULL(ROUND(sum(`c`.`tpz`/`c`.`kolod`),3),0) as tpz, "
-//                       "IFNULL(ROUND(sum(`c`.`tsht`*`c`.`ksht`*`c`.`krop`/`c`.`kolod`),3),0) as tsht "
                        "IFNULL(ROUND(sum(`c`.`tpz`),3),0) as tpz, "
                        "IFNULL(ROUND(sum(`c`.`tsht`),3),0) as tsht "
                        "from `manufacture`.`marsh_lists` a "
@@ -253,7 +251,7 @@ void F140003::BuildData      (std::string part_id, std::string zakaz, std::strin
             "`a`.`prizn`, "
 
             "CONVERT(sum(`b`.`tpz`/`a`.`kol_zag` + `b`.`tsht`), DECIMAL(40,6)) as trud, "
-            "CONVERT(sum((`b`.`tpz`/`a`.`kol_zag` + `b`.`tsht`) * `a`.`kol_det`), DECIMAL(40,6)) as trud_part ";
+            "CONVERT(sum((`b`.`tpz`/`a`.`kol_zag` + `b`.`tsht`) * `a`.`kol_zag`), DECIMAL(40,6)) as trud_part ";//норма времени =(Тпз / кол-во заготовок в партии + Тшт) х количество заготовок в партии
 
     if (!group_by_obd)
         sql << ",CONVERT (`c`.`order_no`, CHAR) as  order_no ";

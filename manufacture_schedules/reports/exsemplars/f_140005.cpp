@@ -226,8 +226,7 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
             "`a`.`prma`, "
 			"CONVERT(`b`.`tpz`, DECIMAL(40,6)) as tpz, "
 			"CONVERT(`b`.`tsht`, DECIMAL(40,6)) as tsht, "
-			"CONVERT(`b`.`tpz` * `a`.`kol`, DECIMAL(40,6)) as tpz_part, "
-            "CONVERT(`b`.`tsht`* `a`.`kol`, DECIMAL(40,6)) as tsht_part, "
+            "CONVERT(`b`.`tsht`* `a`.`kol`+`b`.`tpz`, DECIMAL(40,6)) as trud_part, "
             "CONVERT (`c`.`order_no`, CHAR) as  order_no "
             "from `manufacture`.`step_1` a "
             "join `manufacture`.`step_2` b on `b`.`det_id` = `a`.`det_id` "
@@ -296,8 +295,7 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
                 tmp.prma  = (rez->FieldByName("prma")->Value.operator AnsiString()).c_str();
                 tmp.tpz         = rez->FieldByName("tpz")->Value.operator double();
                 tmp.tsht        = rez->FieldByName("tsht")->Value.operator double();
-                tmp.tpz_part    = rez->FieldByName("tpz_part")->Value.operator double();
-                tmp.tsht_part   = rez->FieldByName("tsht_part")->Value.operator double();
+                tmp.trud_part   = rez->FieldByName("trud_part")->Value.operator double();
                 tmp.order_no    = (rez->FieldByName("order_no")->Value.operator AnsiString()).c_str();
                 tmp.SetPm((rez->FieldByName("pm")->Value.operator AnsiString()).c_str());
 
@@ -434,8 +432,8 @@ void F140005::BuildData      (std::string part_id, std::string zakaz, std::strin
                 xl.toCells(cur_row,     7,  lnk.nama.c_str()    );
                 xl.toCells(cur_row+1,   7,  lnk.prma.c_str()    );
                 xl.toCells(cur_row,     8,  lnk.tsht            );
-                xl.toCells(cur_row+1,   8,  lnk.tsht_part       );
-                tsht_summary += lnk.tsht_part;
+                xl.toCells(cur_row+1,   8,  lnk.trud_part       );
+                tsht_summary += lnk.trud_part;
                 xl.toCells(cur_row,     9,  lnk.ml_no.c_str()   );
                 xl.toCells(cur_row+1,   9,  lnk.order_no.c_str());
                 xl.toCells(cur_row,     14, lnk.ost.c_str()     );

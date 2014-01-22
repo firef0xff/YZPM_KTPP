@@ -30,8 +30,7 @@ private:
         std::string prma;
         double tpz;
         double tsht;
-        double tpz_part;
-        double tsht_part;
+        double trud_part;
         std::string order_no;
         std::list<std::string> pm;
 
