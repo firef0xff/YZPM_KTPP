@@ -25,91 +25,91 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
         IcoData=_IcoData;
     }
     count++;
-    // расположение
+    // СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ
     Align=alClient;
     Parent=_p;
     Name=Name+String(count);
 
     if (Parent->ClassNameIs("TTabSheet"))
     {
-        ((TTabSheet*)Parent)->Caption="Запуски     ";
+        ((TTabSheet*)Parent)->Caption="Р—Р°РїСѓСЃРєРё     ";
     }
     contentTV->Images=IcoData->GetImgList();
 
-    zapSG->Cells[1][0] = "Название";
-    zapSG->Cells[2][0] = "Дата начала";
-    zapSG->Cells[3][0] = "Дата окончания";
+    zapSG->Cells[1][0] = "РќР°Р·РІР°РЅРёРµ";
+    zapSG->Cells[2][0] = "Р”Р°С‚Р° РЅР°С‡Р°Р»Р°";
+    zapSG->Cells[3][0] = "Р”Р°С‚Р° РѕРєРѕРЅС‡Р°РЅРёСЏ";
     AutoWidthSG(zapSG);
 
-    detSG->Cells[1][0] = "Обозначение";
-    detSG->Cells[2][0] = "Наименование";
-    detSG->Cells[3][0] = "Кол - во";
-    detSG->Cells[4][0] = "Труд. Ед.";
-    detSG->Cells[5][0] = "Труд.";
-    detSG->Cells[6][0] = "Изготовлено";
-    detSG->Cells[7][0] = "Брак";
+    detSG->Cells[1][0] = "РћР±РѕР·РЅР°С‡РµРЅРёРµ";
+    detSG->Cells[2][0] = "РќР°РёРјРµРЅРѕРІР°РЅРёРµ";
+    detSG->Cells[3][0] = "РљРѕР» - РІРѕ";
+    detSG->Cells[4][0] = "РўСЂСѓРґ. Р•Рґ.";
+    detSG->Cells[5][0] = "РўСЂСѓРґ.";
+    detSG->Cells[6][0] = "РР·РіРѕС‚РѕРІР»РµРЅРѕ";
+    detSG->Cells[7][0] = "Р‘СЂР°Рє";
     AutoWidthSG(detSG);
 
-    operSG->Cells[1][0] = "Подр.";
-    operSG->Cells[2][0] = "№ ОП";
-    operSG->Cells[3][0] = "Код";
-    operSG->Cells[4][0] = "Операция";
-    operSG->Cells[5][0] = "Труд.";
-    operSG->Cells[6][0] = "Код Обор.";
-    operSG->Cells[7][0] = "Оборудование";
+    operSG->Cells[1][0] = "РџРѕРґСЂ.";
+    operSG->Cells[2][0] = "в„– РћРџ";
+    operSG->Cells[3][0] = "РљРѕРґ";
+    operSG->Cells[4][0] = "РћРїРµСЂР°С†РёСЏ";
+    operSG->Cells[5][0] = "РўСЂСѓРґ.";
+    operSG->Cells[6][0] = "РљРѕРґ РћР±РѕСЂ.";
+    operSG->Cells[7][0] = "РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ";
     AutoWidthSG(operSG);
 
-    makeSG->Cells[1][0] = "№ ОП";
-    makeSG->Cells[2][0] = "Код";
-    makeSG->Cells[3][0] = "Операция";
-    makeSG->Cells[4][0] = "Кол - во";
-    makeSG->Cells[5][0] = "Изг - но";
-    makeSG->Cells[6][0] = "Брак";
+    makeSG->Cells[1][0] = "в„– РћРџ";
+    makeSG->Cells[2][0] = "РљРѕРґ";
+    makeSG->Cells[3][0] = "РћРїРµСЂР°С†РёСЏ";
+    makeSG->Cells[4][0] = "РљРѕР» - РІРѕ";
+    makeSG->Cells[5][0] = "РР·Рі - РЅРѕ";
+    makeSG->Cells[6][0] = "Р‘СЂР°Рє";
     AutoWidthSG(makeSG);
 
-    det_matSG->Cells[1][0] = "Обозначение";
-    det_matSG->Cells[2][0] = "Наименование";
-    det_matSG->Cells[3][0] = "Ед. Изм.";
-    det_matSG->Cells[4][0] = "Необходимо";
-    det_matSG->Cells[5][0] = "Использованно";
+    det_matSG->Cells[1][0] = "РћР±РѕР·РЅР°С‡РµРЅРёРµ";
+    det_matSG->Cells[2][0] = "РќР°РёРјРµРЅРѕРІР°РЅРёРµ";
+    det_matSG->Cells[3][0] = "Р•Рґ. РР·Рј.";
+    det_matSG->Cells[4][0] = "РќРµРѕР±С…РѕРґРёРјРѕ";
+    det_matSG->Cells[5][0] = "РСЃРїРѕР»СЊР·РѕРІР°РЅРЅРѕ";
     AutoWidthSG(det_matSG);
 
-    det_oborudSG->Cells[1][0] = "Труд.";
-    det_oborudSG->Cells[2][0] = "Подр.";
-    det_oborudSG->Cells[3][0] = "Код Обор.";
-    det_oborudSG->Cells[4][0] = "Оборудование";
-    det_oborudSG->Cells[5][0] = "Заданий";
-    det_oborudSG->Cells[6][0] = "Выполнено";
+    det_oborudSG->Cells[1][0] = "РўСЂСѓРґ.";
+    det_oborudSG->Cells[2][0] = "РџРѕРґСЂ.";
+    det_oborudSG->Cells[3][0] = "РљРѕРґ РћР±РѕСЂ.";
+    det_oborudSG->Cells[4][0] = "РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ";
+    det_oborudSG->Cells[5][0] = "Р—Р°РґР°РЅРёР№";
+    det_oborudSG->Cells[6][0] = "Р’С‹РїРѕР»РЅРµРЅРѕ";
     AutoWidthSG(det_oborudSG);
 
-    OborudSG->Cells[1][0] = "Труд.";
-    OborudSG->Cells[2][0] = "Подр.";
-    OborudSG->Cells[3][0] = "Код Обор.";
-    OborudSG->Cells[4][0] = "Оборудование";
-    OborudSG->Cells[5][0] = "Заданий";
-    OborudSG->Cells[6][0] = "Выполнено";
+    OborudSG->Cells[1][0] = "РўСЂСѓРґ.";
+    OborudSG->Cells[2][0] = "РџРѕРґСЂ.";
+    OborudSG->Cells[3][0] = "РљРѕРґ РћР±РѕСЂ.";
+    OborudSG->Cells[4][0] = "РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ";
+    OborudSG->Cells[5][0] = "Р—Р°РґР°РЅРёР№";
+    OborudSG->Cells[6][0] = "Р’С‹РїРѕР»РЅРµРЅРѕ";
     AutoWidthSG(OborudSG);
 
-    detDetails->Cells[1][0] = "Входит в";
-    detDetails->Cells[2][0] = "Обозначение";
-    detDetails->Cells[3][0] = "Наименование";
-    detDetails->Cells[4][0] = "Кол - во";
-    detDetails->Cells[5][0] = "Труд. Ед.";
-    detDetails->Cells[6][0] = "Труд.";
-    detDetails->Cells[7][0] = "Изготовлено";
-    detDetails->Cells[8][0] = "Брак";
+    detDetails->Cells[1][0] = "Р’С…РѕРґРёС‚ РІ";
+    detDetails->Cells[2][0] = "РћР±РѕР·РЅР°С‡РµРЅРёРµ";
+    detDetails->Cells[3][0] = "РќР°РёРјРµРЅРѕРІР°РЅРёРµ";
+    detDetails->Cells[4][0] = "РљРѕР» - РІРѕ";
+    detDetails->Cells[5][0] = "РўСЂСѓРґ. Р•Рґ.";
+    detDetails->Cells[6][0] = "РўСЂСѓРґ.";
+    detDetails->Cells[7][0] = "РР·РіРѕС‚РѕРІР»РµРЅРѕ";
+    detDetails->Cells[8][0] = "Р‘СЂР°Рє";
     AutoWidthSG(detDetails);
 
-    SGNarList->Cells[1][0] = "Наряд";
-    SGNarList->Cells[2][0] = "Изгот.";
-    SGNarList->Cells[3][0] = "Брак";
-    SGNarList->Cells[4][0] = "Таб №";
-    SGNarList->Cells[5][0] = "Рабочий";
-    SGNarList->Cells[6][0] = "Задание";
-    SGNarList->Cells[7][0] = "Остаток";
-    SGNarList->Cells[8][0] = "Деталь";
-    SGNarList->Cells[9][0] = "Операция";
-    SGNarList->Cells[10][0] = "Оборудование";
+    SGNarList->Cells[1][0] = "РќР°СЂСЏРґ";
+    SGNarList->Cells[2][0] = "РР·РіРѕС‚.";
+    SGNarList->Cells[3][0] = "Р‘СЂР°Рє";
+    SGNarList->Cells[4][0] = "РўР°Р± в„–";
+    SGNarList->Cells[5][0] = "Р Р°Р±РѕС‡РёР№";
+    SGNarList->Cells[6][0] = "Р—Р°РґР°РЅРёРµ";
+    SGNarList->Cells[7][0] = "РћСЃС‚Р°С‚РѕРє";
+    SGNarList->Cells[8][0] = "Р”РµС‚Р°Р»СЊ";
+    SGNarList->Cells[9][0] = "РћРїРµСЂР°С†РёСЏ";
+    SGNarList->Cells[10][0] = "РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ";
     AutoWidthSG(SGNarList);
 }
 __fastcall    TManufactureControl::~TManufactureControl(void)
@@ -352,7 +352,7 @@ void TManufactureControl::LoadIzd   (String zap_id, unsigned __int64 zak_id, uns
             bool started = (int)rez->FieldByName("started")->Value;
             IzdNode *ptr = new IzdNode(name, obd, det_id, kol, sp_id, sp_name);
             ptr->SetLock(started);
-            node = contentTV->Items->AddObject(node, VinToGost(ptr->getDetObd())+" "+ptr->getDetName()+" - "+String(ptr->getCount())+" шт.", (void*)ptr);
+            node = contentTV->Items->AddObject(node, VinToGost(ptr->getDetObd())+" "+ptr->getDetName()+" - "+String(ptr->getCount())+" С€С‚.", (void*)ptr);
             Set_img(node);
             if (have_childs)
             {
@@ -391,11 +391,11 @@ void TManufactureControl::LoadDetailParts   (String zap_id, unsigned __int64 zak
     SGClear(det_matSG);
     SGClear(makeSG);
 
-    //получить список инстов
+    //РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РёРЅСЃС‚РѕРІ
     std::stringstream get_ids;
     get_ids << "Call manufacture.GetContent("<<zap_id.ToIntDef(0)<<","<<zak_id<<","<<part_id<<","<<det_id<<","<<inst_id<<")";
-    //отрезать от инстов не используемые
-    //отрезать все детали не из разделов 0,2,3,4,8
+    //РѕС‚СЂРµР·Р°С‚СЊ РѕС‚ РёРЅСЃС‚РѕРІ РЅРµ РёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ
+    //РѕС‚СЂРµР·Р°С‚СЊ РІСЃРµ РґРµС‚Р°Р»Рё РЅРµ РёР· СЂР°Р·РґРµР»РѕРІ 0,2,3,4,8
     std::string step_1_drop =   "drop temporary table if exists manufacture.step_1";
     std::string step_1_init =   "create temporary table if not exists manufacture.step_1 as "
                                 "select a.det_id as det_id, sum(b.kol_using) as det_kol from manufacture.output a "
@@ -403,10 +403,10 @@ void TManufactureControl::LoadDetailParts   (String zap_id, unsigned __int64 zak
                                 "join manufacture.det_names c on c.det_id = a.det_id "
                                 "where b.inst_idc is null or b.using != 0 and c.sp_id in (0,2,3,4,8) "
                                 "group by a.det_id ";
-    //получить количества деталей
+    //РїРѕР»СѓС‡РёС‚СЊ РєРѕР»РёС‡РµСЃС‚РІР° РґРµС‚Р°Р»РµР№
     std::string step_2 = "update manufacture.step_1 a join manufacture.part_content b on a.det_id = b.det_id set a.det_kol = IFNULL(a.det_kol,0)+IFNULL(b.kol,0)";
 
-    //посчитать трудоемкости по списку
+    //РїРѕСЃС‡РёС‚Р°С‚СЊ С‚СЂСѓРґРѕРµРјРєРѕСЃС‚Рё РїРѕ СЃРїРёСЃРєСѓ
     std::string step_3 = " select "
                          " a.det_id as det_id, "
                          " round(sum(c.tsht*c.ksht*c.krop/c.kolod),3) as trud_ed, "
@@ -429,7 +429,7 @@ void TManufactureControl::LoadDetailParts   (String zap_id, unsigned __int64 zak
     String out_part_id  (part_id);
     String out_det_id   (det_id);
     String out_inst_id  (inst_id);
-    //вывести результат
+    //РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚
     if (rez)
     {
         for (rez->First(); !rez->Eof; rez->Next())
@@ -466,11 +466,11 @@ void TManufactureControl::LoadPartDetails   (String id, String zap_id, String za
 {
     SGClear(detDetails, 1);
 
-    //получить список инстов
+    //РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РёРЅСЃС‚РѕРІ
     std::stringstream get_ids;
     get_ids << "Call manufacture.GetContent("<<zap_id.ToIntDef(0)<<","<<zak_id.ToIntDef(0)<<","<<part_id.ToIntDef(0)<<","<<det_id.ToIntDef(0)<<","<<inst_id.ToIntDef(0)<<")";
-    //отрезать от инстов не используемые
-    //отрезать все детали не из разделов 0,2,3,4,8
+    //РѕС‚СЂРµР·Р°С‚СЊ РѕС‚ РёРЅСЃС‚РѕРІ РЅРµ РёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ
+    //РѕС‚СЂРµР·Р°С‚СЊ РІСЃРµ РґРµС‚Р°Р»Рё РЅРµ РёР· СЂР°Р·РґРµР»РѕРІ 0,2,3,4,8
     std::string step_1_drop =   "drop temporary table if exists manufacture.step_1";
     std::string step_1_init =   "create temporary table if not exists manufacture.step_1 as "
                                 "select a.det_id as det_id, sum(b.kol_using) as det_kol, b.det_idp,b.inst_idc from manufacture.output a "
@@ -478,10 +478,10 @@ void TManufactureControl::LoadPartDetails   (String id, String zap_id, String za
                                 "join manufacture.det_names c on c.det_id = a.det_id "
                                 "where b.inst_idc is null or b.using != 0 and c.sp_id in (0,2,3,4,8) "
                                 "group by a.det_id,b.inst_idc ";
-    //получить количества деталей
+    //РїРѕР»СѓС‡РёС‚СЊ РєРѕР»РёС‡РµСЃС‚РІР° РґРµС‚Р°Р»РµР№
     std::string step_2 = "update manufacture.step_1 a join manufacture.part_content b on a.det_id = b.det_id set a.det_kol = IFNULL(a.det_kol,0)+IFNULL(b.kol,0)";
 
-    //посчитать трудоемкости по списку
+    //РїРѕСЃС‡РёС‚Р°С‚СЊ С‚СЂСѓРґРѕРµРјРєРѕСЃС‚Рё РїРѕ СЃРїРёСЃРєСѓ
     std::stringstream step_3;
     step_3 <<   " select "
                 " a.det_id as det_id, "
@@ -501,7 +501,7 @@ void TManufactureControl::LoadPartDetails   (String id, String zap_id, String za
     DB->SendCommand(step_2.c_str());
     TADOQuery *rez = DB->SendSQL(step_3.str().c_str());
     DB->SendCommand(step_1_drop.c_str());
-    //вывести результат
+    //РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚
     if (rez)
     {
         for (rez->First(); !rez->Eof; rez->Next())
@@ -574,7 +574,7 @@ void TManufactureControl::LoadTechDetails   (String det_id)
             operSG->Cells[4][row] = rez->FieldByName("oper_name")->Value;
             operSG->Cells[5][row] = rez->FieldByName("trud_ed")->Value;
             operSG->Cells[6][row] = rez->FieldByName("OboID")->Value;
-            operSG->Cells[7][row] = rez->FieldByName("obo_name")->Value;"Оборудование";  //
+            operSG->Cells[7][row] = rez->FieldByName("obo_name")->Value;"РћР±РѕСЂСѓРґРѕРІР°РЅРёРµ";  //
 
             ++operSG->RowCount;
         }
@@ -682,11 +682,11 @@ void TManufactureControl::LoadDetailOborud       (String zap_id, unsigned __int6
 {
     SGClear(OborudSG);
 
-    //получить список инстов
+    //РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РёРЅСЃС‚РѕРІ
     std::stringstream get_ids;
     get_ids << "Call manufacture.GetContent("<<zap_id.ToIntDef(0)<<","<<zak_id<<","<<part_id<<","<<det_id<<","<<inst_id<<")";
-    //отрезать от инстов не используемые
-    //отрезать все детали не из разделов 0,2,3,4,8
+    //РѕС‚СЂРµР·Р°С‚СЊ РѕС‚ РёРЅСЃС‚РѕРІ РЅРµ РёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ
+    //РѕС‚СЂРµР·Р°С‚СЊ РІСЃРµ РґРµС‚Р°Р»Рё РЅРµ РёР· СЂР°Р·РґРµР»РѕРІ 0,2,3,4,8
     std::string step_1_drop =   "drop temporary table if exists manufacture.step_1";
     std::string step_1_init =   "create temporary table if not exists manufacture.step_1 as "
                                 "select a.det_id as det_id, sum(b.kol_using) as det_kol from manufacture.output a "
@@ -694,10 +694,10 @@ void TManufactureControl::LoadDetailOborud       (String zap_id, unsigned __int6
                                 "join manufacture.det_names c on c.det_id = a.det_id "
                                 "where b.inst_idc is null or b.using != 0 and c.sp_id in (0,2,3,4,8) "
                                 "group by a.det_id ";
-    //получить количества деталей
+    //РїРѕР»СѓС‡РёС‚СЊ РєРѕР»РёС‡РµСЃС‚РІР° РґРµС‚Р°Р»РµР№
     std::string step_2 = "update manufacture.step_1 a join manufacture.part_content b on a.det_id = b.det_id set a.det_kol = IFNULL(a.det_kol,0)+IFNULL(b.kol,0)";
 
-    //посчитать трудоемкости по списку
+    //РїРѕСЃС‡РёС‚Р°С‚СЊ С‚СЂСѓРґРѕРµРјРєРѕСЃС‚Рё РїРѕ СЃРїРёСЃРєСѓ
     std::string step_3 = " select "
                          " b.cex, b.utch, b.oboID, d.name obo_name,"
                          " round(sum(c.tsht*c.ksht*c.krop/c.kolod)*a.det_kol,3) as trud, "
@@ -715,7 +715,7 @@ void TManufactureControl::LoadDetailOborud       (String zap_id, unsigned __int6
     TADOQuery *rez = DB->SendSQL(step_3.c_str());
     DB->SendCommand(step_1_drop.c_str());
 
-    //вывести результат
+    //РІС‹РІРµСЃС‚Рё СЂРµР·СѓР»СЊС‚Р°С‚
     if (rez)
     {
         for (rez->First(); !rez->Eof; rez->Next())
@@ -790,7 +790,7 @@ void __fastcall TManufactureControl::CreateZapusk(TObject *Sender)
 }
 void __fastcall TManufactureControl::RemoveZapusk(TObject *Sender)
 {
-    if ( MessageBoxA(this->Handle, "Удалить запуск?", "Удалить запуск?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+    if ( MessageBoxA(this->Handle, "РЈРґР°Р»РёС‚СЊ Р·Р°РїСѓСЃРє?", "РЈРґР°Р»РёС‚СЊ Р·Р°РїСѓСЃРє?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
         DB->SendCommand("delete from `manufacture`.`manufacture_orders` where `zap_id` = "+zapSG->Cells[ZAP_ID_COL][zapSG->Row]);
         Find->Click();
@@ -799,9 +799,9 @@ void __fastcall TManufactureControl::RemoveZapusk(TObject *Sender)
 }
 void __fastcall TManufactureControl::InWorkZapusk(TObject *Sender)
 {
-    if ( MessageBoxA(this->Handle, "Запустить в работу?", "Запустить в работу?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+    if ( MessageBoxA(this->Handle, "Р—Р°РїСѓСЃС‚РёС‚СЊ РІ СЂР°Р±РѕС‚Сѓ?", "Р—Р°РїСѓСЃС‚РёС‚СЊ РІ СЂР°Р±РѕС‚Сѓ?",MB_YESNO|MB_ICONQUESTION) == mrYes )
 	{
-		//получить список партий для запуска
+		//РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РїР°СЂС‚РёР№ РґР»СЏ Р·Р°РїСѓСЃРєР°
         std::vector<unsigned __int64> parts;
         TADOQuery *rez = DB->SendSQL("Select part_id from manufacture.manufacture_orders a "
                                      " join manufacture.parts b on a.zap_id = b.zap_id "
@@ -822,9 +822,9 @@ void __fastcall TManufactureControl::InWorkZapusk(TObject *Sender)
 }
 void __fastcall TManufactureControl::ToEditZapusk(TObject *Sender)
 {
-    if ( MessageBoxA(this->Handle, "Вернуть в разработку?", "Вернуть в разработку?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+    if ( MessageBoxA(this->Handle, "Р’РµСЂРЅСѓС‚СЊ РІ СЂР°Р·СЂР°Р±РѕС‚РєСѓ?", "Р’РµСЂРЅСѓС‚СЊ РІ СЂР°Р·СЂР°Р±РѕС‚РєСѓ?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
-        //получить список партий для запуска
+        //РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє РїР°СЂС‚РёР№ РґР»СЏ Р·Р°РїСѓСЃРєР°
         std::vector<unsigned __int64> parts;
         TADOQuery *rez = DB->SendSQL("Select part_id from manufacture.manufacture_orders a "
                                      " join manufacture.parts b on a.zap_id = b.zap_id "
@@ -886,7 +886,7 @@ void __fastcall TManufactureControl::AddZakaz(TObject *Sender)
 }
 void __fastcall TManufactureControl::RemoveZakaz(TObject *Sender)
 {
-    if ( MessageBoxA(this->Handle, "Удалить заказ/партию из запуска?", "Удалить заказ/партию из запуска?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+    if ( MessageBoxA(this->Handle, "РЈРґР°Р»РёС‚СЊ Р·Р°РєР°Р·/РїР°СЂС‚РёСЋ РёР· Р·Р°РїСѓСЃРєР°?", "РЈРґР°Р»РёС‚СЊ Р·Р°РєР°Р·/РїР°СЂС‚РёСЋ РёР· Р·Р°РїСѓСЃРєР°?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
         DB->SendCommand("START TRANSACTION");
         try
@@ -895,7 +895,7 @@ void __fastcall TManufactureControl::RemoveZakaz(TObject *Sender)
             {
                 TTreeNode *node = zakTV->Selections[i];
                 if (node->Level == 0)
-                {//удалить заказ
+                {//СѓРґР°Р»РёС‚СЊ Р·Р°РєР°Р·
                     for (TTreeNode *ch_node = node->getFirstChild(); ch_node; ch_node = node->GetNextChild(ch_node))
                     {
                         PartNode *ptr = (PartNode *)ch_node->Data;
@@ -904,7 +904,7 @@ void __fastcall TManufactureControl::RemoveZakaz(TObject *Sender)
                     }
                 }
                 else
-                {//удалить партию
+                {//СѓРґР°Р»РёС‚СЊ РїР°СЂС‚РёСЋ
                     PartNode *ptr = (PartNode *)node->Data;
                     String sql = "Delete from manufacture.parts where part_id = '"+String(ptr->getPartID())+"'";
                     DB->SendCommand(sql);
@@ -925,14 +925,14 @@ void __fastcall TManufactureControl::RemoveZakaz(TObject *Sender)
 }
 void __fastcall TManufactureControl::InWorkZakaz(TObject *Sender)
 {
-    if ( MessageBoxA(this->Handle, "Запустить в работу?", "Запустить в работу?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+    if ( MessageBoxA(this->Handle, "Р—Р°РїСѓСЃС‚РёС‚СЊ РІ СЂР°Р±РѕС‚Сѓ?", "Р—Р°РїСѓСЃС‚РёС‚СЊ РІ СЂР°Р±РѕС‚Сѓ?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
         std::vector<unsigned __int64> parts;
         for (size_t i = 0; i < zakTV->SelectionCount; ++i)
         {
             TTreeNode *node = zakTV->Selections[i];
             if (node->Level == 0)
-            {//запустить заказ
+            {//Р·Р°РїСѓСЃС‚РёС‚СЊ Р·Р°РєР°Р·
                 for (TTreeNode *ch_node = node->getFirstChild(); ch_node; ch_node = node->GetNextChild(ch_node))
                 {
                     PartNode *ptr = (PartNode *)ch_node->Data;
@@ -940,7 +940,7 @@ void __fastcall TManufactureControl::InWorkZakaz(TObject *Sender)
                 }
             }
             else
-            {//запустить партию
+            {//Р·Р°РїСѓСЃС‚РёС‚СЊ РїР°СЂС‚РёСЋ
                 PartNode *ptr = (PartNode *)node->Data;
                 parts.push_back(ptr->getPartID());
             }
@@ -952,14 +952,14 @@ void __fastcall TManufactureControl::InWorkZakaz(TObject *Sender)
 }
 void __fastcall TManufactureControl::ToEditZakaz(TObject *Sender)
 {
-    if ( MessageBoxA(this->Handle, "Вернуть в разработку?", "Вернуть в разработку?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+    if ( MessageBoxA(this->Handle, "Р’РµСЂРЅСѓС‚СЊ РІ СЂР°Р·СЂР°Р±РѕС‚РєСѓ?", "Р’РµСЂРЅСѓС‚СЊ РІ СЂР°Р·СЂР°Р±РѕС‚РєСѓ?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
         std::vector<unsigned __int64> parts;
         for (size_t i = 0; i < zakTV->SelectionCount; ++i)
         {
             TTreeNode *node = zakTV->Selections[i];
             if (node->Level == 0)
-            {//запустить заказ
+            {//Р·Р°РїСѓСЃС‚РёС‚СЊ Р·Р°РєР°Р·
                 for (TTreeNode *ch_node = node->getFirstChild(); ch_node; ch_node = node->GetNextChild(ch_node))
                 {
                     PartNode *ptr = (PartNode *)ch_node->Data;
@@ -967,7 +967,7 @@ void __fastcall TManufactureControl::ToEditZakaz(TObject *Sender)
                 }
             }
             else
-            {//запустить партию
+            {//Р·Р°РїСѓСЃС‚РёС‚СЊ РїР°СЂС‚РёСЋ
                 PartNode *ptr = (PartNode *)node->Data;
                 parts.push_back(ptr->getPartID());
             }
@@ -1035,14 +1035,14 @@ void __fastcall TManufactureControl::AddIzdelie(TObject *Sender)
 }
 void __fastcall TManufactureControl::RemoveIzdelie(TObject *Sender)
 {
-    if (contentTV->SelectionCount && MessageBoxA(this->Handle, "Удалить изделие?", "Удалить изделие?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+    if (contentTV->SelectionCount && MessageBoxA(this->Handle, "РЈРґР°Р»РёС‚СЊ РёР·РґРµР»РёРµ?", "РЈРґР°Р»РёС‚СЊ РёР·РґРµР»РёРµ?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
         Transaction tr(DB);
         for (size_t i = 0; i < contentTV->SelectionCount; ++i)
         {
             TTreeNode *node = contentTV->Selections[i];
             if (node->Level == 0)
-            {//удалить заказ
+            {//СѓРґР°Р»РёС‚СЊ Р·Р°РєР°Р·
                 IzdNode *ptr = (IzdNode *)node->Data;
                 DB->SendCommand("call manufacture.DeleteIzd('"+String(ptr->getDetID())+"')");
             }
@@ -1188,7 +1188,7 @@ void            TManufactureControl::Set_img            (TTreeNode *node)
             node->ImageIndex=IcoData->GetInList(data->getSpRazd(),true,1);
             node->SelectedIndex=node->ImageIndex;
             node->ExpandedImageIndex=node->ImageIndex;
-            if (data->IsUsed()) //интересный фак бул переменная может хранить числовые значения и принимать не только -1 и 0
+            if (data->IsUsed()) //РёРЅС‚РµСЂРµСЃРЅС‹Р№ С„Р°Рє Р±СѓР» РїРµСЂРµРјРµРЅРЅР°СЏ РјРѕР¶РµС‚ С…СЂР°РЅРёС‚СЊ С‡РёСЃР»РѕРІС‹Рµ Р·РЅР°С‡РµРЅРёСЏ Рё РїСЂРёРЅРёРјР°С‚СЊ РЅРµ С‚РѕР»СЊРєРѕ -1 Рё 0
             {
                 node->StateIndex=1;
             }else
@@ -1359,7 +1359,7 @@ void __fastcall TManufactureControl::MenuItem8Click(TObject *Sender)
 	if (node && node->Data)
 	{
 		if (node->Level == 0)
-		{//запустить заказ
+		{//Р·Р°РїСѓСЃС‚РёС‚СЊ Р·Р°РєР°Р·
 			ZakazNode *ptr = (ZakazNode *)node->Data;
 
 			TReports *wnd = new TReports(this,DB,ORDER,ptr->getZapID(),ptr->getZakID());
@@ -1367,7 +1367,7 @@ void __fastcall TManufactureControl::MenuItem8Click(TObject *Sender)
 			delete wnd;
 		}
 		else
-		{//запустить партию
+		{//Р·Р°РїСѓСЃС‚РёС‚СЊ РїР°СЂС‚РёСЋ
 			PartNode *ptr = (PartNode *)node->Data;
 
 			TReports *wnd = new TReports(this,DB,PART,ptr->getPartID());
@@ -1392,7 +1392,7 @@ void __fastcall TManufactureControl::N7Click(TObject *Sender)
 }
 
 
-//____________________________________________Закрытие нарядов_____________________________________________________
+//____________________________________________Р—Р°РєСЂС‹С‚РёРµ РЅР°СЂСЏРґРѕРІ_____________________________________________________
 void __fastcall TManufactureControl::btSearchClick(TObject *Sender)
 {
     bool need_save = false;
@@ -1402,7 +1402,7 @@ void __fastcall TManufactureControl::btSearchClick(TObject *Sender)
     }
     if (need_save)
     {
-        if ( MessageBoxA(this->Handle, "Сохранить изменения?", "Сохранить изменения?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+        if ( MessageBoxA(this->Handle, "РЎРѕС…СЂР°РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ?", "РЎРѕС…СЂР°РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ?",MB_YESNO|MB_ICONQUESTION) == mrYes )
             btSave->Click();
     }
     SGClear(SGNarList);
@@ -1545,10 +1545,10 @@ void __fastcall TManufactureControl::btSearchClick(TObject *Sender)
             {
                 int row = SGNarList->RowCount-1;
               SGNarList->Cells[1][row] = rez->FieldByName("order_id")->Value;
-//                SGNarList->Cells[2][row] = "Изгот.";
-//                SGNarList->Cells[3][row] = "Брак";
-//                SGNarList->Cells[4][row] = "Таб №";
-//                SGNarList->Cells[5][row] = "Рабочий";
+//                SGNarList->Cells[2][row] = "РР·РіРѕС‚.";
+//                SGNarList->Cells[3][row] = "Р‘СЂР°Рє";
+//                SGNarList->Cells[4][row] = "РўР°Р± в„–";
+//                SGNarList->Cells[5][row] = "Р Р°Р±РѕС‡РёР№";
                 SGNarList->Cells[6][row] = rez->FieldByName("kol_request")->Value;
                 SGNarList->Cells[7][row] = rez->FieldByName("kol_unmaked")->Value;
                 SGNarList->Cells[8][row] = VinToGost(rez->FieldByName("obd")->Value);
@@ -1612,7 +1612,7 @@ void __fastcall TManufactureControl::btSaveClick(TObject *Sender)
             }
             else
             {
-                ShowMessage("Не указан табельный номер для наряда "+ SGNarList->Cells[1][i]);
+                ShowMessage("РќРµ СѓРєР°Р·Р°РЅ С‚Р°Р±РµР»СЊРЅС‹Р№ РЅРѕРјРµСЂ РґР»СЏ РЅР°СЂСЏРґР° "+ SGNarList->Cells[1][i]);
             }
         }
     }
@@ -1659,9 +1659,9 @@ void __fastcall TManufactureControl::SGNarListDrawCell(TObject *Sender, int ACol
           int ARow, TRect &Rect, TGridDrawState State)
 {
 	TStringGrid *sg = (TStringGrid *)Sender;
-	// - раскраска сетки
+	// - СЂР°СЃРєСЂР°СЃРєР° СЃРµС‚РєРё
     static int color=0X00E0FFFF;
-    if(ACol&&ARow) // разлинейка
+    if(ACol&&ARow) // СЂР°Р·Р»РёРЅРµР№РєР°
     {
 		if((ARow%2))
         {
@@ -1679,10 +1679,10 @@ void __fastcall TManufactureControl::SGNarListDrawCell(TObject *Sender, int ACol
 		sg->Cells[ACol][ARow]);
     }
 
-	// выделенные поля
+	// РІС‹РґРµР»РµРЅРЅС‹Рµ РїРѕР»СЏ
     if(ACol>=sg->Selection.Left&&ACol<=
 		sg->Selection.Right&&ARow>=sg->Selection.Top&&ARow<=
-		sg->Selection.Bottom) // выделение
+		sg->Selection.Bottom) // РІС‹РґРµР»РµРЅРёРµ
     {
 		sg->Canvas->Brush->Color=0x00FFE0E0; // clMenu;
 		sg->Canvas->FillRect(Rect);
