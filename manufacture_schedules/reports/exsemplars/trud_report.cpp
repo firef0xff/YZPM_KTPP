@@ -129,7 +129,6 @@ void TrudReport::BuildReport()
     "CONVERT(sum(a.maked), CHAR) as maked, "
     "CONVERT(sum(a.broken), CHAR) as broken, "
     "CONVERT(e.cex, CHAR) as cex, "
-    "CONVERT(e.utch, CHAR) as utch, "
     "CONVERT(IFNULL(concat(d.family, ' ',Upper(left(d.name,1)),'.', Upper(left(d.otch,1)),'.'),''), CHAR) as fio, "
     "CONVERT(a.tab_no, CHAR) as tab_no, "
     "CONVERT(round(sum(if (e.cex = '"<< "03" <<"' and e.utch = '"<< "04" <<"', "
@@ -145,7 +144,7 @@ void TrudReport::BuildReport()
     "where '"<<AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str() <<"' <= a.date and a.date < '"
              <<AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str()<<"'";
 
-    sql << "group by e.cex,e.utch,a.tab_no,d.family ";
+    sql << "group by e.cex,a.tab_no,d.family ";
 
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
     if (rez)
@@ -178,7 +177,6 @@ void TrudReport::BuildReport()
             {
                 Data tmp;
                 tmp.cex     =   (rez->FieldByName("cex")->Value.operator AnsiString()).c_str();
-                tmp.utch    =   (rez->FieldByName("utch")->Value.operator AnsiString()).c_str();
                 tmp.tab_no  =   (rez->FieldByName("tab_no")->Value.operator AnsiString()).c_str();
                 tmp.fio     =   (rez->FieldByName("fio")->Value.operator AnsiString()).c_str();
                 tmp.trud    =   rez->FieldByName("trud")->Value.operator double();
@@ -211,8 +209,7 @@ void TrudReport::BuildReport()
             size_t column_ofset = 0;
 
             cur_cex = "";
-            std::string cur_utch("");
-            double sum_trud_ceh(0.0), sum_trud_utch(0.0);
+            double sum_trud_ceh(0.0);
             for (CexData::const_iterator it = cex_data.begin(); it!=cex_data.end(); ++it)
             {
                 const Data &lnk = it->second;
@@ -236,7 +233,7 @@ void TrudReport::BuildReport()
                         xl.Sheet_activate();
                         xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
                     }
-                    xl.toCells(cur_row,     column_ofset+3,  "Итого по цеху"    );
+                    xl.toCells(cur_row,     column_ofset+2,  "Итого по цеху"    );
                     if (!column_ofset)
                         xl.toCells(cur_row,     column_ofset+5,  sum_trud_ceh   );
                     else
@@ -283,29 +280,6 @@ void TrudReport::BuildReport()
                     cur_row = start_row;
                 }
 
-                if (!cur_utch.empty() && cur_utch!=lnk.utch)
-                {
-                    //итого по участку
-                    if (!column_ofset)
-                    {
-                        // копирование
-                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
-                        // вставка
-                        xl.Sheet_activate();
-                        xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
-                    }
-
-                    xl.toCells(cur_row,     column_ofset+3,  "Итого по участку"    );
-                    if (!column_ofset)
-                        xl.toCells(cur_row,     column_ofset+5,  sum_trud_utch   );
-                    else
-                        xl.toCells(cur_row,     column_ofset+7,  sum_trud_utch   );
-
-                    cur_utch=lnk.utch;
-                    sum_trud_utch = 0;
-                    ++cur_row;
-                }
-
                 if (!column_ofset)
                 {
                     //вставить строку в отчет
@@ -316,15 +290,13 @@ void TrudReport::BuildReport()
                     xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
                 }
 
-                xl.toCells(cur_row,     column_ofset+1,  lnk.utch.c_str()   );
-                xl.toCells(cur_row,     column_ofset+2,  lnk.tab_no.c_str() );
-                xl.toCells(cur_row,     column_ofset+3,  lnk.fio.c_str()    );
+                xl.toCells(cur_row,     column_ofset+1,  lnk.tab_no.c_str() );
+                xl.toCells(cur_row,     column_ofset+2,  lnk.fio.c_str()    );
                 if (!column_ofset)
                     xl.toCells(cur_row,     column_ofset+5,  lnk.trud       );
                 else
                     xl.toCells(cur_row,     column_ofset+7,  lnk.trud       );
 
-                sum_trud_utch += lnk.trud;
                 sum_trud_ceh += lnk.trud;
                 ++cur_row;
             }
@@ -332,19 +304,13 @@ void TrudReport::BuildReport()
             xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
             // вставка
             xl.Sheet_activate();
-            xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size));
+            xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
 
-            xl.toCells(cur_row,     column_ofset+3,  "Итого по участку"    );
+            xl.toCells(cur_row,     column_ofset+2,  "Итого по цеху"    );
             if (!column_ofset)
-                xl.toCells(cur_row,     column_ofset+5,  sum_trud_utch   );
+                xl.toCells(cur_row,     column_ofset+5,  sum_trud_ceh   );
             else
-                xl.toCells(cur_row,     column_ofset+7,  sum_trud_utch   );
-
-            xl.toCells(cur_row+1,     column_ofset+3,  "Итого по цеху"    );
-            if (!column_ofset)
-                xl.toCells(cur_row+1,     column_ofset+5,  sum_trud_ceh   );
-            else
-                xl.toCells(cur_row+1,     column_ofset+7,  sum_trud_ceh   );
+                xl.toCells(cur_row,     column_ofset+7,  sum_trud_ceh   );
 
 
 

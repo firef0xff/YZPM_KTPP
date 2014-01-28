@@ -66,7 +66,7 @@ void __fastcall TReports::AddClick(TObject *Sender)
             schedules.push_back(t);
         }
         delete wnd;
-	}
+    }
     UpdateRepListSG();
 }
 

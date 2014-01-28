@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+﻿//---------------------------------------------------------------------------
 
 #include <vcl.h>
 #pragma hdrstop
@@ -1736,7 +1736,7 @@ void __fastcall TManufactureControl::SGNarListSetEditText(TObject *Sender, int A
 {
     TStringGrid *sg = (TStringGrid *)Sender;
 	switch (ACol)
-	{
+    {
 		case 2:
 		{
             int kol = sg->Cells[7][ARow].ToIntDef(0) - sg->Cells[3][ARow].ToIntDef(0);

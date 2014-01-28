@@ -11,7 +11,6 @@ class TrudReport : public Report
     struct Data
     {
         std::string cex;
-        std::string utch;
         std::string tab_no;
         std::string fio;
         double trud;
