@@ -36,6 +36,46 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
     }
     contentTV->Images=IcoData->GetImgList();
 
+    // настройка содержимого
+    std::stringstream sql; sql<<"call administration.Get_Rights('"<<LUser<<"')";
+    TADOQuery *rez=DB->SendSQL(sql.str().c_str());
+    bool manufacture_orders=false,Run_at_manufacture=false,manufacture_view=false;
+    if(rez)
+    {
+        for (rez->First(); !rez->Eof; rez->Next())
+        {
+            const String val=rez->FieldByName("progname")->Value;
+            if (val=="manufacture_orders")
+            {
+                manufacture_orders=true;
+            }
+            if (val=="Run_at_manufacture")
+            {
+                Run_at_manufacture=true;
+            }
+            if (val=="manufacture_view")
+            {
+                manufacture_view=true;
+            }
+        }
+        delete rez;
+    }
+    N1->Enabled = Run_at_manufacture;
+    N2->Enabled = Run_at_manufacture;
+    N3->Enabled = Run_at_manufacture;
+    N4->Enabled = Run_at_manufacture;
+    MenuItem1->Enabled = Run_at_manufacture;
+    MenuItem2->Enabled = Run_at_manufacture;
+    MenuItem3->Enabled = Run_at_manufacture;
+    MenuItem4->Enabled = Run_at_manufacture;
+    MenuItem5->Enabled = Run_at_manufacture;
+    MenuItem7->Enabled = Run_at_manufacture;
+    MenuItem11->Enabled = Run_at_manufacture;
+    MenuItem12->Enabled = Run_at_manufacture;
+
+    TabSheet6->Enabled = manufacture_orders;
+    this->Enabled = manufacture_view;
+
     zapSG->Cells[1][0] = "Название";
     zapSG->Cells[2][0] = "Дата начала";
     zapSG->Cells[3][0] = "Дата окончания";
@@ -1004,6 +1044,7 @@ void __fastcall TManufactureControl::zakTVMouseDown(TObject *Sender, TMouseButto
             if (ptr)
             {
                  MenuItem2->Enabled = !ptr->Locked();
+                 MenuItem3->Enabled = !ptr->Locked();
             }
         }
     }

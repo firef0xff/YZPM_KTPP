@@ -1,4 +1,4 @@
-#include <vcl.h>
+п»ї#include <vcl.h>
 #pragma hdrstop
 
 #include "main.h"
@@ -25,11 +25,11 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
         IcoData=new IconsData(this);
         LoadIL();
         UserID=wnd->Get_UserID();
-        // настройка содержимого
+        // РЅР°СЃС‚СЂРѕР№РєР° СЃРѕРґРµСЂР¶РёРјРѕРіРѕ
         String sql="call administration.Get_Rights('"+String(UserID)+"')";
         TADOQuery *rez=DB->SendSQL(sql);
         bool SpView=false, TehRead=false, TehEdit=false, NormEdit=false, plan_pr_va_det=false,
-        otbor_po_ceu=false, mat_ved=false, texnologic=false,Orders=false,Run_at_manufacture=false;
+        otbor_po_ceu=false, mat_ved=false, texnologic=false,Orders=false,manufacture_view=false;
         if(rez&&rez->RecordCount)
         {
             for (rez->First(); !rez->Eof; rez->Next())
@@ -71,9 +71,9 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
                 {
                     Orders=true;
                 }
-                if (val=="Run_at_manufacture")
+                if (val=="manufacture_view")
                 {
-                    Run_at_manufacture=true;
+                    manufacture_view=true;
                 }
             }
         }
@@ -101,17 +101,17 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
         N13->Visible=Orders;
         N25->Visible=Orders;
         //
-        N28->Visible=Run_at_manufacture;
-        N28->Enabled=Run_at_manufacture;
-        N33->Visible=Run_at_manufacture;
-        N33->Enabled=Run_at_manufacture;
-        N34->Visible=Run_at_manufacture;
-        N34->Enabled=Run_at_manufacture;
-        N35->Visible=Run_at_manufacture;
-        N35->Enabled=Run_at_manufacture;
-        ManufactureBTN->Visible = Run_at_manufacture;
-        N36->Visible=Run_at_manufacture;
-        N37->Visible=Run_at_manufacture;
+        N28->Visible=manufacture_view;
+        N28->Enabled=manufacture_view;
+        N33->Visible=manufacture_view;
+        N33->Enabled=manufacture_view;
+        N34->Visible=manufacture_view;
+        N34->Enabled=manufacture_view;
+        N35->Visible=manufacture_view;
+        N35->Enabled=manufacture_view;
+        ManufactureBTN->Visible = manufacture_view;
+        N36->Visible=manufacture_view;
+        N37->Visible=manufacture_view;
         if(SpView)
         {
             AddTree(LeftPC, 0, Info);
@@ -122,7 +122,7 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
          } */
         AddSearch(RightPC);
 
-        String name=""; //добавить запрос на получение имени для отчета
+        String name=""; //РґРѕР±Р°РІРёС‚СЊ Р·Р°РїСЂРѕСЃ РЅР° РїРѕР»СѓС‡РµРЅРёРµ РёРјРµРЅРё РґР»СЏ РѕС‚С‡РµС‚Р°
         sql="call administration.Get_Name('"+String(UserID)+"')";
         rez=DB->SendSQL(sql);
         if (rez&&rez->RecordCount)
@@ -131,7 +131,7 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
         }
         delete rez;
         HINSTANCE Reports=LoadLibrary(String("lib\\Reports.dll").c_str());
-        // загружаем длл
+        // Р·Р°РіСЂСѓР¶Р°РµРј РґР»Р»
         if(Reports)
         {
             RepInit=(init_func)GetProcAddress(Reports, "_Init");
@@ -139,7 +139,7 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
             {
                 RepInit(name, DB);
                 RepStart=(RepStart_func)GetProcAddress(Reports, "_Report");
-                // получаем указатель на функцию
+                // РїРѕР»СѓС‡Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° С„СѓРЅРєС†РёСЋ
             }
         }
     }
@@ -147,21 +147,21 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
     {
         Application->Terminate();
     }
-    /* динамический вызов
+    /* РґРёРЅР°РјРёС‡РµСЃРєРёР№ РІС‹Р·РѕРІ
      typedef bool (*InetIsOffline_func)(int);
      InetIsOffline_func InetIsOffline;
-     HINSTANCE LibHeader=LoadLibrary(String("URL.DLL").c_str());//загружаем длл
+     HINSTANCE LibHeader=LoadLibrary(String("URL.DLL").c_str());//Р·Р°РіСЂСѓР¶Р°РµРј РґР»Р»
      if(!LibHeader){
-     throw Exception("Не удалось загрузить библиотеку URL.DLL");
+     throw Exception("РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ Р±РёР±Р»РёРѕС‚РµРєСѓ URL.DLL");
      };
-     InetIsOffline=(InetIsOffline_func)GetProcAddress(LibHeader,"InetIsOffline");//получаем указатель на функцию
+     InetIsOffline=(InetIsOffline_func)GetProcAddress(LibHeader,"InetIsOffline");//РїРѕР»СѓС‡Р°РµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° С„СѓРЅРєС†РёСЋ
      if(!InetIsOffline){
-     throw Exception("В библиотеке URL.DLL не найдена функция InetIsOffline");
+     throw Exception("Р’ Р±РёР±Р»РёРѕС‚РµРєРµ URL.DLL РЅРµ РЅР°Р№РґРµРЅР° С„СѓРЅРєС†РёСЏ InetIsOffline");
      };
-     //вызов функции
+     //РІС‹Р·РѕРІ С„СѓРЅРєС†РёРё
      int Flag;
      bool result=InetIsOffline(Flag);
-     //освобождение библиотеки
+     //РѕСЃРІРѕР±РѕР¶РґРµРЅРёРµ Р±РёР±Р»РёРѕС‚РµРєРё
      FreeLibrary(LibHeader);
      */
 }
@@ -201,10 +201,10 @@ void TmForm::LoadIL(void)
 {
     TImageList *il=IcoData->GetImgList();
     TImageList *st=IcoData->GetStateList();
-    // обьявить переменные для считывания
+    // РѕР±СЊСЏРІРёС‚СЊ РїРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ СЃС‡РёС‚С‹РІР°РЅРёСЏ
     TMemoryStream *str=new TMemoryStream();
     Graphics::TBitmap *bmp=new Graphics::TBitmap();
-    // считывание состояний
+    // СЃС‡РёС‚С‹РІР°РЅРёРµ СЃРѕСЃС‚РѕСЏРЅРёР№
     TADOQuery *rez=
         DB->SendSQL
         ("Select `idsost`,`imgt`,`imgf` from administration.conditions");
@@ -213,7 +213,7 @@ void TmForm::LoadIL(void)
         rez->First();
         while(!rez->Eof)
         {
-            // считать в поток блоб поле
+            // СЃС‡РёС‚Р°С‚СЊ РІ РїРѕС‚РѕРє Р±Р»РѕР± РїРѕР»Рµ
             str=(TMemoryStream *)rez->CreateBlobStream(rez->FieldByName("imgt"),
                 bmRead);
             str->Position=0;
@@ -221,65 +221,65 @@ void TmForm::LoadIL(void)
             if(!st->Count)
             {
                 st->Add(bmp, 0);
-                // забивка нулевой позиции в целом юзлесс нужно т.к нумерация начинается с 1 а не с 0
+                // Р·Р°Р±РёРІРєР° РЅСѓР»РµРІРѕР№ РїРѕР·РёС†РёРё РІ С†РµР»РѕРј СЋР·Р»РµСЃСЃ РЅСѓР¶РЅРѕ С‚.Рє РЅСѓРјРµСЂР°С†РёСЏ РЅР°С‡РёРЅР°РµС‚СЃСЏ СЃ 1 Р° РЅРµ СЃ 0
             }
             IcoData->LoadCollation(rez->FieldByName("idsost")->Value,
                 st->Add(bmp, 0), true, 0);
-            // добавить запись в массив сопоставления
+            // РґРѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ РІ РјР°СЃСЃРёРІ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ
             IcoData->LoadCollation(rez->FieldByName("idsost")->Value,
                 il->Add(bmp, 0), true, 3);
-            // добавить запись в массив сопоставления
+            // РґРѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ РІ РјР°СЃСЃРёРІ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ
             str=(TMemoryStream *)rez->CreateBlobStream(rez->FieldByName("imgf"),
                 bmRead);
             str->Position=0;
             bmp->LoadFromStream(str);
-            // il->Add(bmp,0);   //возвращает позицию?                                           //тип 0 состояния
+            // il->Add(bmp,0);   //РІРѕР·РІСЂР°С‰Р°РµС‚ РїРѕР·РёС†РёСЋ?                                           //С‚РёРї 0 СЃРѕСЃС‚РѕСЏРЅРёСЏ
             IcoData->LoadCollation(rez->FieldByName("idsost")->Value,
                 st->Add(bmp, 0), false, 0);
-            // добавить запись в массив сопоставления
+            // РґРѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ РІ РјР°СЃСЃРёРІ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ
             IcoData->LoadCollation(rez->FieldByName("idsost")->Value,
                 il->Add(bmp, 0), false, 3);
-            // добавить запись в массив сопоставления
+            // РґРѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ РІ РјР°СЃСЃРёРІ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ
             rez->Next();
         }
     }
     delete rez;
-    // считывание иконок файлов
+    // СЃС‡РёС‚С‹РІР°РЅРёРµ РёРєРѕРЅРѕРє С„Р°Р№Р»РѕРІ
     rez=DB->SendSQL("Select `id`,`Ico` from administration.files_and_types");
     if(rez)
     {
         rez->First();
         while(!rez->Eof)
         {
-            // считать в поток блоб поле
+            // СЃС‡РёС‚Р°С‚СЊ РІ РїРѕС‚РѕРє Р±Р»РѕР± РїРѕР»Рµ
             str=(TMemoryStream *)rez->CreateBlobStream(rez->FieldByName("Ico"),
                 bmRead);
             str->Position=0;
             bmp->LoadFromStream(str);
-            // il->Add(bmp,0);   возвращает позицию?                                            //тип 2 иконки файлов
+            // il->Add(bmp,0);   РІРѕР·РІСЂР°С‰Р°РµС‚ РїРѕР·РёС†РёСЋ?                                            //С‚РёРї 2 РёРєРѕРЅРєРё С„Р°Р№Р»РѕРІ
             IcoData->LoadCollation(rez->FieldByName("id")->Value,
                 il->Add(bmp, 0), true, 2);
-            // добавить запись в массив сопоставления
+            // РґРѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ РІ РјР°СЃСЃРёРІ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ
             rez->Next();
         }
     }
     delete rez;
-    // считывание разделов разделов спецификации
+    // СЃС‡РёС‚С‹РІР°РЅРёРµ СЂР°Р·РґРµР»РѕРІ СЂР°Р·РґРµР»РѕРІ СЃРїРµС†РёС„РёРєР°С†РёРё
     rez=DB->SendSQL("Select `RazdID`,`Icon` from administration.sprazd");
     if(rez)
     {
         rez->First();
         while(!rez->Eof)
         {
-            // считать в поток блоб поле
+            // СЃС‡РёС‚Р°С‚СЊ РІ РїРѕС‚РѕРє Р±Р»РѕР± РїРѕР»Рµ
             str=(TMemoryStream *)rez->CreateBlobStream(rez->FieldByName("Icon"),
                 bmRead);
             str->Position=0;
             bmp->LoadFromStream(str);
-            // il->Add(bmp,0);   возвращает позицию?                                            //тип 1 иконки
+            // il->Add(bmp,0);   РІРѕР·РІСЂР°С‰Р°РµС‚ РїРѕР·РёС†РёСЋ?                                            //С‚РёРї 1 РёРєРѕРЅРєРё
             IcoData->LoadCollation(rez->FieldByName("RazdID")->Value,
                 il->Add(bmp, 0), true, 1);
-            // добавить запись в массив сопоставления
+            // РґРѕР±Р°РІРёС‚СЊ Р·Р°РїРёСЃСЊ РІ РјР°СЃСЃРёРІ СЃРѕРїРѕСЃС‚Р°РІР»РµРЅРёСЏ
             rez->Next();
         }
     }
@@ -290,7 +290,7 @@ void TmForm::LoadIL(void)
 
 void __fastcall TmForm::PCMouseDown(TObject *Sender, TMouseButton Button,
     TShiftState Shift, int X, int Y)
-{ // нажатие кнопки
+{ // РЅР°Р¶Р°С‚РёРµ РєРЅРѕРїРєРё
     TPageControl *PC=(TPageControl *)Sender;
     DrawCloseTabBtn(PC, 0, X, Y, -1, 1);
     TRect r;
@@ -308,11 +308,11 @@ void __fastcall TmForm::PCMouseDown(TObject *Sender, TMouseButton Button,
 void __fastcall TmForm::PCMouseUp(TObject *Sender, TMouseButton Button,
     TShiftState Shift, int X, int Y)
 {
-    // страбатывание кнопки
+    // СЃС‚СЂР°Р±Р°С‚С‹РІР°РЅРёРµ РєРЅРѕРїРєРё
     TPageControl *PC=(TPageControl *)Sender;
     TRect btn=DrawCloseTabBtn(PC, 0, X, Y, -1, 0);
     if(X>=btn.Left&&X<=btn.Right&&Y>=btn.Top&&Y<=btn.Bottom)
-        // проверить диапазон кнопки
+        // РїСЂРѕРІРµСЂРёС‚СЊ РґРёР°РїР°Р·РѕРЅ РєРЅРѕРїРєРё
     {
         TTabSheet *t=PC->Pages[PC->IndexOfTabAt(X, Y)];
         CloseTab(t);
@@ -328,7 +328,7 @@ void __fastcall TmForm::PCDrawTab(TCustomTabControl *Control, int TabIndex,
     const TRect &Rect, bool Active)
 {
     TPageControl *PC=(TPageControl *)Control;
-    // размеры и рисовка табы
+    // СЂР°Р·РјРµСЂС‹ Рё СЂРёСЃРѕРІРєР° С‚Р°Р±С‹
     /* PC->TabWidth=
      PC->TabHeight= */
     TPoint txt;
@@ -351,18 +351,18 @@ void __fastcall TmForm::PCDrawTab(TCustomTabControl *Control, int TabIndex,
         }
 
     }
-    // чистка
+    // С‡РёСЃС‚РєР°
     PC->Canvas->FillRect(Rect);
-    // вывести текст
+    // РІС‹РІРµСЃС‚Рё С‚РµРєСЃС‚
     if(!PC->Pages[TabIndex]->Tag)
     {
         PC->Canvas->TextOutW(txt.X, txt.Y,
         (PC->Pages[TabIndex]->Caption).Trim());
         PC->Pages[TabIndex]->Tag=0;
     }
-    // кнупочка
+    // РєРЅСѓРїРѕС‡РєР°
     DrawCloseTabBtn(PC, &Rect, 0, 0, TabIndex, 0);
-    // нарисовать иконку
+    // РЅР°СЂРёСЃРѕРІР°С‚СЊ РёРєРѕРЅРєСѓ
     TPoint ico;
     ico.X=Rect.Left+2;
     ico.Y=Rect.Top+2;
@@ -382,17 +382,17 @@ void __fastcall TmForm::PCMouseLeave(TObject *Sender)
 void __fastcall TmForm::PCMouseMove(TObject *Sender, TShiftState Shift,
     int X, int Y)
 {
-    // страбатывание кнопки
+    // СЃС‚СЂР°Р±Р°С‚С‹РІР°РЅРёРµ РєРЅРѕРїРєРё
     TPageControl *PC=(TPageControl *)Sender;
     TRect btn=DrawCloseTabBtn(PC, 0, X, Y, -1, 2);
-    /* static TRect btnOld;     // отключена перерисовка крестина на предыдущей табе
+    /* static TRect btnOld;     // РѕС‚РєР»СЋС‡РµРЅР° РїРµСЂРµСЂРёСЃРѕРІРєР° РєСЂРµСЃС‚РёРЅР° РЅР° РїСЂРµРґС‹РґСѓС‰РµР№ С‚Р°Р±Рµ
      if (btn!=btnOld&&(btnOld.top||btnOld.Bottom||btnOld.Left||btnOld.Right))
      {
      TPoint s;
      s.X=btnOld.Left+5;
      s.Y=btnOld.Top+5;
      s=PC->ParentToClient(s,PC->Parent);
-     DrawCloseTabBtn(PC,0,s.x,s.y,-1,0);     //привести координаты к нужному виду
+     DrawCloseTabBtn(PC,0,s.x,s.y,-1,0);     //РїСЂРёРІРµСЃС‚Рё РєРѕРѕСЂРґРёРЅР°С‚С‹ Рє РЅСѓР¶РЅРѕРјСѓ РІРёРґСѓ
      }
      btnOld=btn; */
 }
@@ -425,9 +425,9 @@ void __fastcall TmForm::PCDragDrop(TObject *Sender, TObject *Source,
 void __fastcall TmForm::FormDragOver(TObject *Sender, TObject *Source, int X,
     int Y, TDragState State, bool &Accept)
 {
-    // сорс ->ссылка на паратаскиваемый контрол
-    // сендер сама форма
-    // сравнить координаты х и у с параметрами размещения контролов если в зоне их нахождения то все норм
+    // СЃРѕСЂСЃ ->СЃСЃС‹Р»РєР° РЅР° РїР°СЂР°С‚Р°СЃРєРёРІР°РµРјС‹Р№ РєРѕРЅС‚СЂРѕР»
+    // СЃРµРЅРґРµСЂ СЃР°РјР° С„РѕСЂРјР°
+    // СЃСЂР°РІРЅРёС‚СЊ РєРѕРѕСЂРґРёРЅР°С‚С‹ С… Рё Сѓ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё СЂР°Р·РјРµС‰РµРЅРёСЏ РєРѕРЅС‚СЂРѕР»РѕРІ РµСЃР»Рё РІ Р·РѕРЅРµ РёС… РЅР°С…РѕР¶РґРµРЅРёСЏ С‚Рѕ РІСЃРµ РЅРѕСЂРј
     if(Source->ClassNameIs("TPageControl"))
     {
         if(X>=LeftPC->Left&&X<=LeftPC->Left+LeftPC->Width&&Y>=LeftPC->Top&&Y<=
@@ -567,7 +567,7 @@ TRect TmForm::DrawCloseTabBtn(TPageControl *PC, const TRect *Rect, int X, int Y,
         {
             int k=GetKeyState(VK_LBUTTON);
             if(X>=btn.Left&&X<=btn.Right&&Y>=btn.Top&&Y<=btn.Bottom&&k<0)
-                // проверить диапазон кнопки
+                // РїСЂРѕРІРµСЂРёС‚СЊ РґРёР°РїР°Р·РѕРЅ РєРЅРѕРїРєРё
             {
                 img=1;
             }
@@ -636,37 +636,37 @@ TTabSheet *TmForm::GetLastTab(char type)
     switch(type)
     {
     case 0:
-        { // поиск среди спецификаций
+        { // РїРѕРёСЃРє СЃСЂРµРґРё СЃРїРµС†РёС„РёРєР°С†РёР№
             ClassType="TreeTab";
             break;
         }
     case 1:
-        { // поиск среди технологий
+        { // РїРѕРёСЃРє СЃСЂРµРґРё С‚РµС…РЅРѕР»РѕРіРёР№
             ClassType="TechTab";
             break;
         }
     case 2:
-        { // поиск среди просмотров технологий
+        { // РїРѕРёСЃРє СЃСЂРµРґРё РїСЂРѕСЃРјРѕС‚СЂРѕРІ С‚РµС…РЅРѕР»РѕРіРёР№
             ClassType="TechViewTab";
             break;
         }
     case 3:
-        { // поиск среди поисков
+        { // РїРѕРёСЃРє СЃСЂРµРґРё РїРѕРёСЃРєРѕРІ
             ClassType="SearchTab";
             break;
         }
     case 4:
-        { // поиск среди поисков
+        { // РїРѕРёСЃРє СЃСЂРµРґРё РїРѕРёСЃРєРѕРІ
             ClassType="ProcessingTab";
             break;
         }
     case 5:
-        { // поиск среди поисков
+        { // РїРѕРёСЃРє СЃСЂРµРґРё РїРѕРёСЃРєРѕРІ
             ClassType="OrdersTab";
             break;
         }
     case 6:
-        { // поиск среди поисков
+        { // РїРѕРёСЃРє СЃСЂРµРґРё РїРѕРёСЃРєРѕРІ
             ClassType="ManufactureTab";
             break;
         }
@@ -725,22 +725,22 @@ void TmForm::AddTree(TPageControl *Page, Obd *Det, TMemo *memo)
     TSpTree *SpTree=0;
     TTabSheet *tab;
     TreeTab *t=new TreeTab();
-    tab=new TTabSheet(this); // создание щита
+    tab=new TTabSheet(this); // СЃРѕР·РґР°РЅРёРµ С‰РёС‚Р°
     tab->ImageIndex=0;
-    tab->PageControl=Page; // прикрепление щита
-    // создание дерева //прикрепление дерева
+    tab->PageControl=Page; // РїСЂРёРєСЂРµРїР»РµРЅРёРµ С‰РёС‚Р°
+    // СЃРѕР·РґР°РЅРёРµ РґРµСЂРµРІР° //РїСЂРёРєСЂРµРїР»РµРЅРёРµ РґРµСЂРµРІР°
     SpTree=new TSpTree(this, tab, DB, UserID, memo, IcoData, &selected,
         &_AddTexTab, &_LoadTexToCurrTab, 0,0/*&_AddTexViewTab,
         &_LoadexViewToCurrTab*/);
 
-    // регистрация щита и дерева
+    // СЂРµРіРёСЃС‚СЂР°С†РёСЏ С‰РёС‚Р° Рё РґРµСЂРµРІР°
     t->tab=tab;
     t->module=SpTree;
     t->last_tab=false;
     Tabs.push_back((Tab *)t);
     SetLastTab(tab);
     tab->Show();
-    // занесение первичных данных в дерево
+    // Р·Р°РЅРµСЃРµРЅРёРµ РїРµСЂРІРёС‡РЅС‹С… РґР°РЅРЅС‹С… РІ РґРµСЂРµРІРѕ
     if(Det)
     {
         ((ClassConnector *)SpTree)->Load_sel(Det);
@@ -753,19 +753,19 @@ void TmForm::AddTexTab(TPageControl *Page, Obd *Det)
     TTechWnd *TechWnd;
     TTabSheet *tab;
     TechTab *t=new TechTab();
-    tab=new TTabSheet(this); // создание щита
+    tab=new TTabSheet(this); // СЃРѕР·РґР°РЅРёРµ С‰РёС‚Р°
     tab->ImageIndex=1;
-    tab->PageControl=Page; // прикрепление щита
-    // создание эелемента
+    tab->PageControl=Page; // РїСЂРёРєСЂРµРїР»РµРЅРёРµ С‰РёС‚Р°
+    // СЃРѕР·РґР°РЅРёРµ СЌРµР»РµРјРµРЅС‚Р°
     TechWnd=new TTechWnd(this, tab, "TechEdit"+String(++i), UserID, DB);
-    // регистрация щита и дерева
+    // СЂРµРіРёСЃС‚СЂР°С†РёСЏ С‰РёС‚Р° Рё РґРµСЂРµРІР°
     t->tab=tab;
     t->module=TechWnd;
     t->last_tab=false;
     Tabs.push_back((Tab *)t);
     SetLastTab(tab);
     tab->Show();
-    // занесение первичных данных в технологию
+    // Р·Р°РЅРµСЃРµРЅРёРµ РїРµСЂРІРёС‡РЅС‹С… РґР°РЅРЅС‹С… РІ С‚РµС…РЅРѕР»РѕРіРёСЋ
     if(Det)
     {
         ((ClassConnector *)TechWnd)->Load_sel(Det);
@@ -776,7 +776,7 @@ void TmForm::LoadTexToCurrTab(Obd *Det)
 {
     Tab *t=GetTab(GetLastTab(1));
     if(t)
-    { // найдена последняя таба
+    { // РЅР°Р№РґРµРЅР° РїРѕСЃР»РµРґРЅСЏСЏ С‚Р°Р±Р°
         ((ClassConnector *)(((TechTab *)t)->module))->Load_sel(Det);
         t->tab->Show();
     }
@@ -784,7 +784,7 @@ void TmForm::LoadTexToCurrTab(Obd *Det)
     {
         AddTexTab(RightPC, Det);
     }
-    // поиск последней табы с технологией и обращение к ней если нет табы то создать новую
+    // РїРѕРёСЃРє РїРѕСЃР»РµРґРЅРµР№ С‚Р°Р±С‹ СЃ С‚РµС…РЅРѕР»РѕРіРёРµР№ Рё РѕР±СЂР°С‰РµРЅРёРµ Рє РЅРµР№ РµСЃР»Рё РЅРµС‚ С‚Р°Р±С‹ С‚Рѕ СЃРѕР·РґР°С‚СЊ РЅРѕРІСѓСЋ
 }
 
 void TmForm::AddTexViewTab(TPageControl *Page, Obd *Det)
@@ -793,12 +793,12 @@ void TmForm::AddTexViewTab(TPageControl *Page, Obd *Det)
     TTechView *TechView=0;
     TTabSheet *tab;
     TechViewTab *t=new TechViewTab();
-    tab=new TTabSheet(this); // создание щита
+    tab=new TTabSheet(this); // СЃРѕР·РґР°РЅРёРµ С‰РёС‚Р°
     tab->ImageIndex=2;
-    tab->PageControl=Page; // прикрепление щита
-    // создание эелемента
+    tab->PageControl=Page; // РїСЂРёРєСЂРµРїР»РµРЅРёРµ С‰РёС‚Р°
+    // СЃРѕР·РґР°РЅРёРµ СЌРµР»РµРјРµРЅС‚Р°
     // TechView=new TTechView(this);
-    // регистрация щита и дерева
+    // СЂРµРіРёСЃС‚СЂР°С†РёСЏ С‰РёС‚Р° Рё РґРµСЂРµРІР°
 
     t->tab=tab;
     t->module=TechView;
@@ -806,19 +806,19 @@ void TmForm::AddTexViewTab(TPageControl *Page, Obd *Det)
     Tabs.push_back((Tab *)t);
     SetLastTab(tab);
     tab->Show();
-    // занесение первичных данных в дерево
+    // Р·Р°РЅРµСЃРµРЅРёРµ РїРµСЂРІРёС‡РЅС‹С… РґР°РЅРЅС‹С… РІ РґРµСЂРµРІРѕ
     // TechView->LoadDet(DetID);
-    tab->Caption="просмотр новая вкладка"; // !!!!!!!!!!
+    tab->Caption="РїСЂРѕСЃРјРѕС‚СЂ РЅРѕРІР°СЏ РІРєР»Р°РґРєР°"; // !!!!!!!!!!
 }
 
 void TmForm::LoadexViewToCurrTab(Obd *Det)
 {
     Tab *t=GetTab(GetLastTab(2));
     if(t)
-    { // найдена последняя таба
+    { // РЅР°Р№РґРµРЅР° РїРѕСЃР»РµРґРЅСЏСЏ С‚Р°Р±Р°
         // ((ClassConnector*)(((TechViewTab*)t)->module))->Load(det);
         t->tab->Show();
-        t->tab->Caption="просмотр текущая вкладка";
+        t->tab->Caption="РїСЂРѕСЃРјРѕС‚СЂ С‚РµРєСѓС‰Р°СЏ РІРєР»Р°РґРєР°";
     }
     else
     {
@@ -831,14 +831,14 @@ void TmForm::AddSearch(TPageControl *Page)
     TSearch *Search=0;
     TTabSheet *tab;
     SearchTab *t=new SearchTab();
-    tab=new TTabSheet(this); // создание щита
-    tab->PageControl=Page; // прикрепление щита
-    // создание эелемента //прикрепление дерева
+    tab=new TTabSheet(this); // СЃРѕР·РґР°РЅРёРµ С‰РёС‚Р°
+    tab->PageControl=Page; // РїСЂРёРєСЂРµРїР»РµРЅРёРµ С‰РёС‚Р°
+    // СЃРѕР·РґР°РЅРёРµ СЌРµР»РµРјРµРЅС‚Р° //РїСЂРёРєСЂРµРїР»РµРЅРёРµ РґРµСЂРµРІР°
     Search=new TSearch(this, tab, UserID, DB, IcoData, &selected, &_ShowTree,
         &_AddTexTab, &_LoadTexToCurrTab, 0,0/*&_AddTexViewTab,
         &_LoadexViewToCurrTab*/);
     tab->ImageIndex=3;
-    // регистрация щита и дерева
+    // СЂРµРіРёСЃС‚СЂР°С†РёСЏ С‰РёС‚Р° Рё РґРµСЂРµРІР°
     t->tab=tab;
     t->module=Search;
     t->last_tab=false;
@@ -858,21 +858,21 @@ TTabSheet *tab=0;
     static i=0;
     TList_Editor *Process=0;
     ProcessingTab *t=new ProcessingTab();
-    tab=new TTabSheet(this); // создание щита
+    tab=new TTabSheet(this); // СЃРѕР·РґР°РЅРёРµ С‰РёС‚Р°
     tab->ImageIndex=9;
-    tab->PageControl=Page; // прикрепление щита
-    // создание дерева //прикрепление дерева
+    tab->PageControl=Page; // РїСЂРёРєСЂРµРїР»РµРЅРёРµ С‰РёС‚Р°
+    // СЃРѕР·РґР°РЅРёРµ РґРµСЂРµРІР° //РїСЂРёРєСЂРµРїР»РµРЅРёРµ РґРµСЂРµРІР°
     Process=new TList_Editor(this, tab, "Processing"+String(++i), UserID, DB,IcoData,&selected,&_ShowTree,
         &_AddTexTab, &_LoadTexToCurrTab, &_AddTexViewTab,
         &_LoadexViewToCurrTab);
 
-    // регистрация щита и дерева
+    // СЂРµРіРёСЃС‚СЂР°С†РёСЏ С‰РёС‚Р° Рё РґРµСЂРµРІР°
     t->tab=tab;
     t->module=Process;
     t->last_tab=false;
     Tabs.push_back((Tab *)t);
     SetLastTab(tab);
-    //показать
+    //РїРѕРєР°Р·Р°С‚СЊ
     tab->Show();
 
 }
@@ -883,19 +883,19 @@ void TmForm::AddOrders    (TPageControl *Page)
 
     TOrders_editor *Orders_editor=0;
     OrdersTab *t=new OrdersTab();
-    tab=new TTabSheet(this); // создание щита
+    tab=new TTabSheet(this); // СЃРѕР·РґР°РЅРёРµ С‰РёС‚Р°
     tab->ImageIndex=10;
-    tab->PageControl=Page; // прикрепление щита
-    // создание дерева //прикрепление дерева
+    tab->PageControl=Page; // РїСЂРёРєСЂРµРїР»РµРЅРёРµ С‰РёС‚Р°
+    // СЃРѕР·РґР°РЅРёРµ РґРµСЂРµРІР° //РїСЂРёРєСЂРµРїР»РµРЅРёРµ РґРµСЂРµРІР°
     Orders_editor=new TOrders_editor(this, tab, UserID, DB,IcoData,&selected);
 
-    // регистрация щита и дерева
+    // СЂРµРіРёСЃС‚СЂР°С†РёСЏ С‰РёС‚Р° Рё РґРµСЂРµРІР°
     t->tab=tab;
     t->module=Orders_editor;
     t->last_tab=false;
     Tabs.push_back((Tab *)t);
     SetLastTab(tab);
-    //показать
+    //РїРѕРєР°Р·Р°С‚СЊ
     tab->Show();
 }
 
@@ -905,19 +905,19 @@ void TmForm::AddManufacture(TPageControl *Page)
 
     TManufactureControl *ManufactureControl=0;
     ManufactureTab *t=new ManufactureTab();
-    tab=new TTabSheet(this); // создание щита
+    tab=new TTabSheet(this); // СЃРѕР·РґР°РЅРёРµ С‰РёС‚Р°
     tab->ImageIndex=10;
-    tab->PageControl=Page; // прикрепление щита
-    // создание дерева //прикрепление дерева
+    tab->PageControl=Page; // РїСЂРёРєСЂРµРїР»РµРЅРёРµ С‰РёС‚Р°
+    // СЃРѕР·РґР°РЅРёРµ РґРµСЂРµРІР° //РїСЂРёРєСЂРµРїР»РµРЅРёРµ РґРµСЂРµРІР°
     ManufactureControl=new TManufactureControl(this, tab, UserID, DB,IcoData,&selected);
 
-    // регистрация щита и дерева
+    // СЂРµРіРёСЃС‚СЂР°С†РёСЏ С‰РёС‚Р° Рё РґРµСЂРµРІР°
     t->tab=tab;
     t->module=ManufactureControl;
     t->last_tab=false;
     Tabs.push_back((Tab *)t);
     SetLastTab(tab);
-    //показать
+    //РїРѕРєР°Р·Р°С‚СЊ
     tab->Show();
 }
 
@@ -944,12 +944,12 @@ void __fastcall TmForm::InfoClick(TObject *Sender)
     default:
         return;
     }
-    InfoTab->PageControl=pc; // переключение-включение
+    InfoTab->PageControl=pc; // РїРµСЂРµРєР»СЋС‡РµРЅРёРµ-РІРєР»СЋС‡РµРЅРёРµ
 }
 
 void __fastcall TmForm::SpTreeClick(TObject *Sender)
 {
-    // если нет ни одного дерева то создать
+    // РµСЃР»Рё РЅРµС‚ РЅРё РѕРґРЅРѕРіРѕ РґРµСЂРµРІР° С‚Рѕ СЃРѕР·РґР°С‚СЊ
     TPageControl *pc;
     TMenuItem *curr=(TMenuItem *)Sender;
     if(curr!=N24&&curr!=N29)
@@ -977,7 +977,7 @@ void __fastcall TmForm::SpTreeClick(TObject *Sender)
         if(t)
         {
             t->PageControl=pc;
-            // если есть хоть одно показать последнее выбранное
+            // РµСЃР»Рё РµСЃС‚СЊ С…РѕС‚СЊ РѕРґРЅРѕ РїРѕРєР°Р·Р°С‚СЊ РїРѕСЃР»РµРґРЅРµРµ РІС‹Р±СЂР°РЅРЅРѕРµ
         }
         else
         {
@@ -1019,7 +1019,7 @@ void __fastcall TmForm::TechClick(TObject *Sender)
         if(t)
         {
             t->PageControl=pc;
-            // если есть хоть одно показать последнее выбранное
+            // РµСЃР»Рё РµСЃС‚СЊ С…РѕС‚СЊ РѕРґРЅРѕ РїРѕРєР°Р·Р°С‚СЊ РїРѕСЃР»РµРґРЅРµРµ РІС‹Р±СЂР°РЅРЅРѕРµ
         }
         else
         {
@@ -1061,7 +1061,7 @@ void __fastcall TmForm::TechViewClick(TObject *Sender)
         if(t)
         {
             t->PageControl=pc;
-            // если есть хоть одно показать последнее выбранное
+            // РµСЃР»Рё РµСЃС‚СЊ С…РѕС‚СЊ РѕРґРЅРѕ РїРѕРєР°Р·Р°С‚СЊ РїРѕСЃР»РµРґРЅРµРµ РІС‹Р±СЂР°РЅРЅРѕРµ
         }
         else
         {
@@ -1103,7 +1103,7 @@ void __fastcall TmForm::SearchClick(TObject *Sender)
         if(t)
         {
             t->PageControl=pc;
-            // если есть хоть одно показать последнее выбранное
+            // РµСЃР»Рё РµСЃС‚СЊ С…РѕС‚СЊ РѕРґРЅРѕ РїРѕРєР°Р·Р°С‚СЊ РїРѕСЃР»РµРґРЅРµРµ РІС‹Р±СЂР°РЅРЅРѕРµ
         }
         else
         {
@@ -1145,7 +1145,7 @@ void __fastcall TmForm::ProcessingClick(TObject *Sender)
         if(t)
         {
             t->PageControl=pc;
-            // если есть хоть одно показать последнее выбранное
+            // РµСЃР»Рё РµСЃС‚СЊ С…РѕС‚СЊ РѕРґРЅРѕ РїРѕРєР°Р·Р°С‚СЊ РїРѕСЃР»РµРґРЅРµРµ РІС‹Р±СЂР°РЅРЅРѕРµ
         }
         else
         {
@@ -1186,7 +1186,7 @@ void __fastcall TmForm::OrdersClick(TObject *Sender)
         if(t)
         {
             t->PageControl=pc;
-            // если есть хоть одно показать последнее выбранное
+            // РµСЃР»Рё РµСЃС‚СЊ С…РѕС‚СЊ РѕРґРЅРѕ РїРѕРєР°Р·Р°С‚СЊ РїРѕСЃР»РµРґРЅРµРµ РІС‹Р±СЂР°РЅРЅРѕРµ
         }
         else
         {
@@ -1228,7 +1228,7 @@ void __fastcall TmForm::ManufactureClick(TObject *Sender)
         if(t)
         {
             t->PageControl=pc;
-            // если есть хоть одно показать последнее выбранное
+            // РµСЃР»Рё РµСЃС‚СЊ С…РѕС‚СЊ РѕРґРЅРѕ РїРѕРєР°Р·Р°С‚СЊ РїРѕСЃР»РµРґРЅРµРµ РІС‹Р±СЂР°РЅРЅРѕРµ
         }
         else
         {
@@ -1314,20 +1314,20 @@ void __fastcall TmForm::otchet(TObject *Sender)
         /* int type=0;
          switch (Item->Tag)
          {
-         case 1:{type=1;break;}//развертка дерева
-         case 2:{type=2;break;}//список состовляющих
-         case 3:{type=3;break;}//план производстка
-         case 4:{type=4;break;}//поиск по цеху
-         case 5:{type=5;break;}//материалка основная
-         case 6:{type=6;break;}//технология
-         case 7:{type=7;break;}//материалки
-         case 8:{type=8;break;}//требование материала
-         case 9:{type=9;break;}//ведомость котельных сборок
-         case 10:{type=10;break;}//план производства для участка
-         case 11:{type=11;break;}//план производства для участка (ЧПУ)
+         case 1:{type=1;break;}//СЂР°Р·РІРµСЂС‚РєР° РґРµСЂРµРІР°
+         case 2:{type=2;break;}//СЃРїРёСЃРѕРє СЃРѕСЃС‚РѕРІР»СЏСЋС‰РёС…
+         case 3:{type=3;break;}//РїР»Р°РЅ РїСЂРѕРёР·РІРѕРґСЃС‚РєР°
+         case 4:{type=4;break;}//РїРѕРёСЃРє РїРѕ С†РµС…Сѓ
+         case 5:{type=5;break;}//РјР°С‚РµСЂРёР°Р»РєР° РѕСЃРЅРѕРІРЅР°СЏ
+         case 6:{type=6;break;}//С‚РµС…РЅРѕР»РѕРіРёСЏ
+         case 7:{type=7;break;}//РјР°С‚РµСЂРёР°Р»РєРё
+         case 8:{type=8;break;}//С‚СЂРµР±РѕРІР°РЅРёРµ РјР°С‚РµСЂРёР°Р»Р°
+         case 9:{type=9;break;}//РІРµРґРѕРјРѕСЃС‚СЊ РєРѕС‚РµР»СЊРЅС‹С… СЃР±РѕСЂРѕРє
+         case 10:{type=10;break;}//РїР»Р°РЅ РїСЂРѕРёР·РІРѕРґСЃС‚РІР° РґР»СЏ СѓС‡Р°СЃС‚РєР°
+         case 11:{type=11;break;}//РїР»Р°РЅ РїСЂРѕРёР·РІРѕРґСЃС‚РІР° РґР»СЏ СѓС‡Р°СЃС‚РєР° (Р§РџРЈ)
          default:return;
          } */
-        // получить обозначение
+        // РїРѕР»СѓС‡РёС‚СЊ РѕР±РѕР·РЅР°С‡РµРЅРёРµ
         String obd="";
         if (selected)
         {
@@ -1357,7 +1357,7 @@ void __fastcall TmForm::otchet(TObject *Sender)
 }
 void __fastcall TmForm::gonawayTimer(TObject *Sender)
 {
-    // для обхода ошибки гонавеи таймер настроен на 5 минут
+    // РґР»СЏ РѕР±С…РѕРґР° РѕС€РёР±РєРё РіРѕРЅР°РІРµРё С‚Р°Р№РјРµСЂ РЅР°СЃС‚СЂРѕРµРЅ РЅР° 5 РјРёРЅСѓС‚
     TADOQuery *rez=DB->SendSQL("select 1");
     delete rez;
 }
@@ -1430,4 +1430,4 @@ void _ShowTree(const Obd *Det)
         }
     }
 }
-//временные
+//РІСЂРµРјРµРЅРЅС‹Рµ

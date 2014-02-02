@@ -227,7 +227,7 @@ void __fastcall TSettings::UserAddClick(TObject *Sender)
             }else
             {
                 //составление запроса
-                String sql=    "insert into administration.Logins (Login,Name,Family,Otch,Pass,Levelacss) "
+                String sql=    "insert into administration.logins (Login,Name,Family,Otch,Pass,Levelacss) "
                             "Values ('"+wnd->leLogin->Text.Trim()+"',"
                             "'"+wnd->leName->Text.Trim()+"',"
                             "'"+wnd->leFam->Text.Trim()+"',"
@@ -264,7 +264,7 @@ void __fastcall TSettings::UserUpdateClick(TObject *Sender)
                 {
 
                     //составление запроса
-                    String sql=    "update administration.Logins set Login='"+wnd->leLogin->Text.Trim()+"',"
+                    String sql=    "update administration.logins set Login='"+wnd->leLogin->Text.Trim()+"',"
                                 "Name='"+wnd->leName->Text.Trim()+"',"
                                 "Family='"+wnd->leFam->Text.Trim()+"',"
                                 "Otch='"+wnd->leOtch->Text.Trim()+"',"
@@ -293,7 +293,7 @@ void __fastcall TSettings::UserDelClick(TObject *Sender)
     if (sgUsers->RowCount)
     {
         //проверка наличия записи
-        String sql="SELECT a.LogID FROM administration.Logins a ";
+        String sql="SELECT a.LogID FROM administration.logins a ";
         sql+="Where a.LogID='"+sgUsers->Cells[USERIDCOL][sgUsers->Row]+"'";
         TADOQuery *rez=DB->SendSQL(sql);
         if (rez)
@@ -301,7 +301,7 @@ void __fastcall TSettings::UserDelClick(TObject *Sender)
             if (rez->RecordCount)
             {//есть запись
                 //удаление записи
-                String sql="delete from administration.Logins where ";
+                String sql="delete from administration.logins where ";
                 sql+="LogID='"+sgUsers->Cells[USERIDCOL][sgUsers->Row]+"'";
 
                 DB->SendCommand(sql);
