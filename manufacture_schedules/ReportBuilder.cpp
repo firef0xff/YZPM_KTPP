@@ -14,6 +14,8 @@
 #include <reports/exsemplars/single_application.h>
 #include <reports/exsemplars/materaials_detail.h>
 #include <reports/exsemplars/trud_report.h>
+#include <reports/exsemplars/zakaz_trud_report.h>
+#include <reports/exsemplars/making_details.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -26,6 +28,8 @@ rep::Y09102 rep5(STARTUP|ORDER|PART);
 rep::SingleApplication rep_6(STARTUP|ORDER|PART);
 rep::MaterialsDetail rep_7 (STARTUP|ORDER|PART);
 rep::TrudReport rep_8 (STARTUP|ORDER|PART);
+rep::ZakazTrudReport rep_9 (STARTUP|ORDER|PART);
+rep::MakingDetails rep_10 (STARTUP|ORDER|PART);
 
 //fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
 

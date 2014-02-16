@@ -279,6 +279,7 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
             }
 
             size_t pp_no(0);
+            size_t page_no(0);
             for (DataList::const_iterator it = data.begin(), end = data.end() ; it!=end; ++it)
             {
                 ++pp_no;
@@ -300,9 +301,10 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                     //создать страницу
                     xl.Sheet_Copy(xl.GetSheet(cur_lists+template_page), xl.GetSheet(cur_lists+1), Variant().NoParam());
                     cur_lists++ ;
+                    page_no++;
                     xl.SetActiveSheet(xl.GetSheet(cur_lists));
                     std::stringstream buf;
-                    buf<<cur_lists;
+                    buf<<page_no;
                     xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("ЕЗ-"+buf.str()).c_str());
 
                     // почистить лист
@@ -315,7 +317,7 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                     //заполнить шапку
 
                     xl.toCells(1,   4,  pp_name.c_str() );
-                    xl.toCells(1,   8,  cur_lists       );
+                    xl.toCells(1,   8,  page_no         );
                     xl.toCells(1,   10, max_page_no     );
                     xl.toCells(2,   6,  zakaz.c_str()   );
                     xl.toCells(2,   8,  part_no.c_str() );

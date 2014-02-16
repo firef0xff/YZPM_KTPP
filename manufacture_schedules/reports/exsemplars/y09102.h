@@ -119,6 +119,7 @@ private:
 
     //глобальные переменные
     size_t cur_lists;
+    size_t page_no;
     size_t file_no;
 	size_t template_page;
 	double sm;

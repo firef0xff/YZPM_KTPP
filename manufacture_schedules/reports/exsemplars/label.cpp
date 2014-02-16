@@ -145,6 +145,7 @@ void Lable::BuildReport()
 			bool add_row = true;
 
 			size_t file_no = 0;
+            size_t page_no(0);
             for (rez->First(); !rez->Eof; rez->Next())
             {
                 //считать данные
@@ -170,9 +171,10 @@ void Lable::BuildReport()
                     //создать страницу
                     xl.Sheet_Copy(xl.GetSheet(cur_lists+template_page), xl.GetSheet(cur_lists+1), Variant().NoParam());
                     cur_lists++ ;
+                    page_no++;
                     xl.SetActiveSheet(xl.GetSheet(cur_lists));
                     std::stringstream buf;
-                    buf<<cur_lists;
+                    buf<<page_no;
                     xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("Ярлыки лист-"+buf.str()).c_str());
 
                     cur_row = start_row;

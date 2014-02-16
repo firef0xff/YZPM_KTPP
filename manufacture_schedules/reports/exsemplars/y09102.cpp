@@ -7,7 +7,7 @@ namespace rep
 
 Y09102::Y09102 (int set): rep::Report("Загрузка оборудования по сводным группам",set),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("Y09102.xlt"),template_page(1),sm(1)
+    cur_lists(0),templ("Y09102.xlt"),template_page(1),sm(1),page_no(0)
 {
     params[REPORT_PATH];
     params[REPORT_LIST_COUNT] = "10";
@@ -19,7 +19,7 @@ Y09102::~Y09102()
 
 Y09102::Y09102(const Y09102 &r):rep::Report(r),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("Y09102.xlt"),template_page(1),sm(1)
+    cur_lists(0),templ("Y09102.xlt"),template_page(1),sm(1),page_no(0)
 {
 
 }
@@ -28,6 +28,7 @@ void Y09102::Build(void)
 {
     cur_lists = 0;
     file_no = 0;
+    page_no = 0;
     ParseParams();
     LoadSettings();
     BuildReport();
@@ -187,7 +188,6 @@ void Y09102::BuildReport()
                 size_t empty_row_tmpl = 5;
                 size_t group_row_tmpl = 3;
                 size_t data_row_tmpl = 6;
-
                 for (std::map<const std::string, RecordData>::const_iterator it_1 = rep_data.begin(); it_1!=rep_data.end(); ++it_1)
                 {
                     const RecordData &lnk = it_1->second;
@@ -294,9 +294,10 @@ void Y09102::CheckList (cExcel &xl, size_t &row, size_t row_size)
         //создать страницу
         xl.Sheet_Copy(xl.GetSheet(cur_lists+template_page), xl.GetSheet(cur_lists+1), Variant().NoParam());
         cur_lists++ ;
+        page_no++;
         xl.SetActiveSheet(xl.GetSheet(cur_lists));
         std::stringstream buf;
-        buf<<cur_lists;
+        buf<<page_no;
         xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("ФY09102-"+buf.str()).c_str());
 
         // почистить лист

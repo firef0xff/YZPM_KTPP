@@ -322,6 +322,7 @@ void MaterialsDetail::BuildData      (std::string part_id, std::string zakaz, st
             size_t pp_no(0);
             std::map<const std::string, double> summary;
             std::string last_obm = "";
+            size_t page_no(0);
             for (DataList::const_iterator it = data.begin(), end = data.end() ; it!=end; ++it)
             {
                 ++pp_no;
@@ -343,9 +344,10 @@ void MaterialsDetail::BuildData      (std::string part_id, std::string zakaz, st
                     //создать страницу
                     xl.Sheet_Copy(xl.GetSheet(cur_lists+template_page), xl.GetSheet(cur_lists+1), Variant().NoParam());
                     cur_lists++ ;
+                    page_no++;
                     xl.SetActiveSheet(xl.GetSheet(cur_lists));
                     std::stringstream buf;
-                    buf<<cur_lists;
+                    buf<<page_no;
                     xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("ЕЗ-"+buf.str()).c_str());
 
                     // почистить лист
@@ -357,7 +359,7 @@ void MaterialsDetail::BuildData      (std::string part_id, std::string zakaz, st
 
                     //заполнить шапку
                     buf.str("");
-                    buf<<cur_lists<<"/"<<max_page_no;
+                    buf<<page_no<<"/"<<max_page_no;
                     xl.toCells(1,   5,  pp_name.c_str()  );
                     xl.toCells(1,   10, buf.str().c_str());
                     xl.toCells(1,   4,  zakaz.c_str()    );

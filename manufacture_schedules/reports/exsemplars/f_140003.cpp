@@ -373,6 +373,7 @@ void F140003::BuildData      (std::string part_id, std::string zakaz, std::strin
             size_t pp_no(0);
             double trud_summary(0);
             double mass_summary(0);
+            size_t list_no(0);
             for (DataList::const_iterator it = data.begin(), end = data.end() ; it!=end; ++it)
             {
 
@@ -395,9 +396,10 @@ void F140003::BuildData      (std::string part_id, std::string zakaz, std::strin
                     //создать страницу
                     xl.Sheet_Copy(xl.GetSheet(cur_lists+template_page), xl.GetSheet(cur_lists+1), Variant().NoParam());
                     cur_lists++ ;
+                    list_no++;
                     xl.SetActiveSheet(xl.GetSheet(cur_lists));
                     std::stringstream buf;
-                    buf<<cur_lists;
+                    buf<<list_no;
                     xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("Ф140003-"+buf.str()).c_str());
 
                     // почистить лист
@@ -415,7 +417,7 @@ void F140003::BuildData      (std::string part_id, std::string zakaz, std::strin
                     xl.toCells(1,   13,  part_no.c_str()                    );
 
                     buf.str("");
-                    buf<<cur_lists<<"/"<<max_page_no;
+                    buf<<list_no<<"/"<<max_page_no;
 
                     xl.toCells(1,   16,  buf.str().c_str()                  );
                     cur_row = start_row;
