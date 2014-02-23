@@ -1,30 +1,22 @@
-#ifndef MAKING_DETAILS_H
-#define MAKING_DETAILS_H
+#ifndef MAKING_SUMMARY_H
+#define MAKING_SUMMARY_H
 
 #include <reports/report.h>
 
 namespace rep
 {
 
-class MakingDetails : public Report
+class MakingSummary : public Report
 {
 public:
     struct Data
     {
-        std::string det_id;
         std::string cex;
         std::string utch;
         std::string zakaz;
         std::string part;
+        std::string oper;
 
-        std::string vz;
-        std::string obd;
-        std::string name;
-
-        std::string kol_req;
-        std::string kol_maked;
-        std::string kol_broken;
-        std::string kol_unmaked;
         double trud_req;
         double trud_maked;
         double trud_broken;
@@ -34,10 +26,10 @@ public:
     typedef std::multimap<const std::string, Data> CexData;
 
 
-    MakingDetails(int set);
-    ~MakingDetails();
+    MakingSummary(int set);
+    ~MakingSummary();
 
-    MakingDetails(const MakingDetails &r);
+    MakingSummary(const MakingSummary &r);
 
     void Build(void);
     boost::shared_ptr<rep::Report> SelfCopy (void) const;
@@ -59,6 +51,10 @@ private:
     std::string date_to;
     bool show_maked;
     bool show_un_maked;
+
+    bool use_podr; //группировать по подразделению
+    bool use_oper; //группировать по операции
+    bool no_duplicate;//убрать дублирующиеся записи
     bool use_objects;//использовать объект ограничения
     //шаблоны
     std::string template_path;//путь к файлу шаблона
@@ -74,4 +70,4 @@ private:
 
 }
 
-#endif // MAKING_DETAILS_H
+#endif // MAKING_SUMMARY_H

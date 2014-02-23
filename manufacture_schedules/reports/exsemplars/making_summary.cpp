@@ -1,5 +1,4 @@
-﻿#include "making_details.h"
-
+﻿#include "making_summary.h"
 
 #include <boost/date_time/gregorian/gregorian.hpp>
 #include <boost/date_time/gregorian/gregorian_io.hpp>
@@ -9,14 +8,13 @@
 #include "functions.h"
 
 namespace bgreg = boost::gregorian;
-
 namespace
 {
-
 struct CalcData
 {
-    CalcData():req(0.0),mk(0.0),br(0.0),umk(0.0)
-    {}
+    CalcData():req(0.0),mk(0.0),br(0.0),umk(0.0),cnt(0),print(false)
+    {
+    }
     double req;
     double mk;
     double br;
@@ -24,24 +22,41 @@ struct CalcData
     void reset()
     {
         req = mk = br = umk = 0.0;
+        cnt = 0;
+        print = false;
     }
-    void inc(const rep::MakingDetails::Data &r)
+    void inc(const rep::MakingSummary::Data &r)
     {
         req+=r.trud_req;
         mk+=r.trud_maked;
         br+=r.trud_broken;
         umk+=r.trud_unmaked;
+        ++cnt;
     }
+
+    void CheckPrint (void)
+    {
+        print = cnt > 1;
+    }
+    bool Print (void)
+    {
+        return print;
+    }
+    bool used (bool check = true)
+    {
+        return check*cnt;
+    }
+private:
+    size_t cnt;
+    bool print;
 };
-
 }
-
 namespace rep
 {
 
-MakingDetails::MakingDetails (int set): rep::Report("Ведомость изготовления деталей",set),
+MakingSummary::MakingSummary (int set): rep::Report("Укрупненная ведомость изготовления деталей.",set),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),
+    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),use_podr(false),use_oper(false),no_duplicate(false),
     use_objects(false)
 {
     params[REPORT_PATH];
@@ -68,34 +83,37 @@ MakingDetails::MakingDetails (int set): rep::Report("Ведомость изго
 
     params["Начало периода"]=f_day.str().c_str();
     params["Окончание периода"]=l_day.str().c_str();
-	params["Показывать завершенные"] = REP_TRUE;
-	params["Показывать не завершенные"] = REP_TRUE;
-    params["Ограничить выбранным объектом"] = REP_TRUE;
+    params["Показывать завершенные"] = REP_TRUE;
+    params["Показывать не завершенные"] = REP_TRUE;
+    params["Группировка по подразделению"] = REP_TRUE;
+    params["Группировка по операциям"] = REP_TRUE;
+    params["Исключить повторения"] = REP_FALSE;
+    params["Ограничить выбранным объектом"] = REP_FALSE;
 }
-MakingDetails::~MakingDetails()
+MakingSummary::~MakingSummary()
 {}
 
-MakingDetails::MakingDetails(const MakingDetails &r):rep::Report(r),
+MakingSummary::MakingSummary(const MakingSummary &r):rep::Report(r),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),
+    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),use_podr(false),use_oper(false),no_duplicate(false),
     use_objects(false)
 {
 
 }
 
-void MakingDetails::Build(void)
+void MakingSummary::Build(void)
 {
     cur_lists = 0;
     ParseParams();
     LoadSettings();
     BuildReport();
 }
-boost::shared_ptr<rep::Report> MakingDetails::SelfCopy (void) const
+boost::shared_ptr<rep::Report> MakingSummary::SelfCopy (void) const
 {
-    return boost::shared_ptr<rep::Report>(new MakingDetails(*this));
+    return boost::shared_ptr<rep::Report>(new MakingSummary(*this));
 }
 
-void MakingDetails::ParseParams(void)
+void MakingSummary::ParseParams(void)
 {
     DB = ReportList::Instance().DbConnection();
     if (!DB)
@@ -120,8 +138,11 @@ void MakingDetails::ParseParams(void)
 
     show_maked = params["Показывать завершенные"] != REP_FALSE && params["Показывать завершенные"] != REP_NULL;
     show_un_maked = params["Показывать не завершенные"] != REP_FALSE && params["Показывать не завершенные"] != REP_NULL;
+    use_podr = params["Группировка по подразделению"] != REP_FALSE && params["Группировка по подразделению"] != REP_NULL;
+    use_oper = params["Группировка по операциям"] != REP_FALSE && params["Группировка по операциям"] != REP_NULL;
+    no_duplicate = params["Исключить повторения"] != REP_FALSE && params["Исключить повторения"] != REP_NULL;
     use_objects = params["Ограничить выбранным объектом"] != REP_FALSE && params["Ограничить выбранным объектом"] != REP_NULL;
-//    if (object.empty())
+    //    if (object.empty())
 //        throw std::runtime_error("Не указан объект для построения отчета");
 //    if (type.empty())
 //        throw std::runtime_error("Не указан тип объекта для отчета");
@@ -138,7 +159,7 @@ void MakingDetails::ParseParams(void)
         throw ("Неверный формат даты");
     }
 }
-void MakingDetails::LoadSettings()
+void MakingSummary::LoadSettings()
 {
     //считать переменные из бд
     TADOQuery *rez = DB->SendSQL("select value from administration.settings where property='template'");
@@ -154,8 +175,7 @@ void MakingDetails::LoadSettings()
     }
 }
 
-
-void MakingDetails::BuildReport()
+void MakingSummary::BuildReport()
 {
     //получить список маршрутных листов по заданию
     if (use_objects)
@@ -190,6 +210,7 @@ void MakingDetails::BuildReport()
             throw std::runtime_error("Не известный тип объекта");
         DB->SendCommand(prepare_sql.str().c_str());
     }
+
 
     std::string sql_date_from = AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str();
     std::string sql_date_to = AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str();
@@ -240,7 +261,6 @@ void MakingDetails::BuildReport()
         "cex     char(2) NOT NULL, "
         "utch    char(2) NOT NULL, "
         "oprid   char(2) NOT NULL, "
-        "opr     char(4) NOT NULL default '', "
         "request     int(10) unsigned not null default 0, "
         "maked       int(10) unsigned not null default 0, "
         "broken      int(10) unsigned not null default 0, "
@@ -329,53 +349,43 @@ void MakingDetails::BuildReport()
         "join `manufacture`.`parts` `c` on `c`.`part_id` = `a`.`part_id` "
         "join `manufacture`.`zakaz_list` `d` on `d`.`zak_id` = `c`.`zak_id` "
         "join `manufacture`.`det_names` `e` on `a`.`det_id` = `e`.`det_id`");
-    TADOQuery *rez = DB->SendSQL("select "
-        "convert(`a`.`request`, char) request, "
-        "convert(min(`a`.`maked`), char)  maked, "
-        "convert(max(`a`.`broken`), char) broken, "
-        "convert(max(`a`.`unmaked`), char) unmaked, "
-        "convert(`a`.`cex`, char) cex, "
-        "convert(`a`.`utch`, char) utch, "
-        "round(sum(`a`.`trud_request`),3) as trud_request, "
-        "round(sum(`a`.`trud_maked`),3) as trud_maked, "
-        "round(sum(`a`.`trud_broken`),3) as trud_broken, "
-        "round(sum(`a`.`trud_unmaked`),3) as trud_unmaked, "
-        "convert(`a`.`vz`, char) vz, "
-        "convert(`b`.`det_id`, char) det_id, "
-        "convert(`b`.`obd`, char) obd, "
-        "convert(`b`.`name`, char) name, "
-        "convert(`b`.`part_no`, char) part_no, "
-        "convert(`b`.`zakaz`, char) zakaz "
-        "from `tmp2` `a` "
-        "join `tmp4` `b` on `a`.`det_id` = `b`.`det_id` "
-        "group by `a`.`cex`,`a`.`utch`,`a`.`det_id` "
-        "order by `a`.`cex`,`b`.`zakaz`,`b`.`part_no`,`a`.`utch`,`b`.`obd`");
 
-    TADOQuery * rez1 = DB->SendSQL(
-            "select convert(`a`.`det_id`, char) det_id,convert(cex, char) cex,convert(utch, char) utch, "
-            "GROUP_CONCAT(' ',`a`.`oprid`,' - ',round(`a`.`trud_unmaked`,3)) timing "
-            "from tmp2 a where a.trud_unmaked > 0 "
-            "group by det_id,cex,utch order by det_id,opr ");
+    std::stringstream sql;
+    sql <<"select "
+          "round(sum(`a`.`trud_request`),3) as trud_request, "
+          "round(sum(`a`.`trud_maked`),3) as trud_maked, "
+          "round(sum(`a`.`trud_broken`),3) as trud_broken, "
+          "round(sum(`a`.`trud_unmaked`),3) as trud_unmaked, "
+
+          "convert(`a`.`cex`, char) cex, "
+          "convert(`a`.`utch`, char) utch, "
+          "convert(`b`.`part_no`, char) part_no, "
+          "convert(`b`.`zakaz`, char) zakaz, "
+          "convert(concat(`c`.`OprID`,' ',`c`.`name`), char) oper "
+
+          "from `tmp2` `a` "
+          "join `tmp4` `b` on `a`.`det_id` = `b`.`det_id` "
+          "join `equipment`.`opr_names` `c` on `a`.`oprid` = `c`.`OprID` "
+          "group by `b`.`zakaz`,`b`.`part_no`" ;
+
+    if (use_podr)
+        sql <<",`a`.`cex`,`a`.`utch` ";
+    if (use_oper)
+        sql <<",`a`.`oprid` ";
+
+    sql << "order by `b`.`zakaz`,`b`.`part_no`";
+
+    if (use_podr)
+        sql <<",`a`.`cex`,`a`.`utch` ";
+    if (use_oper)
+        sql <<",`a`.`oprid` ";
 
 
+    TADOQuery *rez = DB->SendSQL(sql.str().c_str());
     DB->SendCommand("drop temporary table if exists tmp1");
     DB->SendCommand("drop temporary table if exists tmp2");
     DB->SendCommand("drop temporary table if exists tmp3");
     DB->SendCommand("drop temporary table if exists tmp4");
-
-    typedef std::map<const std::string, std::string> CacheType;
-    CacheType cache;
-    if (rez1)
-    {
-        for (rez1->First(); !rez1->Eof; rez1->Next())
-        {
-            std::string id = (rez1->FieldByName("det_id")->Value.operator AnsiString()).c_str();
-            std::string cex = (rez1->FieldByName("cex")->Value.operator AnsiString()).c_str();
-            std::string utch = (rez1->FieldByName("utch")->Value.operator AnsiString()).c_str();
-            std::string prim = (rez1->FieldByName("timing")->Value.operator AnsiString()).c_str();
-            cache[id+cex+utch] = prim;
-        }
-    }
 
     if (rez)
     {
@@ -393,75 +403,125 @@ void MakingDetails::BuildReport()
 
             bool new_page = true;
             size_t cur_row = 0;
-            size_t start_row = 5, end_row = 60, row_size = 2, template_row = 3,
-                    templ_header = 6, templ_foter = 7;
-            size_t template_page = 10;
+            size_t start_row = 4, end_row = 60, row_size = 1, template_row = 5;
+            size_t template_page = 11;
+
 
             size_t list_count(0);
 
             CexData cex_data;
             std::string cur_cex("");
-            std::string cur_zak("");
             std::string cur_utch("");
 
-            for (rez->First(); !rez->Eof; rez->Next())
+            std::string cur_zak("");
+            std::string cur_part("");
+
+			CalcData cex_calc;
+            CalcData utch_calc;
+            CalcData zak_calc;
+            CalcData part_calc;
+
+
+			for (rez->First(); !rez->Eof; rez->Next())
             {
                 Data tmp;
-                tmp.det_id  =   (rez->FieldByName("det_id")->Value.operator AnsiString()).c_str();
                 tmp.cex     =   (rez->FieldByName("cex")->Value.operator AnsiString()).c_str();
                 tmp.utch    =   (rez->FieldByName("utch")->Value.operator AnsiString()).c_str();
                 tmp.zakaz   =   (rez->FieldByName("zakaz")->Value.operator AnsiString()).c_str();
                 tmp.part    =   (rez->FieldByName("part_no")->Value.operator AnsiString()).c_str();
-
-                tmp.vz      =   (rez->FieldByName("vz")->Value.operator AnsiString()).c_str();
-                tmp.obd     =   VinToGost(rez->FieldByName("obd")->Value.operator AnsiString()).c_str();
-                tmp.name    =   (rez->FieldByName("name")->Value.operator AnsiString()).c_str();
-
-                tmp.kol_req     =   (rez->FieldByName("request")->Value.operator AnsiString()).c_str();
-                tmp.kol_maked   =   (rez->FieldByName("maked")->Value.operator AnsiString()).c_str();
-                tmp.kol_broken  =   (rez->FieldByName("broken")->Value.operator AnsiString()).c_str();
-                tmp.kol_unmaked =   (rez->FieldByName("unmaked")->Value.operator AnsiString()).c_str();
+                tmp.oper    =   (rez->FieldByName("oper")->Value.operator AnsiString()).c_str();
 
                 tmp.trud_req        =   rez->FieldByName("trud_request")->Value.operator double();
                 tmp.trud_maked      =   rez->FieldByName("trud_maked")->Value.operator double();
                 tmp.trud_broken     =   rez->FieldByName("trud_broken")->Value.operator double();
                 tmp.trud_unmaked    =   rez->FieldByName("trud_unmaked")->Value.operator double();
 
-                bool need_switch = (cur_row + row_size > end_row);
-                bool t2 = (!cur_cex.empty() && cur_cex!=tmp.cex);
-                new_page = new_page + need_switch + t2;
-                if (t2)
+
+                if (!cur_zak.empty() && cur_zak!=tmp.zakaz)
                 {
+                    zak_calc.CheckPrint();//итог по заказу
+                    part_calc.CheckPrint();//итог по партии
+                    if (use_podr)
+                    {
+                        cex_calc.CheckPrint(); //по цеху
+                        if(use_oper)
+                        {
+                            utch_calc.CheckPrint();// по участку
+                        }
+                    }
+                }
+                else if (!cur_part.empty() && cur_part!=tmp.part)
+                {
+                    part_calc.CheckPrint(); //итог по партии
+                    if (use_podr)
+                    {
+                        cex_calc.CheckPrint(); //по цеху
+                        if(use_oper)
+                        {
+                            utch_calc.CheckPrint(); // по участку
+                        }
+                    }
+                }
+                else if (use_podr)
+                {
+                    if( !cur_cex.empty() && cur_cex!=tmp.cex)
+                    {
+                        cex_calc.CheckPrint();//по цеху
+                        if(use_oper)
+                        {
+                            utch_calc.CheckPrint(); // по участку
+                        }
+                    }
+                    else if (use_oper && !cur_utch.empty() && cur_utch!=tmp.utch)
+                    {
+                        utch_calc.CheckPrint(); // по участку
+                    }
+                }
+
+                if (cex_calc.Print())
                     ++cur_row;
+                if (utch_calc.Print())
                     ++cur_row;
+                if (zak_calc.Print())
+                    ++cur_row;
+                if (part_calc.Print())
                     ++cur_row;
 
-                    cur_zak = tmp.zakaz + tmp.part;
-                    cur_utch = tmp.utch;
-                }
+                bool need_switch = (cur_row + row_size > end_row);
+                new_page = new_page + need_switch;
                 if (new_page)
                 {
                     new_page = false;
-                    cur_cex = tmp.cex;
                     cur_row = start_row;
                     ++list_count;
-                    if (t2||!(list_count-1))
-                    {
-                        ++cur_row;
-                    }
                 }
-                if (!cur_zak.empty() && cur_zak!=tmp.zakaz + tmp.part)
-                {
-                    cur_row+=3;
-                }
-                else if (!cur_utch.empty() && cur_utch!=tmp.utch)
-                {
-                    cur_row+=2;
-                }
-                cur_zak = tmp.zakaz + tmp.part;
+
+                if (cex_calc.Print())
+                    cex_calc.reset();
+                if (utch_calc.Print())
+                    utch_calc.reset();
+                if (zak_calc.Print())
+                    zak_calc.reset();
+                if (part_calc.Print())
+                    part_calc.reset();
+
+                cur_cex  = tmp.cex;
                 cur_utch = tmp.utch;
+                cur_zak  = tmp.zakaz;
+                cur_part = tmp.part;
+
+                if (use_podr)
+                {
+                    cex_calc.inc(tmp);
+                    if (use_oper)
+                        utch_calc.inc(tmp);
+                }
+
+                zak_calc.inc(tmp);
+                part_calc.inc(tmp);
+
                 cur_row+=row_size;
-                cex_data.insert(CexDataItem(tmp.cex, tmp));
+                cex_data.insert(CexDataItem(tmp.zakaz, tmp));
             }
             //расчитать кол - во страниц для цеха
             new_page = true;
@@ -472,72 +532,73 @@ void MakingDetails::BuildReport()
             size_t file_no = 0;
 
             cur_cex = "";
-            cur_zak = "";
             cur_utch = "";
+            cur_zak = "";
+            cur_part = "";
 
-            CalcData cex_calc;
-            CalcData zak_calc;
-            CalcData utch_calc;
+            cex_calc.reset();
+            utch_calc.reset();
+            zak_calc.reset();
+            part_calc.reset();
+
             size_t list_no(0);
             for (CexData::const_iterator it = cex_data.begin(); it!=cex_data.end(); ++it)
             {
                 const Data &lnk = it->second;
 
-                bool need_switch = (cur_row + row_size > end_row);
-
-                bool t2 = (!cur_cex.empty() && cur_cex!=lnk.cex);
-
-                new_page = new_page + need_switch + t2;//проанализировать количестко оставшихся строк
-
-                if (t2)
+                if (!cur_zak.empty() && cur_zak!=lnk.zakaz)
                 {
-                    //Итого по цеху
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_foter, templ_foter));
-                    // вставка
-                    xl.Sheet_activate();
-					xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                    xl.toCells(cur_row,     3,  "УЧАСТКУ"    );
-					xl.toCells(cur_row,     7,  utch_calc.req);
-					xl.toCells(cur_row,     8,  utch_calc.mk );
-                    xl.toCells(cur_row,     9,  utch_calc.br );
-                    xl.toCells(cur_row,     10, utch_calc.umk);
-                    ++cur_row;
-
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_foter, templ_foter));
-                    // вставка
-                    xl.Sheet_activate();
-					xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                    xl.toCells(cur_row,     3,  "ЗАКАЗУ"    );
-                    xl.toCells(cur_row,     7,  zak_calc.req);
-                    xl.toCells(cur_row,     8,  zak_calc.mk );
-                    xl.toCells(cur_row,     9,  zak_calc.br );
-                    xl.toCells(cur_row,     10, zak_calc.umk);
-                    ++cur_row;
-
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_foter, templ_foter));
-                    // вставка
-                    xl.Sheet_activate();
-					xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                    xl.toCells(cur_row,     3,  "ЦЕХУ"    );
-                    xl.toCells(cur_row,     7,  cex_calc.req);
-                    xl.toCells(cur_row,     8,  cex_calc.mk );
-                    xl.toCells(cur_row,     9,  cex_calc.br );
-                    xl.toCells(cur_row,     10, cex_calc.umk);
-                    ++cur_row;
-
-                    cex_calc.reset();
-                    zak_calc.reset();
-                    utch_calc.reset();
-                    cur_zak = lnk.zakaz + lnk.part;
-                    cur_utch = lnk.utch;
+                    zak_calc.CheckPrint();//итог по заказу
+                    part_calc.CheckPrint();//итог по партии
+                    if (use_podr)
+                    {
+                        cex_calc.CheckPrint(); //по цеху
+                        if(use_oper)
+                        {
+                            utch_calc.CheckPrint();// по участку
+                        }
+                    }
+                }
+                else if (!cur_part.empty() && cur_part!=lnk.part)
+                {
+                    part_calc.CheckPrint(); //итог по партии
+                    if (use_podr)
+                    {
+                        cex_calc.CheckPrint(); //по цеху
+                        if(use_oper)
+                        {
+                            utch_calc.CheckPrint(); // по участку
+                        }
+                    }
+                }
+                else if (use_podr)
+                {
+                    if( !cur_cex.empty() && cur_cex!=lnk.cex)
+                    {
+                        cex_calc.CheckPrint();//по цеху
+                        if(use_oper)
+                        {
+                            utch_calc.CheckPrint(); // по участку
+                        }
+                    }
+                    else if (use_oper && !cur_utch.empty() && cur_utch!=lnk.utch)
+                    {
+                        utch_calc.CheckPrint(); // по участку
+                    }
                 }
 
+                size_t need_rows(0);
+                if (cex_calc.Print())
+                    ++need_rows;
+                if (utch_calc.Print())
+                    ++need_rows;
+                if (zak_calc.Print())
+                    ++need_rows;
+                if (part_calc.Print())
+                    ++need_rows;
+
+                bool need_switch = (cur_row + row_size + need_rows> end_row);
+                new_page = new_page + need_switch;
                 if (new_page)
                 {
                     new_page = false;
@@ -560,7 +621,6 @@ void MakingDetails::BuildReport()
                     xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("Лист-"+buf.str()).c_str());
 
 
-                    xl.toCells(1, 11,   lnk.cex.c_str()     );
                     xl.toCells(1, 13,   list_no             );
                     xl.toCells(1, 15,   list_count          );
                     xl.toCells(1, 3,    Now().FormatString("dd.mm.yyyy")   );
@@ -573,176 +633,205 @@ void MakingDetails::BuildReport()
                     xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), 15, 20));
                     // вставка
                     xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(5, 10));
+                    xl.Range_Paste(xl.GetRows(4, 10));
 
                     cur_row = start_row;
-
-
-                    if (t2||!(cur_lists-1))
-                    {
-                        //вставить строку в отчет
-                        // копирование
-                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_header, templ_header));
-                        // вставка
-                        xl.Sheet_activate();
-                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                        xl.toCells(cur_row, 7,   lnk.zakaz.c_str()   );
-                        xl.toCells(cur_row, 9,   lnk.part.c_str()   );
-                        xl.toCells(cur_row, 11,   lnk.utch.c_str()   );
-
-                        ++cur_row;
-                    }
                 }
 
-                if (!cur_zak.empty() && cur_zak!=lnk.zakaz + lnk.part)
+                if (utch_calc.Print())
                 {
                     // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_foter, templ_foter));
+                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row));
                     // вставка
                     xl.Sheet_activate();
                     xl.Range_Paste(xl.GetRows(cur_row, cur_row));
 
-                    xl.toCells(cur_row,     3,  "УЧАСТКУ"    );
-                    xl.toCells(cur_row,     7,  utch_calc.req);
-                    xl.toCells(cur_row,     8,  utch_calc.mk );
-                    xl.toCells(cur_row,     9,  utch_calc.br );
-                    xl.toCells(cur_row,     10, utch_calc.umk);
+                    xl.toCells(cur_row,     6,   "ИТОГО"      );
+                    xl.toCells(cur_row,     10,  utch_calc.req);
+                    xl.toCells(cur_row,     11,  utch_calc.mk );
+                    xl.toCells(cur_row,     12,  utch_calc.br );
+                    xl.toCells(cur_row,     14,  utch_calc.umk);
                     ++cur_row;
-
+                    utch_calc.reset();
+                }
+                if (cex_calc.Print())
+                {
                     // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_foter, templ_foter));
-                    // вставка
-                    xl.Sheet_activate();
-					xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                    xl.toCells(cur_row,     3,  "ЗАКАЗУ"    );
-                    xl.toCells(cur_row,     7,  zak_calc.req);
-                    xl.toCells(cur_row,     8,  zak_calc.mk );
-                    xl.toCells(cur_row,     9,  zak_calc.br );
-                    xl.toCells(cur_row,     10, zak_calc.umk);
-                    ++cur_row;
-
-                    //вставить строку в отчет
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_header, templ_header));
+                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row));
                     // вставка
                     xl.Sheet_activate();
                     xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-                    xl.toCells(cur_row, 7,   lnk.zakaz.c_str()   );
-                    xl.toCells(cur_row, 9,   lnk.part.c_str()   );
-                    xl.toCells(cur_row, 11,   lnk.utch.c_str()   );
 
+                    xl.toCells(cur_row,     4,   "ИТОГО"     );
+                    xl.toCells(cur_row,     10,  cex_calc.req);
+                    xl.toCells(cur_row,     11,  cex_calc.mk );
+                    xl.toCells(cur_row,     12,  cex_calc.br );
+                    xl.toCells(cur_row,     14,  cex_calc.umk);
+                    ++cur_row;
+                    cex_calc.reset();
+                    utch_calc.reset();
+                }
+                if (part_calc.Print())
+                {
+                    // копирование
+                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row));
+                    // вставка
+                    xl.Sheet_activate();
+                    xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                    xl.toCells(cur_row,     3,   "ИТОГО"      );
+                    xl.toCells(cur_row,     10,  part_calc.req);
+                    xl.toCells(cur_row,     11,  part_calc.mk );
+                    xl.toCells(cur_row,     12,  part_calc.br );
+                    xl.toCells(cur_row,     14,  part_calc.umk);
+                    ++cur_row;
+                    part_calc.reset();
+                    cex_calc.reset();
+                    utch_calc.reset();
+                }
+                if (zak_calc.Print())
+                {
+                    // копирование
+                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row));
+                    // вставка
+                    xl.Sheet_activate();
+                    xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                    xl.toCells(cur_row,     1,   "ИТОГО"     );
+                    xl.toCells(cur_row,     10,  zak_calc.req);
+                    xl.toCells(cur_row,     11,  zak_calc.mk );
+                    xl.toCells(cur_row,     12,  zak_calc.br );
+                    xl.toCells(cur_row,     14,  zak_calc.umk);
                     ++cur_row;
                     zak_calc.reset();
-                    utch_calc.reset();
-                }
-                else if (!cur_utch.empty() && cur_utch!=lnk.utch)
-                {
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_foter, templ_foter));
-                    // вставка
-                    xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                    xl.toCells(cur_row,     3,  "УЧАСТКУ"    );
-                    xl.toCells(cur_row,     7,  utch_calc.req);
-                    xl.toCells(cur_row,     8,  utch_calc.mk );
-                    xl.toCells(cur_row,     9,  utch_calc.br );
-                    xl.toCells(cur_row,     10, utch_calc.umk);
-                    ++cur_row;
-
-                    //вставить строку в отчет
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_header, templ_header));
-                    // вставка
-                    xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-                    xl.toCells(cur_row, 7,   lnk.zakaz.c_str()  );
-                    xl.toCells(cur_row, 9,   lnk.part.c_str()   );
-                    xl.toCells(cur_row, 11,  lnk.utch.c_str()   );
-
-                    ++cur_row;
+                    part_calc.reset();
+                    cex_calc.reset();
                     utch_calc.reset();
                 }
 
-                cur_zak = lnk.zakaz + lnk.part;
+                cur_cex  = lnk.cex;
                 cur_utch = lnk.utch;
-
+                cur_zak  = lnk.zakaz;
+                cur_part = lnk.part;
 
                 //вставить строку в отчет
                 // копирование
                 xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
                 // вставка
                 xl.Sheet_activate();
-				xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
 
-                xl.toCells(cur_row,     1,  lnk.vz.c_str() );
-                xl.toCells(cur_row+1,   1,  "" );
 
-                xl.toCells(cur_row,     2,  lnk.obd.c_str() );
-                xl.toCells(cur_row+1,   2,  lnk.name.c_str());
+                if (!zak_calc.used(no_duplicate))
+                    xl.toCells(cur_row,     1,  lnk.zakaz.c_str());
 
-                xl.toCells(cur_row,     7,  lnk.kol_req.c_str()     );
-                xl.toCells(cur_row,     8,  lnk.kol_maked.c_str()   );
-                xl.toCells(cur_row,     9,  lnk.kol_broken.c_str()  );
-                xl.toCells(cur_row,     10, lnk.kol_unmaked.c_str() );
+                if (!part_calc.used(no_duplicate))
+                    xl.toCells(cur_row,     3,  lnk.part.c_str() );
 
-                xl.toCells(cur_row+1,   7,  lnk.trud_req      );
-                xl.toCells(cur_row+1,   8,  lnk.trud_maked    );
-                xl.toCells(cur_row+1,   9,  lnk.trud_broken   );
-                xl.toCells(cur_row+1,   10, lnk.trud_unmaked  );
+                if (use_podr)
+                {
+                    if (!cex_calc.used(no_duplicate))
+                        xl.toCells(cur_row,     4,  lnk.cex.c_str() );
+                    if (!utch_calc.used(no_duplicate))
+                        xl.toCells(cur_row,     6, lnk.utch.c_str() );
+                }
+                if (use_oper)
+                {
+                    xl.toCells(cur_row,     7,  lnk.oper.c_str() );
+                }
 
-                xl.toCells(cur_row,     11, cache[lnk.det_id+lnk.cex+lnk.utch].c_str() );
+                xl.toCells(cur_row,   10,  lnk.trud_req      );
+                xl.toCells(cur_row,   11,  lnk.trud_maked    );
+                xl.toCells(cur_row,   12,  lnk.trud_broken   );
+                xl.toCells(cur_row,   14,  lnk.trud_unmaked   );
 
-                cex_calc.inc(lnk);
+                if (use_podr)
+                {
+                    cex_calc.inc(lnk);
+                    if (use_oper)
+                        utch_calc.inc(lnk);
+                }
+
                 zak_calc.inc(lnk);
-                utch_calc.inc(lnk);
+                part_calc.inc(lnk);
 
-				cur_row+=row_size;
+                cur_row+=row_size;
             }
-
+            zak_calc.CheckPrint();//итог по заказу
+            part_calc.CheckPrint();//итог по партии
+            if (use_podr)
             {
-            //Итого по цеху
-            // копирование
-            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_foter, templ_foter));
-            // вставка
-            xl.Sheet_activate();
-            xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-            xl.toCells(cur_row,     3,  "УЧАСТКУ"    );
-            xl.toCells(cur_row,     7,  utch_calc.req);
-            xl.toCells(cur_row,     8,  utch_calc.mk );
-            xl.toCells(cur_row,     9,  utch_calc.br );
-            xl.toCells(cur_row,     10, utch_calc.umk);
-            ++cur_row;
-
-            // копирование
-            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_foter, templ_foter));
-            // вставка
-            xl.Sheet_activate();
-            xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-            xl.toCells(cur_row,     3,  "ЗАКАЗУ"    );
-            xl.toCells(cur_row,     7,  zak_calc.req);
-            xl.toCells(cur_row,     8,  zak_calc.mk );
-            xl.toCells(cur_row,     9,  zak_calc.br );
-            xl.toCells(cur_row,     10, zak_calc.umk);
-            ++cur_row;
-
-            // копирование
-            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), templ_foter, templ_foter));
-            // вставка
-            xl.Sheet_activate();
-            xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-            xl.toCells(cur_row,     3,  "ЦЕХУ"    );
-            xl.toCells(cur_row,     7,  cex_calc.req);
-            xl.toCells(cur_row,     8,  cex_calc.mk );
-            xl.toCells(cur_row,     9,  cex_calc.br );
-            xl.toCells(cur_row,     10, cex_calc.umk);
-            ++cur_row;
+                cex_calc.CheckPrint(); //по цеху
+                if(use_oper)
+                {
+                    utch_calc.CheckPrint();// по участку
+                }
             }
+            if (utch_calc.Print())
+            {
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                xl.toCells(cur_row,     6,   "ИТОГО"      );
+                xl.toCells(cur_row,     10,  utch_calc.req);
+                xl.toCells(cur_row,     11,  utch_calc.mk );
+                xl.toCells(cur_row,     12,  utch_calc.br );
+                xl.toCells(cur_row,     14,  utch_calc.umk);
+                ++cur_row;
+                utch_calc.reset();
+            }
+            if (cex_calc.Print())
+            {
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                xl.toCells(cur_row,     4,   "ИТОГО"     );
+                xl.toCells(cur_row,     10,  cex_calc.req);
+                xl.toCells(cur_row,     11,  cex_calc.mk );
+                xl.toCells(cur_row,     12,  cex_calc.br );
+                xl.toCells(cur_row,     14,  cex_calc.umk);
+                ++cur_row;
+                cex_calc.reset();
+            }
+            if (part_calc.Print())
+            {
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                xl.toCells(cur_row,     3,   "ИТОГО"      );
+                xl.toCells(cur_row,     10,  part_calc.req);
+                xl.toCells(cur_row,     11,  part_calc.mk );
+                xl.toCells(cur_row,     12,  part_calc.br );
+                xl.toCells(cur_row,     14,  part_calc.umk);
+                ++cur_row;
+                part_calc.reset();
+            }
+            if (zak_calc.Print())
+            {
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                xl.toCells(cur_row,     1,   "ИТОГО"     );
+                xl.toCells(cur_row,     10,  zak_calc.req);
+                xl.toCells(cur_row,     11,  zak_calc.mk );
+                xl.toCells(cur_row,     12,  zak_calc.br );
+                xl.toCells(cur_row,     14,  zak_calc.umk);
+                ++cur_row;
+                zak_calc.reset();
+            }
+
 
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
             {
