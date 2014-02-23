@@ -18,40 +18,40 @@ __fastcall TTechWnd::TTechWnd(TComponent *Owner, TWinControl *_p, String _name,
         String((int)db)+")");
     Selector=new TObdSelector(this, (ClassConnector *)this, Panel5, db);
     count++ ;
-    // расположение
+    // СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ
     Align=alClient;
     Parent=_p;
     Name=_name;
     Init();
-    // загрузка данных по контролю, еденицам измерения
+    // Р·Р°РіСЂСѓР·РєР° РґР°РЅРЅС‹С… РїРѕ РєРѕРЅС‚СЂРѕР»СЋ, РµРґРµРЅРёС†Р°Рј РёР·РјРµСЂРµРЅРёСЏ
     Load_support_info();
-    // инициализация заголовков таблиц
-    operations->Cells[1][0]="Цех";
-    operations->Cells[2][0]="Уч.";
-    operations->Cells[3][0]="Опер.";
-    operations->Cells[4][0]="Код, наименование операций";
-    operations->Cells[5][0]="Обозначение документа";
-    operations->Cells[6][0]="Код";
-    operations->Cells[7][0]="Наименование";
-    operations->Cells[8][0]="СМ";
-    operations->Cells[9][0]="К.шт.";
-    operations->Cells[10][0]="Проф";
-    operations->Cells[11][0]="КР";
-    operations->Cells[12][0]="Р";
-    operations->Cells[13][0]="КОИД";
-    operations->Cells[14][0]="ЕН";
-    operations->Cells[15][0]="УТ";
-    operations->Cells[16][0]="Т п.з.";
-    operations->Cells[17][0]="Т шт.";
-    operations->Cells[18][0]="ОП";
+    // РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Р·Р°РіРѕР»РѕРІРєРѕРІ С‚Р°Р±Р»РёС†
+    operations->Cells[1][0]="Р¦РµС…";
+    operations->Cells[2][0]="РЈС‡.";
+    operations->Cells[3][0]="РћРїРµСЂ.";
+    operations->Cells[4][0]="РљРѕРґ, РЅР°РёРјРµРЅРѕРІР°РЅРёРµ РѕРїРµСЂР°С†РёР№";
+    operations->Cells[5][0]="РћР±РѕР·РЅР°С‡РµРЅРёРµ РґРѕРєСѓРјРµРЅС‚Р°";
+    operations->Cells[6][0]="РљРѕРґ";
+    operations->Cells[7][0]="РќР°РёРјРµРЅРѕРІР°РЅРёРµ";
+    operations->Cells[8][0]="РЎРњ";
+    operations->Cells[9][0]="Рљ.С€С‚.";
+    operations->Cells[10][0]="РџСЂРѕС„";
+    operations->Cells[11][0]="РљР ";
+    operations->Cells[12][0]="Р ";
+    operations->Cells[13][0]="РљРћРР”";
+    operations->Cells[14][0]="Р•Рќ";
+    operations->Cells[15][0]="РЈРў";
+    operations->Cells[16][0]="Рў Рї.Р·.";
+    operations->Cells[17][0]="Рў С€С‚.";
+    operations->Cells[18][0]="РћРџ";
     AutoWidthSG(operations);
-    instrum->Cells[1][0]="Наименвание инструмента";
-    instrum->Cells[2][0]="Номер";
+    instrum->Cells[1][0]="РќР°РёРјРµРЅРІР°РЅРёРµ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°";
+    instrum->Cells[2][0]="РќРѕРјРµСЂ";
     AutoWidthSG(instrum);
-    // капча на вкладку
+    // РєР°РїС‡Р° РЅР° РІРєР»Р°РґРєСѓ
     if(Parent->ClassNameIs("TTabSheet"))
     {
-        ((TTabSheet *)Parent)->Caption="Технология     ";
+        ((TTabSheet *)Parent)->Caption="РўРµС…РЅРѕР»РѕРіРёСЏ     ";
     }
 }
 
@@ -163,24 +163,24 @@ void __fastcall TTechWnd::ei_optClick(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
         "ei_optClick()");
-    Load_support_info(); // выбор другого режима наполнения
+    Load_support_info(); // РІС‹Р±РѕСЂ РґСЂСѓРіРѕРіРѕ СЂРµР¶РёРјР° РЅР°РїРѕР»РЅРµРЅРёСЏ
     if(Info)
     {
         ShowDetInfo();
     }
 }
 
-// загрузка и очистка
+// Р·Р°РіСЂСѓР·РєР° Рё РѕС‡РёСЃС‚РєР°
 void TTechWnd::Load(const Obd * const det)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"Load("+
         String((int)det)+")");
     if(TehRead&&(!Ldet||det->Get_ID()!=Ldet->Get_ID()))
-    { // процесс загрузки
+    { // РїСЂРѕС†РµСЃСЃ Р·Р°РіСЂСѓР·РєРё
         bool accept=false;
         if(Ldet)
         {
-            accept=Close_teh(); // попытка закрыть открытую технологию
+            accept=Close_teh(); // РїРѕРїС‹С‚РєР° Р·Р°РєСЂС‹С‚СЊ РѕС‚РєСЂС‹С‚СѓСЋ С‚РµС…РЅРѕР»РѕРіРёСЋ
         }
         else
         {
@@ -216,7 +216,7 @@ bool TTechWnd::Close_teh(void)
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
         "Close_teh()");
     TimerTimer(0);
-    // проверка на необходимость сохранения
+    // РїСЂРѕРІРµСЂРєР° РЅР° РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚СЊ СЃРѕС…СЂР°РЅРµРЅРёСЏ
     bool closed=true;
     if(Ldet&&Info&& !ReadOnly)
     {
@@ -224,11 +224,11 @@ bool TTechWnd::Close_teh(void)
         perexod->Lines->Clear();
         SGClear(instrum, 2);
         if(Info->Need_Save())
-        { // вопрос на сохранение
+        { // РІРѕРїСЂРѕСЃ РЅР° СЃРѕС…СЂР°РЅРµРЅРёРµ
             String msg;
             int result;
-            result=MessageDlg("Технология "+Ldet->Get_Text()+
-                " нуждается в сохранении. Сохранить?", mtWarning,
+            result=MessageDlg("РўРµС…РЅРѕР»РѕРіРёСЏ "+Ldet->Get_Text()+
+                " РЅСѓР¶РґР°РµС‚СЃСЏ РІ СЃРѕС…СЂР°РЅРµРЅРёРё. РЎРѕС…СЂР°РЅРёС‚СЊ?", mtWarning,
                 TMsgDlgButtons()<<mbYes<<mbNo<<mbCancel, 0);
             if(result==mrYes)
             {
@@ -238,7 +238,7 @@ bool TTechWnd::Close_teh(void)
                     closed=Info->SaveData();
                     if(!closed)
                     {
-                        ShowMessage("Невозможно сохранить технологию "+
+                        ShowMessage("РќРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕС…СЂР°РЅРёС‚СЊ С‚РµС…РЅРѕР»РѕРіРёСЋ "+
                             Ldet->Get_Text());
                     }
                     else
@@ -293,7 +293,7 @@ void TTechWnd::Save_tex(void)
         perexod->Lines->Clear();
         SGClear(instrum, 2);
         if(Info->Need_Save())
-        { // вопрос на сохранение
+        { // РІРѕРїСЂРѕСЃ РЅР° СЃРѕС…СЂР°РЅРµРЅРёРµ
             String msg;
             if(Info->Can_Save(msg))
             {
@@ -310,7 +310,7 @@ void TTechWnd::Save_tex(void)
                 }
                 else
                 {
-                    ShowMessage("Невозможно сохранить технологию "+
+                    ShowMessage("РќРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕС…СЂР°РЅРёС‚СЊ С‚РµС…РЅРѕР»РѕРіРёСЋ "+
                         Ldet->Get_Text());
                 }
             }
@@ -329,27 +329,27 @@ void __fastcall TTechWnd::SavebtnClick(TObject *Sender)
     Save_tex();
 }
 
-// инормация о детали
+// РёРЅРѕСЂРјР°С†РёСЏ Рѕ РґРµС‚Р°Р»Рё
 void TTechWnd::ShowDetInfo(void)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
         "ShowDetInfo()");
-    creator->Caption="Разработал "+Info->Get_CreateUser()+" "+
+    creator->Caption="Р Р°Р·СЂР°Р±РѕС‚Р°Р» "+Info->Get_CreateUser()+" "+
         Info->Get_CreateDate();
-    updater->Caption="Редактировал "+Info->Get_ChangeUser()+" "+
+    updater->Caption="Р РµРґР°РєС‚РёСЂРѕРІР°Р» "+Info->Get_ChangeUser()+" "+
         Info->Get_ChangeDate();
-    access->Caption= !ReadOnly?"Полный доступ":"Только чтение";
-    // общие параметры
+    access->Caption= !ReadOnly?"РџРѕР»РЅС‹Р№ РґРѕСЃС‚СѓРї":"РўРѕР»СЊРєРѕ С‡С‚РµРЅРёРµ";
+    // РѕР±С‰РёРµ РїР°СЂР°РјРµС‚СЂС‹
     DT_Name->Caption=Ldet->Get_Name();
     napr->Text=Info->Get_napr();
     rasceh->Text=Info->Get_pm();
 
-    // параметры детали
+    // РїР°СЂР°РјРµС‚СЂС‹ РґРµС‚Р°Р»Рё
     masd->Text=Trim(String(Info->Get_masd())+" "+Info->Get_eiName());
     ei->ItemIndex=ei->Items->IndexOf(Info->Get_eiName());
     ei->Hint=Info->Get_ei();
     ShowMatInfo();
-    // параметры заготовки
+    // РїР°СЂР°РјРµС‚СЂС‹ Р·Р°РіРѕС‚РѕРІРєРё
     kz->Text=Info->Get_vz();
     kz->Hint=Info->Get_vzName();
     razmzagot->Text=Info->Get_razz();
@@ -394,13 +394,13 @@ void TTechWnd::ShowOperations(void)
     SGClear(operations, 3);
     int rows=operations->RowCount-1;
     if(Info&&Info->Get_Operations())
-    {//проверка наличия списка операций и вообще на загруженость технологии
+    {//РїСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ СЃРїРёСЃРєР° РѕРїРµСЂР°С†РёР№ Рё РІРѕРѕР±С‰Рµ РЅР° Р·Р°РіСЂСѓР¶РµРЅРѕСЃС‚СЊ С‚РµС…РЅРѕР»РѕРіРёРё
         for(OperRow*i=Info->Get_Operations()->Get_First(); i; i=i->Get_Next())
         {
-            if(i->isUsed())//показывает только не удаляемые операции
+            if(i->isUsed())//РїРѕРєР°Р·С‹РІР°РµС‚ С‚РѕР»СЊРєРѕ РЅРµ СѓРґР°Р»СЏРµРјС‹Рµ РѕРїРµСЂР°С†РёРё
             {
                 /*
-                При наличии списка только удаленных операций указатель на массив не будет указан         Warning !!!!!!!!!!!!1
+                РџСЂРё РЅР°Р»РёС‡РёРё СЃРїРёСЃРєР° С‚РѕР»СЊРєРѕ СѓРґР°Р»РµРЅРЅС‹С… РѕРїРµСЂР°С†РёР№ СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РјР°СЃСЃРёРІ РЅРµ Р±СѓРґРµС‚ СѓРєР°Р·Р°РЅ         Warning !!!!!!!!!!!!1
                 */
                 int str=0;
                 operations->Cells[0][rows]="";
@@ -411,20 +411,20 @@ void TTechWnd::ShowOperations(void)
                 operations->Cells[5][rows]=i->Get_Instruct();
                 operations->Cells[6][rows]=i->Get_oboID();
                 operations->Cells[7][rows]=i->Get_OboName();
-                operations->Cells[19][rows]=(String)(unsigned __int64)i;// указатель на операцию
+                operations->Cells[19][rows]=(String)(unsigned __int64)i;// СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕРїРµСЂР°С†РёСЋ
 
-                operations->Cells[21][rows+str]=(String)str;// номер строки операции
+                operations->Cells[21][rows+str]=(String)str;// РЅРѕРјРµСЂ СЃС‚СЂРѕРєРё РѕРїРµСЂР°С†РёРё
 
                 // operations->Cells[22][rows]=i->Get_action();
-                // найти см=ttp ут=kvn оп=kts
+                // РЅР°Р№С‚Рё СЃРј=ttp СѓС‚=kvn РѕРї=kts
                 if(i->Get_nrm())
-                {//проверка на наличие норм в операции
+                {//РїСЂРѕРІРµСЂРєР° РЅР° РЅР°Р»РёС‡РёРµ РЅРѕСЂРј РІ РѕРїРµСЂР°С†РёРё
                     for(NrmRow*j=i->Get_nrm()->Get_First(); j; j=j->Get_Next())
                     {
                         if(j->isUsed())
-                        {//показывает только не удаляемые нормы
+                        {//РїРѕРєР°Р·С‹РІР°РµС‚ С‚РѕР»СЊРєРѕ РЅРµ СѓРґР°Р»СЏРµРјС‹Рµ РЅРѕСЂРјС‹
                             /*
-                            При наличии списка удаленных норм указатель на массив не будет указан            Warning !!!!!!!!!!!!1
+                            РџСЂРё РЅР°Р»РёС‡РёРё СЃРїРёСЃРєР° СѓРґР°Р»РµРЅРЅС‹С… РЅРѕСЂРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РјР°СЃСЃРёРІ РЅРµ Р±СѓРґРµС‚ СѓРєР°Р·Р°РЅ            Warning !!!!!!!!!!!!1
                             */
                             operations->Cells[0][rows+str]="";
                             operations->Cells[8][rows+str]=j->Get_Ttp();
@@ -444,14 +444,14 @@ void TTechWnd::ShowOperations(void)
                                 (String)j->Get_Tsht();
                             operations->Cells[19][rows+str]=
                                 (String)(unsigned __int64)i;
-                            // указатель на операцию
+                            // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕРїРµСЂР°С†РёСЋ
                             operations->Cells[20][rows+str]=
                                 (String)(unsigned __int64)j;
-                            // указатель на норму
+                            // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅРѕСЂРјСѓ
                             operations->Cells[21][rows+str]=(String)str;
-                            // номер строки операции
+                            // РЅРѕРјРµСЂ СЃС‚СЂРѕРєРё РѕРїРµСЂР°С†РёРё
                             // operations->Cells[23][rows+str]=i->Get_action();
-                            // operations->Cells[18][rows+str]="ОП";
+                            // operations->Cells[18][rows+str]="РћРџ";
                             str++ ;
                         }
                     }
@@ -484,13 +484,13 @@ void TTechWnd::ShowData(OperRow *opr)
         String((int)opr)+")");
     perexod->Lines->Clear();
     SGClear(instrum,1);
-    strpLabel->Caption="Строповка";
+    strpLabel->Caption="РЎС‚СЂРѕРїРѕРІРєР°";
     tara->Text="";
     tara->Tag=0;
     SetDefaultData();
     if(opr->isUsed())
     {
-        // переходы
+        // РїРµСЂРµС…РѕРґС‹
         perexod->Paragraph->Numbering=nsBullet;
         if(opr->Get_perex())
         {
@@ -502,7 +502,7 @@ void TTechWnd::ShowData(OperRow *opr)
                 }
             }
         }
-        // инструмент
+        // РёРЅСЃС‚СЂСѓРјРµРЅС‚
         if(opr->Get_instrum())
         {
             int rows=1;
@@ -526,14 +526,14 @@ void TTechWnd::ShowData(OperRow *opr)
         {
             instrum->Cells[0][1]="*";
         }
-        // строповка и прочее
+        // СЃС‚СЂРѕРїРѕРІРєР° Рё РїСЂРѕС‡РµРµ
         if(opr->Get_Strop()!="")
         {
-            strpLabel->Caption="Строповка по РТМ 2103-11-75 чертеж:";
+            strpLabel->Caption="РЎС‚СЂРѕРїРѕРІРєР° РїРѕ Р РўРњ 2103-11-75 С‡РµСЂС‚РµР¶:";
         }
         else
         {
-            strpLabel->Caption="Строповка";
+            strpLabel->Caption="РЎС‚СЂРѕРїРѕРІРєР°";
         }
         strop->Text=opr->Get_Strop();
         tara->Text=opr->Get_Tara();
@@ -543,7 +543,7 @@ void TTechWnd::ShowData(OperRow *opr)
     }
 }
 
-// --редактирование Info
+// --СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ Info
 // ei
 void __fastcall TTechWnd::eiClick(TObject *Sender)
 {
@@ -557,7 +557,7 @@ void __fastcall TTechWnd::eiClick(TObject *Sender)
     }
 }
 
-// масса детали
+// РјР°СЃСЃР° РґРµС‚Р°Р»Рё
 void __fastcall TTechWnd::masdEnter(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"masdEnter("+
@@ -606,7 +606,7 @@ void __fastcall TTechWnd::DoubleFildChange(TObject *Sender)
     }
 }
 
-// -масса заготовки
+// -РјР°СЃСЃР° Р·Р°РіРѕС‚РѕРІРєРё
 void __fastcall TTechWnd::maszEnter(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"maszEnter("+
@@ -632,7 +632,7 @@ void __fastcall TTechWnd::maszExit(TObject *Sender)
     }
 }
 
-// -Норма расхода
+// -РќРѕСЂРјР° СЂР°СЃС…РѕРґР°
 void __fastcall TTechWnd::normaEnter(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"normaEnter("+
@@ -658,7 +658,7 @@ void __fastcall TTechWnd::normaExit(TObject *Sender)
     }
 }
 
-// -Направление
+// -РќР°РїСЂР°РІР»РµРЅРёРµ
 void __fastcall TTechWnd::naprChange(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"naprChange("+
@@ -684,7 +684,7 @@ void __fastcall TTechWnd::naprExit(TObject *Sender)
     }
 }
 
-// -Материал заготовки
+// -РњР°С‚РµСЂРёР°Р» Р·Р°РіРѕС‚РѕРІРєРё
 void __fastcall TTechWnd::obmChange(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"obmChange("+
@@ -718,7 +718,7 @@ void __fastcall TTechWnd::obmExit(TObject *Sender)
     }
 }
 
-// -код заготовки
+// -РєРѕРґ Р·Р°РіРѕС‚РѕРІРєРё
 void __fastcall TTechWnd::kzChange(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"kzChange("+
@@ -747,7 +747,7 @@ void __fastcall TTechWnd::kzExit(TObject *Sender)
     }
 }
 
-// -количество деталей
+// -РєРѕР»РёС‡РµСЃС‚РІРѕ РґРµС‚Р°Р»РµР№
 void __fastcall TTechWnd::kdzChange(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"kdzChange("+
@@ -759,7 +759,7 @@ void __fastcall TTechWnd::kdzChange(TObject *Sender)
     }
 }
 
-// -профиль и размеры
+// -РїСЂРѕС„РёР»СЊ Рё СЂР°Р·РјРµСЂС‹
 void __fastcall TTechWnd::razmzagotChange(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
@@ -771,14 +771,14 @@ void __fastcall TTechWnd::razmzagotChange(TObject *Sender)
     }
 }
 
-// -цветоиндикация
-// --зеленый готово для сохранения
-// --красный конфликт значений
+// -С†РІРµС‚РѕРёРЅРґРёРєР°С†РёСЏ
+// --Р·РµР»РµРЅС‹Р№ РіРѕС‚РѕРІРѕ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ
+// --РєСЂР°СЃРЅС‹Р№ РєРѕРЅС„Р»РёРєС‚ Р·РЅР°С‡РµРЅРёР№
 void TTechWnd::InfoColors(void)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
         "InfoColors()");
-    // общие параметры
+    // РѕР±С‰РёРµ РїР°СЂР°РјРµС‚СЂС‹
     int good_color=0x00DDFFDD, bad_color=0x00DDDDFF;
     if(Info->Get_napr()=="")
     {
@@ -844,7 +844,7 @@ void TTechWnd::InfoColors(void)
     }
 }
 
-// -работа с сеткой
+// -СЂР°Р±РѕС‚Р° СЃ СЃРµС‚РєРѕР№
 void __fastcall TTechWnd::operationsSelectCell(TObject *Sender, int ACol,
     int ARow, bool &CanSelect)
 {
@@ -852,8 +852,8 @@ void __fastcall TTechWnd::operationsSelectCell(TObject *Sender, int ACol,
         "razmzagotChange("+String((int)Sender)+","+(String)ACol+","+
         (String)ARow+")");
     int pRow=operations->Row;
-    // доступ на изменение ячеек
-    /* Блокировка гриды */
+    // РґРѕСЃС‚СѓРї РЅР° РёР·РјРµРЅРµРЅРёРµ СЏС‡РµРµРє
+    /* Р‘Р»РѕРєРёСЂРѕРІРєР° РіСЂРёРґС‹ */
     if((ACol&&ACol<8))
     {
         if(!TehEdit||ReadOnly)
@@ -878,10 +878,10 @@ void __fastcall TTechWnd::operationsSelectCell(TObject *Sender, int ACol,
     }
     GreedClickControl(ACol);
     if(pRow==ARow)
-    {   //не произошол переход на другую сторку
+    {   //РЅРµ РїСЂРѕРёР·РѕС€РѕР» РїРµСЂРµС…РѕРґ РЅР° РґСЂСѓРіСѓСЋ СЃС‚РѕСЂРєСѓ
         return;
     }
-    // АВТОСЕЙФ
+    // РђР’РўРћРЎР•Р™Р¤
     if(Info)
     {
         if(operSave(pRow))
@@ -891,8 +891,8 @@ void __fastcall TTechWnd::operationsSelectCell(TObject *Sender, int ACol,
         rasceh->Text=Info->Get_pm();
 
 
-        // получение новых свойств
-        if(operations->Cells[19][ARow]!="") // указатель на операцию
+        // РїРѕР»СѓС‡РµРЅРёРµ РЅРѕРІС‹С… СЃРІРѕР№СЃС‚РІ
+        if(operations->Cells[19][ARow]!="") // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕРїРµСЂР°С†РёСЋ
         {
             ShowData((OperRow *)operations->Cells[19][ARow].ToInt());
         }
@@ -910,7 +910,7 @@ void TTechWnd::SetDefaultData(void)
     control->ItemIndex=1;
 }
 
-// сохранение операции и норм
+// СЃРѕС…СЂР°РЅРµРЅРёРµ РѕРїРµСЂР°С†РёРё Рё РЅРѕСЂРј
 bool TTechWnd::operSave(int nRow)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"operSave("+
@@ -925,13 +925,13 @@ bool TTechWnd::operSave(int nRow)
         operations->Cells[3][nRow]!=""||operations->Cells[4][nRow]!=""||
         operations->Cells[5][nRow]!=""||operations->Cells[6][nRow]!="")&&
         (operations->Cells[21][nRow]==""||operations->Cells[21][nRow]=="0"))
-    {//проверка на наличие информации у операции для сохранения
+    {//РїСЂРѕРІРµСЂРєР° РЅР° РЅР°Р»РёС‡РёРµ РёРЅС„РѕСЂРјР°С†РёРё Сѓ РѕРїРµСЂР°С†РёРё РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ
         can_opr_save=true;
     }
     if(operations->Cells[20][nRow]=="")
-    { //проверка на наличие нормы по наличию указателя
-        //(вспомним что там Warning т.к. указатель не показывается если массив норм весь на удаление)    Warning!!!!
-        //на этапе присоединения нормы вспомним об этом
+    { //РїСЂРѕРІРµСЂРєР° РЅР° РЅР°Р»РёС‡РёРµ РЅРѕСЂРјС‹ РїРѕ РЅР°Р»РёС‡РёСЋ СѓРєР°Р·Р°С‚РµР»СЏ
+        //(РІСЃРїРѕРјРЅРёРј С‡С‚Рѕ С‚Р°Рј Warning С‚.Рє. СѓРєР°Р·Р°С‚РµР»СЊ РЅРµ РїРѕРєР°Р·С‹РІР°РµС‚СЃСЏ РµСЃР»Рё РјР°СЃСЃРёРІ РЅРѕСЂРј РІРµСЃСЊ РЅР° СѓРґР°Р»РµРЅРёРµ)    Warning!!!!
+        //РЅР° СЌС‚Р°РїРµ РїСЂРёСЃРѕРµРґРёРЅРµРЅРёСЏ РЅРѕСЂРјС‹ РІСЃРїРѕРјРЅРёРј РѕР± СЌС‚РѕРј
         new_nrm=true;
         if((operations->Cells[8][nRow]!=""||operations->Cells[9][nRow]!=""||
             operations->Cells[10][nRow]!=""||operations->Cells[11][nRow]!=""||
@@ -945,7 +945,7 @@ bool TTechWnd::operSave(int nRow)
             can_nrm_save=true;
         }
     }
-    // подготовка данных  для сохранения оперции
+    // РїРѕРґРіРѕС‚РѕРІРєР° РґР°РЅРЅС‹С…  РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РѕРїРµСЂС†РёРё
     int idtar=tara->Tag, id_cntrl=
         (int)control->Items->Objects[control->ItemIndex];
     String     ceh=operations->Cells[1][nRow].Trim(),
@@ -961,7 +961,7 @@ bool TTechWnd::operSave(int nRow)
             Instruct=operations->Cells[5][nRow].Trim();
     OprKod=tmp.SubString(1, tmp.Pos(" ")-1);
     OprName=tmp.SubString(tmp.Pos(" ")+1, tmp.Length()-tmp.Pos(" "));
-    // сохранение
+    // СЃРѕС…СЂР°РЅРµРЅРёРµ
     if(!new_opr)
     {
         if(operations->Cells[21][nRow]=="0")
@@ -974,9 +974,9 @@ bool TTechWnd::operSave(int nRow)
     else
     {
         if(can_opr_save)
-        {//ВНИМАНИЕ впоминием про warning связанный с тображением указателей на
-        //операции для удаления если технология состоит только из них
-            // поиск операции к которой можно прицепиться  среди отображающихся
+        {//Р’РќРРњРђРќРР• РІРїРѕРјРёРЅРёРµРј РїСЂРѕ warning СЃРІСЏР·Р°РЅРЅС‹Р№ СЃ С‚РѕР±СЂР°Р¶РµРЅРёРµРј СѓРєР°Р·Р°С‚РµР»РµР№ РЅР°
+        //РѕРїРµСЂР°С†РёРё РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РµСЃР»Рё С‚РµС…РЅРѕР»РѕРіРёСЏ СЃРѕСЃС‚РѕРёС‚ С‚РѕР»СЊРєРѕ РёР· РЅРёС…
+            // РїРѕРёСЃРє РѕРїРµСЂР°С†РёРё Рє РєРѕС‚РѕСЂРѕР№ РјРѕР¶РЅРѕ РїСЂРёС†РµРїРёС‚СЊСЃСЏ  СЃСЂРµРґРё РѕС‚РѕР±СЂР°Р¶Р°СЋС‰РёС…СЃСЏ
             OperRow *opr=0;
             for(int i=nRow; i>=1&& !opr; i--)
             {
@@ -989,13 +989,13 @@ bool TTechWnd::operSave(int nRow)
                 Ldet->Get_ID(), idtar, id_cntrl, ceh, uch, Opr, oboID, OboName,
                 OprName, OprKod, Strop, Tara, Control, Instruct,
                 Info->Get_LUser(), Info->Get_LUser(), Date(), Date(), opr);
-            if(!opr)//проверка результата поиска
+            if(!opr)//РїСЂРѕРІРµСЂРєР° СЂРµР·СѓР»СЊС‚Р°С‚Р° РїРѕРёСЃРєР°
             {
                 if (Info->Get_Operations())
-                {//если среди отображающихся прицепиться не удалось пробуем цепляться к удаленным
+                {//РµСЃР»Рё СЃСЂРµРґРё РѕС‚РѕР±СЂР°Р¶Р°СЋС‰РёС…СЃСЏ РїСЂРёС†РµРїРёС‚СЊСЃСЏ РЅРµ СѓРґР°Р»РѕСЃСЊ РїСЂРѕР±СѓРµРј С†РµРїР»СЏС‚СЊСЃСЏ Рє СѓРґР°Р»РµРЅРЅС‹Рј
                     Info->Get_Operations()->Insert_line(0,insopr);
                 }else
-                {//технология пуста нет даже удаленных вставляем операцию
+                {//С‚РµС…РЅРѕР»РѕРіРёСЏ РїСѓСЃС‚Р° РЅРµС‚ РґР°Р¶Рµ СѓРґР°Р»РµРЅРЅС‹С… РІСЃС‚Р°РІР»СЏРµРј РѕРїРµСЂР°С†РёСЋ
                     Info->Set_Operations(insopr);
                 }
             }
@@ -1004,7 +1004,7 @@ bool TTechWnd::operSave(int nRow)
             save=true;
         }
     }
-    // подготовка данных  для сохранения норм
+    // РїРѕРґРіРѕС‚РѕРІРєР° РґР°РЅРЅС‹С…  РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РЅРѕСЂРј
     String     prof=operations->Cells[10][nRow].Trim(),
             krop=operations->Cells[11][nRow].Trim(),
             rr=operations->Cells[12][nRow].Trim(),
@@ -1056,18 +1056,18 @@ bool TTechWnd::operSave(int nRow)
     {
         ksht=0;
     }
-    // сохранение  норм
+    // СЃРѕС…СЂР°РЅРµРЅРёРµ  РЅРѕСЂРј
     if(!new_nrm)
-    { // обновление
+    { // РѕР±РЅРѕРІР»РµРЅРёРµ
         NrmRow *nrm=(NrmRow *)operations->Cells[20][nRow].ToInt();
         save=save+nrm->SetValues(kolod, prof, krop, rr, en, kts, kvn, ttp, ksht,
             tpz, tsht);
     }
     else
-    { // создоние новой
+    { // СЃРѕР·РґРѕРЅРёРµ РЅРѕРІРѕР№
         if(can_nrm_save)
         {
-            // поиск ближайшей операции
+            // РїРѕРёСЃРє Р±Р»РёР¶Р°Р№С€РµР№ РѕРїРµСЂР°С†РёРё
             String mark="";
             for(int i=nRow; i>0&&mark==""; i--)
             {
@@ -1080,7 +1080,7 @@ bool TTechWnd::operSave(int nRow)
             if(opr)
             {
                 NrmRow *nrm=0;
-                // получить ссылку на норму стоящую до вводимой
+                // РїРѕР»СѓС‡РёС‚СЊ СЃСЃС‹Р»РєСѓ РЅР° РЅРѕСЂРјСѓ СЃС‚РѕСЏС‰СѓСЋ РґРѕ РІРІРѕРґРёРјРѕР№
                 int pos= -1;
                 for(int i=nRow-1;
                 i>=1&&operations->Cells[19][i].ToIntDef(0)==(int)opr&&pos<0; i--)
@@ -1102,13 +1102,13 @@ bool TTechWnd::operSave(int nRow)
                     ttp, ksht, tpz, tsht, Info->Get_LUser(), Info->Get_LUser(),
                     Date(), Date(), nrm);
                 if(!nrm)
-                { // подключение цепочки
-                    //вспоминаем про warning  с неуказанием указателей на удаленные объекты к которым нужно цепляться
+                { // РїРѕРґРєР»СЋС‡РµРЅРёРµ С†РµРїРѕС‡РєРё
+                    //РІСЃРїРѕРјРёРЅР°РµРј РїСЂРѕ warning  СЃ РЅРµСѓРєР°Р·Р°РЅРёРµРј СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° СѓРґР°Р»РµРЅРЅС‹Рµ РѕР±СЉРµРєС‚С‹ Рє РєРѕС‚РѕСЂС‹Рј РЅСѓР¶РЅРѕ С†РµРїР»СЏС‚СЊСЃСЏ
                     if (opr->Get_nrm())
-                    {//значит есть список удаленных норм впереди которого нужно вкорячить созданное
+                    {//Р·РЅР°С‡РёС‚ РµСЃС‚СЊ СЃРїРёСЃРѕРє СѓРґР°Р»РµРЅРЅС‹С… РЅРѕСЂРј РІРїРµСЂРµРґРё РєРѕС‚РѕСЂРѕРіРѕ РЅСѓР¶РЅРѕ РІРєРѕСЂСЏС‡РёС‚СЊ СЃРѕР·РґР°РЅРЅРѕРµ
                         opr->Get_nrm()->Insert_line(0,insnrm);
                     }else
-                    {//значит норм ваще нет и нада с этим чота делать
+                    {//Р·РЅР°С‡РёС‚ РЅРѕСЂРј РІР°С‰Рµ РЅРµС‚ Рё РЅР°РґР° СЃ СЌС‚РёРј С‡РѕС‚Р° РґРµР»Р°С‚СЊ
                         opr->Set_nrm(insnrm);
                     }
                 }
@@ -1121,35 +1121,35 @@ bool TTechWnd::operSave(int nRow)
     }
     return save;
 }
-// обновление операции и норм
+// РѕР±РЅРѕРІР»РµРЅРёРµ РѕРїРµСЂР°С†РёРё Рё РЅРѕСЂРј
 void TTechWnd::UpdGreedData(int nRow)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
         "UpdGreedData("+String(nRow)+")");
-    int start=0, //позиция начала обновления сетки
-        end=0,   //позиция конца обновления
-        count=0, //количество занимаемых строк которые надо обновить
-        ncount=0;//новое количество строк которое будет после позиции  start
-    // -найти начало строк операций
+    int start=0, //РїРѕР·РёС†РёСЏ РЅР°С‡Р°Р»Р° РѕР±РЅРѕРІР»РµРЅРёСЏ СЃРµС‚РєРё
+        end=0,   //РїРѕР·РёС†РёСЏ РєРѕРЅС†Р° РѕР±РЅРѕРІР»РµРЅРёСЏ
+        count=0, //РєРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РЅРёРјР°РµРјС‹С… СЃС‚СЂРѕРє РєРѕС‚РѕСЂС‹Рµ РЅР°РґРѕ РѕР±РЅРѕРІРёС‚СЊ
+        ncount=0;//РЅРѕРІРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє РєРѕС‚РѕСЂРѕРµ Р±СѓРґРµС‚ РїРѕСЃР»Рµ РїРѕР·РёС†РёРё  start
+    // -РЅР°Р№С‚Рё РЅР°С‡Р°Р»Рѕ СЃС‚СЂРѕРє РѕРїРµСЂР°С†РёР№
     for(start=nRow; start>0&&operations->Cells[19][nRow]==operations->Cells[19]
         [start]; start--){}
     start++ ;
-    // -найти конец строк операций
+    // -РЅР°Р№С‚Рё РєРѕРЅРµС† СЃС‚СЂРѕРє РѕРїРµСЂР°С†РёР№
     end=operations->RowCount-1;
-    // -расчитать количество занимаемых строк
+    // -СЂР°СЃС‡РёС‚Р°С‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ Р·Р°РЅРёРјР°РµРјС‹С… СЃС‚СЂРѕРє
     count=end-start+1;
-    // -расчитать новое количество строк
+    // -СЂР°СЃС‡РёС‚Р°С‚СЊ РЅРѕРІРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє
     if(operations->Cells[19][nRow]!="")
     {
         for(OperRow*opr=(OperRow *)operations->Cells[19][nRow].ToInt(); opr;
-        opr=opr->Get_Next())//предполагается что колонка 19 заполнена без пробелов что в нормальной ситуации и есть    Warning
+        opr=opr->Get_Next())//РїСЂРµРґРїРѕР»Р°РіР°РµС‚СЃСЏ С‡С‚Рѕ РєРѕР»РѕРЅРєР° 19 Р·Р°РїРѕР»РЅРµРЅР° Р±РµР· РїСЂРѕР±РµР»РѕРІ С‡С‚Рѕ РІ РЅРѕСЂРјР°Р»СЊРЅРѕР№ СЃРёС‚СѓР°С†РёРё Рё РµСЃС‚СЊ    Warning
         {
             if(opr->isUsed())
             {
                 ncount++ ;
                 if(opr->Get_nrm())
                 {
-                    int norm_count=0;//количество строчек норм
+                    int norm_count=0;//РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕС‡РµРє РЅРѕСЂРј
                     for(NrmRow*nrm=opr->Get_nrm()->Get_First(); nrm;
                     nrm=nrm->Get_Next())
                     {
@@ -1158,7 +1158,7 @@ void TTechWnd::UpdGreedData(int nRow)
                             norm_count++ ;
                         }
                     }
-                    if(norm_count>1)//если одна строчка то ncount не меняется т.к. первая норма на тойже строке что и операция
+                    if(norm_count>1)//РµСЃР»Рё РѕРґРЅР° СЃС‚СЂРѕС‡РєР° С‚Рѕ ncount РЅРµ РјРµРЅСЏРµС‚СЃСЏ С‚.Рє. РїРµСЂРІР°СЏ РЅРѕСЂРјР° РЅР° С‚РѕР№Р¶Рµ СЃС‚СЂРѕРєРµ С‡С‚Рѕ Рё РѕРїРµСЂР°С†РёСЏ
                     {
                         ncount+=norm_count-1;
                     }
@@ -1167,32 +1167,32 @@ void TTechWnd::UpdGreedData(int nRow)
         }
     }
     else
-    {//в 19й пусто (расчитывается на то что это последняя строка)
+    {//РІ 19Р№ РїСѓСЃС‚Рѕ (СЂР°СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ РЅР° С‚Рѕ С‡С‚Рѕ СЌС‚Рѕ РїРѕСЃР»РµРґРЅСЏСЏ СЃС‚СЂРѕРєР°)
         if(nRow==operations->RowCount-1)
-        {//действительно последняя ставим 1чку чтобы обновить
+        {//РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ РїРѕСЃР»РµРґРЅСЏСЏ СЃС‚Р°РІРёРј 1С‡РєСѓ С‡С‚РѕР±С‹ РѕР±РЅРѕРІРёС‚СЊ
             ncount=1;
         }
         else
-        {//не последняя ставим 0 а вот зачем щас узнаю
-            ncount=0; //поидее эта ситуация недолжна никогда возникнуть
-            //в этом случае не будет пустой строки для дальнейшего ввода
+        {//РЅРµ РїРѕСЃР»РµРґРЅСЏСЏ СЃС‚Р°РІРёРј 0 Р° РІРѕС‚ Р·Р°С‡РµРј С‰Р°СЃ СѓР·РЅР°СЋ
+            ncount=0; //РїРѕРёРґРµРµ СЌС‚Р° СЃРёС‚СѓР°С†РёСЏ РЅРµРґРѕР»Р¶РЅР° РЅРёРєРѕРіРґР° РІРѕР·РЅРёРєРЅСѓС‚СЊ
+            //РІ СЌС‚РѕРј СЃР»СѓС‡Р°Рµ РЅРµ Р±СѓРґРµС‚ РїСѓСЃС‚РѕР№ СЃС‚СЂРѕРєРё РґР»СЏ РґР°Р»СЊРЅРµР№С€РµРіРѕ РІРІРѕРґР°
         }
     }
-    // -сдвинуть строки сетки
+    // -СЃРґРІРёРЅСѓС‚СЊ СЃС‚СЂРѕРєРё СЃРµС‚РєРё
     for(int i=operations->RowCount-1; i>start; i--)
-    { //это такая перманентная чистка (офсет указан как magic однако помним что это офсет для чистки невидимиых столбцов)
+    { //СЌС‚Рѕ С‚Р°РєР°СЏ РїРµСЂРјР°РЅРµРЅС‚РЅР°СЏ С‡РёСЃС‚РєР° (РѕС„СЃРµС‚ СѓРєР°Р·Р°РЅ РєР°Рє magic РѕРґРЅР°РєРѕ РїРѕРјРЅРёРј С‡С‚Рѕ СЌС‚Рѕ РѕС„СЃРµС‚ РґР»СЏ С‡РёСЃС‚РєРё РЅРµРІРёРґРёРјРёС‹С… СЃС‚РѕР»Р±С†РѕРІ)
         for(int j=0; j<operations->ColCount+3; j++)
         {
             operations->Cells[j][i]="";
         }
     }
-    //вот наконецто применяется новое количество строк
+    //РІРѕС‚ РЅР°РєРѕРЅРµС†С‚Рѕ РїСЂРёРјРµРЅСЏРµС‚СЃСЏ РЅРѕРІРѕРµ РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚СЂРѕРє
     operations->RowCount=operations->RowCount-count+ncount+1;
-    // -вставить данные    тут warningи такие же как и при простой отрисовке данных
+    // -РІСЃС‚Р°РІРёС‚СЊ РґР°РЅРЅС‹Рµ    С‚СѓС‚ warningРё С‚Р°РєРёРµ Р¶Рµ РєР°Рє Рё РїСЂРё РїСЂРѕСЃС‚РѕР№ РѕС‚СЂРёСЃРѕРІРєРµ РґР°РЅРЅС‹С…
     if(operations->Cells[19][start]!="")
     {
         int rows=start;
-        for(OperRow*i=(OperRow *)operations->Cells[19][start].ToIntDef(0); i;       //стоят умолчания при конвертации дабы не слететь в exeption
+        for(OperRow*i=(OperRow *)operations->Cells[19][start].ToIntDef(0); i;       //СЃС‚РѕСЏС‚ СѓРјРѕР»С‡Р°РЅРёСЏ РїСЂРё РєРѕРЅРІРµСЂС‚Р°С†РёРё РґР°Р±С‹ РЅРµ СЃР»РµС‚РµС‚СЊ РІ exeption
         i=i->Get_Next())
         {
             if(i->isUsed())
@@ -1217,12 +1217,12 @@ void TTechWnd::UpdGreedData(int nRow)
                 operations->Cells[16][rows]="";
                 operations->Cells[17][rows]="";
                 operations->Cells[19][rows]=(String)(unsigned __int64)i;
-                // указатель на операцию
-                operations->Cells[20][rows]=""; // указатель на норму
+                // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕРїРµСЂР°С†РёСЋ
+                operations->Cells[20][rows]=""; // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅРѕСЂРјСѓ
                 operations->Cells[21][rows]=(String)str;
-                // номер строки операции
+                // РЅРѕРјРµСЂ СЃС‚СЂРѕРєРё РѕРїРµСЂР°С†РёРё
                 // operations->Cells[22][rows]=i->Get_action();
-                // найти см=ttp ут=kvn оп=kts
+                // РЅР°Р№С‚Рё СЃРј=ttp СѓС‚=kvn РѕРї=kts
 
                 if(i->Get_nrm())
                 {
@@ -1248,14 +1248,14 @@ void TTechWnd::UpdGreedData(int nRow)
                                 (String)j->Get_Tsht();
                             operations->Cells[19][rows+str]=
                                 (String)(unsigned __int64)i;
-                            // указатель на операцию
+                            // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕРїРµСЂР°С†РёСЋ
                             operations->Cells[20][rows+str]=
                                 (String)(unsigned __int64)j;
-                            // указатель на норму
+                            // СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅРѕСЂРјСѓ
                             operations->Cells[21][rows+str]=(String)str;
-                            // номер строки операции
+                            // РЅРѕРјРµСЂ СЃС‚СЂРѕРєРё РѕРїРµСЂР°С†РёРё
                             // operations->Cells[23][rows+str]=i->Get_action();
-                            // operations->Cells[18][rows+str]="ОП";
+                            // operations->Cells[18][rows+str]="РћРџ";
                             str++ ;
                         }
                     }
@@ -1276,7 +1276,7 @@ void TTechWnd::UpdGreedData(int nRow)
     // AutoWidthSG(operations);
 }
 
-// функции контроллеры
+// С„СѓРЅРєС†РёРё РєРѕРЅС‚СЂРѕР»Р»РµСЂС‹
 void TTechWnd::GreedClickControl(int ACol)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
@@ -1481,22 +1481,22 @@ bool TTechWnd::GreedDataControl(int ACol, int ARow)
     return result;
 }
 
-// рисовка сетки
+// СЂРёСЃРѕРІРєР° СЃРµС‚РєРё
 void __fastcall TTechWnd::operationsDrawCell(TObject *Sender, int ACol,
     int ARow, TRect &Rect, TGridDrawState State)
 {
-    // - раскраска сетки
+    // - СЂР°СЃРєСЂР°СЃРєР° СЃРµС‚РєРё
     static int color=0X00E0FFFF;
     int bad_color=0x00DDDDFF;
     if(ARow==1)
     {
         color=0X00E0FFFF;
     }
-    if(ACol&&ARow) // разлинейка
+    if(ACol&&ARow) // СЂР°Р·Р»РёРЅРµР№РєР°
     {
         int k=0;
         for(int i=1; operations->Cells[19][i]!=operations->Cells[19][ARow]; i++)
-        {//всего лиш индикатор четности позиции операции
+        {//РІСЃРµРіРѕ Р»РёС€ РёРЅРґРёРєР°С‚РѕСЂ С‡РµС‚РЅРѕСЃС‚Рё РїРѕР·РёС†РёРё РѕРїРµСЂР°С†РёРё
             if(operations->Cells[19][i-1]!=operations->Cells[19][i])
             {
                 k++ ;
@@ -1524,10 +1524,10 @@ void __fastcall TTechWnd::operationsDrawCell(TObject *Sender, int ACol,
             operations->Cells[ACol][ARow]);
     }
 
-    // выделенные поля
+    // РІС‹РґРµР»РµРЅРЅС‹Рµ РїРѕР»СЏ
     if(ACol>=operations->Selection.Left&&ACol<=
         operations->Selection.Right&&ARow>=operations->Selection.Top&&ARow<=
-        operations->Selection.Bottom) // выделение
+        operations->Selection.Bottom) // РІС‹РґРµР»РµРЅРёРµ
     {
         operations->Canvas->Brush->Color=0x00FFE0E0; // clMenu;
         operations->Canvas->FillRect(Rect);
@@ -1537,7 +1537,7 @@ void __fastcall TTechWnd::operationsDrawCell(TObject *Sender, int ACol,
     }
 }
 
-// вызов редакторов для заполенения данных
+// РІС‹Р·РѕРІ СЂРµРґР°РєС‚РѕСЂРѕРІ РґР»СЏ Р·Р°РїРѕР»РµРЅРµРЅРёСЏ РґР°РЅРЅС‹С…
 void __fastcall TTechWnd::operationsDblClick(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
@@ -1547,7 +1547,7 @@ void __fastcall TTechWnd::operationsDblClick(TObject *Sender)
         return;
     }
     int ACol=operations->Col, ARow=operations->Row;
-    // заполнение СВ в зависимости от колонки
+    // Р·Р°РїРѕР»РЅРµРЅРёРµ РЎР’ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РєРѕР»РѕРЅРєРё
     String sql="";
     switch(ACol)
     {
@@ -1794,12 +1794,12 @@ void __fastcall TTechWnd::operationsSetEditText(TObject *Sender, int ACol,
     }
 }
 
-// КОНТЕКСТНОЕ МЕНЮ
+// РљРћРќРўР•РљРЎРўРќРћР• РњР•РќР®
 void __fastcall TTechWnd::N1Click(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"N1Click("+
         String((int)Sender)+")");
-    // копировать
+    // РєРѕРїРёСЂРѕРІР°С‚СЊ
     if(O_buff)
     {
         delete O_buff;
@@ -1821,7 +1821,7 @@ void __fastcall TTechWnd::N1Click(TObject *Sender)
     }
     if(opr_copy)
     {
-        // поиск начала и конца копирования
+        // РїРѕРёСЃРє РЅР°С‡Р°Р»Р° Рё РєРѕРЅС†Р° РєРѕРїРёСЂРѕРІР°РЅРёСЏ
         int start=0, end=0, count=0;
         bool s_find=false,e_find=false;
         for(int i=operations->Selection.Top;
@@ -1843,8 +1843,8 @@ void __fastcall TTechWnd::N1Click(TObject *Sender)
             }
         }
         if (s_find&&e_find)
-        {//защита от попытки скопировать не сохраненные данные
-            // подсчитать количество идентификаторов
+        {//Р·Р°С‰РёС‚Р° РѕС‚ РїРѕРїС‹С‚РєРё СЃРєРѕРїРёСЂРѕРІР°С‚СЊ РЅРµ СЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ РґР°РЅРЅС‹Рµ
+            // РїРѕРґСЃС‡РёС‚Р°С‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ
             String oldrow="";
             for(int i=start; i<=end; i++)
             {
@@ -1854,10 +1854,10 @@ void __fastcall TTechWnd::N1Click(TObject *Sender)
                     oldrow=operations->Cells[19][i];
                 }
             }
-            // копирование данных
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ РґР°РЅРЅС‹С…
             OperRow *opr=(OperRow *)operations->Cells[19][start].ToIntDef(0);
             if (opr)
-            {//проверка наличия операции для копирования (не муляж ли)
+            {//РїСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ РѕРїРµСЂР°С†РёРё РґР»СЏ РєРѕРїРёСЂРѕРІР°РЅРёСЏ (РЅРµ РјСѓР»СЏР¶ Р»Рё)
                 oldrow="";
                 int pos=0;
                 for(int i=1; i<=start; i++)
@@ -1874,7 +1874,7 @@ void __fastcall TTechWnd::N1Click(TObject *Sender)
     }
     if(nrm_copy)
     {
-        // получить копируемый диапазон
+        // РїРѕР»СѓС‡РёС‚СЊ РєРѕРїРёСЂСѓРµРјС‹Р№ РґРёР°РїР°Р·РѕРЅ
         int start=operations->Selection.Top, end=0, count=0;
         String opr=operations->Cells[19][start];
         for(end=start;
@@ -1882,10 +1882,10 @@ void __fastcall TTechWnd::N1Click(TObject *Sender)
             ==opr; end++){}
         end-- ;
         count=end-start+1;
-        // получить идентификатор копируемой нормы
+        // РїРѕР»СѓС‡РёС‚СЊ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РєРѕРїРёСЂСѓРµРјРѕР№ РЅРѕСЂРјС‹
         NrmRow *nrm=(NrmRow *)operations->Cells[20][start].ToIntDef(0);
         if(nrm)
-        {//проверка наличия нормы для копирования (не муляж ли) + защита от копирования не сохраненной нормы
+        {//РїСЂРѕРІРµСЂРєР° РЅР°Р»РёС‡РёСЏ РЅРѕСЂРјС‹ РґР»СЏ РєРѕРїРёСЂРѕРІР°РЅРёСЏ (РЅРµ РјСѓР»СЏР¶ Р»Рё) + Р·Р°С‰РёС‚Р° РѕС‚ РєРѕРїРёСЂРѕРІР°РЅРёСЏ РЅРµ СЃРѕС…СЂР°РЅРµРЅРЅРѕР№ РЅРѕСЂРјС‹
             N_buff=nrm->Copy_subline
                 (operations->Cells[21][start].ToIntDef(0), count);
         }
@@ -1900,10 +1900,10 @@ void __fastcall TTechWnd::N2Click(TObject *Sender)
     }
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"N2Click("+
         String((int)Sender)+")");
-    // вставить
+    // РІСЃС‚Р°РІРёС‚СЊ
     if(O_buff&&TehEdit&& !ReadOnly)
     {
-        // поиск места вставки
+        // РїРѕРёСЃРє РјРµСЃС‚Р° РІСЃС‚Р°РІРєРё
         int row=0;
         for(int i=operations->Selection.Bottom; i>=1&& !row; i--)
         {
@@ -1912,11 +1912,11 @@ void __fastcall TTechWnd::N2Click(TObject *Sender)
                 row=i;
             }
         }
-        // определение наличия массива для вставки
+        // РѕРїСЂРµРґРµР»РµРЅРёРµ РЅР°Р»РёС‡РёСЏ РјР°СЃСЃРёРІР° РґР»СЏ РІСЃС‚Р°РІРєРё
         if(Info->Get_Operations())
-        { // вставка в существующий массив
-            // определение позиции строки в массиве
-            // подсчитать количество видимых идентификаторов до позиции вставки
+        { // РІСЃС‚Р°РІРєР° РІ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РјР°СЃСЃРёРІ
+            // РѕРїСЂРµРґРµР»РµРЅРёРµ РїРѕР·РёС†РёРё СЃС‚СЂРѕРєРё РІ РјР°СЃСЃРёРІРµ
+            // РїРѕРґСЃС‡РёС‚Р°С‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ РІРёРґРёРјС‹С… РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ РґРѕ РїРѕР·РёС†РёРё РІСЃС‚Р°РІРєРё
             String oldrow="";
             int count=0;
             for(int i=1; i<=row; i++)
@@ -1928,7 +1928,7 @@ void __fastcall TTechWnd::N2Click(TObject *Sender)
                     oldrow=operations->Cells[19][i];
                 }
             }
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             OperRow *opr=Info->Get_Operations();
             opr->Insert_line(count, O_buff);
             if(row)
@@ -1941,7 +1941,7 @@ void __fastcall TTechWnd::N2Click(TObject *Sender)
             }
         }
         else
-        { // привязка буфера т.к. некуда вставлять
+        { // РїСЂРёРІСЏР·РєР° Р±СѓС„РµСЂР° С‚.Рє. РЅРµРєСѓРґР° РІСЃС‚Р°РІР»СЏС‚СЊ
             O_buff->UpdID(Info->Get_id(), O_buff, true);
             Info->Set_Operations(O_buff);
             ShowOperations();
@@ -1952,24 +1952,24 @@ void __fastcall TTechWnd::N2Click(TObject *Sender)
     {
         int row=operations->Row;
         if(operations->Cells[19][row]!="")
-        {//нормы нельзя вставлять в пустоту
+        {//РЅРѕСЂРјС‹ РЅРµР»СЊР·СЏ РІСЃС‚Р°РІР»СЏС‚СЊ РІ РїСѓСЃС‚РѕС‚Сѓ
             OperRow *opr=(OperRow *)operations->Cells[19][row].ToInt();
             NrmRow *nrm=opr->Get_nrm();
             if(nrm)
-            { // вставка
+            { // РІСЃС‚Р°РІРєР°
                 NrmRow *nrm=opr->Get_nrm();
                 nrm->Insert_line(operations->Cells[21][row].ToIntDef(0),
                     N_buff);
             }
             else
-            { // присоединение
+            { // РїСЂРёСЃРѕРµРґРёРЅРµРЅРёРµ
                 N_buff->ChangeOpID(opr->Get_OpID(), N_buff, true);
                 opr->Set_nrm(N_buff);
             }
             N_buff=0;
             UpdGreedData(row);
         }
-        // определить позицию вставки
+        // РѕРїСЂРµРґРµР»РёС‚СЊ РїРѕР·РёС†РёСЋ РІСЃС‚Р°РІРєРё
     }
 }
 
@@ -1977,7 +1977,7 @@ void __fastcall TTechWnd::N3Click(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"N3Click("+
         String((int)Sender)+")");
-    // удалить
+    // СѓРґР°Р»РёС‚СЊ
     bool opr_del=false, nrm_del=false;
     if(operations->Selection.Left<8)
     {
@@ -2016,8 +2016,8 @@ void __fastcall TTechWnd::N3Click(TObject *Sender)
             }
         }
         if (s_find&&e_find)
-        {//защита от попытки удалить не сохраненные данные
-            // подсчитать количество идентификаторов
+        {//Р·Р°С‰РёС‚Р° РѕС‚ РїРѕРїС‹С‚РєРё СѓРґР°Р»РёС‚СЊ РЅРµ СЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ РґР°РЅРЅС‹Рµ
+            // РїРѕРґСЃС‡РёС‚Р°С‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ
             String oldrow="";
             for(int i=start; i<=end; i++)
             {
@@ -2027,8 +2027,8 @@ void __fastcall TTechWnd::N3Click(TObject *Sender)
                     oldrow=operations->Cells[19][i];
                 }
             }
-            // удаление данных
-            //позиции начала
+            // СѓРґР°Р»РµРЅРёРµ РґР°РЅРЅС‹С…
+            //РїРѕР·РёС†РёРё РЅР°С‡Р°Р»Р°
             oldrow="";
             int pos=0;
             for(int i=1; i<=start; i++)
@@ -2041,7 +2041,7 @@ void __fastcall TTechWnd::N3Click(TObject *Sender)
             }
             OperRow *opr=Info->Get_Operations();
             if (opr)
-            {// защита от пустого указателя
+            {// Р·Р°С‰РёС‚Р° РѕС‚ РїСѓСЃС‚РѕРіРѕ СѓРєР°Р·Р°С‚РµР»СЏ
                 opr->Del_subline(opr, pos-1, count);
                 Info->Set_Operations(opr);
             }
@@ -2050,7 +2050,7 @@ void __fastcall TTechWnd::N3Click(TObject *Sender)
     }
     if(nrm_del)
     {
-        // получить удаляемый диапазон
+        // РїРѕР»СѓС‡РёС‚СЊ СѓРґР°Р»СЏРµРјС‹Р№ РґРёР°РїР°Р·РѕРЅ
         int start=operations->Selection.Top, end=0, count=0;
         String opr=operations->Cells[19][start];
         for(end=start;
@@ -2058,13 +2058,13 @@ void __fastcall TTechWnd::N3Click(TObject *Sender)
             ==opr; end++){}
         end-- ;
         count=end-start+1;
-        // получить идентификатор удаляемой нормы
+        // РїРѕР»СѓС‡РёС‚СЊ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СѓРґР°Р»СЏРµРјРѕР№ РЅРѕСЂРјС‹
         if(operations->Cells[19][start]!="")
         {
             OperRow *opr=(OperRow *)operations->Cells[19][start].ToInt();
             NrmRow *nrm=opr->Get_nrm();
             if(nrm)
-            {//защита от попытки удалить несохраненное
+            {//Р·Р°С‰РёС‚Р° РѕС‚ РїРѕРїС‹С‚РєРё СѓРґР°Р»РёС‚СЊ РЅРµСЃРѕС…СЂР°РЅРµРЅРЅРѕРµ
                 nrm->Del_subline(nrm,
                     operations->Cells[21][start].ToIntDef(0), count);
                 opr->Set_nrm(nrm);
@@ -2078,7 +2078,7 @@ void __fastcall TTechWnd::N4Click(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"N4Click("+
         String((int)Sender)+")");
-    // вырезать
+    // РІС‹СЂРµР·Р°С‚СЊ
     N1Click(Sender);
     N3Click(Sender);
 }
@@ -2087,7 +2087,7 @@ void __fastcall TTechWnd::N5Click(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"N5Click("+
         String((int)Sender)+")");
-    // обновить
+    // РѕР±РЅРѕРІРёС‚СЊ
     ShowDetInfo();
     ShowOperations();
 }
@@ -2114,7 +2114,7 @@ void __fastcall TTechWnd::PABPopup(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"PABPopup("+
         String((int)Sender)+")");
-    // вставить
+    // РІСЃС‚Р°РІРёС‚СЊ
     if(!O_buff&& !N_buff)
     {
         N2->Enabled=false;
@@ -2130,8 +2130,8 @@ void __fastcall TTechWnd::PABPopup(TObject *Sender)
             N2->Enabled=false;
         }
     }
-    // вырезать
-    // удалить
+    // РІС‹СЂРµР·Р°С‚СЊ
+    // СѓРґР°Р»РёС‚СЊ
     if((TehEdit||NormEdit)&& !ReadOnly)
     {
         N3->Enabled=true;
@@ -2146,7 +2146,7 @@ void __fastcall TTechWnd::PABPopup(TObject *Sender)
     }
 }
 
-// символы
+// СЃРёРјРІРѕР»С‹
 void __fastcall TTechWnd::C1Click(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"C1Click("+
@@ -2169,7 +2169,7 @@ void __fastcall TTechWnd::C1Click(TObject *Sender)
     }
 }
 
-// редактирование переходов
+// СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїРµСЂРµС…РѕРґРѕРІ
 void __fastcall TTechWnd::perexodChange(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
@@ -2199,22 +2199,22 @@ void __fastcall TTechWnd::perexodExit(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
         "perexodExit("+String((int)Sender)+")");
-    // сохранение переходов
+    // СЃРѕС…СЂР°РЅРµРЅРёРµ РїРµСЂРµС…РѕРґРѕРІ
     if(operations->Cells[19][operations->Row]!="")
-    {//операция сохранена (есть к чему цеплять)
+    {//РѕРїРµСЂР°С†РёСЏ СЃРѕС…СЂР°РЅРµРЅР° (РµСЃС‚СЊ Рє С‡РµРјСѓ С†РµРїР»СЏС‚СЊ)
         OperRow *row=(OperRow *)operations->Cells[19][operations->Row].ToInt();
-        PerexRow *per=row->Get_perex(); //список переходов исходный (он весь удаляется и к нему цепляются новые)
+        PerexRow *per=row->Get_perex(); //СЃРїРёСЃРѕРє РїРµСЂРµС…РѕРґРѕРІ РёСЃС…РѕРґРЅС‹Р№ (РѕРЅ РІРµСЃСЊ СѓРґР°Р»СЏРµС‚СЃСЏ Рё Рє РЅРµРјСѓ С†РµРїР»СЏСЋС‚СЃСЏ РЅРѕРІС‹Рµ)
         PerexRow *pertmp=0;
         if(per)
-        {//удаление старого списка
-         //опасность получить нуль когда список самоуничтожится(нечего будет чистить в базе)
+        {//СѓРґР°Р»РµРЅРёРµ СЃС‚Р°СЂРѕРіРѕ СЃРїРёСЃРєР°
+         //РѕРїР°СЃРЅРѕСЃС‚СЊ РїРѕР»СѓС‡РёС‚СЊ РЅСѓР»СЊ РєРѕРіРґР° СЃРїРёСЃРѕРє СЃР°РјРѕСѓРЅРёС‡С‚РѕР¶РёС‚СЃСЏ(РЅРµС‡РµРіРѕ Р±СѓРґРµС‚ С‡РёСЃС‚РёС‚СЊ РІ Р±Р°Р·Рµ)
             per->Del_subline(per, 0, per->Count());
         }
         if(perexod->Lines->Count)
-        {//проверка на наличие строк для сохранения
+        {//РїСЂРѕРІРµСЂРєР° РЅР° РЅР°Р»РёС‡РёРµ СЃС‚СЂРѕРє РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ
             perexod->WordWrap=false;
             for(int i=0; i<perexod->Lines->Count; i++)
-            {//наполнение тмп массива перехдов
+            {//РЅР°РїРѕР»РЅРµРЅРёРµ С‚РјРї РјР°СЃСЃРёРІР° РїРµСЂРµС…РґРѕРІ
                 if(perexod->Lines->operator[](i)!="")
                 {
                     pertmp=new PerexRow(DB, row->Get_OpID(), 0,
@@ -2222,12 +2222,12 @@ void __fastcall TTechWnd::perexodExit(TObject *Sender)
                 }
             }
             if(per)
-            { // обработка сущестующих переходов
+            { // РѕР±СЂР°Р±РѕС‚РєР° СЃСѓС‰РµСЃС‚СѓСЋС‰РёС… РїРµСЂРµС…РѕРґРѕРІ
                 per->Insert_line(0, pertmp);
                 row->Set_perex(per->Get_First());
             }
             else
-            { // создание новой цепочки переходов
+            { // СЃРѕР·РґР°РЅРёРµ РЅРѕРІРѕР№ С†РµРїРѕС‡РєРё РїРµСЂРµС…РѕРґРѕРІ
                 if(pertmp)
                 {
                     row->Set_perex(pertmp->Get_First());
@@ -2253,7 +2253,7 @@ void __fastcall TTechWnd::perexodExit(TObject *Sender)
     }
 }
 
-// редактирование инструмента
+// СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°
 void __fastcall TTechWnd::instrumDblClick(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
@@ -2304,39 +2304,39 @@ void __fastcall TTechWnd::instrumExit(TObject *Sender)
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
         "instrumExit("+String((int)Sender)+")");
     if(operations->Cells[19][operations->Row]!=""&&instrum->RowCount>=2)
-    {//операция сохранена (есть к чему цеплять)ну и список инструмента не пуст))
+    {//РѕРїРµСЂР°С†РёСЏ СЃРѕС…СЂР°РЅРµРЅР° (РµСЃС‚СЊ Рє С‡РµРјСѓ С†РµРїР»СЏС‚СЊ)РЅСѓ Рё СЃРїРёСЃРѕРє РёРЅСЃС‚СЂСѓРјРµРЅС‚Р° РЅРµ РїСѓСЃС‚))
         OperRow *row=(OperRow *)operations->Cells[19][operations->Row].ToIntDef(0);
         InstrumRow *ins=row->Get_instrum();
         InstrumRow *instmp=0;
         for(int i=1; i<instrum->RowCount-1; i++)
-        {//наполнение временного массива
+        {//РЅР°РїРѕР»РЅРµРЅРёРµ РІСЂРµРјРµРЅРЅРѕРіРѕ РјР°СЃСЃРёРІР°
             instmp=new InstrumRow(DB, row->Get_OpID(), 0, instrum->Cells[2][i],
                 instrum->Cells[1][i], instmp);
         }
         if(ins)
-        {//опасность паолучить нуль после удаления
+        {//РѕРїР°СЃРЅРѕСЃС‚СЊ РїР°РѕР»СѓС‡РёС‚СЊ РЅСѓР»СЊ РїРѕСЃР»Рµ СѓРґР°Р»РµРЅРёСЏ
             ins->Del_subline(ins, 0, ins->Count());
         }
         if(instmp)
         {
             if(ins)
-            { // обработка сущестующих переходов
+            { // РѕР±СЂР°Р±РѕС‚РєР° СЃСѓС‰РµСЃС‚СѓСЋС‰РёС… РїРµСЂРµС…РѕРґРѕРІ
                 ins->Insert_line(0, instmp);
                 row->Set_instrum(ins->Get_First());
             }
             else
-            { // создание новой цепочки переходов
+            { // СЃРѕР·РґР°РЅРёРµ РЅРѕРІРѕР№ С†РµРїРѕС‡РєРё РїРµСЂРµС…РѕРґРѕРІ
                 row->Set_instrum(instmp->Get_First());
             }
         }
         else
         {
             if(ins)
-            { // обработка сущестующих переходов
+            { // РѕР±СЂР°Р±РѕС‚РєР° СЃСѓС‰РµСЃС‚СѓСЋС‰РёС… РїРµСЂРµС…РѕРґРѕРІ
                 row->Set_instrum(ins->Get_First());
             }
             else
-            { // создание новой цепочки переходов
+            { // СЃРѕР·РґР°РЅРёРµ РЅРѕРІРѕР№ С†РµРїРѕС‡РєРё РїРµСЂРµС…РѕРґРѕРІ
                 row->Set_instrum(0);
             }
         }
@@ -2344,7 +2344,7 @@ void __fastcall TTechWnd::instrumExit(TObject *Sender)
     }
 }
 
-// тара и строповка
+// С‚Р°СЂР° Рё СЃС‚СЂРѕРїРѕРІРєР°
 void __fastcall TTechWnd::taraDblClick(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
@@ -2402,7 +2402,7 @@ void __fastcall TTechWnd::stropDblClick(TObject *Sender)
     }
 }
 
-// заготовки
+// Р·Р°РіРѕС‚РѕРІРєРё
 void __fastcall TTechWnd::kzDblClick(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+"kzDblClick("+
@@ -2429,7 +2429,7 @@ void __fastcall TTechWnd::kzDblClick(TObject *Sender)
     }
 }
 
-// материал
+// РјР°С‚РµСЂРёР°Р»
 void __fastcall TTechWnd::obmDblClick(TObject *Sender)
 {
     log.push_back(Time().TimeString()+"--"+String((int)this)+"--"+
@@ -2447,7 +2447,7 @@ void __fastcall TTechWnd::obmDblClick(TObject *Sender)
     }
 }
 
-// перетаскивание строк
+// РїРµСЂРµС‚Р°СЃРєРёРІР°РЅРёРµ СЃС‚СЂРѕРє
 void __fastcall TTechWnd::operationsRowMoved(TObject *Sender, int FromIndex,
     int ToIndex)
 {
@@ -2458,7 +2458,7 @@ void __fastcall TTechWnd::operationsRowMoved(TObject *Sender, int FromIndex,
     {
         if(operations->Cells[19][FromIndex]!="")
         {
-            // вычисление текущей позиции в массиве
+            // РІС‹С‡РёСЃР»РµРЅРёРµ С‚РµРєСѓС‰РµР№ РїРѕР·РёС†РёРё РІ РјР°СЃСЃРёРІРµ
             int from=0, to=0;
             String oldrow="";
             bool f_find=false,t_find=false;
@@ -2476,7 +2476,7 @@ void __fastcall TTechWnd::operationsRowMoved(TObject *Sender, int FromIndex,
             {
                 from-- ;
             }
-            // вычисление новой позиции в масиве
+            // РІС‹С‡РёСЃР»РµРЅРёРµ РЅРѕРІРѕР№ РїРѕР·РёС†РёРё РІ РјР°СЃРёРІРµ
             oldrow="";
             for(int i=1; i<=ToIndex; i++)
             {
@@ -2492,17 +2492,17 @@ void __fastcall TTechWnd::operationsRowMoved(TObject *Sender, int FromIndex,
             {
                 to-- ;
             }
-            // замена строк
+            // Р·Р°РјРµРЅР° СЃС‚СЂРѕРє
             if (f_find&&t_find)
             {
                 Info->Get_Operations()->Move_items(from, 1, to);
             }
         }
-        ShowOperations(); // обновление сетки
+        ShowOperations(); // РѕР±РЅРѕРІР»РµРЅРёРµ СЃРµС‚РєРё
     }
 }
 
-// шифт и контрл
+// С€РёС„С‚ Рё РєРѕРЅС‚СЂР»
 void __fastcall TTechWnd::operationsKeyDown(TObject *Sender, WORD &Key,
     TShiftState Shift)
 {
@@ -2526,7 +2526,7 @@ void __fastcall TTechWnd::TimerTimer(TObject *Sender)
     {
         Info->CheckAccept();
         ReadOnly= !(Info->Get_Access()*TehSave*(TehEdit+NormEdit));
-        access->Caption= !ReadOnly?"Полный доступ":"Только чтение";
+        access->Caption= !ReadOnly?"РџРѕР»РЅС‹Р№ РґРѕСЃС‚СѓРї":"РўРѕР»СЊРєРѕ С‡С‚РµРЅРёРµ";
     }
 }
 // ---------------------------------------------------------------------------

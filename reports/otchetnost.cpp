@@ -22,7 +22,7 @@ cReports::cReports(cSQL *r)
 cReports::~cReports()
 {
 }
-// отчеты
+// РѕС‚С‡РµС‚С‹
 
 bool cReports::CreateReport(int type, String param)
 {
@@ -183,7 +183,7 @@ void cReports::Showlist(TADOQuery *rez)
 {
     if(rez==0)
     {
-        ShowMessage("Ошибка формирования запроса/Пустой набор данных.");
+        ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°/РџСѓСЃС‚РѕР№ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С….");
         return;
     }
     XL->Connect();
@@ -201,7 +201,7 @@ void cReports::SQL_To_XL(TADOQuery *rez)
 {
     if(rez==0)
     {
-        ShowMessage("Ошибка формирования запроса/Пустой набор данных.");
+        ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°/РџСѓСЃС‚РѕР№ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С….");
         return;
     }
     int i;
@@ -236,12 +236,12 @@ void cReports::PlanPrDet(String obd, String kol)
     XL->DisplayAlerts(false);
     //XL->Visible(true);
     OpenTemplate(file);
-    // переработака кода...
+    // РїРµСЂРµСЂР°Р±РѕС‚Р°РєР° РєРѕРґР°...
     int Lcount=0, RowMin, RowMax, RowCount=0, TitleRow=3, prizn=0;
     double itog=0, itogPZ=0;
     bool newlist;
     TADOQuery *rez=0;
-    // Создание первого листа отчета
+    // РЎРѕР·РґР°РЅРёРµ РїРµСЂРІРѕРіРѕ Р»РёСЃС‚Р° РѕС‚С‡РµС‚Р°
 
     if(pp_params->P_pr->Checked)
     {
@@ -249,43 +249,43 @@ void cReports::PlanPrDet(String obd, String kol)
         pp_params->ML->Enabled=!parametr->cex->Text.Length();
         if(rez==0)
         {
-            ShowMessage("Ошибка формирования запроса");
+            ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
             return;
         }
         if(!rez->RecordCount)
         {
-            ShowMessage("Пустой набор данных.");
+            ShowMessage("РџСѓСЃС‚РѕР№ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С….");
             delete rez;
             return;
-        } // активация
+        } // Р°РєС‚РёРІР°С†РёСЏ
         newlist=true;
         rez->First();
-        while(!rez->Eof) // начало вывода на лист
+        while(!rez->Eof) // РЅР°С‡Р°Р»Рѕ РІС‹РІРѕРґР° РЅР° Р»РёСЃС‚
         {
             if(newlist)
             {
                 XL->Sheet_Copy(XL->GetSheet(Lcount+1), XL->GetSheet(Lcount+1));
-                // установить смену таргета на полученный лист
+                // СѓСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРјРµРЅСѓ С‚Р°СЂРіРµС‚Р° РЅР° РїРѕР»СѓС‡РµРЅРЅС‹Р№ Р»РёСЃС‚
                 TitleRow=3;
                 Lcount++ ;
                 XL->SetActiveSheet(XL->GetSheet(Lcount));
                 XL->Set_Sheet_Name(XL->GetSheet(Lcount),
                     parametr->zak->Text+"-"+IntToStr(Lcount));
-                XL->toCells(1, 1, "АСУ ЯЗПМ "+Date()+
-                    "     ПЛАН ПРОИЗВОДСТВА ДЕТАЛЕЙ, СБ. ЕДЕНИЦ     ЦЕХУ "+
-                    parametr->cex->Text+"     ПО ЗАКАЗУ "+parametr->zak->Text+
-                    "     ПАРТИИ "+parametr->part->Text+
-                    "     Ф. 140005     ЛИСТ "+IntToStr(Lcount));
+                XL->toCells(1, 1, "РђРЎРЈ РЇР—РџРњ "+Date()+
+                    "     РџР›РђРќ РџР РћРР—Р’РћР”РЎРўР’Рђ Р”Р•РўРђР›Р•Р™, РЎР‘. Р•Р”Р•РќРР¦     Р¦Р•РҐРЈ "+
+                    parametr->cex->Text+"     РџРћ Р—РђРљРђР—РЈ "+parametr->zak->Text+
+                    "     РџРђР РўРР "+parametr->part->Text+
+                    "     Р¤. 140005     Р›РРЎРў "+IntToStr(Lcount));
                 newlist=false;
                 RowCount=1;
-                // очистка строк листа
+                // РѕС‡РёСЃС‚РєР° СЃС‚СЂРѕРє Р»РёСЃС‚Р°
                 XL->Range_Copy(XL->GetRows(7, 9));
                 XL->Range_Paste(XL->GetRows(4, 6));
             }
-            // вычисление позиции вставки
+            // РІС‹С‡РёСЃР»РµРЅРёРµ РїРѕР·РёС†РёРё РІСЃС‚Р°РІРєРё
             RowMin=TitleRow+RowCount*3-2;
             RowMax=TitleRow+RowCount*3;
-            // проверка признака группировки
+            // РїСЂРѕРІРµСЂРєР° РїСЂРёР·РЅР°РєР° РіСЂСѓРїРїРёСЂРѕРІРєРё
             if(prizn<rez->FieldByName("prizn")->Value)
             {
                 prizn=rez->FieldByName("prizn")->Value;
@@ -298,25 +298,25 @@ void cReports::PlanPrDet(String obd, String kol)
                 case 1:
                     {
                         XL->toCells(RowMin-1, 3,
-                            "Детати кот. сборок и кот. сборки");
+                            "Р”РµС‚Р°С‚Рё РєРѕС‚. СЃР±РѕСЂРѕРє Рё РєРѕС‚. СЃР±РѕСЂРєРё");
                         break;
                     }
                 case 2:
                     {
                         XL->toCells(RowMin-1, 3,
-                            "Оригинальные, заим., обезлич. детали");
+                            "РћСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ, Р·Р°РёРј., РѕР±РµР·Р»РёС‡. РґРµС‚Р°Р»Рё");
                         break;
                     }
                 default:
                     break;
                 }
             }
-            // копирование
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ
             XL->Sheet_activate(XL->GetSheet(Lcount+1));
             XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+1), 4, 6));
             XL->Sheet_activate();
             XL->Range_Paste(XL->GetRows(RowMin, RowMax));
-            // заполнение строки
+            // Р·Р°РїРѕР»РЅРµРЅРёРµ СЃС‚СЂРѕРєРё
             RowCount++ ;
             XL->toCells(RowMin, 1, IntToStr(rez->RecNo));
             XL->toCells(RowMax-1, 1, rez->FieldByName("namd")->Value);
@@ -341,12 +341,12 @@ void cReports::PlanPrDet(String obd, String kol)
             }
             rez->Next();
         }
-        XL->toCells(RowMax+1, 4, "ИТОГО ПО ЗАКАЗУ: ");
+        XL->toCells(RowMax+1, 4, "РРўРћР“Рћ РџРћ Р—РђРљРђР—РЈ: ");
         XL->toCells(RowMax+1, 5, FloatToStr(itog));
-        XL->toCells(RowMax+2, 4, "ИТОГО ПО ЗАКАЗУ Тпз: ");
+        XL->toCells(RowMax+2, 4, "РРўРћР“Рћ РџРћ Р—РђРљРђР—РЈ РўРїР·: ");
         XL->toCells(RowMax+2, 5, FloatToStr(itogPZ));
     }
-    /* создание операционки */
+    /* СЃРѕР·РґР°РЅРёРµ РѕРїРµСЂР°С†РёРѕРЅРєРё */
     if (pp_params->trim_file)
     {
         TrimFile(pp_params->save_to_file,pp_params->file_ext,file,Lcount,pp_params->lists_in_file);
@@ -405,17 +405,17 @@ int cReports::AddML(String obd, String name, String name_mat, String prof_mat,
     int page=0, kolzag=0, row_start, row_end=62;
     String Range;
     bool newpage=true;
-    // запрос на данные
+    // Р·Р°РїСЂРѕСЃ РЅР° РґР°РЅРЅС‹Рµ
 
     TADOQuery *rez=DB->SendSQL("Call temporary_tables.Marsh_list ('"+obd+"')");
     if(rez==0)
     {
-        ShowMessage("Ошибка формирования запроса");
+        ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
         return Lcount;
     }
     while(!rez->Eof)
     {
-        // если есть что выводить то
+        // РµСЃР»Рё РµСЃС‚СЊ С‡С‚Рѕ РІС‹РІРѕРґРёС‚СЊ С‚Рѕ
         if(newpage)
         {
             XL->Sheet_Copy(XL->GetSheet(Lcount+2), XL->GetSheet(Lcount+1),
@@ -424,23 +424,23 @@ int cReports::AddML(String obd, String name, String name_mat, String prof_mat,
             page++ ;
             XL->SetActiveSheet(XL->GetSheet(Lcount));
             XL->Set_Sheet_Name(XL->GetSheet(Lcount),
-                "МЛ-"+IntToStr(mlnumber)+"-"+IntToStr(page));
+                "РњР›-"+IntToStr(mlnumber)+"-"+IntToStr(page));
             if(page==1)
             {
-                // удаление лишнего/
+                // СѓРґР°Р»РµРЅРёРµ Р»РёС€РЅРµРіРѕ/
                 XL->Range_Copy(XL->GetRows(22, 26));
                 XL->Range_Paste(XL->GetRows(18, 21));
-                // расчет данных для записи/
+                // СЂР°СЃС‡РµС‚ РґР°РЅРЅС‹С… РґР»СЏ Р·Р°РїРёСЃРё/
                 if(rez->FieldByName("kdz")->Value.operator int())
                 {
                     kolzag=ceil(double(kol)/rez->FieldByName("kdz")
                         ->Value.operator int());
                 }
-                // запись шапки/
-                XL->toCells(3, 3, "К М/Л "+IntToStr(mlnumber)+" от "+Date()+" "+
+                // Р·Р°РїРёСЃСЊ С€Р°РїРєРё/
+                XL->toCells(3, 3, "Рљ Рњ/Р› "+IntToStr(mlnumber)+" РѕС‚ "+Date()+" "+
                     VinToGost(obd)+" "+parametr->zak->Text+" "+
                     parametr->part->Text);
-                XL->toCells(3, 14, "К М/Л "+IntToStr(mlnumber)+" от "+Date()+
+                XL->toCells(3, 14, "Рљ Рњ/Р› "+IntToStr(mlnumber)+" РѕС‚ "+Date()+
                     " "+VinToGost(obd)+" "+parametr->zak->Text+" "+
                     parametr->part->Text);
                 XL->toCells(4, 3, name);
@@ -471,7 +471,7 @@ int cReports::AddML(String obd, String name, String name_mat, String prof_mat,
                 XL->toCells(11, 12, VinToGost(obd));
                 XL->toCells(11, 10, parametr->part->Text);
                 XL->toCells(11, 8, parametr->zak->Text);
-                XL->toCells(11, 6, "от "+Date());
+                XL->toCells(11, 6, "РѕС‚ "+Date());
                 XL->toCells(11, 5, IntToStr(mlnumber));
 
                 XL->toCells(12, 1, name);
@@ -483,7 +483,7 @@ int cReports::AddML(String obd, String name, String name_mat, String prof_mat,
             }
             else
             {
-                // стирание шапки первого листа остается только шапка таблиицы/
+                // СЃС‚РёСЂР°РЅРёРµ С€Р°РїРєРё РїРµСЂРІРѕРіРѕ Р»РёСЃС‚Р° РѕСЃС‚Р°РµС‚СЃСЏ С‚РѕР»СЊРєРѕ С€Р°РїРєР° С‚Р°Р±Р»РёРёС†С‹/
                 XL->Range_Copy(XL->GetRows(22, 35));
                 XL->Range_Paste(XL->GetRows(2, 15));
                 XL->Range_Copy(XL->GetRows(16, 17));
@@ -499,12 +499,12 @@ int cReports::AddML(String obd, String name, String name_mat, String prof_mat,
             XL->toCells(1, 23, IntToStr(page));
             newpage=false;
         }
-        // копирование
+        // РєРѕРїРёСЂРѕРІР°РЅРёРµ
         XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+2), 18, 21));
-        // вставка
+        // РІСЃС‚Р°РІРєР°
         XL->Sheet_activate();
         XL->Range_Paste(XL->GetRows(row_start, row_start+4));
-        // вывод данных/
+        // РІС‹РІРѕРґ РґР°РЅРЅС‹С…/
         XL->toCells(row_start, 1, rez->FieldByName("ceu")->Value);
         XL->toCells(row_start+2, 1, rez->FieldByName("opr")->Value);
         XL->toCells(row_start, 2, Trim(rez->FieldByName("obo")->Value)+
@@ -537,21 +537,21 @@ int cReports::AddReport(String obd, String kol, int Lcount)
             "',"+kol+")");
         if(rez==0)
         {
-            ShowMessage("Ошибка формирования запроса");
+            ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
             return Lcount;
         }
         if(!rez->RecordCount)
         {
-            ShowMessage("Пустой набор данных.");
+            ShowMessage("РџСѓСЃС‚РѕР№ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С….");
             delete rez;
             return Lcount;
-        } // активация
+        } // Р°РєС‚РёРІР°С†РёСЏ
         int i;
         XL->Sheet_activate(XL->GetSheet(Lcount+1));
         XL->Sheet_Add(XL->GetSheets());
         Lcount++ ;
         XL->SetActiveSheet(XL->GetSheet(Lcount));
-        XL->Set_Sheet_Name(XL->GetSheet(Lcount), "Трудоемкость по цехам");
+        XL->Set_Sheet_Name(XL->GetSheet(Lcount), "РўСЂСѓРґРѕРµРјРєРѕСЃС‚СЊ РїРѕ С†РµС…Р°Рј");
         SQL_To_XL(rez);
         delete rez;
     }
@@ -562,21 +562,21 @@ int cReports::AddReport(String obd, String kol, int Lcount)
             "',"+kol+")");
         if(rez==0)
         {
-            ShowMessage("Ошибка формирования запроса");
+            ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
             return Lcount;
         }
         if(!rez->RecordCount)
         {
-            ShowMessage("Пустой набор данных.");
+            ShowMessage("РџСѓСЃС‚РѕР№ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С….");
             delete rez;
             return Lcount;
-        } // активация
+        } // Р°РєС‚РёРІР°С†РёСЏ
         XL->Sheet_activate(XL->GetSheet(Lcount+1));
         XL->Sheet_Add(XL->GetSheets());
         Lcount++ ;
         XL->SetActiveSheet(XL->GetSheet(Lcount));
         XL->Set_Sheet_Name(XL->GetSheet(Lcount),
-            "Трудоемкость по оборудованию");
+            "РўСЂСѓРґРѕРµРјРєРѕСЃС‚СЊ РїРѕ РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЋ");
         SQL_To_XL(rez);
         delete rez;
     }
@@ -586,7 +586,7 @@ int cReports::AddReport(String obd, String kol, int Lcount)
 void cReports::OpenTemplate (AnsiString templ)
 {
     XL->SetActiveBooks(XL->Books_Open(templ));
-    // Инициализация переменных указателей на итемы екселя
+    // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїРµСЂРµРјРµРЅРЅС‹С… СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° РёС‚РµРјС‹ РµРєСЃРµР»СЏ
     XL->SetActiveBook(XL->GetFirstBook());
     XL->SetActiveSheets(XL->GetSheets());
     XL->SetActiveSheet(XL->GetFirstSheet());
@@ -633,16 +633,16 @@ void cReports::ShowDetInside(TADOQuery *rez)
 {
     if(rez==0)
     {
-        ShowMessage("Ошибка формирования запроса");
+        ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
         return;
     }
     if(!rez->RecordCount)
     {
-        ShowMessage("Пустой набор данных.");
+        ShowMessage("РџСѓСЃС‚РѕР№ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С….");
         delete rez;
         return;
-    } // активация
-    // активация
+    } // Р°РєС‚РёРІР°С†РёСЏ
+    // Р°РєС‚РёРІР°С†РёСЏ
     int row;
     XL->Connect();
     XL->DisplayAlerts(false);
@@ -651,15 +651,15 @@ void cReports::ShowDetInside(TADOQuery *rez)
     XL->SetActiveSheets(XL->GetSheets());
     XL->SetActiveSheet(XL->GetFirstSheet());
 
-    XL->toCells(2, 1, "Обозначение");
-    XL->toCells(2, 2, "Наименование");
-    XL->toCells(2, 3, "Количество");
-    XL->toCells(2, 4, "Узел");
-    XL->toCells(1, 1, "Состав");
-    XL->Range_Border(XL->GetRange(2, 1, 2, 4), 7, 1, 3, 1); // внешние левые
-    XL->Range_Border(XL->GetRange(2, 1, 2, 4), 10, 1, 3, 1); // внешние правые
-    XL->Range_Border(XL->GetRange(2, 1, 2, 4), 8, 1, 3, 1); // внешняя вернняя
-    XL->Range_Border(XL->GetRange(2, 1, 2, 4), 9, 1, 3, 1); // внешняя нижняя
+    XL->toCells(2, 1, "РћР±РѕР·РЅР°С‡РµРЅРёРµ");
+    XL->toCells(2, 2, "РќР°РёРјРµРЅРѕРІР°РЅРёРµ");
+    XL->toCells(2, 3, "РљРѕР»РёС‡РµСЃС‚РІРѕ");
+    XL->toCells(2, 4, "РЈР·РµР»");
+    XL->toCells(1, 1, "РЎРѕСЃС‚Р°РІ");
+    XL->Range_Border(XL->GetRange(2, 1, 2, 4), 7, 1, 3, 1); // РІРЅРµС€РЅРёРµ Р»РµРІС‹Рµ
+    XL->Range_Border(XL->GetRange(2, 1, 2, 4), 10, 1, 3, 1); // РІРЅРµС€РЅРёРµ РїСЂР°РІС‹Рµ
+    XL->Range_Border(XL->GetRange(2, 1, 2, 4), 8, 1, 3, 1); // РІРЅРµС€РЅСЏСЏ РІРµСЂРЅРЅСЏСЏ
+    XL->Range_Border(XL->GetRange(2, 1, 2, 4), 9, 1, 3, 1); // РІРЅРµС€РЅСЏСЏ РЅРёР¶РЅСЏСЏ
     XL->HorizontalAlignment(XL->GetRange(1, 1, 1, 4), -4108);
     XL->Range_ColWidth(XL->GetRange(1, 1, 1, 1), 30);
     XL->Range_ColWidth(XL->GetRange(1, 2, 1, 2), 50);
@@ -680,7 +680,7 @@ void cReports::ShowDetInside(TADOQuery *rez)
             {
                 if (count!=1)
                 {
-                    XL->toCells(row, 2, "Итого");
+                    XL->toCells(row, 2, "РС‚РѕРіРѕ");
                     XL->toCells(row, 3, kol);
                     row++;
                 }
@@ -707,16 +707,16 @@ void cReports::ShowDetInside(TADOQuery *rez)
     delete rez;
     XL->Range_Merge(XL->GetRange(1, 1, 1, 4));
     XL->Range_Border(XL->GetRange(3, 1, row-1, 4), 12, 1, 2, 1);
-    // внутренние горизонталтьные
-    XL->Range_Border(XL->GetRange(3, 1, row-1, 4), 7, 1, 3, 1); // внешние левые
+    // РІРЅСѓС‚СЂРµРЅРЅРёРµ РіРѕСЂРёР·РѕРЅС‚Р°Р»С‚СЊРЅС‹Рµ
+    XL->Range_Border(XL->GetRange(3, 1, row-1, 4), 7, 1, 3, 1); // РІРЅРµС€РЅРёРµ Р»РµРІС‹Рµ
     XL->Range_Border(XL->GetRange(3, 1, row-1, 4), 10, 1, 3, 1);
-    // внешние правые
+    // РІРЅРµС€РЅРёРµ РїСЂР°РІС‹Рµ
     XL->Range_Border(XL->GetRange(3, 1, row-1, 4), 8, 1, 3, 1);
-    // внешняя вернняя
+    // РІРЅРµС€РЅСЏСЏ РІРµСЂРЅРЅСЏСЏ
     XL->Range_Border(XL->GetRange(3, 1, row-1, 4), 9, 1, 3, 1);
-    // внешняя нижняя
+    // РІРЅРµС€РЅСЏСЏ РЅРёР¶РЅСЏСЏ
     XL->Range_Border(XL->GetRange(1, 1, row-1, 4), 11, 1, 3, 1);
-    // внутренние вертикальные
+    // РІРЅСѓС‚СЂРµРЅРЅРёРµ РІРµСЂС‚РёРєР°Р»СЊРЅС‹Рµ
     XL->Visible(true);
 }
 
@@ -724,16 +724,16 @@ void cReports::ShowSostIzd(TADOQuery *rez)
 {
     if(rez==0)
     {
-        ShowMessage("Ошибка формирования запроса");
+        ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
         return;
     }
     if(!rez->RecordCount)
     {
-        ShowMessage("Пустой набор данных.");
+        ShowMessage("РџСѓСЃС‚РѕР№ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С….");
         delete rez;
         return;
     }
-    // активация
+    // Р°РєС‚РёРІР°С†РёСЏ
     int row;
     XL->Connect();
     XL->DisplayAlerts(false);
@@ -741,35 +741,35 @@ void cReports::ShowSostIzd(TADOQuery *rez)
     XL->SetActiveBook(XL->GetFirstBook());
     XL->SetActiveSheets(XL->GetSheets());
     XL->SetActiveSheet(XL->GetFirstSheet());
-    XL->toCells(2, 1, "Обозначение");
-    XL->toCells(2, 2, "Наименование");
-    XL->toCells(2, 3, "Количество");
-    XL->toCells(1, 1, "Состав");
-    XL->Range_Border(XL->GetRange(2, 1, 2, 3), 7, 1, 3, 1); // внешние левые
-    XL->Range_Border(XL->GetRange(2, 1, 2, 3), 10, 1, 3, 1); // внешние правые
-    XL->Range_Border(XL->GetRange(2, 1, 2, 3), 8, 1, 3, 1); // внешняя вернняя
-    XL->Range_Border(XL->GetRange(2, 1, 2, 3), 9, 1, 3, 1); // внешняя нижняя
+    XL->toCells(2, 1, "РћР±РѕР·РЅР°С‡РµРЅРёРµ");
+    XL->toCells(2, 2, "РќР°РёРјРµРЅРѕРІР°РЅРёРµ");
+    XL->toCells(2, 3, "РљРѕР»РёС‡РµСЃС‚РІРѕ");
+    XL->toCells(1, 1, "РЎРѕСЃС‚Р°РІ");
+    XL->Range_Border(XL->GetRange(2, 1, 2, 3), 7, 1, 3, 1); // РІРЅРµС€РЅРёРµ Р»РµРІС‹Рµ
+    XL->Range_Border(XL->GetRange(2, 1, 2, 3), 10, 1, 3, 1); // РІРЅРµС€РЅРёРµ РїСЂР°РІС‹Рµ
+    XL->Range_Border(XL->GetRange(2, 1, 2, 3), 8, 1, 3, 1); // РІРЅРµС€РЅСЏСЏ РІРµСЂРЅРЅСЏСЏ
+    XL->Range_Border(XL->GetRange(2, 1, 2, 3), 9, 1, 3, 1); // РІРЅРµС€РЅСЏСЏ РЅРёР¶РЅСЏСЏ
 
     XL->Range_ColWidth(XL->GetRange(1, 1, 1, 1), 30);
     XL->Range_ColWidth(XL->GetRange(1, 2, 1, 2), 50);
     XL->Range_ColWidth(XL->GetRange(1, 3, 1, 4), 15);
     XL->Set_format(XL->GetColumn(1), "\@");
     row=3;
-    SostIzd(rez, row, 0, ""); // вывод массива данных  рекурсивный
+    SostIzd(rez, row, 0, ""); // РІС‹РІРѕРґ РјР°СЃСЃРёРІР° РґР°РЅРЅС‹С…  СЂРµРєСѓСЂСЃРёРІРЅС‹Р№
     XL->Range_Merge(XL->GetRange(1, 1, 1, 3));
     XL->HorizontalAlignment(XL->GetRange(1, 1, 1, 3), -4108);
-    /* тут рисовка сетки на полуившийся лист */
+    /* С‚СѓС‚ СЂРёСЃРѕРІРєР° СЃРµС‚РєРё РЅР° РїРѕР»СѓРёРІС€РёР№СЃСЏ Р»РёСЃС‚ */
     XL->Range_Border(XL->GetRange(3, 1, row-1, 3), 12, 1, 2, 1);
-    // внутренние горизонталтьные
-    XL->Range_Border(XL->GetRange(3, 1, row-1, 3), 7, 1, 3, 1); // внешние левые
+    // РІРЅСѓС‚СЂРµРЅРЅРёРµ РіРѕСЂРёР·РѕРЅС‚Р°Р»С‚СЊРЅС‹Рµ
+    XL->Range_Border(XL->GetRange(3, 1, row-1, 3), 7, 1, 3, 1); // РІРЅРµС€РЅРёРµ Р»РµРІС‹Рµ
     XL->Range_Border(XL->GetRange(3, 1, row-1, 3), 10, 1, 3, 1);
-    // внешние правые
+    // РІРЅРµС€РЅРёРµ РїСЂР°РІС‹Рµ
     XL->Range_Border(XL->GetRange(3, 1, row-1, 3), 8, 1, 3, 1);
-    // внешняя вернняя
+    // РІРЅРµС€РЅСЏСЏ РІРµСЂРЅРЅСЏСЏ
     XL->Range_Border(XL->GetRange(3, 1, row-1, 3), 9, 1, 3, 1);
-    // внешняя нижняя
+    // РІРЅРµС€РЅСЏСЏ РЅРёР¶РЅСЏСЏ
     XL->Range_Border(XL->GetRange(1, 1, row-1, 3), 11, 1, 3, 1);
-    // внутренние вертикальные
+    // РІРЅСѓС‚СЂРµРЅРЅРёРµ РІРµСЂС‚РёРєР°Р»СЊРЅС‹Рµ
     delete rez;
     XL->Visible(true);
 }
@@ -778,15 +778,15 @@ void cReports::SostIzd(TADOQuery *rez, int &row, int lvl, String obd)
 {
     if(rez==0)
     {
-        ShowMessage("Ошибка формирования запроса");
+        ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
         return;
     }
     if(!rez->RecordCount)
     {
-        ShowMessage("Пустой набор данных.");
+        ShowMessage("РџСѓСЃС‚РѕР№ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С….");
         delete rez;
         return;
-    } // активация
+    } // Р°РєС‚РёРІР°С†РёСЏ
     int tmprow;
     String tab="";
     while(tab.Length()<lvl*5)
@@ -819,29 +819,29 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
 {
     if(rez==0)
     {
-        ShowMessage("Ошибка формирования запроса");
+        ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
         return;
     }
     if(!rez->RecordCount)
     {
-        ShowMessage("Пустой набор данных.");
+        ShowMessage("РџСѓСЃС‚РѕР№ РЅР°Р±РѕСЂ РґР°РЅРЅС‹С….");
         delete rez;
         return;
-    } // активация
+    } // Р°РєС‚РёРІР°С†РёСЏ
 
     AnsiString file=Templates+"materials.xlt";
     XL->Connect();
     // XL->Visible(true);
     XL->DisplayAlerts(false);
     XL->SetActiveBooks(XL->Books_Open(file));
-    // Инициализация переменных указателей на итемы екселя
+    // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїРµСЂРµРјРµРЅРЅС‹С… СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° РёС‚РµРјС‹ РµРєСЃРµР»СЏ
     XL->SetActiveBook(XL->GetFirstBook());
     XL->SetActiveSheets(XL->GetSheets());
     XL->SetActiveSheet(XL->GetFirstSheet());
 
     int row_start, row_end=36, Lcount=0;
     bool newpage=true;
-    // Создание первого листа отчета
+    // РЎРѕР·РґР°РЅРёРµ РїРµСЂРІРѕРіРѕ Р»РёСЃС‚Р° РѕС‚С‡РµС‚Р°
     rez->First();
     while(!rez->Eof)
     {
@@ -851,30 +851,30 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
             XL->Sheet_Copy(XL->GetSheet(Lcount+1), XL->GetSheet(Lcount+1));
             Lcount++ ;
             XL->SetActiveSheet(XL->GetSheet(Lcount));
-            XL->Set_Sheet_Name(XL->GetSheet(Lcount), "ЕДИН-"+IntToStr(Lcount));
-            // удалени лишнего/
+            XL->Set_Sheet_Name(XL->GetSheet(Lcount), "Р•Р”РРќ-"+IntToStr(Lcount));
+            // СѓРґР°Р»РµРЅРё Р»РёС€РЅРµРіРѕ/
             XL->Range_Copy(XL->GetRows(14, 19));
             XL->Range_Paste(XL->GetRows(8, 13));
-            // запись шапки/
+            // Р·Р°РїРёСЃСЊ С€Р°РїРєРё/
             XL->toCells(2, 5, VinToGost(obd)+" "+parametr->zak->Text);
-            XL->toCells(1, 7, "Лист "+IntToStr(Lcount));
+            XL->toCells(1, 7, "Р›РёСЃС‚ "+IntToStr(Lcount));
             newpage=false;
         }
-        // копирование
+        // РєРѕРїРёСЂРѕРІР°РЅРёРµ
         if(row_start<row_end&&rez->RecNo<rez->RecordCount)
         {
             XL->Sheet_activate(XL->GetSheet(Lcount+1));
             XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+1), 5, 6));
             XL->Sheet_activate();
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             XL->Range_Paste(XL->GetRows(row_start, row_start+2));
         }
-        // вывод данных
-        XL->toCells(row_start, 2, VinToGost(rez->FieldByName("Код")->Value));
-        XL->toCells(row_start, 3, rez->FieldByName("Сортамент")->Value);
-        XL->toCells(row_start, 4, rez->FieldByName("Материал")->Value);
-        XL->toCells(row_start, 5, rez->FieldByName("Норма на изделие")->Value);
-        XL->toCells(row_start, 6, rez->FieldByName("Единицы измерения")->Value);
+        // РІС‹РІРѕРґ РґР°РЅРЅС‹С…
+        XL->toCells(row_start, 2, VinToGost(rez->FieldByName("РљРѕРґ")->Value));
+        XL->toCells(row_start, 3, rez->FieldByName("РЎРѕСЂС‚Р°РјРµРЅС‚")->Value);
+        XL->toCells(row_start, 4, rez->FieldByName("РњР°С‚РµСЂРёР°Р»")->Value);
+        XL->toCells(row_start, 5, rez->FieldByName("РќРѕСЂРјР° РЅР° РёР·РґРµР»РёРµ")->Value);
+        XL->toCells(row_start, 6, rez->FieldByName("Р•РґРёРЅРёС†С‹ РёР·РјРµСЂРµРЅРёСЏ")->Value);
         if(row_start<row_end)
         {
             row_start++ ;
@@ -886,8 +886,8 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
         rez->Next();
     }
     delete rez;
-    // добавление подетальной материалки
-    // 1 запрос
+    // РґРѕР±Р°РІР»РµРЅРёРµ РїРѕРґРµС‚Р°Р»СЊРЅРѕР№ РјР°С‚РµСЂРёР°Р»РєРё
+    // 1 Р·Р°РїСЂРѕСЃ
     rez=DB->SendSQL("Call temporary_tables.Mat_report_detail ('"+GostToVin(obd)+
         "',"+parametr->kol->Text+")");
     if(rez==0)
@@ -895,13 +895,13 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
         XL->Visible(true);
         return;
     }
-    // 2 шаблон
+    // 2 С€Р°Р±Р»РѕРЅ
     newpage=true;
     row_end=49;
     String grp_param="null";
     double nrm_sum=0;
     int k=0, page=1;
-    // Создание первого листа отчета
+    // РЎРѕР·РґР°РЅРёРµ РїРµСЂРІРѕРіРѕ Р»РёСЃС‚Р° РѕС‚С‡РµС‚Р°
     rez->First();
     while(!rez->Eof)
     {
@@ -913,83 +913,83 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
                 XL->GetSheet(Lcount));
             Lcount++ ;
             XL->SetActiveSheet(XL->GetSheet(Lcount));
-            XL->Set_Sheet_Name(XL->GetSheet(Lcount), "ДЕТ-"+IntToStr(page));
+            XL->Set_Sheet_Name(XL->GetSheet(Lcount), "Р”Р•Рў-"+IntToStr(page));
             page++ ;
             XL->Range_Copy(XL->GetRows(8, 10));
             XL->Range_Paste(XL->GetRows(5, 7));
-            // запись шапки/
+            // Р·Р°РїРёСЃСЊ С€Р°РїРєРё/
             XL->toCells(1, 3, VinToGost(obd));
             XL->toCells(1, 9, parametr->zak->Text);
-            XL->toCells(1, 10, "Лист "+IntToStr(Lcount));
+            XL->toCells(1, 10, "Р›РёСЃС‚ "+IntToStr(Lcount));
             newpage=false;
         }
-        if(grp_param!=rez->FieldByName("Код")->Value.operator UnicodeString()+
-            rez->FieldByName("Материал")->Value.operator UnicodeString()+
-            rez->FieldByName("Сортамент")->Value.operator UnicodeString())
+        if(grp_param!=rez->FieldByName("РљРѕРґ")->Value.operator UnicodeString()+
+            rez->FieldByName("РњР°С‚РµСЂРёР°Р»")->Value.operator UnicodeString()+
+            rez->FieldByName("РЎРѕСЂС‚Р°РјРµРЅС‚")->Value.operator UnicodeString())
         {
             if(grp_param!="null")
             {
                 row_start+=1+k;
-                // копирование строки итогов,
+                // РєРѕРїРёСЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё РёС‚РѕРіРѕРІ,
                 XL->Sheet_activate(XL->GetSheet(Lcount+2));
                 XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+2), 7, 7));
                 XL->Sheet_activate();
-                // вставка
+                // РІСЃС‚Р°РІРєР°
                 XL->Range_Paste(XL->GetRows(row_start-1, row_start-1));
 
-                // подвод итогов по группе
+                // РїРѕРґРІРѕРґ РёС‚РѕРіРѕРІ РїРѕ РіСЂСѓРїРїРµ
                 XL->toCells(row_start-1, 9, nrm_sum);
-                // toCells(row_start-1,10,"кг.");
+                // toCells(row_start-1,10,"РєРі.");
             }
             else
             {
                 row_start+=k;
             }
-            // копирование строки шапки ,
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё С€Р°РїРєРё ,
             XL->Sheet_activate(XL->GetSheet(Lcount+2));
             XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+2), 5, 5));
             XL->Sheet_activate();
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             XL->Range_Paste(XL->GetRows(row_start, row_start));
-            // обнуление итоговых переменных/
+            // РѕР±РЅСѓР»РµРЅРёРµ РёС‚РѕРіРѕРІС‹С… РїРµСЂРµРјРµРЅРЅС‹С…/
             k=1;
             nrm_sum=0;
-            // материал
+            // РјР°С‚РµСЂРёР°Р»
             XL->toCells(row_start, 2,
-                VinToGost(rez->FieldByName("Код")->Value));
+                VinToGost(rez->FieldByName("РљРѕРґ")->Value));
             XL->toCells(row_start, 3,
-                rez->FieldByName("Материал")->Value.operator UnicodeString()+
-                " "+rez->FieldByName("Сортамент")
+                rez->FieldByName("РњР°С‚РµСЂРёР°Р»")->Value.operator UnicodeString()+
+                " "+rez->FieldByName("РЎРѕСЂС‚Р°РјРµРЅС‚")
                 ->Value.operator UnicodeString());
         }
-        grp_param=rez->FieldByName("Код")->Value.operator UnicodeString()+
-            rez->FieldByName("Материал")->Value.operator UnicodeString()+
-            rez->FieldByName("Сортамент")->Value.operator UnicodeString();
-        // копирование строки вывод данных заполнение итоговых переменных/
-        // копирование
+        grp_param=rez->FieldByName("РљРѕРґ")->Value.operator UnicodeString()+
+            rez->FieldByName("РњР°С‚РµСЂРёР°Р»")->Value.operator UnicodeString()+
+            rez->FieldByName("РЎРѕСЂС‚Р°РјРµРЅС‚")->Value.operator UnicodeString();
+        // РєРѕРїРёСЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё РІС‹РІРѕРґ РґР°РЅРЅС‹С… Р·Р°РїРѕР»РЅРµРЅРёРµ РёС‚РѕРіРѕРІС‹С… РїРµСЂРµРјРµРЅРЅС‹С…/
+        // РєРѕРїРёСЂРѕРІР°РЅРёРµ
         XL->Sheet_activate(XL->GetSheet(Lcount+2));
         XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+2), 6, 6));
         XL->Sheet_activate();
-        // вставка
+        // РІСЃС‚Р°РІРєР°
         XL->Range_Paste(XL->GetRows(row_start+k, row_start+k));
-        // вывод данных/
-        // деталь
+        // РІС‹РІРѕРґ РґР°РЅРЅС‹С…/
+        // РґРµС‚Р°Р»СЊ
         XL->toCells(row_start+k, 1, VinToGost(rez->FieldByName("obd")->Value));
         XL->toCells(row_start+k, 2, rez->FieldByName("namd")->Value);
         XL->toCells(row_start+k, 3, rez->FieldByName("kol")->Value);
         XL->toCells(row_start+k, 4, rez->FieldByName("mass")->Value);
-        // заготовка
+        // Р·Р°РіРѕС‚РѕРІРєР°
         XL->toCells(row_start+k, 5, rez->FieldByName("vz")->Value);
         XL->toCells(row_start+k, 6, rez->FieldByName("razz")->Value);
         XL->toCells(row_start+k, 7, rez->FieldByName("kolzag")->Value);
         XL->toCells(row_start+k, 8, rez->FieldByName("masz")->Value);
-        // результат
-        XL->toCells(row_start+k, 9, rez->FieldByName("Норма на изделие")
+        // СЂРµР·СѓР»СЊС‚Р°С‚
+        XL->toCells(row_start+k, 9, rez->FieldByName("РќРѕСЂРјР° РЅР° РёР·РґРµР»РёРµ")
             ->Value);
-        nrm_sum=nrm_sum+rez->FieldByName("Норма на изделие")->Value;
-        XL->toCells(row_start+k, 10, rez->FieldByName("Единицы измерения")
+        nrm_sum=nrm_sum+rez->FieldByName("РќРѕСЂРјР° РЅР° РёР·РґРµР»РёРµ")->Value;
+        XL->toCells(row_start+k, 10, rez->FieldByName("Р•РґРёРЅРёС†С‹ РёР·РјРµСЂРµРЅРёСЏ")
             ->Value);
-        XL->toCells(row_start+k, 11, rez->FieldByName("КИМ")->Value);
+        XL->toCells(row_start+k, 11, rez->FieldByName("РљРРњ")->Value);
         if(row_start+k<row_end)
         {
             k++ ;
@@ -1001,18 +1001,18 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
         rez->Next();
     }
     delete rez;
-    // копирование строки итогов,//
-    // копирование
+    // РєРѕРїРёСЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё РёС‚РѕРіРѕРІ,//
+    // РєРѕРїРёСЂРѕРІР°РЅРёРµ
     XL->Sheet_activate(XL->GetSheet(Lcount+2));
     XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+2), 7, 7));
     XL->Sheet_activate();
-    // вставка
+    // РІСЃС‚Р°РІРєР°
     XL->Range_Paste(XL->GetRows(row_start+k, row_start+k));
-    // подвод итогов по группе/
+    // РїРѕРґРІРѕРґ РёС‚РѕРіРѕРІ РїРѕ РіСЂСѓРїРїРµ/
     XL->toCells(row_start+k, 9, nrm_sum);
-    // toCells(row_start+k,10,"кг.");
-    // 3 вывод на шабон
-    // конец
+    // toCells(row_start+k,10,"РєРі.");
+    // 3 РІС‹РІРѕРґ РЅР° С€Р°Р±РѕРЅ
+    // РєРѕРЅРµС†
     XL->Sheet_Del(XL->GetSheet(XL->GetSheetsCount()));
     XL->SetActiveSheet(XL->GetFirstSheet());
     XL->Sheet_activate();
@@ -1025,24 +1025,24 @@ void cReports::Texnologic(String obd)
     String sql, sql1;
     // ---------------------------------------------------------------------------
     sql="Call temporary_tables.teh_dt_info('"+GostToVin(obd)+"')";
-    // активация
+    // Р°РєС‚РёРІР°С†РёСЏ
     AnsiString file=Templates+"mok.xlt";
     XL->Connect();
     XL->DisplayAlerts(false);
     XL->SetActiveBooks(XL->Books_Open(file));
-    // Инициализация переменных указателей на итемы екселя
+    // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїРµСЂРµРјРµРЅРЅС‹С… СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° РёС‚РµРјС‹ РµРєСЃРµР»СЏ
     XL->SetActiveBook(XL->GetFirstBook());
     XL->SetActiveSheets(XL->GetSheets());
     XL->SetActiveSheet(XL->GetFirstSheet());
-    // переработака кода...
+    // РїРµСЂРµСЂР°Р±РѕС‚Р°РєР° РєРѕРґР°...
     int Lcount=0;
-    // перехват переменных/
+    // РїРµСЂРµС…РІР°С‚ РїРµСЂРµРјРµРЅРЅС‹С…/
     String zak="", napr="";
     detinfo dt;
     rez=DB->SendSQL(sql);
     if(rez==0)
     {
-        ShowMessage("Ошибка формирования запроса");
+        ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
         XL->Visible(true);
         return;
     }
@@ -1083,13 +1083,13 @@ void cReports::Texnologic(String obd)
 
     Row_range r;
     Tex_new_list(dt, Lcount, r);
-    // запрос по операционный
+    // Р·Р°РїСЂРѕСЃ РїРѕ РѕРїРµСЂР°С†РёРѕРЅРЅС‹Р№
     sql="Call temporary_tables.teh_oper('"+GostToVin(obd)+"')";
     delete rez;
     rez=DB->SendSQL(sql);
     if(rez==0)
     {
-        ShowMessage("Ошибка формирования запроса");
+        ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
         XL->Visible(true);
         return;
     }
@@ -1097,7 +1097,7 @@ void cReports::Texnologic(String obd)
     String krop, kolod, tpz, tsht, ksht;
     while(!rez->Eof)
     {
-        // вывод операции
+        // РІС‹РІРѕРґ РѕРїРµСЂР°С†РёРё
         XL->toCells(r.Row, 1, "A");
         XL->toCells(r.Row, 6,
             rez->FieldByName("ceu")->Value.operator UnicodeString()
@@ -1111,8 +1111,8 @@ void cReports::Texnologic(String obd)
             rez->FieldByName("oper")->Value.operator UnicodeString());
         XL->toCells(r.Row, 52,
             rez->FieldByName("ioht")->Value.operator UnicodeString());
-        Tex_format_string(1, r.Row); // оформление строки/
-        // строка оборудования
+        Tex_format_string(1, r.Row); // РѕС„РѕСЂРјР»РµРЅРёРµ СЃС‚СЂРѕРєРё/
+        // СЃС‚СЂРѕРєР° РѕР±РѕСЂСѓРґРѕРІР°РЅРёСЏ
         if(rez->FieldByName("krop")->Value.operator UnicodeString()!="0")
         {
             krop=rez->FieldByName("krop")->Value.operator UnicodeString();
@@ -1158,7 +1158,7 @@ void cReports::Texnologic(String obd)
         {
             Tex_new_list(dt, Lcount, r);
         }
-        XL->toCells(r.Row, 1, "Б");
+        XL->toCells(r.Row, 1, "Р‘");
         XL->toCells(r.Row, 10,
             rez->FieldByName("obo")->Value.operator UnicodeString());
         XL->toCells(r.Row, 52,
@@ -1177,8 +1177,8 @@ void cReports::Texnologic(String obd)
         XL->toCells(r.Row, 91, tpz);
         XL->toCells(r.Row, 98, tsht);
         XL->toCells(r.Row, 106, "");
-        // оформление строки/
-        // строповка
+        // РѕС„РѕСЂРјР»РµРЅРёРµ СЃС‚СЂРѕРєРё/
+        // СЃС‚СЂРѕРїРѕРІРєР°
         if(rez->FieldByName("stro")->Value.operator UnicodeString().Trim()!="")
         {
             r.Row++ ;
@@ -1190,9 +1190,9 @@ void cReports::Texnologic(String obd)
             XL->toCells(r.Row, 10,
                 rez->FieldByName("stro")->Value.operator UnicodeString()
                 .Trim());
-            Tex_format_string(2, r.Row); // оформление строки/
+            Tex_format_string(2, r.Row); // РѕС„РѕСЂРјР»РµРЅРёРµ СЃС‚СЂРѕРєРё/
         }
-        // тара
+        // С‚Р°СЂР°
         if(rez->FieldByName("tara")->Value.operator UnicodeString().Trim()!="")
         {
             r.Row++ ;
@@ -1204,63 +1204,63 @@ void cReports::Texnologic(String obd)
             XL->toCells(r.Row, 10,
                 rez->FieldByName("tara")->Value.operator UnicodeString()
                 .Trim());
-            Tex_format_string(2, r.Row); // оформление строки/
+            Tex_format_string(2, r.Row); // РѕС„РѕСЂРјР»РµРЅРёРµ СЃС‚СЂРѕРєРё/
         }
-        // запрос на переходы
+        // Р·Р°РїСЂРѕСЃ РЅР° РїРµСЂРµС…РѕРґС‹
         sql1="Call temporary_tables.teh_per('"+GostToVin(obd)+"','"+
             rez->FieldByName("opr")->Value.operator UnicodeString()+"')";
         rez1=DB->SendSQL(sql1);
         if(rez1==0)
         {
-            ShowMessage("Ошибка формирования запроса");
+            ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
             XL->Visible(true);
             return;
         }
         rez1->First();
         while(!rez1->Eof)
         {
-            // вывод переходов
+            // РІС‹РІРѕРґ РїРµСЂРµС…РѕРґРѕРІ
             r.Row++ ;
             if(r.Row>r.Rowmax)
             {
                 Tex_new_list(dt, Lcount, r);
             }
-            XL->toCells(r.Row, 1, "О");
+            XL->toCells(r.Row, 1, "Рћ");
             XL->toCells(r.Row, 11,
                 rez1->FieldByName("tpe")->Value.operator UnicodeString()
                 .Trim());
-            Tex_format_string(3, r.Row); // оформление строки/
+            Tex_format_string(3, r.Row); // РѕС„РѕСЂРјР»РµРЅРёРµ СЃС‚СЂРѕРєРё/
             rez1->Next();
         }
         delete rez1;
-        // запрос на инструмент
+        // Р·Р°РїСЂРѕСЃ РЅР° РёРЅСЃС‚СЂСѓРјРµРЅС‚
         sql1="Call temporary_tables.teh_instr('"+GostToVin(obd)+"','"+
             rez->FieldByName("opr")->Value.operator UnicodeString()+"')";
         rez1=DB->SendSQL(sql1);
         if(rez1==0)
         {
-            ShowMessage("Ошибка формирования запроса");
+            ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
             XL->Visible(true);
             return;
         }
         rez1->First();
         while(!rez1->Eof)
         {
-            // вывод инструмента
+            // РІС‹РІРѕРґ РёРЅСЃС‚СЂСѓРјРµРЅС‚Р°
             r.Row++ ;
             if(r.Row>r.Rowmax)
             {
                 Tex_new_list(dt, Lcount, r);
             }
-            XL->toCells(r.Row, 1, "Т");
+            XL->toCells(r.Row, 1, "Рў");
             XL->toCells(r.Row, 12,
                 rez1->FieldByName("nain")->Value.operator UnicodeString()
                 .Trim());
-            Tex_format_string(4, r.Row); // оформление строки/
+            Tex_format_string(4, r.Row); // РѕС„РѕСЂРјР»РµРЅРёРµ СЃС‚СЂРѕРєРё/
             rez1->Next();
         }
         delete rez1;
-        // контроль
+        // РєРѕРЅС‚СЂРѕР»СЊ
         if(rez->FieldByName("control")->Value.operator UnicodeString()
             .Trim()!="")
         {
@@ -1270,22 +1270,22 @@ void cReports::Texnologic(String obd)
                 Tex_new_list(dt, Lcount, r);
             }
             XL->toCells(r.Row, 1, "A");
-            XL->toCells(r.Row, 23, "69 КОНТРОЛЬНАЯ");
-            XL->toCells(r.Row, 52, "И-ПЕШК-56-2002");
-            Tex_format_string(1, r.Row); // оформление строки/
+            XL->toCells(r.Row, 23, "69 РљРћРќРўР РћР›Р¬РќРђРЇ");
+            XL->toCells(r.Row, 52, "Р-РџР•РЁРљ-56-2002");
+            Tex_format_string(1, r.Row); // РѕС„РѕСЂРјР»РµРЅРёРµ СЃС‚СЂРѕРєРё/
             if(rez->FieldByName("control")->Value.operator UnicodeString().Trim
-                ()!="без текста")
+                ()!="Р±РµР· С‚РµРєСЃС‚Р°")
             {
                 r.Row++ ;
                 if(r.Row>r.Rowmax)
                 {
                     Tex_new_list(dt, Lcount, r);
                 }
-                XL->toCells(r.Row, 1, "О");
+                XL->toCells(r.Row, 1, "Рћ");
                 XL->toCells(r.Row, 11,
                     rez->FieldByName("control")->Value.operator UnicodeString()
                     .Trim());
-                Tex_format_string(3, r.Row); // оформление строки/
+                Tex_format_string(3, r.Row); // РѕС„РѕСЂРјР»РµРЅРёРµ СЃС‚СЂРѕРєРё/
             }
         }
         r.Row++ ;
@@ -1299,7 +1299,7 @@ void cReports::Texnologic(String obd)
     XL->toCells(r.Row, 11, napr);
     while(r.Row<=r.Rowmax)
     {
-        Tex_format_string(3, r.Row); // оформление строки/
+        Tex_format_string(3, r.Row); // РѕС„РѕСЂРјР»РµРЅРёРµ СЃС‚СЂРѕРєРё/
         r.Row++ ;
     }
     int i;
@@ -1359,7 +1359,7 @@ void cReports::Tex_format_string(int type, int Row)
 
 void cReports::Tex_new_list(detinfo dt, int &Lcount, Row_range &r)
 {
-    // копирование первого листа
+    // РєРѕРїРёСЂРѕРІР°РЅРёРµ РїРµСЂРІРѕРіРѕ Р»РёСЃС‚Р°
     if(!Lcount)
     {
         XL->Sheet_Copy(XL->GetSheet(XL->GetSheetsCount()-1),
@@ -1372,17 +1372,17 @@ void cReports::Tex_new_list(detinfo dt, int &Lcount, Row_range &r)
     }
     Lcount++ ;
     XL->SetActiveSheet(XL->GetSheet(Lcount));
-    XL->Set_Sheet_Name(XL->GetSheet(Lcount), "Лист "+IntToStr(Lcount));
-    // заполнение шапки и некоторых шапочных переменных
+    XL->Set_Sheet_Name(XL->GetSheet(Lcount), "Р›РёСЃС‚ "+IntToStr(Lcount));
+    // Р·Р°РїРѕР»РЅРµРЅРёРµ С€Р°РїРєРё Рё РЅРµРєРѕС‚РѕСЂС‹С… С€Р°РїРѕС‡РЅС‹С… РїРµСЂРµРјРµРЅРЅС‹С…
     XL->toCells(6, 107, IntToStr(Lcount));
     if(Lcount==1)
     {
-        XL->toCells(8, 10, user); // делать потом чтоб писался пользователь
+        XL->toCells(8, 10, user); // РґРµР»Р°С‚СЊ РїРѕС‚РѕРј С‡С‚РѕР± РїРёСЃР°Р»СЃСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ
         XL->toCells(8, 32, dt.dnte);
         XL->toCells(8, 54, dt.obd);
         XL->toCells(8, 81, koldet->CB2->Text+"                      "+
-            koldet->E1->Text+" шт.");
-        // для заказа и количества данные будут браться на основе подсчета количества из конкретного узла
+            koldet->E1->Text+" С€С‚.");
+        // РґР»СЏ Р·Р°РєР°Р·Р° Рё РєРѕР»РёС‡РµСЃС‚РІР° РґР°РЅРЅС‹Рµ Р±СѓРґСѓС‚ Р±СЂР°С‚СЊСЃСЏ РЅР° РѕСЃРЅРѕРІРµ РїРѕРґСЃС‡РµС‚Р° РєРѕР»РёС‡РµСЃС‚РІР° РёР· РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ СѓР·Р»Р°
         XL->toCells(11, 44, dt.namd);
         XL->toCells(13, 6, dt.mater);
         XL->toCells(15, 6, dt.ei);
@@ -1402,8 +1402,8 @@ void cReports::Tex_new_list(detinfo dt, int &Lcount, Row_range &r)
         XL->toCells(6, 87, dt.obd);
         XL->toCells(8, 71, dt.namd);
         XL->toCells(8, 98, koldet->CB2->Text+"                      "+
-            koldet->E1->Text+" шт.");
-        // lля заказа и количества данные будут браться на основе подсчета количества из конкретного узла
+            koldet->E1->Text+" С€С‚.");
+        // lР»СЏ Р·Р°РєР°Р·Р° Рё РєРѕР»РёС‡РµСЃС‚РІР° РґР°РЅРЅС‹Рµ Р±СѓРґСѓС‚ Р±СЂР°С‚СЊСЃСЏ РЅР° РѕСЃРЅРѕРІРµ РїРѕРґСЃС‡РµС‚Р° РєРѕР»РёС‡РµСЃС‚РІР° РёР· РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ СѓР·Р»Р°
         r.Row=13;
         r.Rowmax=29;
     }
@@ -1418,49 +1418,49 @@ void cReports::Mat_Ved_Komplect(String obd, String zak, int kol)
     {
         delete komplekt;
         return;
-    } // активация
+    } // Р°РєС‚РёРІР°С†РёСЏ
     AnsiString file=Templates+"materials_by_types.xlt";
     XL->Connect();
     XL->DisplayAlerts(false);
     XL->SetActiveBooks(XL->Books_Open(file));
-    // Инициализация переменных указателей на итемы екселя
+    // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїРµСЂРµРјРµРЅРЅС‹С… СѓРєР°Р·Р°С‚РµР»РµР№ РЅР° РёС‚РµРјС‹ РµРєСЃРµР»СЏ
     XL->SetActiveBook(XL->GetFirstBook());
     XL->SetActiveSheets(XL->GetSheets());
     XL->SetActiveSheet(XL->GetFirstSheet());
-    // блок построения ведомостей
+    // Р±Р»РѕРє РїРѕСЃС‚СЂРѕРµРЅРёСЏ РІРµРґРѕРјРѕСЃС‚РµР№
     int list=0;
     if(komplekt->materials->Checked)
     {
-        String Title="Ведомость материалов";
+        String Title="Р’РµРґРѕРјРѕСЃС‚СЊ РјР°С‚РµСЂРёР°Р»РѕРІ";
         Mat_Ved_razd(DB->SendSQL("Call temporary_tables.bordereau_all('"+
             GostToVin(obd)+"',"+String(kol)+")"), obd, zak, Title, list);
     }
     if(komplekt->litho->Checked)
     {
-        String Title="Ведомость материалов на детали, получаемые из литья";
+        String Title="Р’РµРґРѕРјРѕСЃС‚СЊ РјР°С‚РµСЂРёР°Р»РѕРІ РЅР° РґРµС‚Р°Р»Рё, РїРѕР»СѓС‡Р°РµРјС‹Рµ РёР· Р»РёС‚СЊСЏ";
         Mat_Ved_razd(DB->SendSQL("Call temporary_tables.bordereau_litho('"+
             GostToVin(obd)+"',"+String(kol)+")"), obd, zak, Title, list);
     }
     if(komplekt->forging->Checked)
     {
-        String Title="Ведомость материалов на детали, получаемые из поковок";
+        String Title="Р’РµРґРѕРјРѕСЃС‚СЊ РјР°С‚РµСЂРёР°Р»РѕРІ РЅР° РґРµС‚Р°Р»Рё, РїРѕР»СѓС‡Р°РµРјС‹Рµ РёР· РїРѕРєРѕРІРѕРє";
         Mat_Ved_razd(DB->SendSQL("Call temporary_tables.bordereau_forging('"+
             GostToVin(obd)+"',"+String(kol)+")"), obd, zak, Title, list);
     }
     if(komplekt->shtamping->Checked)
     {
-        String Title="Ведомость материалов на  штампованные детали ";
+        String Title="Р’РµРґРѕРјРѕСЃС‚СЊ РјР°С‚РµСЂРёР°Р»РѕРІ РЅР°  С€С‚Р°РјРїРѕРІР°РЅРЅС‹Рµ РґРµС‚Р°Р»Рё ";
         Mat_Ved_razd(DB->SendSQL("Call temporary_tables.bordereau_stamping('"+
             GostToVin(obd)+"',"+String(kol)+")"), obd, zak, Title, list);
     }
     if(komplekt->cooperation->Checked)
     {
-        String Title="Ведомость материалов на детали, получаемые по кооперации";
+        String Title="Р’РµРґРѕРјРѕСЃС‚СЊ РјР°С‚РµСЂРёР°Р»РѕРІ РЅР° РґРµС‚Р°Р»Рё, РїРѕР»СѓС‡Р°РµРјС‹Рµ РїРѕ РєРѕРѕРїРµСЂР°С†РёРё";
         Mat_Ved_razd(DB->SendSQL
             ("Call temporary_tables.bordereau_cooperation('"+GostToVin(obd)+
             "',"+String(kol)+")"), obd, zak, Title, list);
     }
-    // показ екселя
+    // РїРѕРєР°Р· РµРєСЃРµР»СЏ
     if(list)
     {
         while(list<XL->GetSheetsCount())
@@ -1477,7 +1477,7 @@ const String &zak, const String &Title, int &list)
 {
     if(rez==0)
     {
-        ShowMessage("Ошибка формирования запроса");
+        ShowMessage("РћС€РёР±РєР° С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ Р·Р°РїСЂРѕСЃР°");
         return;
     }
     if(!rez->RecordCount)
@@ -1486,7 +1486,7 @@ const String &zak, const String &Title, int &list)
         return;
     }
     int str=0, Row=0, RowMax=13, StartPos=6, Pos, templ=XL->GetSheetsCount();
-    // скопировать шаблон
+    // СЃРєРѕРїРёСЂРѕРІР°С‚СЊ С€Р°Р±Р»РѕРЅ
     rez->First();
     while(!rez->Eof)
     {
@@ -1499,15 +1499,15 @@ const String &zak, const String &Title, int &list)
             XL->Set_Sheet_Name(XL->GetSheet(list), zak+"-"+IntToStr(list));
             XL->toCells(1, 2, DateToStr(Date()));
             XL->toCells(1, 3, Title+" ("+VinToGost(obd)+")");
-            XL->toCells(1, 12, "заказ "+zak);
-            XL->toCells(1, 15, "Лист "+IntToStr(str));
+            XL->toCells(1, 12, "Р·Р°РєР°Р· "+zak);
+            XL->toCells(1, 15, "Р›РёСЃС‚ "+IntToStr(str));
             Row++ ;
             templ++ ;
         }
-        // вывод данных
+        // РІС‹РІРѕРґ РґР°РЅРЅС‹С…
 
         Pos=(Row-1)*3+StartPos;
-        // копирование строки шаблона
+        // РєРѕРїРёСЂРѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё С€Р°Р±Р»РѕРЅР°
         if(Row>1)
         {
             XL->Sheet_activate(XL->GetSheet(templ));
@@ -1515,22 +1515,22 @@ const String &zak, const String &Title, int &list)
             XL->Sheet_activate();
             XL->Range_Paste(XL->GetRows(Pos, Pos+3));
         }
-        // текст
-        XL->toCells(Pos, 1, VinToGost(rez->FieldByName("Обозначение")->Value));
-        XL->toCells(Pos+1, 1, rez->FieldByName("Наименование")->Value);
-        XL->toCells(Pos, 4, rez->FieldByName("Кол-во")->Value);
-        XL->toCells(Pos, 5, rez->FieldByName("Ед. изм.")->Value);
+        // С‚РµРєСЃС‚
+        XL->toCells(Pos, 1, VinToGost(rez->FieldByName("РћР±РѕР·РЅР°С‡РµРЅРёРµ")->Value));
+        XL->toCells(Pos+1, 1, rez->FieldByName("РќР°РёРјРµРЅРѕРІР°РЅРёРµ")->Value);
+        XL->toCells(Pos, 4, rez->FieldByName("РљРѕР»-РІРѕ")->Value);
+        XL->toCells(Pos, 5, rez->FieldByName("Р•Рґ. РёР·Рј.")->Value);
         XL->toCells(Pos+1, 5, rez->FieldByName("snameei")->Value);
-        XL->toCells(Pos, 6, rez->FieldByName("Масса детали")->Value);
+        XL->toCells(Pos, 6, rez->FieldByName("РњР°СЃСЃР° РґРµС‚Р°Р»Рё")->Value);
         XL->toCells(Pos, 7, VinToGost(rez->FieldByName("obm")->Value));
-        XL->toCells(Pos+1, 7, rez->FieldByName("Материал")->Value);
-        XL->toCells(Pos, 8, rez->FieldByName("Код заготовки")->Value);
-        XL->toCells(Pos+1, 8, rez->FieldByName("Размеры заг.")->Value);
-        XL->toCells(Pos, 9, rez->FieldByName("Кол-во дет. в заг.")->Value);
-        XL->toCells(Pos, 10, rez->FieldByName("Масса заг.")->Value);
-        XL->toCells(Pos, 11, rez->FieldByName("Норма расхода")->Value);
+        XL->toCells(Pos+1, 7, rez->FieldByName("РњР°С‚РµСЂРёР°Р»")->Value);
+        XL->toCells(Pos, 8, rez->FieldByName("РљРѕРґ Р·Р°РіРѕС‚РѕРІРєРё")->Value);
+        XL->toCells(Pos+1, 8, rez->FieldByName("Р Р°Р·РјРµСЂС‹ Р·Р°Рі.")->Value);
+        XL->toCells(Pos, 9, rez->FieldByName("РљРѕР»-РІРѕ РґРµС‚. РІ Р·Р°Рі.")->Value);
+        XL->toCells(Pos, 10, rez->FieldByName("РњР°СЃСЃР° Р·Р°Рі.")->Value);
+        XL->toCells(Pos, 11, rez->FieldByName("РќРѕСЂРјР° СЂР°СЃС…РѕРґР°")->Value);
         XL->toCells(Pos, 12,
-            Get_Rascex(rez->FieldByName("Обозначение")->Value));
+            Get_Rascex(rez->FieldByName("РћР±РѕР·РЅР°С‡РµРЅРёРµ")->Value));
         Row++ ;
         if(Row>13)
         {
@@ -1547,7 +1547,7 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
     {
         return;
     }
-    //инициализация
+    //РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
     AnsiString file=Templates+"materials_trb.xlt";
     XL->Connect();
     XL->DisplayAlerts(false);
@@ -1555,7 +1555,7 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
     OpenTemplate(file);
     const int row_start=19, row_end=25, head_row=11, org_row=7;
     int Lcount=0,ofset=-1;
-    //получим список цехов
+    //РїРѕР»СѓС‡РёРј СЃРїРёСЃРѕРє С†РµС…РѕРІ
 
     TADOQuery *rez=0;
     String sql;
@@ -1565,7 +1565,7 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
         rez=DB->SendSQL(sql);
         if (!rez)
         {
-            ShowMessage("Ошибка при выполнении запроса");
+            ShowMessage("РћС€РёР±РєР° РїСЂРё РІС‹РїРѕР»РЅРµРЅРёРё Р·Р°РїСЂРѕСЃР°");
             return;
         }
         rez->First();
@@ -1574,7 +1574,7 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
     do
     {
         bool newpage=true;
-        //получим список материалов для цеха
+        //РїРѕР»СѓС‡РёРј СЃРїРёСЃРѕРє РјР°С‚РµСЂРёР°Р»РѕРІ РґР»СЏ С†РµС…Р°
         String cex;
         String utch;
         if (rez)
@@ -1593,23 +1593,23 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
         for (rez2->First(); !rez2->Eof; rez2->Next())
         {
             String date=Now().FormatString("dd.mm.yy");
-            String sklad=rez2->FieldByName("Склад")->Value;
+            String sklad=rez2->FieldByName("РЎРєР»Р°Рґ")->Value;
             String podr=cex+utch;
             if (trb_params->MatReceiver!="")
             {
                 podr=trb_params->MatReceiver;
             }
-            String ss=rez2->FieldByName("Балансовый счет")->Value;
-            String material1=Trim(rez2->FieldByName("Сортамент")->Value);
-            String material2=Trim(rez2->FieldByName("Материал")->Value);
-            String kod=VinToGost(rez2->FieldByName("Код")->Value);
+            String ss=rez2->FieldByName("Р‘Р°Р»Р°РЅСЃРѕРІС‹Р№ СЃС‡РµС‚")->Value;
+            String material1=Trim(rez2->FieldByName("РЎРѕСЂС‚Р°РјРµРЅС‚")->Value);
+            String material2=Trim(rez2->FieldByName("РњР°С‚РµСЂРёР°Р»")->Value);
+            String kod=VinToGost(rez2->FieldByName("РљРѕРґ")->Value);
             String eik="";
             if (!rez2->FieldByName("ei")->Value.IsNull())
                 eik=rez2->FieldByName("ei")->Value;
-            String ei=rez2->FieldByName("Единицы измерения")->Value;
-            String request=rez2->FieldByName("Норма на изделие")->Value;
-            String price=rez2->FieldByName("Цена")->Value;
-            double cost=rez2->FieldByName("Сумма")->Value;
+            String ei=rez2->FieldByName("Р•РґРёРЅРёС†С‹ РёР·РјРµСЂРµРЅРёСЏ")->Value;
+            String request=rez2->FieldByName("РќРѕСЂРјР° РЅР° РёР·РґРµР»РёРµ")->Value;
+            String price=rez2->FieldByName("Р¦РµРЅР°")->Value;
+            double cost=rez2->FieldByName("РЎСѓРјРјР°")->Value;
             if (old_sklad!=sklad)
             {
                 newpage=true;
@@ -1632,9 +1632,9 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
                     Lcount++ ;
                     XL->SetActiveSheet(XL->GetSheet(Lcount));
 
-                    XL->Set_Sheet_Name(XL->GetSheet(Lcount), "ТРЕБ-"+IntToStr(Lcount));
+                    XL->Set_Sheet_Name(XL->GetSheet(Lcount), "РўР Р•Р‘-"+IntToStr(Lcount));
                 }
-                // запись шапки/
+                // Р·Р°РїРёСЃСЊ С€Р°РїРєРё/
                 XL->toCells(head_row+ofset, 1, date);
                 XL->toCells(head_row+ofset, 5, sklad);
                 XL->toCells(head_row+ofset, 8, podr);
@@ -1645,7 +1645,7 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
                 newpage=false;
                 row=row_start;
             }
-            //построение
+            //РїРѕСЃС‚СЂРѕРµРЅРёРµ
             XL->toCells(row+ofset, 1, ss);
             XL->toCells(row+ofset, 2, zak);
             if (24<(material1.Length()+material2.Length()))
@@ -1715,10 +1715,10 @@ void cReports::Boiler_Assemblies    (String obd,String zak,int kol,String ceu,St
 {
     if (ceu.Length()!=4)
     {
-        ShowMessage("Не указан цех/участок");
+        ShowMessage("РќРµ СѓРєР°Р·Р°РЅ С†РµС…/СѓС‡Р°СЃС‚РѕРє");
         return;
     }
-//инициализация
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
     AnsiString file=Templates+"boiler_assembly.xlt";
     XL->Connect();
     XL->DisplayAlerts(false);
@@ -1726,13 +1726,13 @@ void cReports::Boiler_Assemblies    (String obd,String zak,int kol,String ceu,St
     OpenTemplate(file);
     const int row_start=5, row_end=64, head_row=1;
     int Lcount=0;
-    //получим список цехов
+    //РїРѕР»СѓС‡РёРј СЃРїРёСЃРѕРє С†РµС…РѕРІ
 
     String sql = "Call temporary_tables.boiler_assemblies('"+GostToInt(obd)+"',"+String(kol)+",'"+ceu.SubString(1,2)+"','"+ceu.SubString(3,2)+"')";
     TADOQuery *rez=DB->SendSQL(sql);
     if (!rez)
     {
-        ShowMessage("Ошибка при выполнении запроса");
+        ShowMessage("РћС€РёР±РєР° РїСЂРё РІС‹РїРѕР»РЅРµРЅРёРё Р·Р°РїСЂРѕСЃР°");
         return;
     }
     bool newpage=true;
@@ -1779,8 +1779,8 @@ void cReports::Boiler_Assemblies    (String obd,String zak,int kol,String ceu,St
             Lcount++ ;
             XL->SetActiveSheet(XL->GetSheet(Lcount));
 
-            XL->Set_Sheet_Name(XL->GetSheet(Lcount), "ЛИСТ-"+IntToStr(Lcount));
-            // запись шапки/
+            XL->Set_Sheet_Name(XL->GetSheet(Lcount), "Р›РРЎРў-"+IntToStr(Lcount));
+            // Р·Р°РїРёСЃСЊ С€Р°РїРєРё/
             XL->toCells(head_row, 3,  date    );
             XL->toCells(head_row, 9,  ceu    );
             XL->toCells(head_row, 11, zak    );
@@ -1837,10 +1837,10 @@ void cReports::Operation_Timing    (String obd,String zak,int kol,String ceu,Str
 {
      if (ceu.Length()!=4)
     {
-        ShowMessage("Не указан цех/участок");
+        ShowMessage("РќРµ СѓРєР°Р·Р°РЅ С†РµС…/СѓС‡Р°СЃС‚РѕРє");
         //return;
     }
-//инициализация
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
     AnsiString file=Templates+"manufacture_forms.xlt";
     XL->Connect();
     XL->DisplayAlerts(false);
@@ -1856,7 +1856,7 @@ void cReports::Operation_Timing    (String obd,String zak,int kol,String ceu,Str
     TADOQuery *rez=DB->SendSQL(sql);
     if (!rez)
     {
-        ShowMessage("Ошибка при выполнении запроса");
+        ShowMessage("РћС€РёР±РєР° РїСЂРё РІС‹РїРѕР»РЅРµРЅРёРё Р·Р°РїСЂРѕСЃР°");
         return;
     }
     bool newpage=true;
@@ -1880,7 +1880,7 @@ void cReports::Operation_Timing    (String obd,String zak,int kol,String ceu,Str
 
         int curr_prizn=rez->FieldByName("prizn")->Value;
 
-        //вставка доп строк
+        //РІСЃС‚Р°РІРєР° РґРѕРї СЃС‚СЂРѕРє
         int add_cnt=((timing.size()>way.size())?timing.size():way.size())-row_H;
         int add_nm=name.size()-row_H/2;
         add_cnt=(add_cnt>add_nm)?add_cnt:add_nm;
@@ -1889,9 +1889,9 @@ void cReports::Operation_Timing    (String obd,String zak,int kol,String ceu,Str
             row_need++;
         if (row+row_need>row_end)
         {
-            // копирование
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ
             XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+TemplPos), 10, 10));
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             XL->Sheet_activate();
             XL->Range_Paste(XL->GetRows(row, row));
             newpage=true;
@@ -1903,8 +1903,8 @@ void cReports::Operation_Timing    (String obd,String zak,int kol,String ceu,Str
             Lcount++ ;
             XL->SetActiveSheet(XL->GetSheet(Lcount));
 
-            XL->Set_Sheet_Name(XL->GetSheet(Lcount), "ЛИСТ-"+IntToStr(Lcount));
-            // запись шапки/
+            XL->Set_Sheet_Name(XL->GetSheet(Lcount), "Р›РРЎРў-"+IntToStr(Lcount));
+            // Р·Р°РїРёСЃСЊ С€Р°РїРєРё/
             XL->toCells(head_row, 3,  date    );
             if (!ceu.Length())
             {
@@ -1920,35 +1920,35 @@ void cReports::Operation_Timing    (String obd,String zak,int kol,String ceu,Str
             XL->toCells(head_row, 16, Lcount);
             newpage=false;
 
-            // копирование
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ
             XL->Range_Copy(XL->GetRows( 14, 24));
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             XL->Range_Paste(XL->GetRows(4, 13));
 
             row=row_start;
         }
 
-        // проверка признака группировки
+        // РїСЂРѕРІРµСЂРєР° РїСЂРёР·РЅР°РєР° РіСЂСѓРїРїРёСЂРѕРІРєРё
         if(prizn!=curr_prizn)
         {
-            // копирование
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ
             XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+TemplPos), 8, 8));
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             XL->Sheet_activate();
             XL->Range_Paste(XL->GetRows(row, row));
 
             prizn=curr_prizn;
-            //cкопировать строку для записи
+            //cРєРѕРїРёСЂРѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ РґР»СЏ Р·Р°РїРёСЃРё
             switch(prizn)
             {
             case 1:
                 {
-                    XL->toCells(row, 1,"Детати кот. сборок и кот. сборки");
+                    XL->toCells(row, 1,"Р”РµС‚Р°С‚Рё РєРѕС‚. СЃР±РѕСЂРѕРє Рё РєРѕС‚. СЃР±РѕСЂРєРё");
                     break;
                 }
             case 2:
                 {
-                    XL->toCells(row, 1,"Оригинальные, заим., обезлич. детали");
+                    XL->toCells(row, 1,"РћСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ, Р·Р°РёРј., РѕР±РµР·Р»РёС‡. РґРµС‚Р°Р»Рё");
                     break;
                 }
             default:
@@ -1956,18 +1956,18 @@ void cReports::Operation_Timing    (String obd,String zak,int kol,String ceu,Str
             }
             row++;
         }
-        //добавление строки
-        // копирование
+        //РґРѕР±Р°РІР»РµРЅРёРµ СЃС‚СЂРѕРєРё
+        // РєРѕРїРёСЂРѕРІР°РЅРёРµ
         XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+TemplPos), 5, 6));
-        // вставка
+        // РІСЃС‚Р°РІРєР°
         XL->Sheet_activate();
         XL->Range_Paste(XL->GetRows(row, row+1));
 
         while (add_cnt>0)
         {
-            // копирование
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ
             XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+TemplPos), 6, 6));
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             XL->Sheet_activate();
             XL->Range_Paste(XL->GetRows(row+row_H+add_cnt-1, row+row_H+add_cnt-1));
             add_cnt--;
@@ -2019,9 +2019,9 @@ void cReports::Operation_Timing    (String obd,String zak,int kol,String ceu,Str
     }
     else
     {
-        // копирование
+        // РєРѕРїРёСЂРѕРІР°РЅРёРµ
         XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+TemplPos), 12, 12));
-        // вставка
+        // РІСЃС‚Р°РІРєР°
         XL->Sheet_activate();
         XL->Range_Paste(XL->GetRows(row, row));
 
@@ -2070,10 +2070,10 @@ void cReports::Cpu_Operation_Timing    (String obd,String zak,int kol,String ceu
 {
     if (ceu.Length()!=4)
     {
-        ShowMessage("Не указан цех/участок");
+        ShowMessage("РќРµ СѓРєР°Р·Р°РЅ С†РµС…/СѓС‡Р°СЃС‚РѕРє");
 		//return;
     }
-//инициализация
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
     AnsiString file=Templates+"manufacture_forms.xlt";
     XL->Connect();
     XL->DisplayAlerts(false);
@@ -2109,7 +2109,7 @@ void cReports::Cpu_Operation_Timing    (String obd,String zak,int kol,String ceu
     rez=DB->SendSQL(sql);
     if (!rez)
     {
-        ShowMessage("Ошибка при выполнении запроса");
+        ShowMessage("РћС€РёР±РєР° РїСЂРё РІС‹РїРѕР»РЅРµРЅРёРё Р·Р°РїСЂРѕСЃР°");
         return;
     }
     bool newpage=true;
@@ -2141,7 +2141,7 @@ void cReports::Cpu_Operation_Timing    (String obd,String zak,int kol,String ceu
             obo_detail.push_back(it->second);
         }
 
-        //вставка доп строк
+        //РІСЃС‚Р°РІРєР° РґРѕРї СЃС‚СЂРѕРє
         int add_way=way.size()-row_H;
         int add_timing=timing.size()-row_H;
         int add_obo_nm=obo_detail.size()-row_H;
@@ -2155,9 +2155,9 @@ void cReports::Cpu_Operation_Timing    (String obd,String zak,int kol,String ceu
             row_need++;
         if (row+row_need>row_end)
         {
-            // копирование
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ
             XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+TemplPos), 10, 10));
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             XL->Sheet_activate();
             XL->Range_Paste(XL->GetRows(row, row));
             newpage=true;
@@ -2169,8 +2169,8 @@ void cReports::Cpu_Operation_Timing    (String obd,String zak,int kol,String ceu
             Lcount++ ;
             XL->SetActiveSheet(XL->GetSheet(Lcount));
 
-            XL->Set_Sheet_Name(XL->GetSheet(Lcount), "ЛИСТ-"+IntToStr(Lcount));
-            // запись шапки/
+            XL->Set_Sheet_Name(XL->GetSheet(Lcount), "Р›РРЎРў-"+IntToStr(Lcount));
+            // Р·Р°РїРёСЃСЊ С€Р°РїРєРё/
             XL->toCells(head_row, 3,  date    );
             if (!ceu.Length())
             {
@@ -2186,35 +2186,35 @@ void cReports::Cpu_Operation_Timing    (String obd,String zak,int kol,String ceu
             XL->toCells(head_row, 19, Lcount);
             newpage=false;
 
-            // копирование
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ
             XL->Range_Copy(XL->GetRows( 14, 24));
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             XL->Range_Paste(XL->GetRows(4, 13));
 
             row=row_start;
         }
 
-        // проверка признака группировки
+        // РїСЂРѕРІРµСЂРєР° РїСЂРёР·РЅР°РєР° РіСЂСѓРїРїРёСЂРѕРІРєРё
         if(prizn!=curr_prizn)
         {
-            // копирование
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ
             XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+TemplPos), 8, 8));
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             XL->Sheet_activate();
             XL->Range_Paste(XL->GetRows(row, row));
 
             prizn=curr_prizn;
-            //cкопировать строку для записи
+            //cРєРѕРїРёСЂРѕРІР°С‚СЊ СЃС‚СЂРѕРєСѓ РґР»СЏ Р·Р°РїРёСЃРё
             switch(prizn)
             {
             case 1:
                 {
-                    XL->toCells(row, 1,"Детати кот. сборок и кот. сборки");
+                    XL->toCells(row, 1,"Р”РµС‚Р°С‚Рё РєРѕС‚. СЃР±РѕСЂРѕРє Рё РєРѕС‚. СЃР±РѕСЂРєРё");
                     break;
                 }
             case 2:
                 {
-                    XL->toCells(row, 1,"Оригинальные, заим., обезлич. детали");
+                    XL->toCells(row, 1,"РћСЂРёРіРёРЅР°Р»СЊРЅС‹Рµ, Р·Р°РёРј., РѕР±РµР·Р»РёС‡. РґРµС‚Р°Р»Рё");
                     break;
                 }
             default:
@@ -2222,18 +2222,18 @@ void cReports::Cpu_Operation_Timing    (String obd,String zak,int kol,String ceu
             }
             row++;
         }
-        //добавление строки
-        // копирование
+        //РґРѕР±Р°РІР»РµРЅРёРµ СЃС‚СЂРѕРєРё
+        // РєРѕРїРёСЂРѕРІР°РЅРёРµ
         XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+TemplPos), 5, 6));
-        // вставка
+        // РІСЃС‚Р°РІРєР°
         XL->Sheet_activate();
         XL->Range_Paste(XL->GetRows(row, row+1));
 
         while (add_cnt>0)
         {
-            // копирование
+            // РєРѕРїРёСЂРѕРІР°РЅРёРµ
             XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+TemplPos), 6, 6));
-            // вставка
+            // РІСЃС‚Р°РІРєР°
             XL->Sheet_activate();
             XL->Range_Paste(XL->GetRows(row+row_H+add_cnt-1, row+row_H+add_cnt-1));
             add_cnt--;
@@ -2304,9 +2304,9 @@ void cReports::Cpu_Operation_Timing    (String obd,String zak,int kol,String ceu
     }
     else
     {
-        // копирование
+        // РєРѕРїРёСЂРѕРІР°РЅРёРµ
         XL->Range_Copy(XL->GetRows(XL->GetSheet(Lcount+TemplPos), 12, 12));
-        // вставка
+        // РІСЃС‚Р°РІРєР°
         XL->Sheet_activate();
         XL->Range_Paste(XL->GetRows(row, row));
 
@@ -2393,10 +2393,10 @@ String cReports::Get_Rascex(String obd)
         "'limit 0,1", sql2="Select sklad from sklad.materials where obmid='"+
         (String)id+"'", result="", last="";
     if(OBD.SubString(1, 9)=="000000000"&&OBD.Length()==15)
-    { // если расцеховка по стандартному изделию
+    { // РµСЃР»Рё СЂР°СЃС†РµС…РѕРІРєР° РїРѕ СЃС‚Р°РЅРґР°СЂС‚РЅРѕРјСѓ РёР·РґРµР»РёСЋ
         rez=DB->SendSQL(sql);
         if(rez&&rez->RecordCount)
-        { // построение расцеховки
+        { // РїРѕСЃС‚СЂРѕРµРЅРёРµ СЂР°СЃС†РµС…РѕРІРєРё
             for(rez->First(); !rez->Eof; rez->Next())
             {
                 if(Trim(rez->FieldByName("ceu")->Value)!=""&&Trim
@@ -2416,7 +2416,7 @@ String cReports::Get_Rascex(String obd)
         rez=0;
         rez=DB->SendSQL(sql1);
         if(rez&&rez->RecordCount)
-        { // поиск направления
+        { // РїРѕРёСЃРє РЅР°РїСЂР°РІР»РµРЅРёСЏ
             if(result=="")
             {
                 result=Trim(rez->FieldByName("pm")->Value)+" ";
@@ -2436,7 +2436,7 @@ String cReports::Get_Rascex(String obd)
         rez=0;
         rez=DB->SendSQL(sql2);
         if(rez&&rez->RecordCount)
-        { // дописывание склада
+        { // РґРѕРїРёСЃС‹РІР°РЅРёРµ СЃРєР»Р°РґР°
             if(result=="")
             {
                 result="1600?? "+Trim(rez->FieldByName("sklad")->Value);
@@ -2452,14 +2452,14 @@ String cReports::Get_Rascex(String obd)
         }
         else
         {
-            result=result+"напр???";
+            result=result+"РЅР°РїСЂ???";
         }
     }
     else
     {
         rez=DB->SendSQL(sql);
         if(rez&&rez->RecordCount)
-        { // расцеховка
+        { // СЂР°СЃС†РµС…РѕРІРєР°
             for(rez->First(); !rez->Eof; rez->Next())
             {
                 if(Trim(rez->FieldByName("ceu")->Value)!=""&&Trim
@@ -2495,7 +2495,7 @@ String cReports::Get_Rascex(String obd)
         }
         else
         {
-            result=result+"напр???";
+            result=result+"РЅР°РїСЂ???";
         }
         delete rez;
         rez=0;
