@@ -16,6 +16,8 @@
 
 #include <ImgList.hpp>
 #include "SQL.h"
+#include "workers.h"
+
 #define USERIDCOL 1
 #define GROUPIDCOL 1
 #define CONDIDCOL 1
@@ -57,7 +59,7 @@ __published:    // IDE-managed Components
     TMenuItem *GroupEdit;
     TTabSheet *tsEquipment;
     TTabSheet *tsGroupsAndStates;
-    TTabSheet *TabSheet3;
+	TTabSheet *Workers;
     TPanel *Panel9;
     TPanel *Panel10;
     TStringGrid *sgStates;
@@ -102,7 +104,9 @@ __published:    // IDE-managed Components
 
 private:    // User declarations
     cSQL *DB;
-    const int    &LUser;  //идентификатор пользователя
+    TWorkersSettings *workers;
+
+	const int    &LUser;  //идентификатор пользователя
     bool     _UserADD,            //настройки безопасности
             _UserDel,
             _UserEdit,
@@ -123,6 +127,7 @@ private:    // User declarations
     void    Fill_Greed       (String sql,TStringGrid *sg,int offset=0);
 
 public:        // User declarations
-    __fastcall TSettings(TComponent* Owner,cSQL *db,const int&_LUser);
+	__fastcall TSettings(TComponent* Owner,cSQL *db,const int&_LUser);
+	__fastcall ~TSettings();
 };
 #endif

@@ -20,7 +20,7 @@ object Settings: TSettings
     Top = 0
     Width = 634
     Height = 443
-    ActivePage = tsEquipment
+    ActivePage = Workers
     Align = alClient
     Images = images
     TabOrder = 0
@@ -346,9 +346,11 @@ object Settings: TSettings
       Enabled = False
       ImageIndex = 2
     end
-    object TabSheet3: TTabSheet
-      Enabled = False
+    object Workers: TTabSheet
+      Caption = #1056#1072#1073#1086#1095#1080#1077
       ImageIndex = 4
+      ExplicitLeft = 8
+      ExplicitTop = 29
     end
   end
   object pabUsers: TPopupActionBar
@@ -378,8 +380,8 @@ object Settings: TSettings
   end
   object pabGroups: TPopupActionBar
     Images = ImageList1
-    Left = 224
-    Top = 128
+    Left = 88
+    Top = 96
     object AddGroup: TMenuItem
       Caption = #1044#1086#1073#1072#1074#1080#1090#1100
       ImageIndex = 2
@@ -398,8 +400,8 @@ object Settings: TSettings
   end
   object pabRights: TPopupActionBar
     Images = ImageList1
-    Left = 304
-    Top = 128
+    Left = 88
+    Top = 64
     object AddRight: TMenuItem
       Caption = #1044#1086#1073#1072#1074#1080#1090#1100
       ImageIndex = 2
@@ -415,7 +417,7 @@ object Settings: TSettings
     Left = 64
     Top = 208
     Bitmap = {
-      494C010105000A00080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       00000000000000000000E9E9E900FDFDFD000000000000000000000000000000
@@ -690,7 +692,7 @@ object Settings: TSettings
     Left = 224
     Top = 216
     Bitmap = {
-      494C010108000A00080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010108000A000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1095,8 +1097,8 @@ object Settings: TSettings
   end
   object pabGTUS: TPopupActionBar
     Images = ImageList1
-    Left = 392
-    Top = 168
+    Left = 128
+    Top = 64
     object miGTUSAdd: TMenuItem
       Caption = #1044#1086#1073#1072#1074#1080#1090#1100
       ImageIndex = 2
@@ -1110,8 +1112,8 @@ object Settings: TSettings
   end
   object pabPS: TPopupActionBar
     Images = ImageList1
-    Left = 448
-    Top = 168
+    Left = 128
+    Top = 104
     object miNextStateAdd: TMenuItem
       Caption = #1044#1086#1073#1072#1074#1080#1090#1100
       ImageIndex = 2

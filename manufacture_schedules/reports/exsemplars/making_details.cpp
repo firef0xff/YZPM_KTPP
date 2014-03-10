@@ -375,6 +375,7 @@ void MakingDetails::BuildReport()
             std::string prim = (rez1->FieldByName("timing")->Value.operator AnsiString()).c_str();
             cache[id+cex+utch] = prim;
         }
+        delete rez1;
     }
 
     if (rez)

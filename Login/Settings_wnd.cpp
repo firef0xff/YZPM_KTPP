@@ -10,12 +10,13 @@
 #include "GTUSdialog.h"
 #include "NextStateSelector.h"
 #include "functions.h"
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 
 
-__fastcall TSettings::TSettings(TComponent* Owner,cSQL *db,const int&_LUser): TForm(Owner),DB(db),LUser(_LUser)
+__fastcall TSettings::TSettings(TComponent* Owner,cSQL *db,const int&_LUser): TForm(Owner),DB(db),LUser(_LUser),workers(0)
 {//закончена
     pcMain->OnChange(pcMain);
     _UserADD=false;
@@ -65,8 +66,15 @@ __fastcall TSettings::TSettings(TComponent* Owner,cSQL *db,const int&_LUser): TF
         sgGTU->PopupMenu=pabGTUS;
     }
     sgPS->Cells[0][0]="Название";
-    sgPS->Cells[1][0]="Тип";
-    ShowModal();
+	sgPS->Cells[1][0]="Тип";
+	workers = new TWorkersSettings(this,DB,LUser);
+	workers->Parent = Workers;
+	workers->Align = alClient;
+	ShowModal();
+}
+__fastcall TSettings::~TSettings()
+{
+	delete workers;
 }
 //функции
 void     TSettings::Get_Users    (void)
@@ -171,13 +179,17 @@ void __fastcall TSettings::sgDrawCell(TObject *Sender, int ACol, int ARow, TRect
 //обработка триггеров
 void __fastcall TSettings::pcMainChange(TObject *Sender)
 {//закончена
-    switch (pcMain->ActivePage->Tag)
+	switch (pcMain->ActivePage->Tag)
     {
         case 0:{Get_Users();break;}
         case 1:{Get_AllGroups();break;}
         case 2:{Get_Conditions();break;}
-        default:return;
-    }
+        default: break;
+	}
+	if (pcMain->ActivePage == Workers && workers)
+	{
+		workers->OnShow();
+	}
 }
 void __fastcall TSettings::pcStatesSettingsChange(TObject *Sender)
 {//закончена
