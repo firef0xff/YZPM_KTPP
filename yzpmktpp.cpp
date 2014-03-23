@@ -5,12 +5,12 @@
 #include <tchar.h>
 //---------------------------------------------------------------------------
 
+USEFORM("manufacture_schedules\report_params.cpp", RepParams);
 USEFORM("manufacture_schedules\workers.cpp", WorkersSettings); /* TFrame: File Type */
 USEFORM("manufacture_schedules\ZakazCreator.cpp", ZakazWnd);
-USEFORM("manufacture_schedules\ZapCreator.cpp", ZapuskWnd);
-USEFORM("manufacture_schedules\report_params.cpp", RepParams);
 USEFORM("orders_editor\OrderContent_set.cpp", ZakazContent_set);
 USEFORM("orders_editor\Orders.cpp", Orders_editor); /* TFrame: File Type */
+USEFORM("manufacture_schedules\ZapCreator.cpp", ZapuskWnd);
 USEFORM("orders_editor\Order_set.cpp", Zakaz_set);
 USEFORM("technology\support_modules\catalog_workpieces\zagotovk.cpp", zagotovka);
 USEFORM("technology\support_modules\instrument.cpp", instr);
@@ -39,20 +39,21 @@ USEFORM("boom_tree\BomTree.cpp", SpTree); /* TFrame: File Type */
 USEFORM("boom_tree\contents\Conditions.cpp", Cond);
 USEFORM("boom_editor\SPEdit.cpp", SPEditor);
 USEFORM("boom_editor\sp_params.cpp", spparams);
+USEFORM("manufacture_schedules\manufacture.cpp", ManufactureControl); /* TFrame: File Type */
 USEFORM("manufacture_schedules\ReportBuilder.cpp", Reports);
-USEFORM("Login\dialogs\Input_wnd.cpp", newItem);
 USEFORM("Login\dialogs\NextStateSelector.cpp", Next_State_Selector);
 USEFORM("Login\dialogs\RightSelect.cpp", fselRight);
+USEFORM("Login\dialogs\User_Data.cpp", UserData);
 USEFORM("log.cpp", LogForm);
 USEFORM("Login\dialogs\GTUSdialog.cpp", GTUSGroupSelector);
-USEFORM("main.cpp", mForm);
+USEFORM("Login\dialogs\Input_wnd.cpp", newItem);
+USEFORM("manufacture_schedules\EditWorkerData.cpp", WorkerData);
+USEFORM("manufacture_schedules\EditWorkerGroup.cpp", WorkerGroup);
 USEFORM("manufacture_schedules\IzdAppender.cpp", IzdAppenderWnd);
-USEFORM("manufacture_schedules\manufacture.cpp", ManufactureControl); /* TFrame: File Type */
-USEFORM("Login\dialogs\User_Data.cpp", UserData);
 USEFORM("Login\loginwin.cpp", LogIn);
 USEFORM("Login\Settings_wnd.cpp", Settings);
-USEFORM("manufacture_schedules\EditWorkerGroup.cpp", WorkerGroup);
-USEFORM("manufacture_schedules\EditWorkerData.cpp", WorkerData);
+USEFORM("main.cpp", mForm);
+USEFORM("manufacture_schedules\surcharge\surcharge_list.cpp", SurchargeList);
 //---------------------------------------------------------------------------
 WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

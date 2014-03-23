@@ -251,6 +251,16 @@ __published:    // IDE-managed Components
 	TLabeledEdit *E2;
 	TSpeedButton *next;
 	TLabeledEdit *E3;
+	TTabSheet *Surcharge;
+	TStringGrid *surch_sg;
+	TPopupActionBar *PAB4;
+	TMenuItem *N6;
+	TMenuItem *N8;
+	TMenuItem *N9;
+	TPanel *Panel2;
+	TSplitter *Splitter4;
+	TMemo *surch_descr;
+	TEdit *surch_reason;
     void __fastcall CreateZapusk(TObject *Sender);
     void __fastcall RemoveZapusk(TObject *Sender);
     void __fastcall InWorkZapusk(TObject *Sender);
@@ -295,6 +305,11 @@ __published:    // IDE-managed Components
 	void __fastcall E3Change(TObject *Sender);
 	void __fastcall RG2Click(TObject *Sender);
     void __fastcall SGNarListSetEditText(TObject *Sender, int ACol, int ARow, const UnicodeString Value);
+	void __fastcall surch_sgSelectCell(TObject *Sender, int ACol, int ARow, bool &CanSelect);
+	void __fastcall N6Click(TObject *Sender);
+	void __fastcall N9Click(TObject *Sender);
+	void __fastcall N8Click(TObject *Sender);
+
 
 
 
@@ -319,6 +334,7 @@ private:    // User declarations
     void LoadDetailStandartParts(String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
     void LoadDetailMaterials    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
     void LoadDetailOborud       (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
+    void LoadDetailSurCharge    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
 
     void Set_img   (TTreeNode *node);
     void Update    (TTreeNode *node);

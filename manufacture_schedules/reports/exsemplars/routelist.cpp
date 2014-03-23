@@ -216,7 +216,7 @@ void RouteList::BuildData(cExcel &xl, size_t det_id, std::string part_id, std::s
             bool new_page = true;
             bool first_page = true;
             size_t cur_row = 0;
-            size_t start_row = 0, end_row = 69, row_size = 0, template_row = 0;
+            size_t start_row = 0, end_row = 68, row_size = 0, template_row = 0;
             size_t first_page_start = 17;
             size_t second_page_start = 4;
             size_t summary_row_size = 2;

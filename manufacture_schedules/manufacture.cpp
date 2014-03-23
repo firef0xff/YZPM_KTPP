@@ -10,6 +10,8 @@
 #include "functions.h"
 #include "ReportBuilder.h"
 #include "sstream.h"
+
+#include <surcharge/surcharge_list.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -150,7 +152,29 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
     SGNarList->Cells[8][0] = "Деталь";
     SGNarList->Cells[9][0] = "Операция";
     SGNarList->Cells[10][0] = "Оборудование";
-    AutoWidthSG(SGNarList);
+	AutoWidthSG(SGNarList);
+
+
+	surch_sg->Cells[1][0] = "Наряд №";
+
+	surch_sg->Cells[2][0] = "Заказ";
+	surch_sg->Cells[3][0] = "Партия";
+	surch_sg->Cells[4][0] = "Деталь";
+
+	surch_sg->Cells[5][0] = "Цех";
+	surch_sg->Cells[6][0] = "Уч-ок";
+	surch_sg->Cells[7][0] = "Операция";
+
+	surch_sg->Cells[8][0] = "Таб №";
+	surch_sg->Cells[9][0] = "РР";
+	surch_sg->Cells[10][0] = "ВН";
+	surch_sg->Cells[11][0] = "КТС";
+
+	surch_sg->Cells[12][0] = "кол";
+	surch_sg->Cells[13][0] = "Тпз.";
+	surch_sg->Cells[14][0] = "Тшт.";
+	surch_sg->Cells[15][0] = "Тфакт.";
+	AutoWidthSG(surch_sg);
 }
 __fastcall    TManufactureControl::~TManufactureControl(void)
 {
@@ -420,6 +444,10 @@ void TManufactureControl::LoadDetailData    (String zap_id, unsigned __int64 zak
     else if (Content_detail->ActivePage == Oborud)
     {
         LoadDetailOborud(zap_id, zak_id, part_id, det_id, inst_id);
+    }
+    else if (Content_detail->ActivePage == Surcharge)
+    {
+        LoadDetailSurCharge(zap_id, zak_id, part_id, det_id, inst_id);
     }
 }
 void TManufactureControl::LoadDetailParts   (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id)
@@ -795,6 +823,172 @@ void TManufactureControl::LoadDetailOborud       (String zap_id, unsigned __int6
         delete rez;
     }
     AutoWidthSG(OborudSG);
+    return;
+}
+void TManufactureControl::LoadDetailSurCharge    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id)
+{
+    SGClear(surch_sg, 8);
+
+    //входные параметры нужно свести к набору part_id + obd
+
+    std::string step_1_drop = "Drop temporary table if exists step_1";
+    std::string step_1 = "Create temporary table if not exists step_1 "
+                         "("
+                         "part_id bigint(20) unsigned not null,"
+                         "key part_id(`part_id`)"
+                         ")engine = MEMORY";
+    DB->SendCommand(step_1_drop.c_str());
+    DB->SendCommand(step_1.c_str());
+
+    std::stringstream where;
+    std::stringstream joins;
+    std::string obd("");
+    if (zap_id != "")
+    {
+        where << " and a.zap_id = '"<<zap_id.ToIntDef(0)<<"' ";
+    }
+    if (zak_id > 0)
+    {
+        where << " and a.zak_id = '"<<zak_id<<"' ";
+    }
+    if (part_id > 0)
+    {
+        where << " and a.part_id = '"<<part_id<<"' ";
+    }
+    if (det_id > 0)
+    {
+        joins << " join `manufacture`.`part_content` b on `a`.`part_id` = `b`.`part_id` ";
+        where << " and b.det_id = '"<<det_id<<"' ";
+
+        std::stringstream sql;
+        sql << "select a.obd from manufacture.det_names a where a.det_id = '"<<det_id<<"'";
+        TADOQuery *rez = DB->SendSQL(sql.str().c_str());
+        if (rez)
+        {
+            if (rez->RecordCount)
+            {
+                obd = rez->FieldByName("obd")->Value.operator AnsiString().Trim().c_str();
+            }
+            delete rez;
+        }
+    }
+
+    if (!where.str().empty())
+    {
+        std::stringstream step_1_fill;
+        step_1_fill << "insert into step_1 (part_id) "
+                       "select `a`.`part_id` "
+                       "from `manufacture`.`parts` a "
+                       <<joins.str()<<
+                       "where true "<< where.str();
+        DB->SendCommand(step_1_fill.str().c_str());
+    }
+    where.str("");
+
+    /*
+    добавить обработку inst_id для этого нужно получить обозначение детали и проследить до партии по древу спецификации
+    */
+
+    std::stringstream sql;
+    sql << "select "
+           "CONVERT(`a`.`record_id`, CHAR) record_id,"
+           "CONVERT(`c1`.`order_id`, CHAR) order_id,"//cells
+
+           "CONVERT(`a`.`zak_id`, CHAR) zak_id,     "
+           "CONVERT(`b`.`zakaz`, CHAR) zakaz,       "//cells
+
+           "CONVERT(`a`.`part_id`, CHAR) part_id,   "
+           "CONVERT(`c`.`part_no`, CHAR) part_no,   "//cells
+
+           "CONVERT(`a`.`opr_id`, CHAR) opr_id, "//cells
+           "CONVERT(`d`.`name`, CHAR) opr_name,     "//cells
+
+           "CONVERT(`a`.`cex`, CHAR) cex,       "//cells
+           "CONVERT(`a`.`utch`, CHAR) utch,     "//cells
+
+           "CONVERT(`a`.`tab_no`, CHAR) tab_no, "//cells
+           "CONVERT(IFNULL(concat(e.family, ' ',Upper(left(e.name,1)),'.', Upper(left(e.otch,1)),'.'),''), CHAR) as fio, "
+
+           "CONVERT(`a`.`obd`, CHAR) obd,       "//cells
+           "CONVERT(`a`.`kts`, CHAR) kts,       "//cells
+           "CONVERT(`a`.`rr`, CHAR) rr,         "//cells
+           "CONVERT(`c1`.`kol_request`, CHAR) kol,       "//cells
+           "CONVERT(`a`.`tpz`, CHAR) tpz,       "//cells
+           "CONVERT(`a`.`tsht`, CHAR) tsht,     "//cells
+           "CONVERT(`a`.`kvn`, CHAR) kvn,       "//cells
+           "CONVERT(`a`.`reason`, CHAR) reason, "
+           "CONVERT(`a`.`tfact`, CHAR) tfact,   "//cells
+           "CONVERT(`a`.`descr`, CHAR)  descr   "
+           "from manufacture.surcharge a "
+           "join step_1 a1 on a.part_id = a1.part_id "
+           "join manufacture.zakaz_list b on a.zak_id = b.zak_id "
+           "join manufacture.parts c on a.part_id = c.part_id "
+           "join manufacture.orders c1 on c1.surcharge_id = a.record_id "
+           "left join equipment.opr_names d on a.opr_id = d.OprID "
+           "left join manufacture.workers e on a.tab_no = e.tab_no and e.date_from < c1.creation_date and (c1.creation_date < e.date_to or e.date_to = '0000-00-00') ";
+    if (!obd.empty())
+    {
+        sql << " where a.obd = '"<<obd<<"'";
+    }
+
+
+    TADOQuery *rez = DB->SendSQL(sql.str().c_str());
+    DB->SendCommand(step_1_drop.c_str());
+
+    /*
+    часть данных спрятать в сетке и при клике на ячейку отображать
+    */
+    //вывести результат
+    if (rez)
+    {
+        for (rez->First(); !rez->Eof; rez->Next())
+        {
+            int row = surch_sg->RowCount - 1;
+
+            surch_sg->Cells[1][row] = rez->FieldByName("order_id")->Value;
+
+            surch_sg->Cells[2][row] = rez->FieldByName("zakaz")->Value;
+            surch_sg->Cells[3][row] = rez->FieldByName("part_no")->Value;
+            surch_sg->Cells[4][row] = VinToGost(rez->FieldByName("obd")->Value);
+
+            surch_sg->Cells[5][row] = rez->FieldByName("cex")->Value;
+            surch_sg->Cells[6][row] = rez->FieldByName("utch")->Value;
+            surch_sg->Cells[7][row] = rez->FieldByName("opr_id")->Value.operator UnicodeString() + rez->FieldByName("opr_name")->Value.operator UnicodeString();
+
+            surch_sg->Cells[8][row] = rez->FieldByName("tab_no")->Value;
+            surch_sg->Cells[9][row] = rez->FieldByName("rr")->Value;
+            surch_sg->Cells[10][row] = rez->FieldByName("kvn")->Value;
+            surch_sg->Cells[11][row] = rez->FieldByName("kts")->Value;
+
+            surch_sg->Cells[12][row] = rez->FieldByName("kol")->Value;
+            surch_sg->Cells[13][row] = rez->FieldByName("tpz")->Value;
+            surch_sg->Cells[14][row] = rez->FieldByName("tsht")->Value;
+            surch_sg->Cells[15][row] = rez->FieldByName("tfact")->Value;
+
+            //доп поля
+            surch_sg->Cells[16][row] = rez->FieldByName("record_id")->Value;
+            surch_sg->Cells[17][row] = rez->FieldByName("zak_id")->Value;
+            surch_sg->Cells[18][row] = rez->FieldByName("part_id")->Value;
+            surch_sg->Cells[19][row] = rez->FieldByName("reason")->Value;
+            surch_sg->Cells[20][row] = rez->FieldByName("descr")->Value;
+            surch_sg->Cells[21][row] = rez->FieldByName("fio")->Value;
+
+            surch_sg->Cells[22][row] = rez->FieldByName("opr_id")->Value;
+            surch_sg->Cells[23][row] = rez->FieldByName("opr_name")->Value;
+
+
+            ++surch_sg->RowCount;
+        }
+        if (surch_sg->RowCount > 2)
+        {
+            --surch_sg->RowCount;
+        }
+        delete rez;
+    }
+    AutoWidthSG(surch_sg);
+
+    bool s;
+    surch_sgSelectCell(0, surch_sg->Col, surch_sg->Row, s);
     return;
 }
 
@@ -1821,3 +2015,75 @@ void __fastcall TManufactureControl::SGNarListSetEditText(TObject *Sender, int A
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TManufactureControl::surch_sgSelectCell(TObject *Sender, int ACol,
+          int ARow, bool &CanSelect)
+{
+	surch_descr->Lines->Text = surch_sg->Cells[20][ARow];
+	surch_reason->Text = surch_sg->Cells[19][ARow];
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TManufactureControl::N6Click(TObject *Sender)
+{
+	//create
+    TSurchargeList *wnd = new TSurchargeList(this, DB);
+    wnd->ShowModal();
+    delete wnd;
+}
+void __fastcall TManufactureControl::N9Click(TObject *Sender)
+{
+	//edit
+    TSurchargeList *wnd = new TSurchargeList(this, DB);
+    //загрузить данные из гриды
+
+    wnd->zak_no->Text = surch_sg->Cells[2][surch_sg->Row];
+    wnd->part_no->Text = surch_sg->Cells[3][surch_sg->Row];
+    wnd->obd->Text = surch_sg->Cells[4][surch_sg->Row];
+    wnd->opr_kod->Text = surch_sg->Cells[22][surch_sg->Row];
+    wnd->opr_name->Text = surch_sg->Cells[23][surch_sg->Row];//ro
+    wnd->kts->Text = surch_sg->Cells[11][surch_sg->Row];
+    wnd->rr->Text = surch_sg->Cells[9][surch_sg->Row];
+    wnd->vn->Text = surch_sg->Cells[10][surch_sg->Row];
+    wnd->kol->Text = surch_sg->Cells[12][surch_sg->Row];
+    wnd->tpz->Text = surch_sg->Cells[13][surch_sg->Row];
+    wnd->tsht->Text = surch_sg->Cells[14][surch_sg->Row];
+    wnd->tfact->Text = surch_sg->Cells[15][surch_sg->Row];
+
+    wnd->reason->Text = surch_sg->Cells[19][surch_sg->Row];
+    wnd->descr->Lines->Text = surch_sg->Cells[20][surch_sg->Row];
+
+    wnd->nar_no->Text = surch_sg->Cells[1][surch_sg->Row];//ro
+    wnd->cex->Text = surch_sg->Cells[5][surch_sg->Row];
+    wnd->utch->Text = surch_sg->Cells[6][surch_sg->Row];
+    wnd->tab_no->Text = surch_sg->Cells[8][surch_sg->Row];
+    wnd->fio->Text = surch_sg->Cells[21][surch_sg->Row];//ro
+
+    wnd->surcharge_id = surch_sg->Cells[16][surch_sg->Row];
+    wnd->zak_id = surch_sg->Cells[17][surch_sg->Row];
+    wnd->part_id = surch_sg->Cells[18][surch_sg->Row];
+
+    wnd->ShowModal();
+
+    delete wnd;
+}
+void __fastcall TManufactureControl::N8Click(TObject *Sender)
+{
+	//remove
+    std::string surch_id(AnsiString(surch_sg->Cells[16][surch_sg->Row]).c_str());
+    if (surch_id.empty())
+        return;
+
+    if ( MessageBoxA(this->Handle, "Удалить доплатной лист?", "Удалить доплатной лист?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+    {
+        Transaction tr(DB);
+        std::stringstream sql;
+        sql << "delete from `manufacture`.`orders` where surcharge_id = '"<<surch_id<<"'";
+        DB->SendCommand(sql.str().c_str());
+
+        sql.str("");
+
+        sql << "delete from `manufacture`.`surcharge` where record_id = '"<<surch_id<<"'";
+        DB->SendCommand(sql.str().c_str());
+        tr.Commit();
+    }
+}

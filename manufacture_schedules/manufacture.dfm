@@ -30,16 +30,12 @@ object ManufactureControl: TManufactureControl
       Top = 0
       Width = 665
       Height = 252
-      ActivePage = TabSheet6
+      ActivePage = Surcharge
       Align = alClient
       Constraints.MinHeight = 100
       TabOrder = 0
       object Parts: TTabSheet
         Caption = #1044#1077#1090#1072#1083#1080
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object Splitter3: TSplitter
           Left = 342
           Top = 0
@@ -125,10 +121,6 @@ object ManufactureControl: TManufactureControl
           OnChange = DetDetailControlChange
           object OperationsSheet: TTabSheet
             Caption = #1054#1087#1077#1088#1072#1094#1080#1080
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object operSG: TStringGrid
               Left = 0
               Top = 0
@@ -146,10 +138,6 @@ object ManufactureControl: TManufactureControl
           object ObourSheet: TTabSheet
             Caption = #1054#1073#1086#1088#1091#1076#1086#1074#1072#1085#1080#1077
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object det_oborudSG: TStringGrid
               Left = 0
               Top = 0
@@ -166,10 +154,6 @@ object ManufactureControl: TManufactureControl
           object TabSheet2: TTabSheet
             Caption = #1052#1072#1090#1077#1088#1080#1072#1083#1099
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object det_matSG: TStringGrid
               Left = 0
               Top = 0
@@ -186,10 +170,6 @@ object ManufactureControl: TManufactureControl
           object TabSheet3: TTabSheet
             Caption = #1048#1079#1075#1086#1090#1086#1074#1083#1077#1085#1080#1077
             ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object makeSG: TStringGrid
               Left = 0
               Top = 0
@@ -208,10 +188,6 @@ object ManufactureControl: TManufactureControl
       object StandartParts: TTabSheet
         Caption = #1057#1090#1072#1085#1076#1072#1088#1090#1085#1099#1077
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object stSG: TStringGrid
           Left = 0
           Top = 0
@@ -229,10 +205,6 @@ object ManufactureControl: TManufactureControl
       object Materials: TTabSheet
         Caption = #1052#1072#1090#1077#1088#1080#1072#1083#1099
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object matSG: TStringGrid
           Left = 0
           Top = 0
@@ -250,10 +222,6 @@ object ManufactureControl: TManufactureControl
       object Oborud: TTabSheet
         Caption = #1054#1073#1086#1088#1091#1076#1086#1074#1072#1085#1080#1077
         ImageIndex = 3
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object OborudSG: TStringGrid
           Left = 0
           Top = 0
@@ -270,10 +238,6 @@ object ManufactureControl: TManufactureControl
       object TabSheet6: TTabSheet
         Caption = #1054#1090#1095#1077#1090' '#1087#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1072
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         DesignSize = (
           657
           224)
@@ -537,6 +501,61 @@ object ManufactureControl: TManufactureControl
           TabOrder = 10
           Text = '20'
           OnChange = E3Change
+        end
+      end
+      object Surcharge: TTabSheet
+        Caption = #1044#1086#1087#1083#1072#1090#1085#1099#1077
+        ImageIndex = 5
+        object Splitter4: TSplitter
+          Left = 407
+          Top = 0
+          Height = 224
+          Align = alRight
+          ExplicitLeft = -6
+          ExplicitTop = -3
+          ExplicitHeight = 203
+        end
+        object surch_sg: TStringGrid
+          Left = 0
+          Top = 0
+          Width = 407
+          Height = 224
+          Align = alClient
+          ColCount = 16
+          DefaultColWidth = 16
+          DefaultRowHeight = 16
+          RowCount = 2
+          Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing]
+          PopupMenu = PAB4
+          TabOrder = 0
+          OnDrawCell = SGNarListDrawCell
+          OnSelectCell = surch_sgSelectCell
+        end
+        object Panel2: TPanel
+          Left = 410
+          Top = 0
+          Width = 247
+          Height = 224
+          Align = alRight
+          BevelOuter = bvNone
+          TabOrder = 1
+          object surch_descr: TMemo
+            Left = 0
+            Top = 21
+            Width = 247
+            Height = 203
+            Align = alClient
+            ScrollBars = ssVertical
+            TabOrder = 0
+          end
+          object surch_reason: TEdit
+            Left = 0
+            Top = 0
+            Width = 247
+            Height = 21
+            Align = alTop
+            TabOrder = 1
+          end
         end
       end
     end
@@ -964,7 +983,7 @@ object ManufactureControl: TManufactureControl
     Left = 224
     Top = 208
     Bitmap = {
-      494C0101030005008C0018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000500980018001800FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000600000001800000001002000000000000024
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1272,7 +1291,7 @@ object ManufactureControl: TManufactureControl
     Left = 224
     Top = 136
     Bitmap = {
-      494C010103005400C00010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103005400CC0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       000000000000000000000000000000000000241CED00241CED00241CED00241C
       ED00241CED00241CED00241CED00241CED00241CED00241CED00241CED00241C
@@ -1410,5 +1429,21 @@ object ManufactureControl: TManufactureControl
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000}
+  end
+  object PAB4: TPopupActionBar
+    Left = 504
+    Top = 408
+    object N6: TMenuItem
+      Caption = #1057#1086#1079#1076#1072#1090#1100
+      OnClick = N6Click
+    end
+    object N9: TMenuItem
+      Caption = #1056#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1090#1100
+      OnClick = N9Click
+    end
+    object N8: TMenuItem
+      Caption = #1059#1076#1072#1083#1080#1090#1100
+      OnClick = N8Click
+    end
   end
 end
