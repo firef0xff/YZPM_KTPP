@@ -14,7 +14,7 @@ namespace rep
 
 ZakazTrudReport::ZakazTrudReport (int set): rep::Report("Отчет о трудозатратах по заказам",set),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),use_zakaz_group(false)
+    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),use_zakaz_group(false),surcharge(false)
 {
     params[REPORT_PATH];
     params[REPORT_LIST_COUNT] = "10";
@@ -41,13 +41,14 @@ ZakazTrudReport::ZakazTrudReport (int set): rep::Report("Отчет о труд�
     params["Начало периода"]=f_day.str().c_str();
     params["Окончание периода"]=l_day.str().c_str();
     params["Группировать по заказам"] = REP_TRUE;
+    params["Доплатные"] = REP_FALSE;
 }
 ZakazTrudReport::~ZakazTrudReport()
 {}
 
 ZakazTrudReport::ZakazTrudReport(const ZakazTrudReport &r):rep::Report(r),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),use_zakaz_group(false)
+    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),use_zakaz_group(false),surcharge(false)
 {
 
 }
@@ -94,7 +95,7 @@ void ZakazTrudReport::ParseParams(void)
     date_to = params["Окончание периода"];
     date_from = params["Начало периода"];
     use_zakaz_group = params["Группировать по заказам"] != REP_FALSE && params["Группировать по заказам"] != REP_NULL;
-
+    surcharge = params["Доплатные"] != REP_FALSE && params["Доплатные"] != REP_NULL;
     try
     {
         TDateTime(date_to.c_str());
@@ -129,7 +130,8 @@ void ZakazTrudReport::BuildReport()
     DB->SendCommand(
     "create temporary table if not exists `tmp` "
     "( "
-    "det_id bigint(20) unsigned NOT NULL, "
+    "det_id bigint(20) unsigned NULL, "
+    "surch_id bigint(20) unsigned NULL, "
     "maked int(10) unsigned NOT NULL, "
     "broken int(10) unsigned NOT NULL, "
     "cex varchar(10) NOT NULL, "
@@ -138,57 +140,103 @@ void ZakazTrudReport::BuildReport()
     "date datetime  NOT NULL, "
 
     "key det_id (`det_id`), "
+    "key surch_id (`surch_id`), "
     "key tab_no (`tab_no`), "
     "key date (`date`) "
     ")engine = MEMORY ");
 
     std::stringstream sql;
-    sql <<
-    "insert into tmp "
-    "select "
-    "    c1.det_id as det_id, "
-    "    a.maked as maked, "
-    "    a.broken as broken, "
-    "    e.cex  as cex, "
-    "    a.tab_no as tab_no, "
-    "    if (e.cex = '03' and e.utch = '04', "
-    "    IFNULL(`c`.`tsht`*ceil(`b`.`kol_request`/`c1`.`kdz`)/`b`.`kol_request`*`a`.`maked`+`c`.`tpz`,0), "
-    "    IFNULL(`c`.`tsht`*`c`.`ksht`*`c`.`krop`/`c`.`kolod`*a.maked+`c`.`tpz`,0) "
-    "    ) as trud, "
-    "    a.date "
-    "from `manufacture`.`orders_history` a "
-    "    join `manufacture`.`orders` b on b.order_id = a.order_id "
-    "    join `manufacture`.`operation_norms` c on c.OpUUID = b.operation_id "
-    "    join `manufacture`.`operation_list` e on e.OpUUID = b.operation_id "
-    "    join `manufacture`.`det_info` c1 on c1.det_id = e.det_id "
-    "where '"<<AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str() <<"' <= a.date and a.date < '"
-             <<AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str()<<"'";
-
+    if (!surcharge)
+    {
+        sql <<//основные наряды
+        "insert into tmp "
+        "select "
+        "    c1.det_id as det_id, "
+        "    NULL as surch_id, "
+        "    a.maked as maked, "
+        "    a.broken as broken, "
+        "    e.cex  as cex, "
+        "    a.tab_no as tab_no, "
+        "    if (e.cex = '03' and e.utch = '04', "
+        "    IFNULL(`c`.`tsht`*ceil(`b`.`kol_request`/`c1`.`kdz`)/`b`.`kol_request`*`a`.`maked`+`c`.`tpz`,0), "
+        "    IFNULL(`c`.`tsht`*`c`.`ksht`*`c`.`krop`/`c`.`kolod`*a.maked+`c`.`tpz`,0) "
+        "    ) as trud, "
+        "    a.date "
+        "from `manufacture`.`orders_history` a "
+        "    join `manufacture`.`orders` b on b.order_id = a.order_id "
+        "    join `manufacture`.`operation_norms` c on c.OpUUID = b.operation_id "
+        "    join `manufacture`.`operation_list` e on e.OpUUID = b.operation_id "
+        "    join `manufacture`.`det_info` c1 on c1.det_id = e.det_id "
+        "where '"<<AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str() <<"' <= a.date and a.date < '"
+                 <<AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str()<<"'";
+    }
+    else
+    {
+        sql <<//доплатные
+        "insert into tmp "
+        "select "
+        "    NULL as det_id, "
+        "    a.surcharge_id as surch_id,"
+        "    a.kol_maked as maked, "
+        "    a.kol_broken as broken, "
+        "    b.cex  as cex, "
+        "    b.tab_no as tab_no, "
+        "    if (b.cex = '03' and b.utch = '04', "
+        "    IFNULL(`b`.`tsht`*`a`.`kol_maked`+`b`.`tpz`,0), "
+        "    IFNULL(`b`.`tsht`*`a`.`kol_maked`+`b`.`tpz`,0) "
+        "    ) as trud, "
+        "    a.creation_date "
+        "from `manufacture`.`orders` a "
+        "    join `manufacture`.`surcharge` b on b.record_id = a.surcharge_id "
+        "where '"<<AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str() <<"' <= a.creation_date and a.creation_date < '"
+                 <<AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str()<<"'";
+    }
     DB->SendCommand(sql.str().c_str());
 
     sql.str("");
-    sql <<
-    "select "
-    "d.zakaz, "
-    "a.det_id, "
-    "sum(a.maked) as maked, "
-    "sum(a.broken) as broken, "
-    "a.tab_no, "
-    "round(sum(a.trud),3) as trud, "
-    "IFNULL(concat(e.family, ' ',Upper(left(e.name,1)),'.', Upper(left(e.otch,1)),'.'),'') fio "
-
-    "from tmp a "
-    "    join `manufacture`.`marsh_lists`   b on b.det_id = a.det_id "
-    "    join `manufacture`.`parts`         c on c.part_id = b.part_id "
-    "    join `manufacture`.`zakaz_list`    d on d.zak_id = c.zak_id "
-    "    left join `manufacture`.`workers` e on e.tab_no = a.tab_no and e.date_from <= a.date and IF(e.date_to != 0, a.date < e.date_to, 1) ";
-    if (use_zakaz_group)
-        sql << "group by d.zakaz,e.family,a.tab_no";
+    if (!surcharge)
+    {
+        sql <<
+        "select "
+        "d.zakaz, "
+        "sum(a.maked) as maked, "
+        "sum(a.broken) as broken, "
+        "a.tab_no, "
+        "round(sum(a.trud),3) as trud, "
+        "IFNULL(concat(e.family, ' ',Upper(left(e.name,1)),'.', Upper(left(e.otch,1)),'.'),'') fio, "
+        " '' reason "
+        "from tmp a "
+        "    join `manufacture`.`marsh_lists`   b on b.det_id = a.det_id "
+        "    join `manufacture`.`parts`         c on c.part_id = b.part_id "
+        "    join `manufacture`.`zakaz_list`    d on d.zak_id = c.zak_id "
+        "    left join `manufacture`.`workers` e on e.tab_no = a.tab_no and e.date_from <= a.date and IF(e.date_to != 0, a.date < e.date_to, 1) ";
+        if (use_zakaz_group)
+            sql << "group by d.zakaz,e.family,a.tab_no";
+        else
+            sql << "group by e.family,a.tab_no,d.zakaz";
+    }
     else
-		sql << "group by e.family,a.tab_no,d.zakaz";
+    {
+        sql<<
+            " select "
+            "c.zakaz, "
+            "sum(a.maked) as maked, "
+            "sum(a.broken) as broken, "
+            "b.tab_no, "
+            "round(sum(a.trud),3) as trud, "
+            "IFNULL(concat(e.family, ' ',Upper(left(e.name,1)),'.', Upper(left(e.otch,1)),'.'),'') fio, "
+            " b.reason reason "
+            "from tmp a "
+            "    join `manufacture`.`surcharge` b on b.record_id = a.surch_id "
+            "    join `manufacture`.`zakaz_list` c on c.zak_id = b.zak_id "
+            "    left join `manufacture`.`workers` e on e.tab_no = b.tab_no and e.date_from <= a.date and IF(e.date_to != 0, a.date < e.date_to, 1) ";
+        if (use_zakaz_group)
+            sql << "group by c.zakaz,e.family,b.tab_no";
+        else
+            sql << "group by e.family,b.tab_no,c.zakaz";
+    }
 	TADOQuery *rez = DB->SendSQL(sql.str().c_str());
 	DB->SendCommand("drop temporary table if EXISTS `tmp`");
-
 
     if (rez)
     {
@@ -223,6 +271,7 @@ void ZakazTrudReport::BuildReport()
                 tmp.tab_no  =   (rez->FieldByName("tab_no")->Value.operator AnsiString()).c_str();
                 tmp.fio     =   (rez->FieldByName("fio")->Value.operator AnsiString()).c_str();
                 tmp.trud    =   rez->FieldByName("trud")->Value.operator double();
+                tmp.reason     =   (rez->FieldByName("reason")->Value.operator AnsiString()).c_str();
 
                 std::string mark;
                 if (use_zakaz_group)
@@ -336,6 +385,11 @@ void ZakazTrudReport::BuildReport()
                     xl.toCells(2, 2,    Now().FormatString("dd.mm.yyyy")   );
                     xl.toCells(2, 7,    date_from.c_str()   );
                     xl.toCells(2, 11,   date_to.c_str()     );
+
+                    if (!surcharge)
+                        xl.toCells(2, 15,   "Основные наряды"     );
+                    else
+                        xl.toCells(2, 15,   "Доплатные наряды"    );
 
                     cur_row = start_row;
                 }

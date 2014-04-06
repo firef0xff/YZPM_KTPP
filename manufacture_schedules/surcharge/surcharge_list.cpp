@@ -29,11 +29,33 @@ void __fastcall TSurchargeList::saveClick(TObject *Sender)
 {
 // save
     if (!zak_id.ToIntDef(0) || !part_id.ToIntDef(0))
-    {
-        ShowMessage("Укажите заказ и номер партии");
-        return;
-    }
+	{
+		ShowMessage("Укажите заказ и номер партии");
+		return;
+	}
+	if (!opr_kod->Text.ToIntDef(0))
+	{
+		ShowMessage("Укажите операцию");
+		return;
+	}
+	if (!tab_no->Text.ToIntDef(0))
+	{
+		ShowMessage("Укажите табельный номер");
+		return;
+	}
 
+	if (tpz->Text == "")
+	{
+		tpz->Text = "0";
+	}
+	if (tsht->Text == "")
+	{
+		tsht->Text = "0";
+	}
+	if (tfact->Text == "")
+	{
+		tfact->Text = "0";
+	}
     Transaction tr(DB);
     if (surcharge_id != "")
     {
@@ -46,7 +68,7 @@ void __fastcall TSurchargeList::saveClick(TObject *Sender)
         DB->SendCommand("update `manufacture`.`surcharge` set "
                         "`zak_id`   ='"+zak_id+"', "
                         "`part_id`  ='"+part_id+"', "
-                        "`opr_id`   ='"+opr_kod->Text+"', "
+						"`opr_id`   ='"+opr_kod->Text+"', "
                         "`cex`      ='"+cex->Text+"', "
                         "`utch`     ='"+utch->Text+"', "
                         "`tab_no`   ='"+tab_no->Text+"', "
@@ -57,7 +79,7 @@ void __fastcall TSurchargeList::saveClick(TObject *Sender)
                         "`tsht`     ='"+tsht->Text+"', "
                         "`kvn`      ='"+vn->Text+"', "
                         "`reason`   ='"+reason->Text+"', "
-                        "`tfact`    ='"+tfact->Text+"', "
+						"`tfact`    ='"+tfact->Text+"', "
                         "`descr`    ='"+ekran(descr->Text)+"' "
                         "where record_id = '"+surcharge_id+"'"
                         );
@@ -178,3 +200,24 @@ void __fastcall TSurchargeList::tab_noChange(TObject *Sender)
         delete rez;
     }
 }
+
+void __fastcall TSurchargeList::RealFilter(TObject *Sender, wchar_t &Key)
+{
+	if (Key == '\b')
+	{
+    	return;
+	}
+
+	TLabeledEdit *ptr = (TLabeledEdit *)Sender;
+	if (Key == ',')
+	{
+    	Key = '.';
+	}
+	bool skeep = ptr->Text.Pos(".")-1 > 0;
+	if ( (!isdigit(Key) && Key != '.') || (skeep && Key == '.'))
+	{
+		Key = 0;
+	}
+}
+//---------------------------------------------------------------------------
+

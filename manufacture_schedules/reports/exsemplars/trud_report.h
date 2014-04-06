@@ -49,6 +49,7 @@ private:
 
     //глобальные переменные
     size_t cur_lists;
+    bool surcharge;
 
     void ParseParams    (void);
     void LoadSettings   (void);

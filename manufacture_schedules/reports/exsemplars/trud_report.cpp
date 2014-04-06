@@ -14,7 +14,7 @@ namespace rep
 
 TrudReport::TrudReport (int set): rep::Report("Отчет о трудозатратах",set),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to("")
+    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),surcharge(false)
 {
     params[REPORT_PATH];
     params[REPORT_LIST_COUNT] = "10";
@@ -40,13 +40,14 @@ TrudReport::TrudReport (int set): rep::Report("Отчет о трудозатр�
 
     params["Начало периода"]=f_day.str().c_str();
     params["Окончание периода"]=l_day.str().c_str();
+    params["Доплатные"] = REP_FALSE;
 }
 TrudReport::~TrudReport()
 {}
 
 TrudReport::TrudReport(const TrudReport &r):rep::Report(r),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to("")
+    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),surcharge(false)
 {
 
 }
@@ -92,6 +93,7 @@ void TrudReport::ParseParams(void)
 //        throw std::runtime_error("Не указан тип объекта для отчета");
     date_to = params["Окончание периода"];
     date_from = params["Начало периода"];
+    surcharge = params["Доплатные"] != REP_FALSE && params["Доплатные"] != REP_NULL;
 
     try
     {
@@ -124,27 +126,51 @@ void TrudReport::BuildReport()
 {
     //получить список маршрутных листов по заданию
     std::stringstream sql;
-    sql <<
-    "select "
-    "CONVERT(sum(a.maked), CHAR) as maked, "
-    "CONVERT(sum(a.broken), CHAR) as broken, "
-    "CONVERT(e.cex, CHAR) as cex, "
-    "CONVERT(IFNULL(concat(d.family, ' ',Upper(left(d.name,1)),'.', Upper(left(d.otch,1)),'.'),''), CHAR) as fio, "
-    "CONVERT(a.tab_no, CHAR) as tab_no, "
-    "CONVERT(round(sum(if (e.cex = '"<< "03" <<"' and e.utch = '"<< "04" <<"', "
-    "IFNULL(`c`.`tsht`*ceil(`b`.`kol_request`/`c1`.`kdz`)/`b`.`kol_request`*`a`.`maked`+`c`.`tpz`,0), "
-    "IFNULL(`c`.`tsht`*`c`.`ksht`*`c`.`krop`/`c`.`kolod`*a.maked+`c`.`tpz`,0) "
-    ")),3), DECIMAL(40,6)) as trud "
-    "from `manufacture`.`orders_history` a "
-    "join `manufacture`.`orders` b on b.order_id = a.order_id "
-    "join `manufacture`.`operation_norms` c on c.OpUUID = b.operation_id "
-    "join `manufacture`.`operation_list` e on e.OpUUID = b.operation_id "
-    "join `manufacture`.`det_info` c1 on c1.det_id = e.det_id "
-    "left join `manufacture`.`workers` d on d.tab_no = a.tab_no and d.date_from <= a.date and IF(d.date_to != 0, a.date < d.date_to, 1) "
-    "where '"<<AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str() <<"' <= a.date and a.date < '"
-             <<AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str()<<"'";
+    if (!surcharge)
+    {
+        sql <<
+        "select "
+        "CONVERT(sum(a.maked), CHAR) as maked, "
+        "CONVERT(sum(a.broken), CHAR) as broken, "
+        "CONVERT(e.cex, CHAR) as cex, "
+        "CONVERT(IFNULL(concat(d.family, ' ',Upper(left(d.name,1)),'.', Upper(left(d.otch,1)),'.'),''), CHAR) as fio, "
+        "CONVERT(a.tab_no, CHAR) as tab_no, "
+        "CONVERT(round(sum(if (e.cex = '"<< "03" <<"' and e.utch = '"<< "04" <<"', "
+        "IFNULL(`c`.`tsht`*ceil(`b`.`kol_request`/`c1`.`kdz`)/`b`.`kol_request`*`a`.`maked`+`c`.`tpz`,0), "
+        "IFNULL(`c`.`tsht`*`c`.`ksht`*`c`.`krop`/`c`.`kolod`*a.maked+`c`.`tpz`,0) "
+        ")),3), DECIMAL(40,6)) as trud "
+        "from `manufacture`.`orders_history` a "
+        "join `manufacture`.`orders` b on b.order_id = a.order_id "
+        "join `manufacture`.`operation_norms` c on c.OpUUID = b.operation_id "
+        "join `manufacture`.`operation_list` e on e.OpUUID = b.operation_id "
+        "join `manufacture`.`det_info` c1 on c1.det_id = e.det_id "
+        "left join `manufacture`.`workers` d on d.tab_no = a.tab_no and d.date_from <= a.date and IF(d.date_to != 0, a.date < d.date_to, 1) "
+        "where '"<<AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str() <<"' <= a.date and a.date < '"
+                 <<AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str()<<"'";
 
-    sql << "group by e.cex,a.tab_no,d.family ";
+        sql << "group by e.cex,a.tab_no,d.family ";
+    }
+    else
+    {
+        sql <<
+        "select "
+        "CONVERT(sum(a.kol_maked), CHAR) as maked, "
+        "CONVERT(sum(a.kol_broken), CHAR) as broken, "
+        "CONVERT(b.cex, CHAR) as cex, "
+        "CONVERT(IFNULL(concat(d.family, ' ',Upper(left(d.name,1)),'.', Upper(left(d.otch,1)),'.'),''), CHAR) as fio, "
+        "CONVERT(b.tab_no, CHAR) as tab_no, "
+        "CONVERT(round(sum(if (b.cex = '"<< "03" <<"' and b.utch = '"<< "04" <<"', "
+        "    IFNULL(`b`.`tsht`*`a`.`kol_maked`+`b`.`tpz`,0), "
+        "    IFNULL(`b`.`tsht`*`a`.`kol_maked`+`b`.`tpz`,0) "
+        ")),3), DECIMAL(40,6)) as trud "
+        "from `manufacture`.`orders` a "
+        "join `manufacture`.`surcharge` b on b.record_id = a.surcharge_id "
+        "left join `manufacture`.`workers` d on d.tab_no = b.tab_no and d.date_from <= a.creation_date and IF(d.date_to != 0, a.creation_date < d.date_to, 1) "
+        "where '"<<AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str() <<"' <= a.creation_date and a.creation_date < '"
+                 <<AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str()<<"'";
+
+        sql << "group by b.cex,b.tab_no,d.family ";
+    }
 
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
     if (rez)
@@ -278,6 +304,11 @@ void TrudReport::BuildReport()
                     xl.toCells(2, 2,    Now().FormatString("dd.mm.yyyy")   );
                     xl.toCells(2, 6,    date_from.c_str()   );
                     xl.toCells(2, 9,    date_to.c_str()     );
+
+                    if (!surcharge)
+                        xl.toCells(2, 12,   "Основные наряды"     );
+                    else
+                        xl.toCells(2, 12,   "Доплатные наряды"    );
 
                     cur_row = start_row;
                 }

@@ -52,6 +52,7 @@ __published:	// IDE-managed Components
 	void __fastcall zak_noChange(TObject *Sender);
 	void __fastcall part_noChange(TObject *Sender);
 	void __fastcall tab_noChange(TObject *Sender);
+	void __fastcall RealFilter(TObject *Sender, wchar_t &Key);
 private:	// User declarations
     cSQL *DB;
 public:		// User declarations

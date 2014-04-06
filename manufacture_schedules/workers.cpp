@@ -48,7 +48,7 @@ void TWorkersSettings::LoadGroups(void)
                                  "convert(`a`.`p_kol`, char) p_kol, "
                                  "convert(count(`b`.`tab_no`), char) kol "
                                  "from `manufacture`.`worker_groups` `a` "
-                                 "left join `manufacture`.`workers` `b` on `a`.`group_id` = `b`.`group_id` and `b`.`date_to` = '0000-00-00'"
+                                 "left join `manufacture`.`workers` `b` on `a`.`group_id` = `b`.`group_id` and `b`.`date_to` is null "
                                  "group by `a`.`group_id`");
     if (rez)
     {
@@ -80,7 +80,7 @@ void TWorkersSettings::LoadWorkers(std::string group_id)
            "convert(`a`.`razr`, char) razr,"
            "convert(`a`.`proff`, char) proff "
            "from `manufacture`.`workers` `a` "
-		   "where `a`.`date_to` = '0000-00-00' ";
+		   "where `a`.`date_to` is null ";
 	if (!group_id.empty())
 		sql << "and group_id = '"<<group_id<<"' ";
 	sql << "order by tab_no";
@@ -200,7 +200,7 @@ void __fastcall TWorkersSettings::N3Click(TObject *Sender)
 
         //если не задан табельный - послать
         DB->SendCommand(std::string("update `manufacture`.`workers` set date_to = now() "
-                                "where tab_no = '"+tab_no+"' and date_to = '0000-00-00'").c_str());
+                                "where tab_no = '"+tab_no+"' and date_to is null").c_str());
         //если табельный задан, считать последнего активного рабочего с ним,
         //если такового нет то просто добавить новоро работягу
         //если таковой есть то закрыть его историю работы на этом номере
@@ -265,7 +265,7 @@ void __fastcall TWorkersSettings::N4Click(TObject *Sender)
                "proff = '"<<proff<<"' ";
         if (group_id)
             sql << ", group_id = '"<<group_id<<"'";
-        sql << "where tab_no = '"<<tab_no<<"' and date_to = '0000-00-00'";
+        sql << "where tab_no = '"<<tab_no<<"' and date_to is null";
 
         DB->SendCommand(sql.str().c_str());
 
@@ -280,7 +280,7 @@ void __fastcall TWorkersSettings::N5Click(TObject *Sender)
     if ( MessageBoxA(this->Handle, "Удалить рабочего?", "Удалить рабочего?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
         DB->SendCommand(AnsiString("update `manufacture`.`workers` set date_to = now() "
-                                "where tab_no = '"+sgWorkers->Cells[0][sgWorkers->Row]+"' and date_to = '0000-00-00'"));
+                                "where tab_no = '"+sgWorkers->Cells[0][sgWorkers->Row]+"' and date_to is null"));
 
         LoadGroups();
         LoadWorkers(AnsiString(sgGroups->Cells[3][sgGroups->Row]).c_str());

@@ -13,6 +13,7 @@ class ZakazTrudReport : public Report
         std::string zakaz;
         std::string tab_no;
         std::string fio;
+        std::string reason;
         double trud;
     };
     typedef std::pair<const std::string, Data> CexDataItem;
@@ -43,6 +44,7 @@ private:
     std::string date_from;
     std::string date_to;
     bool use_zakaz_group;
+    bool surcharge;
 
     //шаблоны
     std::string template_path;//путь к файлу шаблона
