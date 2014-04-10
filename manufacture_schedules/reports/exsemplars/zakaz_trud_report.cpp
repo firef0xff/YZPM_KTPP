@@ -460,4 +460,534 @@ void ZakazTrudReport::BuildReport()
         throw std::runtime_error("Ошибка соединения с базой данных");
     }
 }
+
+//------------
+
+ZakazTrudReport2::ZakazTrudReport2 (int set): rep::Report("Отчет о трудозатратах по заказам 2",set),
+    DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
+    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),use_zakaz_group(false)
+{
+    params[REPORT_PATH];
+    params[REPORT_LIST_COUNT] = "10";
+    params[REPORT_USE_LISTING] = REP_TRUE;
+
+
+    bgreg::date now = bgreg::day_clock::local_day();
+
+    std::stringstream f_day;
+    f_day.fill('0');
+    f_day.width(2);
+    f_day<<1<<".";
+    f_day.width(2);
+    f_day<<(int)now.month()<<"."<<(int)now.year();
+
+    now += bgreg::months(1);
+    std::stringstream l_day;
+    l_day.fill('0');
+    l_day.width(2);
+    l_day<<1<<".";
+    l_day.width(2);
+    l_day<<(int)now.month()<<"."<<(int)now.year();
+
+    params["Начало периода"]=f_day.str().c_str();
+    params["Окончание периода"]=l_day.str().c_str();
+    params["Группировать по заказам"] = REP_TRUE;
+}
+ZakazTrudReport2::~ZakazTrudReport2()
+{}
+
+ZakazTrudReport2::ZakazTrudReport2(const ZakazTrudReport2 &r):rep::Report(r),
+    DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
+    cur_lists(0),templ("manufacture_forms.xlt"),date_from(""),date_to(""),use_zakaz_group(false)
+{
+
+}
+
+void ZakazTrudReport2::Build(void)
+{
+    cur_lists = 0;
+    ParseParams();
+    LoadSettings();
+    BuildReport();
+}
+boost::shared_ptr<rep::Report> ZakazTrudReport2::SelfCopy (void) const
+{
+    return boost::shared_ptr<rep::Report>(new ZakazTrudReport2(*this));
+}
+
+void ZakazTrudReport2::ParseParams(void)
+{
+    DB = ReportList::Instance().DbConnection();
+    if (!DB)
+        throw std::runtime_error("Отсутствует соединение с базой данных");
+
+    //парсинг входных параметров отчета
+    path = params[REPORT_PATH];
+    use_listing = params[REPORT_USE_LISTING] == REP_TRUE;
+
+    std::string s_tmp = params[REPORT_LIST_COUNT];
+    std::stringstream s;
+    s << s_tmp;
+    s >> lists_by_file;
+
+    if (!lists_by_file && !s_tmp.empty())
+        throw std::runtime_error("Количество станиц на файл должно быть числом");
+
+    //переменные указывающие на цель отчета
+    object = params[REPORT_OBJECT_ID];
+    type   = params[REPORT_OBJECT_TYPE];
+    element = params[REPORT_ELEMENT_ID];
+
+//    if (object.empty())
+//        throw std::runtime_error("Не указан объект для построения отчета");
+//    if (type.empty())
+//        throw std::runtime_error("Не указан тип объекта для отчета");
+    date_to = params["Окончание периода"];
+    date_from = params["Начало периода"];
+    use_zakaz_group = params["Группировать по заказам"] != REP_FALSE && params["Группировать по заказам"] != REP_NULL;
+    try
+    {
+        TDateTime(date_to.c_str());
+        TDateTime(date_from.c_str());
+    }
+    catch (...)
+    {
+        throw ("Неверный формат даты");
+    }
+}
+void ZakazTrudReport2::LoadSettings()
+{
+    //считать переменные из бд
+    TADOQuery *rez = DB->SendSQL("select value from administration.settings where property='template'");
+    if (rez)
+    {
+        template_path = rez->FieldByName("Value")->Value.operator AnsiString().Trim().c_str();
+        delete rez;
+        rez = 0;
+    }
+    else
+    {
+        throw std::runtime_error("Не задан путь к шаблонам");
+    }
+}
+
+
+void ZakazTrudReport2::BuildReport()
+{
+    //получить список маршрутных листов по заданию
+    DB->SendCommand("drop temporary table if EXISTS `tmp`");
+    DB->SendCommand(
+    "create temporary table if not exists `tmp` "
+    "( "
+    "det_id bigint(20) unsigned NULL, "
+    "surch_id bigint(20) unsigned NULL, "
+    "maked int(10) unsigned NOT NULL, "
+    "broken int(10) unsigned NOT NULL, "
+    "cex varchar(10) NOT NULL, "
+    "tab_no int(11) NOT NULL, "
+    "trud double not null default 0.0, "
+    "date datetime  NOT NULL, "
+
+    "key det_id (`det_id`), "
+    "key surch_id (`surch_id`), "
+    "key tab_no (`tab_no`), "
+    "key date (`date`) "
+    ")engine = MEMORY ");
+
+    std::stringstream sql;
+    sql <<//основные наряды
+    "insert into tmp "
+    "select "
+    "    c1.det_id as det_id, "
+    "    NULL as surch_id, "
+    "    a.maked as maked, "
+    "    a.broken as broken, "
+    "    e.cex  as cex, "
+    "    a.tab_no as tab_no, "
+    "    if (e.cex = '03' and e.utch = '04', "
+    "    IFNULL(`c`.`tsht`*ceil(`b`.`kol_request`/`c1`.`kdz`)/`b`.`kol_request`*`a`.`maked`+`c`.`tpz`,0), "
+    "    IFNULL(`c`.`tsht`*`c`.`ksht`*`c`.`krop`/`c`.`kolod`*a.maked+`c`.`tpz`,0) "
+    "    ) as trud, "
+    "    a.date "
+    "from `manufacture`.`orders_history` a "
+    "    join `manufacture`.`orders` b on b.order_id = a.order_id "
+    "    join `manufacture`.`operation_norms` c on c.OpUUID = b.operation_id "
+    "    join `manufacture`.`operation_list` e on e.OpUUID = b.operation_id "
+    "    join `manufacture`.`det_info` c1 on c1.det_id = e.det_id "
+    "where '"<<AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str() <<"' <= a.date and a.date < '"
+             <<AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str()<<"'";
+    DB->SendCommand(sql.str().c_str());
+    sql.str("");
+
+    sql <<//доплатные
+    "insert into tmp "
+    "select "
+    "    NULL as det_id, "
+    "    a.surcharge_id as surch_id,"
+    "    a.kol_maked as maked, "
+    "    a.kol_broken as broken, "
+    "    b.cex  as cex, "
+    "    b.tab_no as tab_no, "
+    "    if (b.cex = '03' and b.utch = '04', "
+    "    IFNULL(`b`.`tsht`*`a`.`kol_maked`+`b`.`tpz`,0), "
+    "    IFNULL(`b`.`tsht`*`a`.`kol_maked`+`b`.`tpz`,0) "
+    "    ) as trud, "
+    "    a.creation_date "
+    "from `manufacture`.`orders` a "
+    "    join `manufacture`.`surcharge` b on b.record_id = a.surcharge_id "
+    "where '"<<AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str() <<"' <= a.creation_date and a.creation_date < '"
+             <<AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str()<<"'";
+    DB->SendCommand(sql.str().c_str());
+    sql.str("");
+
+
+    DB->SendCommand("drop temporary table if EXISTS `tmp2`");
+    DB->SendCommand(
+    "create temporary table if not exists `tmp2` "
+    "( "
+    "zakaz varchar(255) NOT NULL default '', "
+    "maked varchar(255) NOT NULL default '', "
+    "broken varchar(255) NOT NULL default '', "
+    "tab_no varchar(255) NOT NULL default '', "
+    "trud double NOT NULL default 0.0, "
+    "fio varchar(255) NOT NULL default '', "
+    "reason varchar(255) NOT NULL default '' "
+    ")engine = MEMORY ");
+
+    sql <<
+    "insert into tmp2 (zakaz, maked, broken, tab_no, trud, fio, reason) "
+    " select "
+    "d.zakaz, "
+    "sum(a.maked) as maked, "
+    "sum(a.broken) as broken, "
+    "a.tab_no, "
+    "round(sum(a.trud),3) as trud, "
+    "IFNULL(concat(e.family, ' ',Upper(left(e.name,1)),'.', Upper(left(e.otch,1)),'.'),'') fio, "
+    " 'Основные' as reason "
+    "from tmp a "
+    "    join `manufacture`.`marsh_lists`   b on b.det_id = a.det_id "
+    "    join `manufacture`.`parts`         c on c.part_id = b.part_id "
+    "    join `manufacture`.`zakaz_list`    d on d.zak_id = c.zak_id "
+    "    left join `manufacture`.`workers` e on e.tab_no = a.tab_no and e.date_from <= a.date and IF(e.date_to != 0, a.date < e.date_to, 1) ";
+    if (use_zakaz_group)
+        sql << "group by d.zakaz,e.family,a.tab_no";
+    else
+        sql << "group by e.family,a.tab_no,d.zakaz";
+    DB->SendCommand(sql.str().c_str());
+    sql.str("");
+
+    sql<<
+    "insert into tmp2 (zakaz, maked, broken, tab_no, trud, fio, reason) "
+    " select "
+    "c.zakaz, "
+    "sum(a.maked) as maked, "
+    "sum(a.broken) as broken, "
+    "b.tab_no, "
+    "round(sum(a.trud),3) as trud, "
+    "IFNULL(concat(e.family, ' ',Upper(left(e.name,1)),'.', Upper(left(e.otch,1)),'.'),'') fio, "
+    " 'Доплатные' as reason "
+    "from tmp a "
+    "    join `manufacture`.`surcharge` b on b.record_id = a.surch_id "
+    "    join `manufacture`.`zakaz_list` c on c.zak_id = b.zak_id "
+    "    left join `manufacture`.`workers` e on e.tab_no = b.tab_no and e.date_from <= a.date and IF(e.date_to != 0, a.date < e.date_to, 1) ";
+    if (use_zakaz_group)
+        sql << "group by c.zakaz,e.family,b.tab_no";
+    else
+        sql << "group by e.family,b.tab_no,c.zakaz";
+    DB->SendCommand(sql.str().c_str());
+    sql.str("");
+
+    sql << "select zakaz, maked, broken, tab_no, trud, fio, reason "
+           " from tmp2 ";
+    if (use_zakaz_group)
+       sql << "order by zakaz, fio, tab_no";
+    else
+       sql << "order by fio, tab_no, zakaz";
+
+
+    TADOQuery *rez = DB->SendSQL(sql.str().c_str());
+    DB->SendCommand("drop temporary table if EXISTS `tmp`");
+    DB->SendCommand("drop temporary table if EXISTS `tmp2`");
+
+    if (rez)
+    {
+        if (rez->RecordCount)
+        {
+            //включаем ексель
+            cExcel xl;
+            xl.Connect();
+            xl.Visible(false);
+            xl.DisplayAlerts(false);
+
+            std::string teml_file = template_path + templ;
+
+            OpenTemplate(xl, teml_file);
+
+            bool new_page = true;
+            size_t cur_row = 0;
+            size_t start_row = 4, end_row = 60, row_size = 1, template_row = 4;
+            size_t template_page = 13;
+
+            size_t cur_rows(start_row);
+            size_t list_count(0);
+
+            CexData cex_data;
+            std::string firs_cur_mark("");
+            std::string second_cur_mark("");
+
+            for (rez->First(); !rez->Eof; rez->Next())
+            {
+                Data tmp;
+                tmp.zakaz   =   (rez->FieldByName("zakaz")->Value.operator AnsiString()).c_str();
+                tmp.tab_no  =   (rez->FieldByName("tab_no")->Value.operator AnsiString()).c_str();
+                tmp.fio     =   (rez->FieldByName("fio")->Value.operator AnsiString()).c_str();
+                tmp.trud    =   rez->FieldByName("trud")->Value.operator double();
+                tmp.reason  =   (rez->FieldByName("reason")->Value.operator AnsiString()).c_str();
+
+                std::string mark;
+                if (use_zakaz_group)
+                {
+                    mark = tmp.zakaz;
+
+                    if(tmp.fio+tmp.tab_no != second_cur_mark && second_cur_mark != "")
+                    {
+                        ++cur_rows;
+                    }
+                    if (tmp.zakaz != firs_cur_mark && firs_cur_mark != "" || tmp.fio+tmp.tab_no != second_cur_mark && second_cur_mark != "")
+                    {
+                        ++cur_rows;
+                    }
+                }
+                else
+                {
+                    mark = tmp.fio+tmp.tab_no;
+
+                    if (tmp.zakaz != firs_cur_mark && firs_cur_mark != "" )
+                    {
+                        ++cur_rows;
+                    }
+                    if(tmp.fio+tmp.tab_no != second_cur_mark && second_cur_mark != "" || tmp.zakaz != firs_cur_mark && firs_cur_mark != "")
+                    {
+                        ++cur_rows;
+                    }
+                }
+
+                firs_cur_mark = tmp.zakaz;
+                second_cur_mark = tmp.fio+tmp.tab_no;
+                cur_rows += row_size;
+                cex_data.insert(CexDataItem(mark, tmp));
+                if (cur_row + row_size > end_row)
+                {
+                    ++list_count;
+                    cur_rows = start_row;
+                }
+            }
+            if (cur_rows > start_row)
+                ++list_count;
+
+            //считать данные подсчитать колво страниц
+            //вывести данные
+            size_t file_no = 0;
+
+            firs_cur_mark = "";
+            second_cur_mark = "";
+
+            double sum_trud(0.0);
+            double sum_trud_zak(0.0);
+            double sum_trud_work(0.0);
+            size_t page_no(0);
+            for (CexData::const_iterator it = cex_data.begin(); it!=cex_data.end(); ++it)
+            {
+                const Data &lnk = it->second;
+
+                bool need_switch = (cur_row + row_size > end_row);
+                new_page = new_page + need_switch;
+
+                firs_cur_mark = lnk.zakaz;
+                second_cur_mark = lnk.fio+lnk.tab_no;
+
+                if (new_page)
+                {
+                    new_page = false;
+
+                    if (cur_lists)
+                    {
+                        if (use_listing && !path.empty())
+                        {//проверяем количество страниц, если выставлена опция
+                            TrimFile(xl,path,"",cur_lists,lists_by_file,teml_file,file_no);
+                        }
+                    }
+                    //создать страницу
+                    xl.Sheet_Copy(xl.GetSheet(cur_lists+template_page), xl.GetSheet(cur_lists+1), Variant().NoParam());
+                    cur_lists++ ;
+                    page_no++;
+                    xl.SetActiveSheet(xl.GetSheet(cur_lists));
+                    std::stringstream buf;
+                    buf<<page_no;
+                    xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("Трудозатраты-"+buf.str()).c_str());
+
+
+                    xl.toCells(1, 15,   page_no             );
+                    xl.toCells(1, 17,   list_count          );
+                    xl.toCells(2, 2,    Now().FormatString("dd.mm.yyyy")   );
+                    xl.toCells(2, 6,    date_from.c_str()   );
+                    xl.toCells(2, 9,    date_to.c_str()     );
+
+                    cur_row = start_row;
+                }
+
+                //вставить строку в отчет
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
+
+
+                xl.toCells(cur_row,     1,  lnk.zakaz.c_str()  );
+                xl.toCells(cur_row,     2,  lnk.tab_no.c_str() );
+                xl.toCells(cur_row,     3,  lnk.fio.c_str()    );
+                xl.toCells(cur_row,     7,  lnk.reason.c_str() );
+                xl.toCells(cur_row,     12, lnk.trud           );
+
+
+                if (use_zakaz_group)
+                {
+                    if (lnk.fio+lnk.tab_no != second_cur_mark && second_cur_mark != "")
+                    {
+                        // копирование
+                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                        // вставка
+                        xl.Sheet_activate();
+                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                        xl.toCells(cur_row,     3,  "Итого по рабочему"     );
+                        xl.toCells(cur_row,     12,  sum_trud_work          );
+                        sum_trud_work = 0.0;
+                        ++cur_row;
+                    }
+                    if (lnk.zakaz != firs_cur_mark && firs_cur_mark != "" || lnk.fio+lnk.tab_no != second_cur_mark && second_cur_mark != "")
+                    {
+                        // копирование
+                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                        // вставка
+                        xl.Sheet_activate();
+                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                        xl.toCells(cur_row,     3,  "Итого по заказу"      );
+                        xl.toCells(cur_row,     12,  sum_trud_zak          );
+                        sum_trud_zak = 0.0;
+                        ++cur_row;
+                    }
+                }
+                else
+                {
+                    if (lnk.zakaz != firs_cur_mark && firs_cur_mark != "")
+                    {
+                        // копирование
+                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                        // вставка
+                        xl.Sheet_activate();
+                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                        xl.toCells(cur_row,     3,  "Итого по заказу"      );
+                        xl.toCells(cur_row,     12,  sum_trud_zak          );
+                        sum_trud_zak = 0.0;
+                        ++cur_row;
+                    }
+                    if (lnk.fio+lnk.tab_no != second_cur_mark && second_cur_mark != "" || lnk.zakaz != firs_cur_mark && firs_cur_mark != "")
+                    {
+                        // копирование
+                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                        // вставка
+                        xl.Sheet_activate();
+                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                        xl.toCells(cur_row,     3,  "Итого по рабочему"     );
+                        xl.toCells(cur_row,     12,  sum_trud_work          );
+                        sum_trud_work = 0.0;
+                        ++cur_row;
+                    }
+                }
+
+                sum_trud += lnk.trud;
+                sum_trud_zak += lnk.trud;
+                sum_trud_work += lnk.trud;
+
+                ++cur_row;
+            }
+            if (use_zakaz_group)
+            {
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                xl.toCells(cur_row,     3,  "Итого по рабочему"     );
+                xl.toCells(cur_row,     12,  sum_trud_work          );
+                ++cur_row;
+
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                xl.toCells(cur_row,     3,  "Итого по заказу"      );
+                xl.toCells(cur_row,     12,  sum_trud_zak          );
+                ++cur_row;
+            }
+            else
+            {
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                xl.toCells(cur_row,     3,  "Итого по заказу"      );
+                xl.toCells(cur_row,     12,  sum_trud_zak          );
+                ++cur_row;
+
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+                xl.toCells(cur_row,     3,  "Итого по рабочему"     );
+                xl.toCells(cur_row,     12,  sum_trud_work          );
+                ++cur_row;
+            }
+
+            // копирование
+            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+            // вставка
+            xl.Sheet_activate();
+            xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
+
+            xl.toCells(cur_row,     3,  std::string("Итого по заказу").c_str());
+            xl.toCells(cur_row,     12, sum_trud   );
+
+            if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
+            {
+                SaveFile(xl,path,"",cur_lists,file_no);
+                xl.Book_Close(xl.GetBook(1));
+                xl.Disconnect();
+            }
+            else
+            {
+                RemoveTemplates(xl,cur_lists);
+                xl.Visible(true);
+            }
+        }
+        delete rez;
+    }
+    else
+    {
+        throw std::runtime_error("Ошибка соединения с базой данных");
+    }
+}
+
 }

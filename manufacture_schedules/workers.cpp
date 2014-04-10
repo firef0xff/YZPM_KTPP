@@ -12,7 +12,7 @@
 #pragma resource "*.dfm"
 
 __fastcall TWorkersSettings::TWorkersSettings(TComponent* Owner,cSQL *db,const int&_LUser)
-	: TFrame(Owner),DB(db),LUser(_LUser)
+    : TFrame(Owner),DB(db),LUser(_LUser)
 {
 	sgGroups->Cells[0][0] = "Группа";
 	sgGroups->Cells[1][0] = "Кол-во";
