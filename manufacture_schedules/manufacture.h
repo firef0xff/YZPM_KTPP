@@ -261,6 +261,7 @@ __published:    // IDE-managed Components
 	TSplitter *Splitter4;
 	TMemo *surch_descr;
 	TEdit *surch_reason;
+	TCheckBox *Show_Closed;
     void __fastcall CreateZapusk(TObject *Sender);
     void __fastcall RemoveZapusk(TObject *Sender);
     void __fastcall InWorkZapusk(TObject *Sender);
