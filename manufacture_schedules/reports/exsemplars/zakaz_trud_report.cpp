@@ -749,11 +749,11 @@ void ZakazTrudReport2::BuildReport()
                 {
                     mark = tmp.zakaz;
 
-                    if(tmp.fio+tmp.tab_no != second_cur_mark && second_cur_mark != "")
+					if(tmp.zakaz != firs_cur_mark && firs_cur_mark != "" || tmp.fio+tmp.tab_no != second_cur_mark && second_cur_mark != "")
                     {
                         ++cur_rows;
                     }
-                    if (tmp.zakaz != firs_cur_mark && firs_cur_mark != "" || tmp.fio+tmp.tab_no != second_cur_mark && second_cur_mark != "")
+                    if (tmp.zakaz != firs_cur_mark && firs_cur_mark != "" )
                     {
                         ++cur_rows;
                     }
@@ -762,11 +762,11 @@ void ZakazTrudReport2::BuildReport()
                 {
                     mark = tmp.fio+tmp.tab_no;
 
-                    if (tmp.zakaz != firs_cur_mark && firs_cur_mark != "" )
+					if (tmp.fio+tmp.tab_no != second_cur_mark && second_cur_mark != "" || tmp.zakaz != firs_cur_mark && firs_cur_mark != "" )
                     {
                         ++cur_rows;
-                    }
-                    if(tmp.fio+tmp.tab_no != second_cur_mark && second_cur_mark != "" || tmp.zakaz != firs_cur_mark && firs_cur_mark != "")
+					}
+					if(tmp.fio+tmp.tab_no != second_cur_mark && second_cur_mark != "" )
                     {
                         ++cur_rows;
                     }
@@ -776,7 +776,7 @@ void ZakazTrudReport2::BuildReport()
                 second_cur_mark = tmp.fio+tmp.tab_no;
                 cur_rows += row_size;
                 cex_data.insert(CexDataItem(mark, tmp));
-                if (cur_row + row_size > end_row)
+                if (cur_rows + row_size > end_row)
                 {
                     ++list_count;
                     cur_rows = start_row;
@@ -802,9 +802,6 @@ void ZakazTrudReport2::BuildReport()
 
                 bool need_switch = (cur_row + row_size > end_row);
                 new_page = new_page + need_switch;
-
-                firs_cur_mark = lnk.zakaz;
-                second_cur_mark = lnk.fio+lnk.tab_no;
 
                 if (new_page)
                 {
@@ -836,6 +833,66 @@ void ZakazTrudReport2::BuildReport()
                     cur_row = start_row;
                 }
 
+				if (use_zakaz_group)
+                {
+					if (lnk.zakaz != firs_cur_mark && firs_cur_mark != "" ||lnk.fio+lnk.tab_no != second_cur_mark && second_cur_mark != "")
+                    {
+                        // копирование
+                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                        // вставка
+                        xl.Sheet_activate();
+                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+						xl.toCells(cur_row,     7,  "Итого по рабочему"     );
+                        xl.toCells(cur_row,     12,  sum_trud_work          );
+                        sum_trud_work = 0.0;
+                        ++cur_row;
+					}
+					if (lnk.zakaz != firs_cur_mark && firs_cur_mark != "" )
+                    {
+                        // копирование
+                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                        // вставка
+                        xl.Sheet_activate();
+                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+						xl.toCells(cur_row,     7,  "Итого по заказу"      );
+                        xl.toCells(cur_row,     12,  sum_trud_zak          );
+                        sum_trud_zak = 0.0;
+                        ++cur_row;
+                    }
+                }
+                else
+                {
+					if (lnk.fio+lnk.tab_no != second_cur_mark && second_cur_mark != "" || lnk.zakaz != firs_cur_mark && firs_cur_mark != "")
+                    {
+                        // копирование
+                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                        // вставка
+                        xl.Sheet_activate();
+                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+						xl.toCells(cur_row,     7,  "Итого по заказу"      );
+						xl.toCells(cur_row,     12,  sum_trud_zak          );
+						sum_trud_zak = 0.0;
+						++cur_row;
+					}
+					if (lnk.fio+lnk.tab_no != second_cur_mark && second_cur_mark != "")
+					{
+						// копирование
+						xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+						// вставка
+						xl.Sheet_activate();
+						xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+						xl.toCells(cur_row,     7,  "Итого по рабочему"     );
+						xl.toCells(cur_row,     12,  sum_trud_work          );
+						sum_trud_work = 0.0;
+						++cur_row;
+					}
+				}
+                firs_cur_mark = lnk.zakaz;
+				second_cur_mark = lnk.fio+lnk.tab_no;
                 //вставить строку в отчет
                 // копирование
                 xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
@@ -849,66 +906,6 @@ void ZakazTrudReport2::BuildReport()
                 xl.toCells(cur_row,     3,  lnk.fio.c_str()    );
                 xl.toCells(cur_row,     7,  lnk.reason.c_str() );
                 xl.toCells(cur_row,     12, lnk.trud           );
-
-
-                if (use_zakaz_group)
-                {
-                    if (lnk.fio+lnk.tab_no != second_cur_mark && second_cur_mark != "")
-                    {
-                        // копирование
-                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
-                        // вставка
-                        xl.Sheet_activate();
-                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                        xl.toCells(cur_row,     3,  "Итого по рабочему"     );
-                        xl.toCells(cur_row,     12,  sum_trud_work          );
-                        sum_trud_work = 0.0;
-                        ++cur_row;
-                    }
-                    if (lnk.zakaz != firs_cur_mark && firs_cur_mark != "" || lnk.fio+lnk.tab_no != second_cur_mark && second_cur_mark != "")
-                    {
-                        // копирование
-                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
-                        // вставка
-                        xl.Sheet_activate();
-                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                        xl.toCells(cur_row,     3,  "Итого по заказу"      );
-                        xl.toCells(cur_row,     12,  sum_trud_zak          );
-                        sum_trud_zak = 0.0;
-                        ++cur_row;
-                    }
-                }
-                else
-                {
-                    if (lnk.zakaz != firs_cur_mark && firs_cur_mark != "")
-                    {
-                        // копирование
-                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
-                        // вставка
-                        xl.Sheet_activate();
-                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                        xl.toCells(cur_row,     3,  "Итого по заказу"      );
-                        xl.toCells(cur_row,     12,  sum_trud_zak          );
-                        sum_trud_zak = 0.0;
-                        ++cur_row;
-                    }
-                    if (lnk.fio+lnk.tab_no != second_cur_mark && second_cur_mark != "" || lnk.zakaz != firs_cur_mark && firs_cur_mark != "")
-                    {
-                        // копирование
-                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
-                        // вставка
-                        xl.Sheet_activate();
-                        xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                        xl.toCells(cur_row,     3,  "Итого по рабочему"     );
-                        xl.toCells(cur_row,     12,  sum_trud_work          );
-                        sum_trud_work = 0.0;
-                        ++cur_row;
-                    }
-                }
 
                 sum_trud += lnk.trud;
                 sum_trud_zak += lnk.trud;
@@ -924,7 +921,7 @@ void ZakazTrudReport2::BuildReport()
                 xl.Sheet_activate();
                 xl.Range_Paste(xl.GetRows(cur_row, cur_row));
 
-                xl.toCells(cur_row,     3,  "Итого по рабочему"     );
+				xl.toCells(cur_row,     7,  "Итого по рабочему"     );
                 xl.toCells(cur_row,     12,  sum_trud_work          );
                 ++cur_row;
 
@@ -934,7 +931,7 @@ void ZakazTrudReport2::BuildReport()
                 xl.Sheet_activate();
                 xl.Range_Paste(xl.GetRows(cur_row, cur_row));
 
-                xl.toCells(cur_row,     3,  "Итого по заказу"      );
+				xl.toCells(cur_row,     7,  "Итого по заказу"      );
                 xl.toCells(cur_row,     12,  sum_trud_zak          );
                 ++cur_row;
             }
@@ -946,7 +943,7 @@ void ZakazTrudReport2::BuildReport()
                 xl.Sheet_activate();
                 xl.Range_Paste(xl.GetRows(cur_row, cur_row));
 
-                xl.toCells(cur_row,     3,  "Итого по заказу"      );
+				xl.toCells(cur_row,     7,  "Итого по заказу"      );
                 xl.toCells(cur_row,     12,  sum_trud_zak          );
                 ++cur_row;
 
@@ -956,7 +953,7 @@ void ZakazTrudReport2::BuildReport()
                 xl.Sheet_activate();
                 xl.Range_Paste(xl.GetRows(cur_row, cur_row));
 
-                xl.toCells(cur_row,     3,  "Итого по рабочему"     );
+				xl.toCells(cur_row,     7,  "Итого по рабочему"     );
                 xl.toCells(cur_row,     12,  sum_trud_work          );
                 ++cur_row;
             }
@@ -967,7 +964,7 @@ void ZakazTrudReport2::BuildReport()
             xl.Sheet_activate();
             xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
 
-            xl.toCells(cur_row,     3,  std::string("Итого по заказу").c_str());
+            xl.toCells(cur_row,     7,  std::string("Итого").c_str());
             xl.toCells(cur_row,     12, sum_trud   );
 
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл

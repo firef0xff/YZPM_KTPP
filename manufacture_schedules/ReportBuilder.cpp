@@ -28,6 +28,8 @@ rep::F140003 rep4(STARTUP|ORDER|PART);
 rep::Y09102 rep5(STARTUP|ORDER|PART);
 rep::SingleApplication rep_6(STARTUP|ORDER|PART);
 rep::MaterialsDetail rep_7 (STARTUP|ORDER|PART);
+rep::TrudReport rep_81 (STARTUP|ORDER|PART);
+rep::ZakazTrudReport rep_91 (STARTUP|ORDER|PART);
 rep::TrudReport2 rep_8 (STARTUP|ORDER|PART);
 rep::ZakazTrudReport2 rep_9 (STARTUP|ORDER|PART);
 rep::MakingDetails rep_10 (STARTUP|ORDER|PART);

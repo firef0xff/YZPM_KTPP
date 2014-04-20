@@ -650,7 +650,22 @@ void TrudReport2::BuildReport()
                     xl.toCells(2, 9,    date_to.c_str()     );
 
                     cur_row = start_row;
-                }
+				}
+
+				if (lnk.fio+lnk.tab_no != cur_fio && cur_fio != "")
+				{
+					// копирование
+					xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+					// вставка
+					xl.Sheet_activate();
+					xl.Range_Paste(xl.GetRows(cur_row, cur_row));
+
+					xl.toCells(cur_row,     7,  "Итого по рабочему"     );
+					xl.toCells(cur_row,     12,  sum_trud_work          );
+					sum_trud_work = 0.0;
+					++cur_row;
+				}
+				cur_fio = lnk.fio+lnk.tab_no;
                 //вставить строку в отчет
                 // копирование
                 xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
@@ -663,20 +678,6 @@ void TrudReport2::BuildReport()
                 xl.toCells(cur_row,     7,  lnk.reason.c_str()  );
                 xl.toCells(cur_row,     12, lnk.trud            );
 
-                if (lnk.fio != cur_fio && cur_fio != "")
-                {
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
-                    // вставка
-                    xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(cur_row, cur_row));
-
-                    xl.toCells(cur_row,     2,  "Итого по рабочему"     );
-                    xl.toCells(cur_row,     12,  sum_trud_work          );
-                    sum_trud_work = 0.0;
-                    ++cur_row;
-                }
-
                 sum_trud_work += lnk.trud;
                 sum_trud += lnk.trud;
                 ++cur_row;
@@ -687,7 +688,7 @@ void TrudReport2::BuildReport()
             xl.Sheet_activate();
             xl.Range_Paste(xl.GetRows(cur_row, cur_row));
 
-            xl.toCells(cur_row,     2,  "Итого по рабочему" );
+			xl.toCells(cur_row,     7,  "Итого по рабочему" );
             xl.toCells(cur_row,     12,  sum_trud_work      );
             ++cur_row;
 
@@ -697,7 +698,7 @@ void TrudReport2::BuildReport()
             xl.Sheet_activate();
             xl.Range_Paste(xl.GetRows(cur_row, cur_row));
 
-            xl.toCells(cur_row,     2,  "Итого"         );
+            xl.toCells(cur_row,     7,  "Итого"         );
             xl.toCells(cur_row,     12,  sum_trud   );
 
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
