@@ -4,45 +4,46 @@
 #pragma hdrstop
 
 #include "material.h"
+#include <math.h>
 #pragma package(smart_init)
 #pragma resource "*.dfm"
  __fastcall Tmaterials::Tmaterials(TComponent* Owner,cSQL *db,bool ReadOnly,const int &_LUser)
     : TForm(Owner),DB(db),LUser(_LUser)
 {
-obm="";
-SQL="";
-LE1->Text=_obm;
-LE2->Text=_name;
-LE3->Text=_prof;
-if (_obm!=""||_name!=""||_prof!="")
+    obm="";
+    SQL="";
+    LE1->Text=_obm;
+    LE2->Text=_name;
+    LE3->Text=_prof;
+    if (_obm!=""||_name!=""||_prof!="")
     {
-    Button1Click(0);
+        Button1Click(0);
     }
-E3->Text=rowcount;
-E2->Text=list;
-TV->Items->Clear();
-String sql="Select `ngrup`,`key`,`parent` from sklad.mat_tree where `parent`=0";
-TADOQuery *rez=DB->SendSQL(sql);
-if (rez&&rez->RecordCount)
+    E3->Text=rowcount;
+    E2->Text=list;
+    TV->Items->Clear();
+    String sql="Select `ngrup`,`key`,`parent` from sklad.mat_tree where `parent`=0";
+    TADOQuery *rez=DB->SendSQL(sql);
+    if (rez&&rez->RecordCount)
     {
-    for (rez->First(); !rez->Eof; rez->Next())
+        for (rez->First(); !rez->Eof; rez->Next())
         {
-        TV->Items->AddChildObject(TV->Items->AddObject(0,rez->FieldByName("ngrup")->Value,(void*)(int)rez->FieldByName("key")->Value),"",0);
+            TV->Items->AddChildObject(TV->Items->AddObject(0,rez->FieldByName("ngrup")->Value,(void*)(int)rez->FieldByName("key")->Value),"",0);
         }
     }
-delete rez;
-SG->Cells[0][0]="Обозначение";
-SG->Cells[1][0]="Наименование";
-SG->Cells[2][0]="ГОСТ";
-SG->Cells[3][0]="Профиль";
-SG->Cells[4][0]="ГОСТ на профиль";
-AutoWidthSG(SG);
-if (ReadOnly)
+    delete rez;
+    SG->Cells[0][0]="Обозначение";
+    SG->Cells[1][0]="Наименование";
+    SG->Cells[2][0]="ГОСТ";
+    SG->Cells[3][0]="Профиль";
+    SG->Cells[4][0]="ГОСТ на профиль";
+    AutoWidthSG(SG);
+    if (ReadOnly)
     {
-    Add->Hide();
-    Button2->Hide();
-    BB1->Hide();
-    Del->Hide();
+        //Add->Hide();
+        Button2->Hide();
+        BB1->Hide();
+        Del->Hide();
     }
 }
 void __fastcall Tmaterials::TVExpanding(TObject *Sender, TTreeNode *Node, bool &AllowExpansion)
@@ -200,10 +201,55 @@ obm=SG->Cells[0][SG->Row];
 }
 void __fastcall Tmaterials::AddClick(TObject *Sender)
 {
-TMater_add *wnd=new TMater_add(this,DB,LUser);
-wnd->ShowModal();
-Find();
-delete wnd;
+    if (TV->Selected && TV->Selected->Data)
+    {
+        String sql="Select `kl`,`kb`,`ke` from sklad.mat_tree where `key`='"+(String)((int)TV->Selected->Data)+"' and kl = 3";
+        TADOQuery *rez=DB->SendSQL(sql);
+        if (rez)
+        {
+            if (rez->RecordCount)
+            {
+                int kl=0,kb=0,ke=0;
+                kl=rez->FieldByName("kl")->Value;
+                kb=rez->FieldByName("kb")->Value;
+                ke=rez->FieldByName("ke")->Value;
+
+				sql="Select convert(right(a.obd,6-"+String(kl)+"), SIGNED) obd  from constructions.det_names a "
+                        "join sklad.materials b on a.id=b.obmid "
+                        "where left(a.obd,9)='000000000' and left(a.obd,9+"+String(kl)+")*1 between '"+(String)kb+"' and '"+(String)ke+"' "
+                        "order by obd";
+                TADOQuery *rez2=DB->SendSQL(sql);
+                if (rez2)
+				{
+					long prev = 0;
+					for (rez2->First(); !rez2->Eof; rez2->Next())
+                    {
+                        long curr = rez2->FieldByName("obd")->Value;
+                        if (curr - prev > 1)
+                        {
+                            prev += 1;
+                            break;
+                        }
+                        else
+                        {
+							prev = curr;
+                        }
+					}
+					if (!prev)
+					{
+                    	prev+=1;
+					}
+					delete rez2;
+					long num = pow(double(10),6-kl)*kb + prev;
+                    TMater_add *wnd=new TMater_add(this,DB,LUser,num);
+					wnd->ShowModal();
+                    delete wnd;
+                }
+            }
+            delete rez;
+        }
+    }
+    Find();
 }
 void __fastcall Tmaterials::DelClick(TObject *Sender)
 {

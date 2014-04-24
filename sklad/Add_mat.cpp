@@ -7,24 +7,15 @@
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 //---------------------------------------------------------------------------
-__fastcall     TMater_add::TMater_add(TComponent* Owner,cSQL *db,const int &_LUser)
+__fastcall     TMater_add::TMater_add(TComponent* Owner,cSQL *db,const int &_LUser, long number)
     : TForm(Owner),DB(db),LUser(_LUser)
 {
 L1->Caption="";
-TADOQuery *rez=DB->SendSQL("Select max(right(obd,4)) as id from constructions.det_names where obd like 'NA____'");
-int rec=0;
-if (rez&&rez->RecordCount)
-    {
-    rec=Trim(rez->FieldByName("id")->Value).ToInt();
-    rec++;
-    }
-L1->Caption=String(rec);
-while (L1->Caption.Length()<4)
-    {
+L1->Caption=String(number);
+while (L1->Caption.Length()<15)
+{
     L1->Caption="0"+L1->Caption;
-    }
-L1->Caption="NA"+L1->Caption;
-delete rez;
+}
 }
 void          TMater_add::Load_support_info(void)
 {
@@ -43,7 +34,7 @@ void __fastcall TMater_add::BitBtn1Click(TObject *Sender)
 {
 if (ei->ItemIndex&&(LE1->Text.Trim()!=""||LE2->Text.Trim()!=""||LE3->Text.Trim()!=""||LE4->Text.Trim()!=""))
     {
-    DB->SendCommand("Call save_tmp_material('"+String(LUser)+"','"+L1->Caption+"','"+LE1->Text.Trim()+"','"+LE2->Text.Trim()+"','"+LE3->Text.Trim()+"','"+LE4->Text.Trim()+"','"+String((int)ei->Items->Objects[ei->ItemIndex])+"')");
+    DB->SendCommand("Call sklad.save_tmp_material('"+String(LUser)+"','"+L1->Caption+"','"+LE1->Text.Trim()+"','"+LE2->Text.Trim()+"','"+LE3->Text.Trim()+"','"+LE4->Text.Trim()+"','"+String((int)ei->Items->Objects[ei->ItemIndex])+"')");
     }else
     {
     ShowMessage("Не введены все необходимые данные.");

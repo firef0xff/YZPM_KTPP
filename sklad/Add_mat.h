@@ -36,6 +36,6 @@ cSQL *  const DB;
 const int &LUser;
 void Load_support_info(void);
 public:        // User declarations
-    __fastcall TMater_add(TComponent* Owner,cSQL *db,const int &_LUser);
+    __fastcall TMater_add(TComponent* Owner,cSQL *db,const int &_LUser, long number);
 };
 #endif

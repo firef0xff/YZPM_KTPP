@@ -21,12 +21,12 @@ object Mater_add: TMater_add
   object L1: TLabel
     Left = 8
     Top = 145
-    Width = 110
-    Height = 19
+    Width = 76
+    Height = 13
     Caption = #1054#1073#1086#1079#1085#1072#1095#1077#1085#1080#1077
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -16
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
     ParentFont = False
