@@ -214,31 +214,43 @@ void __fastcall Tmaterials::AddClick(TObject *Sender)
                 kb=rez->FieldByName("kb")->Value;
                 ke=rez->FieldByName("ke")->Value;
 
-				sql="Select convert(right(a.obd,6-"+String(kl)+"), SIGNED) obd  from constructions.det_names a "
-                        "join sklad.materials b on a.id=b.obmid "
+                sql="Select distinct convert(right(a.obd,6), SIGNED) obd  from constructions.det_names a "
+                      //  "join sklad.materials b on a.id=b.obmid "
                         "where left(a.obd,9)='000000000' and left(a.obd,9+"+String(kl)+")*1 between '"+(String)kb+"' and '"+(String)ke+"' "
                         "order by obd";
                 TADOQuery *rez2=DB->SendSQL(sql);
                 if (rez2)
 				{
-					long prev = 0;
-					for (rez2->First(); !rez2->Eof; rez2->Next())
+                    long prev = pow(double(10),6-kl)*kb+1;
+                    long end = pow(double(10),6-kl)*ke + 999;
+                    if (rez2->RecordCount)
                     {
-                        long curr = rez2->FieldByName("obd")->Value;
-                        if (curr - prev > 1)
+                        bool find =false;
+                        for (rez2->First(); !rez2->Eof && !find ; rez2->Next())
                         {
-                            prev += 1;
-                            break;
+                            long curr = rez2->FieldByName("obd")->Value;
+                            if (curr - prev > 0)
+                            {
+                                find = true;
+                                break;
+                            }
+                            else
+                            {
+                                prev += 1;
+                            }
                         }
-                        else
+                        if (!find)
                         {
-							prev = curr;
+                            prev+=1;
                         }
-					}
-					if (!prev)
-					{
-                    	prev+=1;
-					}
+                    }
+
+                    if (prev > end)
+                    {
+                        ShowMessage("Диапазон кодов закончился");
+                        return;
+                    }
+
 					delete rez2;
 					long num = pow(double(10),6-kl)*kb + prev;
                     TMater_add *wnd=new TMater_add(this,DB,LUser,num);
