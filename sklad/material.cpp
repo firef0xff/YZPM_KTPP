@@ -239,10 +239,6 @@ void __fastcall Tmaterials::AddClick(TObject *Sender)
                                 prev += 1;
                             }
                         }
-                        if (!find)
-                        {
-                            prev+=1;
-                        }
                     }
 
                     if (prev > end)
@@ -252,7 +248,7 @@ void __fastcall Tmaterials::AddClick(TObject *Sender)
                     }
 
 					delete rez2;
-					long num = pow(double(10),6-kl)*kb + prev;
+                    long num = prev;
                     TMater_add *wnd=new TMater_add(this,DB,LUser,num);
 					wnd->ShowModal();
                     delete wnd;
