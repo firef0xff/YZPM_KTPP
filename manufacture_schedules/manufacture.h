@@ -262,6 +262,7 @@ __published:    // IDE-managed Components
 	TMemo *surch_descr;
 	TEdit *surch_reason;
 	TCheckBox *Show_Closed;
+	TMenuItem *N10;
     void __fastcall CreateZapusk(TObject *Sender);
     void __fastcall RemoveZapusk(TObject *Sender);
     void __fastcall InWorkZapusk(TObject *Sender);
@@ -310,6 +311,7 @@ __published:    // IDE-managed Components
 	void __fastcall N6Click(TObject *Sender);
 	void __fastcall N9Click(TObject *Sender);
 	void __fastcall N8Click(TObject *Sender);
+	void __fastcall N10Click(TObject *Sender);
 
 
 
@@ -320,6 +322,7 @@ private:    // User declarations
 
     void StartOrder(const std::vector<unsigned __int64> &parts);
     void StopOrder(const std::vector<unsigned __int64> &parts);
+    void CloseOrder(const std::vector<unsigned __int64> &parts);
 
 
     void LoadZapusk(String zapusk, String zakaz, String det);

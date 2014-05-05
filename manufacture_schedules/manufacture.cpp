@@ -1217,6 +1217,33 @@ void __fastcall TManufactureControl::ToEditZakaz(TObject *Sender)
     }
     return;
 }
+void __fastcall TManufactureControl::N10Click(TObject *Sender)
+{
+    //закрыть заказ
+    if ( MessageBoxA(this->Handle, "Закрыть заказ?", "Закрыть заказ?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+    {
+        std::vector<unsigned __int64> parts;
+        for (size_t i = 0; i < zakTV->SelectionCount; ++i)
+        {
+            TTreeNode *node = zakTV->Selections[i];
+            if (node->Level == 0)
+            {//запустить заказ
+                for (TTreeNode *ch_node = node->getFirstChild(); ch_node; ch_node = node->GetNextChild(ch_node))
+                {
+                    PartNode *ptr = (PartNode *)ch_node->Data;
+                    parts.push_back(ptr->getPartID());
+                }
+            }
+            else
+            {//запустить партию
+                PartNode *ptr = (PartNode *)node->Data;
+                parts.push_back(ptr->getPartID());
+            }
+        }
+        CloseOrder(parts);
+        Find->Click();
+    }
+}
 void __fastcall TManufactureControl::zakTVMouseDown(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y)
 {
@@ -1550,6 +1577,15 @@ void TManufactureControl::StopOrder(const std::vector<unsigned __int64> &parts)
 	for (std::vector<unsigned __int64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
 	{
         DB->SendCommand("call manufacture.zapusk_stopper('"+String(*it)+"')");
+    }
+    tr.Commit();
+}
+void TManufactureControl::CloseOrder(const std::vector<unsigned __int64> &parts)
+{
+    Transaction tr(DB);
+    for (std::vector<unsigned __int64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
+    {
+        DB->SendCommand("call manufacture.Close_part('"+String(*it)+"')");
     }
     tr.Commit();
 }
@@ -2099,3 +2135,5 @@ void __fastcall TManufactureControl::N8Click(TObject *Sender)
         tr.Commit();
     }
 }
+//---------------------------------------------------------------------------
+
