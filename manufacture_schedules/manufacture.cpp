@@ -193,19 +193,23 @@ void TManufactureControl::LoadZapusk(String zapusk, String zakaz, String det)
     contentTV->Items->Clear();
 
     String zap_sql = "select a.name, a.begin, a.end, a.zap_id, (a.in_work is not null) started from manufacture.manufacture_orders a ";
-    if (zakaz.Length() || det.Length())
+    if (zakaz.Length() || det.Length() || !Show_Closed->Checked)
     {
-        zap_sql +=  " join manufacture.parts b on a.zap_id = b.zap_id "
-                    " join manufacture.zakaz_list e on b.zak_id = e.zak_id ";
+        if (zakaz.Length() || !Show_Closed->Checked)
+            zap_sql +=  " join manufacture.parts b on a.zap_id = b.zap_id ";
+        if (zakaz.Length())
+            zap_sql +=  " join manufacture.zakaz_list e on b.zak_id = e.zak_id ";
 
         if (det.Length())
         {
             zap_sql +=  " join manufacture.part_content c on b.part_id = c.part_id "
                         " join manufacture.det_names d on d.det_id = c.det_id ";
         }
-    }
+	}
 
     String where = "where 1 ";
+    if (!Show_Closed->Checked)
+		where += " and b.close_date is null ";
     if (zapusk.Length())
     {
         where += " and a.name like '%"+zapusk+"%' ";
@@ -259,6 +263,8 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
     }
 
     String where = "where 1 ";
+    if (!Show_Closed->Checked)
+        where += " and a.close_date is null ";
     if (zap_id.Length())
     {
         where += " and c.zap_id = '"+zap_id+"' ";
@@ -1211,6 +1217,33 @@ void __fastcall TManufactureControl::ToEditZakaz(TObject *Sender)
     }
     return;
 }
+void __fastcall TManufactureControl::N10Click(TObject *Sender)
+{
+    //закрыть заказ
+    if ( MessageBoxA(this->Handle, "Закрыть заказ?", "Закрыть заказ?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+    {
+        std::vector<unsigned __int64> parts;
+        for (size_t i = 0; i < zakTV->SelectionCount; ++i)
+        {
+            TTreeNode *node = zakTV->Selections[i];
+            if (node->Level == 0)
+            {//запустить заказ
+                for (TTreeNode *ch_node = node->getFirstChild(); ch_node; ch_node = node->GetNextChild(ch_node))
+                {
+                    PartNode *ptr = (PartNode *)ch_node->Data;
+                    parts.push_back(ptr->getPartID());
+                }
+            }
+            else
+            {//запустить партию
+                PartNode *ptr = (PartNode *)node->Data;
+                parts.push_back(ptr->getPartID());
+            }
+        }
+        CloseOrder(parts);
+        Find->Click();
+    }
+}
 void __fastcall TManufactureControl::zakTVMouseDown(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y)
 {
@@ -1547,6 +1580,15 @@ void TManufactureControl::StopOrder(const std::vector<unsigned __int64> &parts)
     }
     tr.Commit();
 }
+void TManufactureControl::CloseOrder(const std::vector<unsigned __int64> &parts)
+{
+    Transaction tr(DB);
+    for (std::vector<unsigned __int64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
+    {
+        DB->SendCommand("call manufacture.Close_part('"+String(*it)+"')");
+    }
+    tr.Commit();
+}
 
 void __fastcall TManufactureControl::zapSGDrawCell(TObject *Sender, int ACol, int ARow,
 		  TRect &Rect, TGridDrawState State)
@@ -1836,9 +1878,15 @@ void __fastcall TManufactureControl::btSaveClick(TObject *Sender)
                         " kol_broken = kol_broken +'"+AnsiString(SGNarList->Cells[3][i].ToIntDef(0)).c_str()+"', "
                         " kol_unmaked = kol_unmaked - ('"+AnsiString(SGNarList->Cells[2][i].ToIntDef(0)).c_str()+"' + '"+AnsiString(SGNarList->Cells[3][i].ToIntDef(0)).c_str()+"') "
                         " where order_id = '"+AnsiString(SGNarList->Cells[1][i]).c_str()+"'";
+
+                std::string upd2 = std::string("Update `manufacture`.`orders` set"
+                        " closed_date = now(), closed_type = 'end of actions' "
+                        " where kol_unmaked = 0 and order_id = '")+AnsiString(SGNarList->Cells[1][i]).c_str()+"'";
+
                 Transaction tr(DB);
                 bool res = DB->SendCommand(sql.c_str());
                 res *= DB->SendCommand(upd.c_str());
+                res *= DB->SendCommand(upd2.c_str());
                 if (res)
                 {
                     tr.Commit();
@@ -2087,3 +2135,5 @@ void __fastcall TManufactureControl::N8Click(TObject *Sender)
         tr.Commit();
     }
 }
+//---------------------------------------------------------------------------
+
