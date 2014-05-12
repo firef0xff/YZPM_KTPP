@@ -193,7 +193,7 @@ void TManufactureControl::LoadZapusk(String zapusk, String zakaz, String det)
     contentTV->Items->Clear();
 
     String zap_sql = "select a.name, a.begin, a.end, a.zap_id, (a.in_work is not null) started from manufacture.manufacture_orders a "
-                     " join manufacture.parts b on a.zap_id = b.zap_id ";
+                     " left join manufacture.parts b on a.zap_id = b.zap_id ";
     if (zakaz.Length() || det.Length())
     {
         if (zakaz.Length())
@@ -212,7 +212,7 @@ void TManufactureControl::LoadZapusk(String zapusk, String zakaz, String det)
     if (!Show_Closed->Checked)
 		where += " and b.close_date is null ";
     else
-        where += " and b.close_date not null ";
+        where += " and b.close_date is not null ";
 
     if (zapusk.Length())
     {
@@ -270,7 +270,7 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
     if (!Show_Closed->Checked)
         where += " and a.close_date is null ";
     else
-        where += " and a.close_date not null ";
+        where += " and a.close_date is not null ";
     if (zap_id.Length())
     {
         where += " and c.zap_id = '"+zap_id+"' ";
