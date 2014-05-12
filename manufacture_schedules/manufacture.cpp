@@ -192,7 +192,7 @@ void TManufactureControl::LoadZapusk(String zapusk, String zakaz, String det)
     zakTV->Items->Clear();
     contentTV->Items->Clear();
 
-    String zap_sql = "select a.name, a.begin, a.end, a.zap_id, (a.in_work is not null) started from manufacture.manufacture_orders a "
+    String zap_sql = "select distinct a.name, a.begin, a.end, a.zap_id, (a.in_work is not null) started from manufacture.manufacture_orders a "
                      " left join manufacture.parts b on a.zap_id = b.zap_id ";
     if (zakaz.Length() || det.Length())
     {
