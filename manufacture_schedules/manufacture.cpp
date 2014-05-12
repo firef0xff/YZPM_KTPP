@@ -193,12 +193,13 @@ void TManufactureControl::LoadZapusk(String zapusk, String zakaz, String det)
     contentTV->Items->Clear();
 
     String zap_sql = "select a.name, a.begin, a.end, a.zap_id, (a.in_work is not null) started from manufacture.manufacture_orders a ";
-    if (zakaz.Length() || det.Length() || !Show_Closed->Checked)
+    if (zakaz.Length() || det.Length())
     {
-        if (zakaz.Length() || !Show_Closed->Checked)
-            zap_sql +=  " join manufacture.parts b on a.zap_id = b.zap_id ";
         if (zakaz.Length())
-            zap_sql +=  " join manufacture.zakaz_list e on b.zak_id = e.zak_id ";
+        {
+            zap_sql +=  " join manufacture.parts b on a.zap_id = b.zap_id "
+                        " join manufacture.zakaz_list e on b.zak_id = e.zak_id ";
+        }
 
         if (det.Length())
         {
@@ -210,6 +211,9 @@ void TManufactureControl::LoadZapusk(String zapusk, String zakaz, String det)
     String where = "where 1 ";
     if (!Show_Closed->Checked)
 		where += " and b.close_date is null ";
+    else
+        where += " and b.close_date not null ";
+
     if (zapusk.Length())
     {
         where += " and a.name like '%"+zapusk+"%' ";
@@ -265,6 +269,8 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
     String where = "where 1 ";
     if (!Show_Closed->Checked)
         where += " and a.close_date is null ";
+    else
+        where += " and a.close_date not null ";
     if (zap_id.Length())
     {
         where += " and c.zap_id = '"+zap_id+"' ";
