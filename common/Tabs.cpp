@@ -128,3 +128,18 @@ if (module)
         delete module;
     }
 }
+
+        ResourceUsageTab::ResourceUsageTab    (void):Tab(),module(0)
+{}
+        ResourceUsageTab::ResourceUsageTab    (const ResourceUsageTab &r):Tab(r)
+{
+    module=r.module;
+}
+        ResourceUsageTab::~ResourceUsageTab    (void)
+{
+    if (module)
+    {
+        module->Parent=0;
+        delete module;
+    }
+}

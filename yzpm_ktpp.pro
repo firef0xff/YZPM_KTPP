@@ -18,6 +18,7 @@ INCLUDEPATH += \
     Login\
     Login/dialogs\
     manufacture_schedules\
+    manufacture_schedules/Calck\
     manufacture_schedules/reports\
     manufacture_schedules/surcharge\
     manufacture_schedules/reports/exsemplars\
@@ -44,7 +45,8 @@ SOURCES += \
     boom_editor/*.cpp\
     Login/*.cpp\
     Login/dialogs/*.cpp\
-    manufacture_schedules/*cpp\
+    manufacture_schedules/*.cpp\
+    manufacture_schedules/Calck/*.cpp\
     manufacture_schedules/reports/*.cpp\
     manufacture_schedules/surcharge/*.cpp\
     manufacture_schedules/reports/exsemplars/*.cpp\
@@ -71,7 +73,8 @@ HEADERS += \
     boom_editor/*.h\
     Login/*.h\
     Login/dialogs/*.h\
-    manufacture_schedules/*h\
+    manufacture_schedules/*.h\
+    manufacture_schedules/Calck/*.h\
     manufacture_schedules/reports/*.h\
     manufacture_schedules/surcharge/*.h\
     manufacture_schedules/reports/exsemplars/*.h\
@@ -95,7 +98,8 @@ OTHER_FILES += \
     boom_editor/*.dfm\
     Login/*.dfm\
     Login/dialogs/*.dfm\
-    manufacture_schedules/*dfm\
+    manufacture_schedules/*.dfm\
+    manufacture_schedules/Calck/*.dfm\
     sklad/*dfm\
     oasu_moover/*dfm\
     reports/*dfm\

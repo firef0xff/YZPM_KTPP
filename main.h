@@ -90,6 +90,9 @@ __published:
     TToolButton *ToolButton2;
     TMenuItem *N36;
     TMenuItem *N37;
+	TToolButton *ResourceUsageBTN;
+	TMenuItem *N38;
+	TMenuItem *N39;
     
     void __fastcall PCDrawTab(TCustomTabControl *Control, int TabIndex, const TRect &Rect,
           bool Active);
@@ -132,6 +135,8 @@ __published:
     void __fastcall OrdersClick(TObject *Sender);
     void __fastcall ManufactureBTNClick(TObject *Sender);
     void __fastcall ManufactureClick(TObject *Sender);
+	void __fastcall ResourceUsageBTNClick(TObject *Sender);
+	void __fastcall ResourceUsageClick(TObject *Sender);
 
     
 
@@ -175,6 +180,8 @@ void     AddProcessing        (TPageControl *Page);
 void    AddOrders            (TPageControl *Page);
 
 void    AddManufacture        (TPageControl *Page);
+
+void    AddResourceUsage        (TPageControl *Page);
 
 };
 

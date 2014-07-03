@@ -10,6 +10,7 @@
 #include "Izd_Unroll.h"
 #include "Orders.h"
 #include "manufacture.h"
+#include "Usage.h"
 class Tab
     {
     public:
@@ -107,5 +108,16 @@ class ManufactureTab:public Tab
 
     TManufactureControl   *module;
     };
+class ResourceUsageTab:public Tab
+    {
+    public:
+    ResourceUsageTab(void);
+    ResourceUsageTab(const ResourceUsageTab &);
+    ~ResourceUsageTab(void);
+    bool CanClose(void){return true;};
+    String TrueClassName (void)const{return "ResourceUsageTab";};
+    bool ItTrueClassName (void)const{return TrueClassName()=="ResourceUsageTab"?true:false;}
 
+    TResourceUsage *module;
+    };
 #endif

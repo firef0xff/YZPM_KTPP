@@ -670,6 +670,11 @@ TTabSheet *TmForm::GetLastTab(char type)
             ClassType="ManufactureTab";
             break;
         }
+    case 7:
+        { // поиск среди поисков
+            ClassType="ResourceUsageTab";
+            break;
+        }
     default:
         ClassType="";
         break;
@@ -914,6 +919,28 @@ void TmForm::AddManufacture(TPageControl *Page)
     // регистрация щита и дерева
     t->tab=tab;
     t->module=ManufactureControl;
+    t->last_tab=false;
+    Tabs.push_back((Tab *)t);
+    SetLastTab(tab);
+    //показать
+    tab->Show();
+}
+
+void TmForm::AddResourceUsage(TPageControl *Page)
+{
+    TTabSheet *tab=0;
+
+    TResourceUsage *ResourceUsage=0;
+    ResourceUsageTab *t=new ResourceUsageTab();
+    tab=new TTabSheet(this); // создание щита
+    tab->ImageIndex=11;
+    tab->PageControl=Page; // прикрепление щита
+    // создание дерева //прикрепление дерева
+    ResourceUsage=new TResourceUsage(this, tab, UserID, DB,IcoData);
+
+    // регистрация щита и дерева
+    t->tab=tab;
+    t->module=ResourceUsage;
     t->last_tab=false;
     Tabs.push_back((Tab *)t);
     SetLastTab(tab);
@@ -1241,6 +1268,49 @@ void __fastcall TmForm::ManufactureClick(TObject *Sender)
     }
 }
 
+void __fastcall TmForm::ResourceUsageClick(TObject *Sender)
+{
+    TPageControl *pc;
+    TMenuItem *curr=(TMenuItem *)Sender;
+    if(curr!=N38&&curr!=N39)
+    {
+        return;
+    }
+    switch(curr->Tag)
+    {
+    case 1:
+        {
+            pc=RightPC;
+            break;
+        }
+    case -1:
+        {
+            pc=LeftPC;
+            break;
+        }
+    default:
+        return;
+    }
+    if(Tabs.size())
+    {
+        TTabSheet *t=GetLastTab(7);
+        if(t)
+        {
+            t->PageControl=pc;
+            // если есть хоть одно показать последнее выбранное
+        }
+        else
+        {
+            AddResourceUsage(pc);
+        }
+    }
+    else
+    {
+        AddResourceUsage(pc);
+    }
+}
+
+
 void __fastcall TmForm::TreeBTNClick(TObject *Sender)
 {
     AddTree(LeftPC, 0, Info);
@@ -1283,6 +1353,11 @@ void __fastcall TmForm::OrdersBTNClick(TObject *Sender)
 void __fastcall TmForm::ManufactureBTNClick(TObject *Sender)
 {
     AddManufacture(RightPC);
+}
+
+void __fastcall TmForm::ResourceUsageBTNClick(TObject *Sender)
+{
+    AddResourceUsage(RightPC);
 }
 
 void __fastcall TmForm::N8Click(TObject *Sender)
@@ -1431,3 +1506,4 @@ void _ShowTree(const Obd *Det)
     }
 }
 //временные
+//---------------------------------------------------------------------------
