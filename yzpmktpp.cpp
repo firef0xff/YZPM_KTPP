@@ -40,21 +40,21 @@ USEFORM("boom_tree\BomTree.cpp", SpTree); /* TFrame: File Type */
 USEFORM("boom_tree\contents\Conditions.cpp", Cond);
 USEFORM("boom_editor\SPEdit.cpp", SPEditor);
 USEFORM("boom_editor\sp_params.cpp", spparams);
-USEFORM("manufacture_schedules\ReportBuilder.cpp", Reports);
 USEFORM("manufacture_schedules\manufacture.cpp", ManufactureControl); /* TFrame: File Type */
+USEFORM("manufacture_schedules\ReportBuilder.cpp", Reports);
+USEFORM("manufacture_schedules\IzdAppender.cpp", IzdAppenderWnd);
 USEFORM("Login\dialogs\NextStateSelector.cpp", Next_State_Selector);
 USEFORM("Login\dialogs\RightSelect.cpp", fselRight);
 USEFORM("Login\dialogs\User_Data.cpp", UserData);
 USEFORM("log.cpp", LogForm);
 USEFORM("Login\dialogs\GTUSdialog.cpp", GTUSGroupSelector);
 USEFORM("Login\dialogs\Input_wnd.cpp", newItem);
+USEFORM("manufacture_schedules\Calck\Usage.cpp", ResourceUsage); /* TFrame: File Type */
 USEFORM("manufacture_schedules\EditWorkerData.cpp", WorkerData);
 USEFORM("manufacture_schedules\EditWorkerGroup.cpp", WorkerGroup);
-USEFORM("manufacture_schedules\IzdAppender.cpp", IzdAppenderWnd);
 USEFORM("Login\loginwin.cpp", LogIn);
 USEFORM("Login\Settings_wnd.cpp", Settings);
 USEFORM("main.cpp", mForm);
-USEFORM("manufacture_schedules\Calck\Usage.cpp", ResourceUsage); /* TFrame: File Type */
 //---------------------------------------------------------------------------
 WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

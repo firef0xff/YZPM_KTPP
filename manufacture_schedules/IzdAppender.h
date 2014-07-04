@@ -11,16 +11,17 @@
 
 #include "SQL.h"
 #include "Obd.h"
+#include "def_types.h"
 //---------------------------------------------------------------------------
 
 class ZakazData : public TObject
 {
 public:
-    __fastcall ZakazData(unsigned __int64 zak_id_, String zakaz_):
+    __fastcall ZakazData(__uint64 zak_id_, String zakaz_):
     zak_id(zak_id_), zakaz(zakaz_)
     {}
     __fastcall ~ZakazData(){}
-    unsigned __int64 getZakID(void)
+    __uint64 getZakID(void)
     {
         return zak_id;
     }
@@ -29,19 +30,19 @@ public:
         return zakaz;
     }
 private:
-    unsigned __int64 zak_id;
+    __uint64 zak_id;
     String zakaz;
 };
 
 class PartData : public TObject
 {
 public:
-    __fastcall PartData(unsigned __int64 part_id_,  int part_no_):
+    __fastcall PartData(__uint64 part_id_,  int part_no_):
                 part_id(part_id_), part_no(part_no_)
     {}
     __fastcall ~PartData()
     {}
-    unsigned __int64 getPartID(void)
+    __uint64 getPartID(void)
     {
         return part_id;
     }
@@ -50,7 +51,7 @@ public:
         return part_no;
     }
 private:
-    unsigned __int64 part_id;
+    __uint64 part_id;
     unsigned int part_no;
 };
 

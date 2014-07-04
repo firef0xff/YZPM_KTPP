@@ -20,11 +20,8 @@
 #include "SQL.h"
 #include "IconsData.h"
 #include <ImgList.hpp>
+#include "def_types.h"
 //---------------------------------------------------------------------------
-#ifndef __int64
-#define __int64 long long
-#endif
-
 class NodeData
 {
     public:
@@ -47,15 +44,15 @@ class NodeData
 class ZakazNode : public NodeData
 {
 public:
-    ZakazNode(unsigned __int64 zak_id_, unsigned __int64 zap_id_, String zakaz_):
+    ZakazNode(__uint64 zak_id_, __uint64 zap_id_, String zakaz_):
     zak_id(zak_id_), zap_id(zap_id_), zakaz(zakaz_)
     {}
     ~ZakazNode(){}
-    unsigned __int64 getZakID(void)
+    __uint64 getZakID(void)
     {
         return zak_id;
     }
-    unsigned __int64 getZapID(void)
+    __uint64 getZapID(void)
     {
         return zap_id;
     }
@@ -64,19 +61,19 @@ public:
         return zakaz;
     }
 private:
-    unsigned __int64 zak_id;
-    unsigned __int64 zap_id;
+    __uint64 zak_id;
+    __uint64 zap_id;
     String zakaz;
 };
 class PartNode : public NodeData
 {
 public:
-    PartNode(unsigned __int64 part_id_,  int part_no_):
+    PartNode(__uint64 part_id_,  int part_no_):
     part_id(part_id_), part_no(part_no_)
     {}
     ~PartNode()
     {}
-    unsigned __int64 getPartID(void)
+    __uint64 getPartID(void)
     {
         return part_id;
     }
@@ -85,19 +82,19 @@ public:
         return part_no;
     }
 private:
-    unsigned __int64 part_id;
+    __uint64 part_id;
     unsigned int part_no;
 };
 
 class IzdNode : public NodeData
 {
 public:
-    IzdNode(String name_, String obd_, unsigned __int64 det_id_, double kol_used_, unsigned int sp_id_, String sp_name_):
+    IzdNode(String name_, String obd_, __uint64 det_id_, double kol_used_, unsigned int sp_id_, String sp_name_):
     name(name_),obd(obd_),det_id(det_id_),kol_used(kol_used_), sp_id(sp_id_), sp_name(sp_name_)
     {}
     ~IzdNode()
     {}
-    unsigned __int64 getDetID(void)
+    __uint64 getDetID(void)
     {
         return det_id;
     }
@@ -125,7 +122,7 @@ protected:
     String name;
     String sp_name;
     unsigned int sp_id;
-    unsigned __int64 det_id;
+    __uint64 det_id;
     String obd;
     double kol_used;
 };
@@ -133,8 +130,8 @@ protected:
 class IzdPartNode : public IzdNode
 {
 public:
-    IzdPartNode(String name_, String obd_, unsigned __int64 det_id_, double kol_used_,
-        unsigned __int64 det_idp_ ,unsigned __int64 inst_idc_,unsigned __int64 inst_idp_,double kol_sp_, unsigned int sp_id_, String sp_name_, bool used_):
+    IzdPartNode(String name_, String obd_, __uint64 det_id_, double kol_used_,
+        __uint64 det_idp_ ,__uint64 inst_idc_,__uint64 inst_idp_,double kol_sp_, unsigned int sp_id_, String sp_name_, bool used_):
     IzdNode(name_, obd_, det_id_, kol_used_, sp_id_, sp_name_), det_idp(det_idp_), kol_sp(kol_sp_), used(used_),inst_idc(inst_idc_),inst_idp(inst_idp_)
     {}
     ~IzdPartNode()
@@ -143,15 +140,15 @@ public:
     {
         return used;
     }
-    unsigned __int64 getDetIDp(void)
+    __uint64 getDetIDp(void)
     {
         return det_idp;
     }
-    unsigned __int64 getInstIDc(void)
+    __uint64 getInstIDc(void)
     {
         return inst_idc;
     }
-    unsigned __int64 getInstIDp(void)
+    __uint64 getInstIDp(void)
     {
         return inst_idp;
     }
@@ -165,9 +162,9 @@ public:
         }
     }
 private:
-    unsigned __int64 det_idp;
-    unsigned __int64 inst_idc;
-    unsigned __int64 inst_idp;
+    __uint64 det_idp;
+    __uint64 inst_idc;
+    __uint64 inst_idp;
     double kol_sp;
     bool used;
 };
@@ -313,32 +310,27 @@ __published:    // IDE-managed Components
 	void __fastcall N8Click(TObject *Sender);
 	void __fastcall N10Click(TObject *Sender);
 
-
-
-
-
-
 private:    // User declarations
 
-    void StartOrder(const std::vector<unsigned __int64> &parts);
-    void StopOrder(const std::vector<unsigned __int64> &parts);
-    void CloseOrder(const std::vector<unsigned __int64> &parts);
+    void StartOrder(const std::vector<__uint64> &parts);
+    void StopOrder(const std::vector<__uint64> &parts);
+    void CloseOrder(const std::vector<__uint64> &parts);
 
 
     void LoadZapusk(String zapusk, String zakaz, String det);
     void LoadZakaz (String zap_id, String zakaz, String det);
-    void LoadIzd   (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, String det);
+    void LoadIzd   (String zap_id, __uint64 zak_id, __uint64 part_id, String det);
 
-    void LoadDetailData         (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
-    void LoadDetailParts        (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
+    void LoadDetailData         (String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id);
+    void LoadDetailParts        (String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id);
     void LoadPartDetails        (String id, String zap_id, String zak_id, String part_id, String det_id, String inst_id);
     void LoadTechDetails        (String det_id);
     void LoadOborudDetails      (String det_id);
 
-    void LoadDetailStandartParts(String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
-    void LoadDetailMaterials    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
-    void LoadDetailOborud       (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
-    void LoadDetailSurCharge    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id);
+    void LoadDetailStandartParts(String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id);
+    void LoadDetailMaterials    (String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id);
+    void LoadDetailOborud       (String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id);
+    void LoadDetailSurCharge    (String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id);
 
     void Set_img   (TTreeNode *node);
     void Update    (TTreeNode *node);

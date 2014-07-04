@@ -17,42 +17,43 @@
 #include "SQL.h"
 #include "IconsData.h"
 #include "string.h"
+#include "def_types.h"
 
 class ZakazData
 {
 public:
-    ZakazData(long zakaz_id, const std::string &zakaz)
+    ZakazData(__uint64 zakaz_id, const AnsiString &zakaz)
         :zakaz_id(zakaz_id),zakaz(zakaz)
     {
     }
     virtual ~ZakazData()
     {}
 
-    const long zakaz_id;
-    const std::string zakaz;
+    const __uint64 zakaz_id;
+    const AnsiString zakaz;
 };
 class PartData : public ZakazData
 {
 public:
-    PartData(long zakaz_id, const std::string &zakaz, long part_id, long part_no)
+    PartData(long zakaz_id, const AnsiString &zakaz, __uint64 part_id, __uint64 part_no)
         :ZakazData(zakaz_id, zakaz),part_id(part_id),part_no(part_no)
     {}
     ~PartData()
     {}
-    const long part_no;
-    const long part_id;
+    const __uint64 part_no;
+    const __uint64 part_id;
 };
 class IzdData : public ZakazData
 {
 public:
-    IzdData(long zakaz_id, const std::string &zakaz, long det_id, long kol, const std::string &obd)
+    IzdData(long zakaz_id, const AnsiString &zakaz, __uint64 det_id, __uint64 kol, const AnsiString &obd)
         :ZakazData(zakaz_id, zakaz),det_id(det_id),kol(kol),obd(obd)
     {}
     ~IzdData()
     {}
-    const long det_id;
-    const long kol;
-    const std::string obd;
+    const __uint64 det_id;
+    const __uint64 kol;
+    const AnsiString obd;
 };
 //---------------------------------------------------------------------------
 class TResourceUsage : public TFrame
@@ -95,6 +96,7 @@ __published:	// IDE-managed Components
 	TButton *FindNew;
     void __fastcall FindStartedClick(TObject *Sender);
     void __fastcall FindNewClick(TObject *Sender);
+    void __fastcall TVDeletion(TObject *Sender, TTreeNode *Node);
 private:	// User declarations
     const int &LUser;
 	IconsData *IcoData;

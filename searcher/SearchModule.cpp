@@ -1,4 +1,4 @@
-
+п»ї
 
 #include <vcl.h>
 #pragma hdrstop
@@ -18,40 +18,40 @@ if (count==0)
     IcoData=_IcoData;
     }
 count++;
-// расположение
+// СЂР°СЃРїРѕР»РѕР¶РµРЅРёРµ
 Align=alClient;
 Parent=_p;
 Name=Name+String(count);
-//инициализация
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
 Combo->Items->Clear();
 String sql="select idsost,name from administration.conditions order by idsost";
 TADOQuery *rez=DB->SendSQL(sql);
 if (rez&&rez->RecordCount)
     {
-    Combo->Items->AddObject("Все",(TObject *)-1);
+    Combo->Items->AddObject("Р’СЃРµ",(TObject *)-1);
     for (rez->First(); !rez->Eof; rez->Next())
         {
         Combo->Items->AddObject(rez->FieldByName("name")->Value,(TObject *)rez->FieldByName("idsost")->Value.operator int());
         }
     }
 Combo->ItemIndex=0;
-//деревья
+//РґРµСЂРµРІСЊСЏ
 MainTree->Images=IcoData->GetImgList();
 MainTree->StateImages=IcoData->GetStateList();
 SupportTree->Images=IcoData->GetImgList();
 SupportTree->StateImages=IcoData->GetStateList();
-//функция возврата
+//С„СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‚Р°
 OpenTree=(void (*)(Obd *det))_OpenTree;
-//функции указатели
+//С„СѓРЅРєС†РёРё СѓРєР°Р·Р°С‚РµР»Рё
 AddTexTab=Tech(_AddTexTab);
 AddTexViewTab=Tech(_AddTexViewTab);
 LoadTexToCurrTab=Tech(_LoadTexToCurrTab);
 LoadexViewToCurrTab=Tech(_LoadexViewToCurrTab);
 if (Parent->ClassNameIs("TTabSheet"))
     {
-    ((TTabSheet*)Parent)->Caption="Поиск     ";
+    ((TTabSheet*)Parent)->Caption="РџРѕРёСЃРє     ";
     }
-//инициализация в меню
+//РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РІ РјРµРЅСЋ
 delete rez;
 
     SpView=false;
@@ -129,9 +129,9 @@ tv->Items->Clear();
 void              TSearch::BranchClear(TTreeNode *Node)
 {
 TTreeNode *node=Node->getFirstChild();
-while (node)  //перебор детей
+while (node)  //РїРµСЂРµР±РѕСЂ РґРµС‚РµР№
     {
-    if (node->Count) //есть дети которых надо порезать
+    if (node->Count) //РµСЃС‚СЊ РґРµС‚Рё РєРѕС‚РѕСЂС‹С… РЅР°РґРѕ РїРѕСЂРµР·Р°С‚СЊ
         {
         BranchClear(node);
         }
@@ -204,17 +204,17 @@ if (LastChild)
 
 void __fastcall TSearch::AddCondClick(TObject *Sender)
 {
-if (M2->Lines->Count!=0 && Trim(M2->Lines->Strings[M2->Lines->Count-1])!="" && Trim(M2->Lines->Strings[M2->Lines->Count-1])!="и" && Trim(M2->Lines->Strings[M2->Lines->Count-1])!="или")
+if (M2->Lines->Count!=0 && Trim(M2->Lines->Strings[M2->Lines->Count-1])!="" && Trim(M2->Lines->Strings[M2->Lines->Count-1])!="Рё" && Trim(M2->Lines->Strings[M2->Lines->Count-1])!="РёР»Рё")
     {
     M2->Lines->Add(RG2->Items->Strings[RG2->ItemIndex]);
     }
 String COLUMN;
 switch (SearchParams->ItemIndex)
     {
-    case 0: {COLUMN="Обозначение содержит";break;}
-    case 1: {COLUMN="Наименование содержит";break;}
-    case 2: {COLUMN="Заказ содержит";break;}
-    case 3: {COLUMN="Изготавливается из";break;}
+    case 0: {COLUMN="РћР±РѕР·РЅР°С‡РµРЅРёРµ СЃРѕРґРµСЂР¶РёС‚";break;}
+    case 1: {COLUMN="РќР°РёРјРµРЅРѕРІР°РЅРёРµ СЃРѕРґРµСЂР¶РёС‚";break;}
+    case 2: {COLUMN="Р—Р°РєР°Р· СЃРѕРґРµСЂР¶РёС‚";break;}
+    case 3: {COLUMN="РР·РіРѕС‚Р°РІР»РёРІР°РµС‚СЃСЏ РёР·";break;}
     default: break;
     }
 if (Trim(E1->Text)!="") {M2->Lines->Add(COLUMN+" "+Trim(E1->Text));}
@@ -240,38 +240,38 @@ if (M2->Lines->Count)
         {
         if (Trim(M2->Lines->Strings[i])!="")
             {
-            if (Trim(M2->Lines->Strings[i])=="и")
+            if (Trim(M2->Lines->Strings[i])=="Рё")
                 {
                 conditions=conditions+" and ";
                 }else
-            if (Trim(M2->Lines->Strings[i])=="или")
+            if (Trim(M2->Lines->Strings[i])=="РёР»Рё")
                 {
                 conditions=conditions+" or ";
                 } else
                 {
                 cond=Trim(M2->Lines->Strings[i]);
-                if (cond.Pos("Обозначение содержит"))
+                if (cond.Pos("РћР±РѕР·РЅР°С‡РµРЅРёРµ СЃРѕРґРµСЂР¶РёС‚"))
                     {
                     COLUMN="obd";
-                    cond.Delete(cond.Pos("Обозначение содержит"),21);
+                    cond.Delete(cond.Pos("РћР±РѕР·РЅР°С‡РµРЅРёРµ СЃРѕРґРµСЂР¶РёС‚"),21);
                     conditions=conditions+" "+COLUMN+" LIKE '%"+GostToInt(cond)+"%'";
                     }
-                if (cond.Pos("Наименование содержит"))
+                if (cond.Pos("РќР°РёРјРµРЅРѕРІР°РЅРёРµ СЃРѕРґРµСЂР¶РёС‚"))
                     {
                     COLUMN="namd";
-                    cond.Delete(cond.Pos("Наименование содержит"),22);
+                    cond.Delete(cond.Pos("РќР°РёРјРµРЅРѕРІР°РЅРёРµ СЃРѕРґРµСЂР¶РёС‚"),22);
                     conditions=conditions+" "+COLUMN+" LIKE '%"+cond.Trim()+"%'";
                     }
-                if (cond.Pos("Заказ содержит"))
+                if (cond.Pos("Р—Р°РєР°Р· СЃРѕРґРµСЂР¶РёС‚"))
                     {
                     COLUMN="zakaz";
-                    cond.Delete(cond.Pos("Заказ содержит"),15);
+                    cond.Delete(cond.Pos("Р—Р°РєР°Р· СЃРѕРґРµСЂР¶РёС‚"),15);
                     conditions=conditions+" "+COLUMN+" LIKE '%"+cond.Trim()+"%'";
                     }
-                if (cond.Pos("Изготавливается из"))
+                if (cond.Pos("РР·РіРѕС‚Р°РІР»РёРІР°РµС‚СЃСЏ РёР·"))
                     {
                     COLUMN="obmid";
-                    cond.Delete(cond.Pos("Изготавливается из"),22);
+                    cond.Delete(cond.Pos("РР·РіРѕС‚Р°РІР»РёРІР°РµС‚СЃСЏ РёР·"),22);
                     conditions=conditions+" "+COLUMN+" in (select id from constructions.det_names where obd like '%"+cond.Trim()+"%')";
                     }
                 }
@@ -311,7 +311,7 @@ if (E2->Text=="1")
     Find();
     }else
     {
-    E2->Text="1";  //срабатывет onChange а ссылка который и вызывает Find
+    E2->Text="1";  //СЃСЂР°Р±Р°С‚С‹РІРµС‚ onChange Р° СЃСЃС‹Р»РєР° РєРѕС‚РѕСЂС‹Р№ Рё РІС‹Р·С‹РІР°РµС‚ Find
     }
 //E1->Text="";
 M2->Lines->Clear();
@@ -341,16 +341,16 @@ String condition=conditions;
 String sql="select a.id,a.obd,a.namd,a.razdSPID,b.Razdname from constructions.det_names a  join administration.sprazd b on b.RazdID=a.razdSPID ";
 if (condition.Pos(" zakaz "))
     {
-    //добавить вхождение в заказы
+    //РґРѕР±Р°РІРёС‚СЊ РІС…РѕР¶РґРµРЅРёРµ РІ Р·Р°РєР°Р·С‹
     sql+="right join market.zakaz c on c.id=a.id ";
     sql+="right join market.Orders c1 on c.zakaz_id=c1.zakaz_id ";
     }
 if (condition.Pos(" obmid "))
     {
-    //добавить вхождение в технологии
+    //РґРѕР±Р°РІРёС‚СЊ РІС…РѕР¶РґРµРЅРёРµ РІ С‚РµС…РЅРѕР»РѕРіРёРё
     sql+="join technologic.det_info d on d.id=a.id " ;
     }
-//разделы поиска
+//СЂР°Р·РґРµР»С‹ РїРѕРёСЃРєР°
 String razd=" razdSPID in(";
 if (products->Checked)
     {
@@ -420,7 +420,7 @@ void             TSearch::FillTV(TTreeView *tv,TTreeNode *StartNode,String sql,b
 TADOQuery *rez=DB->SendSQL(sql);
 if (rez&&rez->RecordCount)
     {
-    //наполнение сетки
+    //РЅР°РїРѕР»РЅРµРЅРёРµ СЃРµС‚РєРё
     String name,obd,razd_name;
     int id,razd;
     rez->First();
@@ -481,9 +481,9 @@ if (E2->Text=="1")
 
 void __fastcall TSearch::MainTreeClick(TObject *Sender)
 {
-// найти вхождения
+// РЅР°Р№С‚Рё РІС…РѕР¶РґРµРЅРёСЏ
 TTreeView *tv=(TTreeView *)Sender;
-TPoint s;                  //вычисление кликнутой ячейки
+TPoint s;                  //РІС‹С‡РёСЃР»РµРЅРёРµ РєР»РёРєРЅСѓС‚РѕР№ СЏС‡РµР№РєРё
 GetCursorPos(&s);
 s=tv->ScreenToClient(s);
 TTreeNode *node=tv->GetNodeAt(s.X,s.Y);
@@ -535,9 +535,9 @@ if (data)
 }
 void __fastcall TSearch::MainTreeDblClick(TObject *Sender)
 {
-// передать объект на спецификацию
+// РїРµСЂРµРґР°С‚СЊ РѕР±СЉРµРєС‚ РЅР° СЃРїРµС†РёС„РёРєР°С†РёСЋ
 TTreeView *tv=(TTreeView *)Sender;
-TPoint s;                  //вычисление кликнутой ячейки
+TPoint s;                  //РІС‹С‡РёСЃР»РµРЅРёРµ РєР»РёРєРЅСѓС‚РѕР№ СЏС‡РµР№РєРё
 GetCursorPos(&s);
 s=tv->ScreenToClient(s);
 TTreeNode *node=tv->GetNodeAt(s.X,s.Y);
@@ -549,7 +549,7 @@ if (node&&node==tv->Selected)
         OpenTree(data);
         }
     }
-//вызов обратной функции
+//РІС‹Р·РѕРІ РѕР±СЂР°С‚РЅРѕР№ С„СѓРЅРєС†РёРё
 }
 
 void __fastcall TSearch::HideBtnClick(TObject *Sender)
@@ -600,16 +600,16 @@ if (SupportTree->Focused())
     }
 if (node)
     {
-    //объект
+    //РѕР±СЉРµРєС‚
     TMenuItem *m=(TMenuItem *)Sender;
     Obd *bag=(Obd*)node->Data;
     Obd *det=new Obd(*bag);
     switch (m->Tag)
         {
-        case 1:{AddTexTab(det);break;}     //редактировать новая вкладка
-        case 0:{LoadTexToCurrTab(det);break;}           //редактировать текущая вкладка
-        case 3:{AddTexViewTab(det);break;}//просмотр новая вкладка
-        case 2:{LoadexViewToCurrTab(det);break;}        //просмотр текущая вкладка
+        case 1:{AddTexTab(det);break;}     //СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РЅРѕРІР°СЏ РІРєР»Р°РґРєР°
+        case 0:{LoadTexToCurrTab(det);break;}           //СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ С‚РµРєСѓС‰Р°СЏ РІРєР»Р°РґРєР°
+        case 3:{AddTexViewTab(det);break;}//РїСЂРѕСЃРјРѕС‚СЂ РЅРѕРІР°СЏ РІРєР»Р°РґРєР°
+        case 2:{LoadexViewToCurrTab(det);break;}        //РїСЂРѕСЃРјРѕС‚СЂ С‚РµРєСѓС‰Р°СЏ РІРєР»Р°РґРєР°
         default:break;
         }
     bag->UpdateVal();
@@ -626,7 +626,7 @@ void __fastcall  TSearch::TreeClick(TObject *Sender)
     if (tv->SelectionCount)
     {
         *selected =new int[tv->SelectionCount+1];
-        **selected=tv->SelectionCount; //первое значение массива это номер последнего элемента
+        **selected=tv->SelectionCount; //РїРµСЂРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РјР°СЃСЃРёРІР° СЌС‚Рѕ РЅРѕРјРµСЂ РїРѕСЃР»РµРґРЅРµРіРѕ СЌР»РµРјРµРЅС‚Р°
         for (size_t i=1; i <= tv->SelectionCount; i++)
         {
             Obd *det=(Obd*)tv->Selections[i-1]->Data;

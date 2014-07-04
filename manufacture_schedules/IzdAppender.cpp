@@ -21,7 +21,7 @@ __fastcall TIzdAppenderWnd::TIzdAppenderWnd(TComponent* Owner, cSQL *db, String 
         for (rez->First(); !rez->Eof; rez->Next())
         {
             String zakaz = rez->FieldByName("zakaz")->Value;
-            unsigned __int64 zak_id = (unsigned __int64)__int64(rez->FieldByName("zak_id")->Value);
+            __uint64 zak_id = (__uint64)__int64(rez->FieldByName("zak_id")->Value);
             ZakazData *ptr = new ZakazData(zak_id, zakaz);
             ZakazList->Items->AddObject(ptr->getZakaz(), (TObject *)ptr);
         }
@@ -45,7 +45,7 @@ void __fastcall TIzdAppenderWnd::ZakazListChange(TObject *Sender)
         for (rez->First(); !rez->Eof; rez->Next())
         {
             unsigned int part_no = rez->FieldByName("part_no")->Value;
-            unsigned __int64 part_id = (unsigned __int64) __int64(rez->FieldByName("part_id")->Value);
+            __uint64 part_id = (__uint64) __int64(rez->FieldByName("part_id")->Value);
             PartData *ptr = new PartData(part_id, part_no);
             PartList->Items->AddObject(ptr->getPartNo(), (TObject *)ptr);
         }

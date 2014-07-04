@@ -2,7 +2,7 @@ TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
-
+DEFINES += QT = 1
 INCLUDEPATH += \
     ../win_includes/vcl\
     ../win_includes/rtl\

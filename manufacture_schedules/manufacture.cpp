@@ -299,9 +299,9 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
 
             String zak = rez->FieldByName("zakaz")->Value;
             unsigned int part_no = rez->FieldByName("part_no")->Value;
-            unsigned __int64 zak_id = (unsigned __int64)rez->FieldByName("zak_id")->Value.operator __int64();
-            unsigned __int64 zap_id = (unsigned __int64)rez->FieldByName("zap_id")->Value.operator __int64();
-            unsigned __int64 part_id = (unsigned __int64)rez->FieldByName("part_id")->Value.operator __int64();
+            __uint64 zak_id = (__uint64)rez->FieldByName("zak_id")->Value.operator __int64();
+            __uint64 zap_id = (__uint64)rez->FieldByName("zap_id")->Value.operator __int64();
+            __uint64 part_id = (__uint64)rez->FieldByName("part_id")->Value.operator __int64();
             bool started = (int)rez->FieldByName("started")->Value;
 
             if (zak != prev_zakaz)
@@ -380,7 +380,7 @@ void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
     }
     delete rez;
 }
-void TManufactureControl::LoadIzd   (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, String det)
+void TManufactureControl::LoadIzd   (String zap_id, __uint64 zak_id, __uint64 part_id, String det)
 {
     contentTV->Items->Clear();
 
@@ -420,7 +420,7 @@ void TManufactureControl::LoadIzd   (String zap_id, unsigned __int64 zak_id, uns
         {
             String obd = rez->FieldByName("obd")->Value;
             String name = rez->FieldByName("name")->Value;
-            unsigned __int64 det_id = (unsigned __int64)rez->FieldByName("det_id")->Value.operator __int64();
+            __uint64 det_id = (__uint64)rez->FieldByName("det_id")->Value.operator __int64();
             unsigned int kol = (unsigned int)rez->FieldByName("kol")->Value.operator int();
             bool have_childs = int(rez->FieldByName("have_childs")->Value);
             unsigned int sp_id = (unsigned int)rez->FieldByName("sp_id")->Value.operator int();
@@ -439,7 +439,7 @@ void TManufactureControl::LoadIzd   (String zap_id, unsigned __int64 zak_id, uns
     delete rez;
 }
 
-void TManufactureControl::LoadDetailData    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id)
+void TManufactureControl::LoadDetailData    (String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id)
 {
     if (Content_detail->ActivePage == Parts)
     {
@@ -462,7 +462,7 @@ void TManufactureControl::LoadDetailData    (String zap_id, unsigned __int64 zak
         LoadDetailSurCharge(zap_id, zak_id, part_id, det_id, inst_id);
     }
 }
-void TManufactureControl::LoadDetailParts   (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id)
+void TManufactureControl::LoadDetailParts   (String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id)
 {
     SGClear(detSG, 6);
     SGClear(detDetails, 1);
@@ -750,15 +750,15 @@ void __fastcall TManufactureControl::DetDetailControlChange(TObject *Sender)
 }
 
 
-void TManufactureControl::LoadDetailStandartParts(String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id)
+void TManufactureControl::LoadDetailStandartParts(String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id)
 {
     return;
 }
-void TManufactureControl::LoadDetailMaterials    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id)
+void TManufactureControl::LoadDetailMaterials    (String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id)
 {
     return;
 }
-void TManufactureControl::LoadDetailOborud       (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id)
+void TManufactureControl::LoadDetailOborud       (String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id)
 {
     SGClear(OborudSG);
 
@@ -837,7 +837,7 @@ void TManufactureControl::LoadDetailOborud       (String zap_id, unsigned __int6
     AutoWidthSG(OborudSG);
     return;
 }
-void TManufactureControl::LoadDetailSurCharge    (String zap_id, unsigned __int64 zak_id, unsigned __int64 part_id, unsigned __int64 det_id, unsigned __int64 inst_id)
+void TManufactureControl::LoadDetailSurCharge    (String zap_id, __uint64 zak_id, __uint64 part_id, __uint64 det_id, __uint64 inst_id)
 {
     SGClear(surch_sg, 8);
 
@@ -1048,7 +1048,7 @@ void __fastcall TManufactureControl::InWorkZapusk(TObject *Sender)
     if ( MessageBoxA(this->Handle, "Запустить в работу?", "Запустить в работу?",MB_YESNO|MB_ICONQUESTION) == mrYes )
 	{
 		//получить список партий для запуска
-        std::vector<unsigned __int64> parts;
+        std::vector<__uint64> parts;
         TADOQuery *rez = DB->SendSQL("Select part_id from manufacture.manufacture_orders a "
                                      " join manufacture.parts b on a.zap_id = b.zap_id "
                                      " where a.zap_id ='"+zapSG->Cells[ZAP_ID_COL][zapSG->Row]+"'");
@@ -1056,7 +1056,7 @@ void __fastcall TManufactureControl::InWorkZapusk(TObject *Sender)
 		{
             for (rez->First(); !rez->Eof; rez->Next())
 			{
-				parts.push_back((unsigned __int64)((__int64)rez->FieldByName("part_id")->Value));
+                parts.push_back((__uint64)((__int64)rez->FieldByName("part_id")->Value));
             }
             delete rez;
         }
@@ -1071,7 +1071,7 @@ void __fastcall TManufactureControl::ToEditZapusk(TObject *Sender)
     if ( MessageBoxA(this->Handle, "Вернуть в разработку?", "Вернуть в разработку?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
         //получить список партий для запуска
-        std::vector<unsigned __int64> parts;
+        std::vector<__uint64> parts;
         TADOQuery *rez = DB->SendSQL("Select part_id from manufacture.manufacture_orders a "
                                      " join manufacture.parts b on a.zap_id = b.zap_id "
                                      " where a.zap_id ='"+zapSG->Cells[ZAP_ID_COL][zapSG->Row]+"'");
@@ -1079,7 +1079,7 @@ void __fastcall TManufactureControl::ToEditZapusk(TObject *Sender)
         {
             for (rez->First(); !rez->Eof; rez->Next())
             {
-                parts.push_back((unsigned __int64)((__int64)rez->FieldByName("part_id")->Value));
+                parts.push_back((__uint64)((__int64)rez->FieldByName("part_id")->Value));
             }
             delete rez;
         }
@@ -1173,7 +1173,7 @@ void __fastcall TManufactureControl::InWorkZakaz(TObject *Sender)
 {
     if ( MessageBoxA(this->Handle, "Запустить в работу?", "Запустить в работу?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
-        std::vector<unsigned __int64> parts;
+        std::vector<__uint64> parts;
         for (size_t i = 0; i < zakTV->SelectionCount; ++i)
         {
             TTreeNode *node = zakTV->Selections[i];
@@ -1200,7 +1200,7 @@ void __fastcall TManufactureControl::ToEditZakaz(TObject *Sender)
 {
     if ( MessageBoxA(this->Handle, "Вернуть в разработку?", "Вернуть в разработку?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
-        std::vector<unsigned __int64> parts;
+        std::vector<__uint64> parts;
         for (size_t i = 0; i < zakTV->SelectionCount; ++i)
         {
             TTreeNode *node = zakTV->Selections[i];
@@ -1228,7 +1228,7 @@ void __fastcall TManufactureControl::N10Click(TObject *Sender)
     //закрыть заказ
     if ( MessageBoxA(this->Handle, "Закрыть заказ?", "Закрыть заказ?",MB_YESNO|MB_ICONQUESTION) == mrYes )
     {
-        std::vector<unsigned __int64> parts;
+        std::vector<__uint64> parts;
         for (size_t i = 0; i < zakTV->SelectionCount; ++i)
         {
             TTreeNode *node = zakTV->Selections[i];
@@ -1394,10 +1394,10 @@ void __fastcall TManufactureControl::contentTVExpanding(TObject *Sender, TTreeNo
         {
             String obd = rez->FieldByName("obd")->Value;
             String name = rez->FieldByName("name")->Value;
-            unsigned __int64 det_id = (unsigned __int64)rez->FieldByName("det_id")->Value.operator __int64();
-            unsigned __int64 det_idp = (unsigned __int64)rez->FieldByName("det_idp")->Value.operator __int64();
-            unsigned __int64 inst_idc = (unsigned __int64)rez->FieldByName("inst_idc")->Value.operator __int64();
-            unsigned __int64 inst_idp = (unsigned __int64)rez->FieldByName("inst_idp")->Value.operator __int64();
+            __uint64 det_id = (__uint64)rez->FieldByName("det_id")->Value.operator __int64();
+            __uint64 det_idp = (__uint64)rez->FieldByName("det_idp")->Value.operator __int64();
+            __uint64 inst_idc = (__uint64)rez->FieldByName("inst_idc")->Value.operator __int64();
+            __uint64 inst_idp = (__uint64)rez->FieldByName("inst_idp")->Value.operator __int64();
             unsigned int kol_using = (unsigned int)rez->FieldByName("kol_using")->Value.operator int();
             unsigned int kol_sp = (unsigned int)rez->FieldByName("kol_sp")->Value.operator int();
             bool have_childs = int(rez->FieldByName("have_childs")->Value);
@@ -1568,28 +1568,28 @@ void TManufactureControl::UpdatePartsStatus (void)
     LoadIzd(zapSG->Cells[ZAP_ID_COL][zapSG->Row], 0, 0, "");
 }
 
-void TManufactureControl::StartOrder(const std::vector<unsigned __int64> &parts)
+void TManufactureControl::StartOrder(const std::vector<__uint64> &parts)
 {
     Transaction tr(DB);
-	for (std::vector<unsigned __int64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
+    for (std::vector<__uint64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
     {
 		DB->SendCommand("call manufacture.zapusk_starter('"+String(*it)+"')");
 	}
 	tr.Commit();
 }
-void TManufactureControl::StopOrder(const std::vector<unsigned __int64> &parts)
+void TManufactureControl::StopOrder(const std::vector<__uint64> &parts)
 {
 	Transaction tr(DB);
-	for (std::vector<unsigned __int64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
+    for (std::vector<__uint64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
 	{
         DB->SendCommand("call manufacture.zapusk_stopper('"+String(*it)+"')");
     }
     tr.Commit();
 }
-void TManufactureControl::CloseOrder(const std::vector<unsigned __int64> &parts)
+void TManufactureControl::CloseOrder(const std::vector<__uint64> &parts)
 {
     Transaction tr(DB);
-    for (std::vector<unsigned __int64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
+    for (std::vector<__uint64>::const_iterator it = parts.begin(); it!=parts.end(); ++it)
     {
         DB->SendCommand("call manufacture.Close_part('"+String(*it)+"')");
     }

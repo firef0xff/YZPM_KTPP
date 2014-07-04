@@ -59,7 +59,7 @@ __fastcall TResourceUsage::TResourceUsage(TComponent* Owner,TWinControl *_p, int
 	plan_sg->Cells[7][0] = "Процент";
     AutoWidthSG(plan_sg);
 }
-//---------------------------------------------------------------------------
+
 void __fastcall TResourceUsage::FindStartedClick(TObject *Sender)
 {
 /*Получаем список всех запущенных/закрытых партий
@@ -73,14 +73,58 @@ void __fastcall TResourceUsage::FindStartedClick(TObject *Sender)
            " where a.zakaz like '%"<<AnsiString(StartedParams->Text).c_str()<<"%' ";
     if (Show_Closed->Checked)
     {
-        sql << "' and b.close_date is not null'";
+        sql << " and b.close_date is not null";
     }
     else
     {
-        sql << "' and b.close_date is null'";
+        sql << " and b.close_date is null";
     }
+    sql << " order by a.zakaz,b.part_no ";
+
+    ManufactureTree->Items->Clear();
+
+    TADOQuery *rez = DB->SendSQL(sql.str().c_str());
+    if (rez && rez->RecordCount)
+    {
+        String prev_zakaz;
+        TTreeNode *node = 0;
+        for (rez->First(); !rez->Eof; rez->Next())
+        {
+            TTreeNode *ch_node = 0;
+
+            AnsiString zak = rez->FieldByName("zakaz")->Value;
+            unsigned int part_no = rez->FieldByName("part_no")->Value;
+            __uint64 zak_id = (__uint64)rez->FieldByName("zak_id")->Value.operator __int64();
+            __uint64 part_id = (__uint64)rez->FieldByName("part_id")->Value.operator __int64();
+
+
+            if (zak != prev_zakaz)
+            {
+                if (node)
+                {
+                    node->SelectedIndex = node->ImageIndex;
+                    node->ExpandedImageIndex = node->ImageIndex;
+                }
+
+                ZakazData *ptr = new ZakazData(zak_id, zak);
+                node = ManufactureTree->Items->AddObject(node, ptr->zakaz, (void *)ptr);
+                prev_zakaz = zak;
+            }
+            PartData *ptr = new PartData(zak_id, zak, part_id, part_no);
+            ch_node = ManufactureTree->Items->AddChildObject(node, ptr->part_no, (void*)ptr);
+
+            ch_node->SelectedIndex = ch_node->ImageIndex;
+            ch_node->ExpandedImageIndex = ch_node->ImageIndex;
+        }
+        if (node)
+        {
+            node->SelectedIndex=node->ImageIndex;
+            node->ExpandedImageIndex=node->ImageIndex;
+        }
+        delete rez;
+    }
+
 }
-//---------------------------------------------------------------------------
 
 void __fastcall TResourceUsage::FindNewClick(TObject *Sender)
 {
@@ -94,7 +138,58 @@ void __fastcall TResourceUsage::FindNewClick(TObject *Sender)
            " from `market`.`zakaz` a "
            " join `market`.`orders` b on a.zakaz_id = b.zakaz_id"
            " join `constructions`.`det_names` c on a.id = c.id "
-           " where b.zakaz like '%"<<AnsiString(NewParams->Text).c_str()<<"%' or c.obd like '%"<<GostToVin(NewParams->Text).c_str()<<"%'";
-}
-//---------------------------------------------------------------------------
+           " where b.zakaz like '%"<<AnsiString(NewParams->Text).c_str()<<"%' or c.obd like '%"<<GostToInt(NewParams->Text).c_str()<<"%'";
 
+	DevelopTree->Items->Clear();
+
+    TADOQuery *rez = DB->SendSQL(sql.str().c_str());
+    if (rez && rez->RecordCount)
+    {
+        String prev_zakaz;
+        TTreeNode *node = 0;
+        for (rez->First(); !rez->Eof; rez->Next())
+        {
+            TTreeNode *ch_node = 0;
+
+            AnsiString zak = rez->FieldByName("zakaz")->Value;
+            __uint64 zak_id = (__uint64)rez->FieldByName("zakaz_id")->Value.operator __int64();
+
+            AnsiString obd = rez->FieldByName("obd")->Value;
+            unsigned int det_id = rez->FieldByName("id")->Value;
+            __uint64 kol = (__uint64)rez->FieldByName("kol")->Value.operator __int64();
+
+            if (zak != prev_zakaz)
+            {
+                if (node)
+                {
+                    node->SelectedIndex = node->ImageIndex;
+                    node->ExpandedImageIndex = node->ImageIndex;
+                }
+
+                ZakazData *ptr = new ZakazData(zak_id, zak);
+                node = DevelopTree->Items->AddObject(node, ptr->zakaz, (void *)ptr);
+                prev_zakaz = zak;
+            }
+            IzdData *ptr = new IzdData(zak_id, zak, det_id, kol, obd);
+            ch_node = DevelopTree->Items->AddChildObject(node, VinToGost(ptr->obd) + " - " + ptr->kol + " шт.", (void*)ptr);
+
+            ch_node->SelectedIndex = ch_node->ImageIndex;
+            ch_node->ExpandedImageIndex = ch_node->ImageIndex;
+        }
+        if (node)
+        {
+            node->SelectedIndex=node->ImageIndex;
+            node->ExpandedImageIndex=node->ImageIndex;
+        }
+        delete rez;
+    }
+}
+
+void __fastcall TResourceUsage::TVDeletion(TObject *Sender, TTreeNode *Node)
+{
+    if (Node->Data)
+    {
+        delete (ZakazData *)Node->Data;
+    }
+    return;
+}
