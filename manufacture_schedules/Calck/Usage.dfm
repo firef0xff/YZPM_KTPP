@@ -139,7 +139,7 @@ object ResourceUsage: TResourceUsage
     Top = 0
     Width = 504
     Height = 571
-    ActivePage = TabSheet4
+    ActivePage = TabSheet3
     Align = alClient
     TabOrder = 1
     object TabSheet3: TTabSheet
