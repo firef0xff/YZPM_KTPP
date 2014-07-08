@@ -5,13 +5,13 @@
 #include <tchar.h>
 //---------------------------------------------------------------------------
 
+USEFORM("manufacture_schedules\report_params.cpp", RepParams);
 USEFORM("manufacture_schedules\surcharge\surcharge_list.cpp", SurchargeList);
 USEFORM("manufacture_schedules\workers.cpp", WorkersSettings); /* TFrame: File Type */
-USEFORM("manufacture_schedules\ZakazCreator.cpp", ZakazWnd);
-USEFORM("manufacture_schedules\report_params.cpp", RepParams);
 USEFORM("orders_editor\OrderContent_set.cpp", ZakazContent_set);
-USEFORM("orders_editor\Orders.cpp", Orders_editor); /* TFrame: File Type */
+USEFORM("manufacture_schedules\ZakazCreator.cpp", ZakazWnd);
 USEFORM("manufacture_schedules\ZapCreator.cpp", ZapuskWnd);
+USEFORM("orders_editor\Orders.cpp", Orders_editor); /* TFrame: File Type */
 USEFORM("technology\support_modules\catalog_workpieces\zagotovk.cpp", zagotovka);
 USEFORM("technology\support_modules\instrument.cpp", instr);
 USEFORM("technology\support_modules\symblos.cpp", Symbol);
@@ -55,6 +55,7 @@ USEFORM("manufacture_schedules\EditWorkerGroup.cpp", WorkerGroup);
 USEFORM("Login\loginwin.cpp", LogIn);
 USEFORM("Login\Settings_wnd.cpp", Settings);
 USEFORM("main.cpp", mForm);
+USEFORM("manufacture_schedules\Calck\add_data_wnd.cpp", CalckAddParams);
 //---------------------------------------------------------------------------
 WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

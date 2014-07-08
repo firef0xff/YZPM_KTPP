@@ -1,4 +1,4 @@
-#pragma hdrstop
+п»ї#pragma hdrstop
 #include "functions.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -40,21 +40,21 @@ if (DirName.Length())
  if (!FindFirst(DirName+"\\*.*",faAnyFile,sr))
  do
   {
-  if (!(sr.Name=="." || sr.Name==".."))// это удалять не надо
+  if (!(sr.Name=="." || sr.Name==".."))// СЌС‚Рѕ СѓРґР°Р»СЏС‚СЊ РЅРµ РЅР°РґРѕ
    if (((sr.Attr & faDirectory) == faDirectory ) ||
-   (sr.Attr == faDirectory))// найдена папка
+   (sr.Attr == faDirectory))// РЅР°Р№РґРµРЅР° РїР°РїРєР°
     {
-    FileSetAttr(DirName+"\\"+sr.Name, faDirectory );// сброс всяких read-only
-    DeleteDir(DirName+"\\"+sr.Name);//рекурсивно удаляем содержимое
-    RemoveDir(DirName + "\\"+sr.Name);// удаляем теперь уже пустую папку
+    FileSetAttr(DirName+"\\"+sr.Name, faDirectory );// СЃР±СЂРѕСЃ РІСЃСЏРєРёС… read-only
+    DeleteDir(DirName+"\\"+sr.Name);//СЂРµРєСѓСЂСЃРёРІРЅРѕ СѓРґР°Р»СЏРµРј СЃРѕРґРµСЂР¶РёРјРѕРµ
+    RemoveDir(DirName + "\\"+sr.Name);// СѓРґР°Р»СЏРµРј С‚РµРїРµСЂСЊ СѓР¶Рµ РїСѓСЃС‚СѓСЋ РїР°РїРєСѓ
     }
-    else// иначе найден файл
+    else// РёРЅР°С‡Рµ РЅР°Р№РґРµРЅ С„Р°Р№Р»
     {
-    FileSetAttr(DirName+"\\"+sr.Name, 0);// сброс всяких read-only
-    DeleteFile(DirName+"\\"+sr.Name);// удаляем файл
+    FileSetAttr(DirName+"\\"+sr.Name, 0);// СЃР±СЂРѕСЃ РІСЃСЏРєРёС… read-only
+    DeleteFile(DirName+"\\"+sr.Name);// СѓРґР°Р»СЏРµРј С„Р°Р№Р»
     }
   }
- while (!FindNext(sr));// ищем опять, пока не найдем все
+ while (!FindNext(sr));// РёС‰РµРј РѕРїСЏС‚СЊ, РїРѕРєР° РЅРµ РЅР°Р№РґРµРј РІСЃРµ
  FindClose(sr);
  }
 RemoveDir(DirName);
@@ -132,7 +132,7 @@ return st;
 }
 bool   ischar (const char ch)
 {
-String str="йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiopasdfghjklzxcvbnm";
+String str="Р№С†СѓРєРµРЅРіС€С‰Р·С…СЉС„С‹РІР°РїСЂРѕР»РґР¶СЌСЏС‡СЃРјРёС‚СЊР±СЋС‘qwertyuiopasdfghjklzxcvbnm";
 if (str.Pos(LowerCase(ch)))
     {
     return true;
@@ -157,35 +157,35 @@ AnsiString GostToVin(AnsiString Gost)
 {
 String tmp=Gost;
 Gost=Replace(Gost," ","");
-bool isp=false;    // показывает может ли отсутствовать исполнение в обозначении
+bool isp=false;    // РїРѕРєР°Р·С‹РІР°РµС‚ РјРѕР¶РµС‚ Р»Рё РѕС‚СЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ РёСЃРїРѕР»РЅРµРЅРёРµ РІ РѕР±РѕР·РЅР°С‡РµРЅРёРё
 if (Trim(Gost)==""){return "";} else
     {
-    if (Gost.UpperCase().Pos("ПЕШК"))
+    if (Gost.UpperCase().Pos("РџР•РЁРљ"))
         {
-        Gost=Gost.SubString(Gost.UpperCase().Pos("ПЕШК"),Gost.Length()-Gost.UpperCase().Pos("ПЕШК")+1);
-        Gost.Insert("97",Gost.UpperCase().Pos("ПЕШК"));
-        Gost.Delete(Gost.UpperCase().Pos("ПЕШК"),4);
+        Gost=Gost.SubString(Gost.UpperCase().Pos("РџР•РЁРљ"),Gost.Length()-Gost.UpperCase().Pos("РџР•РЁРљ")+1);
+        Gost.Insert("97",Gost.UpperCase().Pos("РџР•РЁРљ"));
+        Gost.Delete(Gost.UpperCase().Pos("РџР•РЁРљ"),4);
         isp=true;
         }
-    if (Gost.UpperCase().Pos("ГКНЮ")!=0)
+    if (Gost.UpperCase().Pos("Р“РљРќР®")!=0)
         {
-        Gost=Gost.SubString(Gost.UpperCase().Pos("ГКНЮ"),Gost.Length()-Gost.UpperCase().Pos("ГКНЮ")+1);
-        Gost.Insert("95",Gost.UpperCase().Pos("ГКНЮ"));   //находим в строке буквенное обозначение и меняем на цифровое
-        Gost.Delete(Gost.UpperCase().Pos("ГКНЮ"),4);
+        Gost=Gost.SubString(Gost.UpperCase().Pos("Р“РљРќР®"),Gost.Length()-Gost.UpperCase().Pos("Р“РљРќР®")+1);
+        Gost.Insert("95",Gost.UpperCase().Pos("Р“РљРќР®"));   //РЅР°С…РѕРґРёРј РІ СЃС‚СЂРѕРєРµ Р±СѓРєРІРµРЅРЅРѕРµ РѕР±РѕР·РЅР°С‡РµРЅРёРµ Рё РјРµРЅСЏРµРј РЅР° С†РёС„СЂРѕРІРѕРµ
+        Gost.Delete(Gost.UpperCase().Pos("Р“РљРќР®"),4);
         isp=true;
         }
-    if (Gost.UpperCase().Pos("НАЦВ")!=0)
+    if (Gost.UpperCase().Pos("РќРђР¦Р’")!=0)
         {
-        Gost=Gost.SubString(Gost.UpperCase().Pos("НАЦВ"),Gost.Length()-Gost.UpperCase().Pos("НАЦВ")+1);
-        Gost.Insert("85",Gost.UpperCase().Pos("НАЦВ"));
-        Gost.Delete(Gost.UpperCase().Pos("НАЦВ"),4);
+        Gost=Gost.SubString(Gost.UpperCase().Pos("РќРђР¦Р’"),Gost.Length()-Gost.UpperCase().Pos("РќРђР¦Р’")+1);
+        Gost.Insert("85",Gost.UpperCase().Pos("РќРђР¦Р’"));
+        Gost.Delete(Gost.UpperCase().Pos("РќРђР¦Р’"),4);
         isp=true;
         }
-    if (Gost.UpperCase().Pos("НЕИА")!=0)
+    if (Gost.UpperCase().Pos("РќР•РРђ")!=0)
         {
-        Gost=Gost.SubString(Gost.UpperCase().Pos("НЕИА"),Gost.Length()-Gost.UpperCase().Pos("НЕИА")+1);
-        Gost.Insert("98",Gost.UpperCase().Pos("НЕИА"));
-        Gost.Delete(Gost.UpperCase().Pos("НЕИА"),4);
+        Gost=Gost.SubString(Gost.UpperCase().Pos("РќР•РРђ"),Gost.Length()-Gost.UpperCase().Pos("РќР•РРђ")+1);
+        Gost.Insert("98",Gost.UpperCase().Pos("РќР•РРђ"));
+        Gost.Delete(Gost.UpperCase().Pos("РќР•РРђ"),4);
         isp=true;
         }
     if (!isdigit(Gost[1]))
@@ -199,11 +199,11 @@ if (Trim(Gost)==""){return "";} else
         if (isp)
             {
             while (Gost.Length()<15)
-                {Gost=Gost+"0";}     // если в обозначении отсутствует номер исполнения(нулевое исполнение) то добиваем конец нулями
+                {Gost=Gost+"0";}     // РµСЃР»Рё РІ РѕР±РѕР·РЅР°С‡РµРЅРёРё РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РЅРѕРјРµСЂ РёСЃРїРѕР»РЅРµРЅРёСЏ(РЅСѓР»РµРІРѕРµ РёСЃРїРѕР»РЅРµРЅРёРµ) С‚Рѕ РґРѕР±РёРІР°РµРј РєРѕРЅРµС† РЅСѓР»СЏРјРё
             }else
             {
             while (Gost.Length()<15)
-                {Gost="0"+Gost;}     // если трока меньше 15 символов добиваем нулями (случай с обозначением стандартных или покупных изделий)
+                {Gost="0"+Gost;}     // РµСЃР»Рё С‚СЂРѕРєР° РјРµРЅСЊС€Рµ 15 СЃРёРјРІРѕР»РѕРІ РґРѕР±РёРІР°РµРј РЅСѓР»СЏРјРё (СЃР»СѓС‡Р°Р№ СЃ РѕР±РѕР·РЅР°С‡РµРЅРёРµРј СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… РёР»Рё РїРѕРєСѓРїРЅС‹С… РёР·РґРµР»РёР№)
             }
         } else return tmp;
     }
@@ -212,32 +212,32 @@ if (Trim(Gost)==""){return "";} else
 AnsiString GostToInt(AnsiString Gost)
 {
 String tmp=Gost;
-Gost=Replace(Gost," ","");    // показывает может ли отсутствовать исполнение в обозначении
+Gost=Replace(Gost," ","");    // РїРѕРєР°Р·С‹РІР°РµС‚ РјРѕР¶РµС‚ Р»Рё РѕС‚СЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ РёСЃРїРѕР»РЅРµРЅРёРµ РІ РѕР±РѕР·РЅР°С‡РµРЅРёРё
 if (Trim(Gost)==""){return "";} else
     {
-    if (Gost.UpperCase().Pos("ПЕШК"))
+    if (Gost.UpperCase().Pos("РџР•РЁРљ"))
         {
-        Gost=Gost.SubString(Gost.UpperCase().Pos("ПЕШК"),Gost.Length()-Gost.UpperCase().Pos("ПЕШК")+1);
-        Gost.Insert("97",Gost.UpperCase().Pos("ПЕШК"));
-        Gost.Delete(Gost.UpperCase().Pos("ПЕШК"),4);
+        Gost=Gost.SubString(Gost.UpperCase().Pos("РџР•РЁРљ"),Gost.Length()-Gost.UpperCase().Pos("РџР•РЁРљ")+1);
+        Gost.Insert("97",Gost.UpperCase().Pos("РџР•РЁРљ"));
+        Gost.Delete(Gost.UpperCase().Pos("РџР•РЁРљ"),4);
         }
-    if (Gost.UpperCase().Pos("ГКНЮ")!=0)
+    if (Gost.UpperCase().Pos("Р“РљРќР®")!=0)
         {
-        Gost=Gost.SubString(Gost.UpperCase().Pos("ГКНЮ"),Gost.Length()-Gost.UpperCase().Pos("ГКНЮ")+1);
-        Gost.Insert("95",Gost.UpperCase().Pos("ГКНЮ"));   //находим в строке буквенное обозначение и меняем на цифровое
-        Gost.Delete(Gost.UpperCase().Pos("ГКНЮ"),4);
+        Gost=Gost.SubString(Gost.UpperCase().Pos("Р“РљРќР®"),Gost.Length()-Gost.UpperCase().Pos("Р“РљРќР®")+1);
+        Gost.Insert("95",Gost.UpperCase().Pos("Р“РљРќР®"));   //РЅР°С…РѕРґРёРј РІ СЃС‚СЂРѕРєРµ Р±СѓРєРІРµРЅРЅРѕРµ РѕР±РѕР·РЅР°С‡РµРЅРёРµ Рё РјРµРЅСЏРµРј РЅР° С†РёС„СЂРѕРІРѕРµ
+        Gost.Delete(Gost.UpperCase().Pos("Р“РљРќР®"),4);
         }
-    if (Gost.UpperCase().Pos("НАЦВ")!=0)
+    if (Gost.UpperCase().Pos("РќРђР¦Р’")!=0)
         {
-        Gost=Gost.SubString(Gost.UpperCase().Pos("НАЦВ"),Gost.Length()-Gost.UpperCase().Pos("НАЦВ")+1);
-        Gost.Insert("85",Gost.UpperCase().Pos("НАЦВ"));
-        Gost.Delete(Gost.UpperCase().Pos("НАЦВ"),4);
+        Gost=Gost.SubString(Gost.UpperCase().Pos("РќРђР¦Р’"),Gost.Length()-Gost.UpperCase().Pos("РќРђР¦Р’")+1);
+        Gost.Insert("85",Gost.UpperCase().Pos("РќРђР¦Р’"));
+        Gost.Delete(Gost.UpperCase().Pos("РќРђР¦Р’"),4);
         }
-    if (Gost.UpperCase().Pos("НЕИА")!=0)
+    if (Gost.UpperCase().Pos("РќР•РРђ")!=0)
         {
-        Gost=Gost.SubString(Gost.UpperCase().Pos("НЕИА"),Gost.Length()-Gost.UpperCase().Pos("НЕИА")+1);
-        Gost.Insert("98",Gost.UpperCase().Pos("НЕИА"));
-        Gost.Delete(Gost.UpperCase().Pos("НЕИА"),4);
+        Gost=Gost.SubString(Gost.UpperCase().Pos("РќР•РРђ"),Gost.Length()-Gost.UpperCase().Pos("РќР•РРђ")+1);
+        Gost.Insert("98",Gost.UpperCase().Pos("РќР•РРђ"));
+        Gost.Delete(Gost.UpperCase().Pos("РќР•РРђ"),4);
         }
     if (!isdigit(Gost[1]))
         {
@@ -285,10 +285,10 @@ s4=Vin.SubString(7,2);
 s5=Vin.SubString(9,2);
 s6=Vin.SubString(11,3);
 s7=Vin.SubString(14,2);
-if (s1=="85") {s1="НАЦВ";type=1;}
-if (s1=="95") {s1="ГКНЮ";type=1;}
-if (s1=="97") {s1="ПЕШК";type=1;}
-if (s1=="98") {s1="НЕИА";type=1;}
+if (s1=="85") {s1="РќРђР¦Р’";type=1;}
+if (s1=="95") {s1="Р“РљРќР®";type=1;}
+if (s1=="97") {s1="РџР•РЁРљ";type=1;}
+if (s1=="98") {s1="РќР•РРђ";type=1;}
 switch (type)
     {
     case 0:{return s1+s2+"."+s3+"."+s4+"."+s5+"."+s6+"-"+s7;}
@@ -318,7 +318,7 @@ for (i = 0; i <sg->ColCount; i++)
         if (sg->ColWidths[i]<NewWidth&&NewWidth>sg->DefaultColWidth)
             {sg->ColWidths[i]=NewWidth;}
         if (i&&sg->ColWidths[i]<minwdth)
-            {sg->ColWidths[i]=minwdth;}//минимальный размерчик под комбо
+            {sg->ColWidths[i]=minwdth;}//РјРёРЅРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂС‡РёРє РїРѕРґ РєРѕРјР±Рѕ
         }
     }
 }
@@ -344,11 +344,11 @@ long inc,i,j,seq[40];
     seq[i]=0;
     } */
 int s;
-// вычисление последовательности приращений
+// РІС‹С‡РёСЃР»РµРЅРёРµ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё РїСЂРёСЂР°С‰РµРЅРёР№
 s = increment(seq, size);
 while (s >= 0)
     {
-    // сортировка вставками с инкрементами inc[]
+    // СЃРѕСЂС‚РёСЂРѕРІРєР° РІСЃС‚Р°РІРєР°РјРё СЃ РёРЅРєСЂРµРјРµРЅС‚Р°РјРё inc[]
     inc = seq[s--];
     for (i = inc; i < size; i++)
         {
@@ -418,11 +418,11 @@ void    WordWrap        (std::list<std::string> &out,std::string in,const size_t
             size_t delim_ofset = delimeter.size();
             if (pos == std::string::npos)
             {
-                //обрезаем по сайзу
+                //РѕР±СЂРµР·Р°РµРј РїРѕ СЃР°Р№Р·Сѓ
                 pos = max_len-1;
                 delim_ofset = 0;
             }
-            //обрезаем по разделителю
+            //РѕР±СЂРµР·Р°РµРј РїРѕ СЂР°Р·РґРµР»РёС‚РµР»СЋ
 
             out.push_back(in.substr(0, pos));
             in = in.substr(pos+delim_ofset, in.size());
