@@ -90,6 +90,7 @@ __published:
     TToolButton *ToolButton2;
     TMenuItem *N36;
     TMenuItem *N37;
+	TMenuItem *N38;
     
     void __fastcall PCDrawTab(TCustomTabControl *Control, int TabIndex, const TRect &Rect,
           bool Active);

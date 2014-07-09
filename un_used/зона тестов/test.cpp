@@ -46,7 +46,7 @@ void __fastcall TForm1::Button9Click(TObject *Sender)
 {
 
 	cReports *rep=new cReports(DB);
-	rep->CreateReport(11,Edit2->Text);
+	rep->CreateReport(12,Edit2->Text);
 
 	/*std::vector<String> s;
 	String w="1231  1234  88999  223";

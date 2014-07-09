@@ -108,7 +108,9 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
         N34->Visible=manufacture_view;
         N34->Enabled=manufacture_view;
         N35->Visible=manufacture_view;
-        N35->Enabled=manufacture_view;
+		N35->Enabled=manufacture_view;
+		N38->Visible=manufacture_view;
+		N38->Enabled=manufacture_view;
         ManufactureBTN->Visible = manufacture_view;
         N36->Visible=manufacture_view;
         N37->Visible=manufacture_view;
@@ -1308,24 +1310,25 @@ void __fastcall TmForm::N10Click(TObject *Sender)
 
 void __fastcall TmForm::otchet(TObject *Sender)
 {
-    TMenuItem *Item=(TMenuItem *)Sender;
+	TMenuItem *Item=(TMenuItem *)Sender;
     if(Item)
     {
         /* int type=0;
-         switch (Item->Tag)
-         {
+		 switch (Item->Tag)
+		 {
          case 1:{type=1;break;}//развертка дерева
          case 2:{type=2;break;}//список состовляющих
          case 3:{type=3;break;}//план производстка
          case 4:{type=4;break;}//поиск по цеху
          case 5:{type=5;break;}//материалка основная
-         case 6:{type=6;break;}//технология
-         case 7:{type=7;break;}//материалки
-         case 8:{type=8;break;}//требование материала
+		 case 6:{type=6;break;}//технология
+		 case 7:{type=7;break;}//материалки
+		 case 8:{type=8;break;}//требование материала
          case 9:{type=9;break;}//ведомость котельных сборок
          case 10:{type=10;break;}//план производства для участка
-         case 11:{type=11;break;}//план производства для участка (ЧПУ)
-         default:return;
+		 case 11:{type=11;break;}//план производства для участка (ЧПУ)
+		 case 12:{type=8;break;}//требование покупных
+		 default:return;
          } */
         // получить обозначение
         String obd="";
@@ -1431,3 +1434,4 @@ void _ShowTree(const Obd *Det)
     }
 }
 //временные
+

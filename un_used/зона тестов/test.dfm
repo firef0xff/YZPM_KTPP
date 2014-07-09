@@ -169,7 +169,7 @@ object Form1: TForm1
         Width = 121
         Height = 21
         TabOrder = 0
-        Text = 'Edit2'
+        Text = '971171000000000'
       end
       object Button9: TButton
         Left = 384
@@ -183,13 +183,9 @@ object Form1: TForm1
     end
   end
   object ADC: TADOConnection
-    ConnectionString = 
-      'FILE NAME=C:\Users\ghost\Desktop\prg\'#1060#1072#1081#1083#1086#1074#1072#1103' '#1073#1072#1079#1072' 3_yzpm\Debug\' +
-      'Win32\lib\connect.udl'
+    ConnectionString = 'FILE NAME=E:\YZPM_KTPP\Debug\Win32\lib\connect.udl'
     LoginPrompt = False
-    Provider = 
-      'C:\Users\ghost\Desktop\prg\'#1060#1072#1081#1083#1086#1074#1072#1103' '#1073#1072#1079#1072' 3_yzpm\Debug\Win32\lib\' +
-      'connect.udl'
+    Provider = 'E:\YZPM_KTPP\Debug\Win32\lib\connect.udl'
     Left = 160
     Top = 56
   end
