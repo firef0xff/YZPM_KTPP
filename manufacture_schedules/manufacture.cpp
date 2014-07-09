@@ -389,11 +389,6 @@ void TManufactureControl::LoadIzd   (String zap_id, __uint64 zak_id, __uint64 pa
                      " from manufacture.part_content a "
                      " join manufacture.det_names b on a.det_id = b.det_id "
                      " left join manufacture.det_tree b1 on a.det_id = b1.det_idp ";
-    if (zap_id.Length()||zak_id)
-    {
-        zap_sql +=     " join manufacture.parts c on a.part_id = c.part_id ";
-    }
-
     String where = "where 1 ";
     if (zap_id.Length())
     {
@@ -411,6 +406,15 @@ void TManufactureControl::LoadIzd   (String zap_id, __uint64 zak_id, __uint64 pa
     {
         where += " and b.obd like '%"+GostToVin(det)+"%' ";
     }
+    if (zap_id.Length()||zak_id)
+    {
+        zap_sql +=     " join manufacture.parts c on a.part_id = c.part_id ";
+        if (!Show_Closed->Checked)
+            where += " and c.close_date is null ";
+        else
+            where += " and c.close_date is not null ";
+    }
+
     String order = "group by a.det_id order by b.obd ";
     TADOQuery *rez = DB->SendSQL(zap_sql+where+order);
     if (rez && rez->RecordCount)
