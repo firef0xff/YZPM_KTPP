@@ -12,7 +12,6 @@ eventLog*.txt
 LibrarySupport*/
 ModelSupport*/
 yzpm_ktpp.pro.user
-yzpmktpp.cbproj
 yzpmktpp.cbproj.local
 Debug
 ModelSupport_yzpmktpp
