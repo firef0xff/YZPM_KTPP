@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.663,D:\документы\RAD Studio\Projects\ProjectGroup1.groupproj=D:\документы\проекты\Файловая база 3\yzpm_ktpp_base.groupproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.663,D:\документы\проекты\Файловая база 3\yzpm_ktpp_base.groupproj=D:\документы\RAD Studio\Projects\ProjectGroup1.groupproj</Transaction>
   </Transactions>
 	<Default.Personality>
-		<Projects ActiveProject="F:\YZPM_KTPP\yzpmktpp.cbproj"/>
+		<Projects ActiveProject="E:\YZPM_KTPP\yzpmktpp.cbproj"/>
 	</Default.Personality>
 </BorlandProject>

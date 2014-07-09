@@ -95,6 +95,9 @@ RESOURCES +=\
     icons/tree/*\
 
 OTHER_FILES += \
+    .gitignore\
+    *.cbproj\
+    *.groupproj\
     *.dfm\    
     boom_tree/*.dfm\
     boom_tree/contents/*.dfm\
@@ -106,6 +109,7 @@ OTHER_FILES += \
     sklad/*dfm\
     oasu_moover/*dfm\
     reports/*dfm\
+    reports/*.cbproj\
     professions/*dfm\
     technology/*dfm\
     technology/data_classes/*dfm\
