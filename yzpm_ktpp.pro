@@ -87,8 +87,15 @@ HEADERS += \
     searcher/*h\
     orders_editor/*h \
 
+RESOURCES +=\
+    *.res\
+    icons/files/*\
+    icons/indicators/*\
+    icons/tabs/*\
+    icons/tree/*\
+
 OTHER_FILES += \
-    *.dfm\
+    *.dfm\    
     boom_tree/*.dfm\
     boom_tree/contents/*.dfm\
     boom_tree/file_working/*.dfm\
