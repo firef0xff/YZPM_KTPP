@@ -403,6 +403,33 @@ public:
     typedef std::map<const std::string, Data> RecordData;
     typedef std::map<const std::string, RecordData> DataSet;
 
+    class SummaryInfo
+    {
+    public:
+        SummaryInfo()
+            :plan(0.0),deficit(0.0)
+        {}
+        void Add(double plan, double deficit)
+        {
+            this->plan += plan;
+            this->deficit += deficit;
+        }
+        const double& GetPlan(void) const
+        {
+            return plan;
+        }
+        const double& GetDeficit(void) const
+        {
+            return deficit;
+        }
+
+    private:
+        double plan;
+        double deficit;
+    };
+
+    typedef std::map<const std::string, SummaryInfo> SummaryDetains;
+
     EquipmentLoad (cSQL *db,dbtmp::StartedOrdersQueue &st_queue,dbtmp::NewOrdersQueue &new_queue)
         :DB(db),path(""),use_listing(false),lists_by_file(10),templ("Y09102.xlt"),template_page(1)
     {
@@ -415,10 +442,15 @@ public:
         Drop();
     }
 
-    DataSet& GetData (DataSet &out)
+    DataSet& GetData (DataSet &out, SummaryDetains &summary_details, SummaryInfo &summary)
     {
         const char * sql = "select * from `manufacture`.`equipment_load_tmp` "
                 " group by cex,utch, obo_group, oboid, zakaz_no, part_no";
+
+        out.clear();
+        summary = SummaryInfo();
+        summary_details.clear();
+
         TADOQuery *rez = DB->SendSQL(sql);
         if (rez)
         {
@@ -435,7 +467,10 @@ public:
                 double ksm      =   rez->FieldByName("ksm")->Value.operator double();
 
                 Data &lnk = out[cex_name][obo_group];
-                lnk.AddRow(oboid, zakaz_no+" "+part_no, ksm, plan, deficit);
+                std::string inst_id = zakaz_no+" "+part_no;
+                lnk.AddRow(oboid, inst_id, ksm, plan, deficit);
+                summary_details[inst_id].Add(plan,deficit);
+                summary.Add(plan,deficit);
             }
             delete rez;
         }
@@ -463,7 +498,9 @@ public:
         //отчет
 
         DataSet rep_data;
-        if (GetData(rep_data).size())
+        SummaryDetains summary_details;
+        SummaryInfo summary;
+        if (GetData(rep_data,summary_details, summary).size())
         {
             //включаем ексель
             cExcel xl;
@@ -542,6 +579,51 @@ public:
                     row += rows_count;
                 }
             }
+            //вывод итогов
+            CheckList(xl, row, 1);
+            // копирование
+            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), data_row_tmpl, data_row_tmpl));
+            // вставка
+            xl.Sheet_activate();
+            xl.Range_Paste(xl.GetRows(row, row));
+
+            row += 1;
+
+            for (SummaryDetains::const_iterator it = summary_details.begin(),end = summary_details.end(); it!=end; it++)
+            {
+                const SummaryInfo &lnk = it->second;
+                CheckList(xl, row, 1);
+
+                // копирование
+                xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), data_row_tmpl, data_row_tmpl));
+                // вставка
+                xl.Sheet_activate();
+                xl.Range_Paste(xl.GetRows(row, row));
+
+                std::stringstream ss;
+                ss<<it->first<<" План:"<<lnk.GetPlan()<<" Дефицит:"<<lnk.GetDeficit();
+                xl.toCells(row, 1, ss.str().c_str());
+                row += 1;
+            }
+
+            CheckList(xl, row, 1);
+            // копирование
+            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), data_row_tmpl, data_row_tmpl));
+            // вставка
+            xl.Sheet_activate();
+            xl.Range_Paste(xl.GetRows(row, row));
+            row += 1;
+
+            CheckList(xl, row, 1);
+            // копирование
+            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), data_row_tmpl, data_row_tmpl));
+            // вставка
+            xl.Sheet_activate();
+            xl.Range_Paste(xl.GetRows(row, row));
+
+            std::stringstream ss;
+            ss<<"Итого "<<" План:"<<summary.GetPlan()<<" Дефицит:"<<summary.GetDeficit();
+            xl.toCells(row, 1, ss.str().c_str());
 
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
             {
@@ -560,7 +642,9 @@ public:
     {
 		SGClear(sg);
         DataSet rep_data;
-        if (GetData(rep_data).size())
+        SummaryDetains summary_details;
+        SummaryInfo summary;
+        if (GetData(rep_data,summary_details,summary).size())
         {
             for (DataSet::const_iterator it_1 = rep_data.begin(); it_1!=rep_data.end(); ++it_1)
             {
@@ -593,6 +677,29 @@ public:
                     ++sg->RowCount;
                 }
             }
+
+            ++sg->RowCount;
+
+            for (SummaryDetains::const_iterator it = summary_details.begin(),end = summary_details.end(); it!=end; it++)
+            {
+                const SummaryInfo &lnk = it->second;
+
+                sg->Cells[1][sg->RowCount - 1] = it->first.c_str();
+                sg->Cells[2][sg->RowCount - 1] = " План:";
+                sg->Cells[3][sg->RowCount - 1] = lnk.GetPlan();
+                sg->Cells[4][sg->RowCount - 1] = " Дефицит:";
+                sg->Cells[5][sg->RowCount - 1] = lnk.GetDeficit();
+                ++sg->RowCount;
+            }
+
+            ++sg->RowCount;
+
+            sg->Cells[1][sg->RowCount - 1] = "Итого";
+            sg->Cells[2][sg->RowCount - 1] = " План:";
+            sg->Cells[3][sg->RowCount - 1] = summary.GetPlan();
+            sg->Cells[4][sg->RowCount - 1] = " Дефицит:";
+            sg->Cells[5][sg->RowCount - 1] = summary.GetDeficit();
+            ++sg->RowCount;
         }
         if (sg->RowCount > 2)
             --sg->RowCount;
@@ -672,7 +779,7 @@ private:
             sql.str("");
 
             sql << "insert into `manufacture`.`step_1` (`zakaz`,`part_no`,`det_id`, `ceh`, `utch`, `percent`) "
-                   "select '"<<lnk.zakaz<<"', '"<<lnk.part_no<<"', `a`.`det_id`, '"<<lnk.ceh<<"', '"<<lnk.utch<<"', '"<<lnk.percent<<"' "
+                   "select DISTINCT '"<<lnk.zakaz<<"', '"<<lnk.part_no<<"', `a`.`det_id`, '"<<lnk.ceh<<"', '"<<lnk.utch<<"', '"<<lnk.percent<<"' "
                    "from `manufacture`.`output` a "
                    "join `manufacture`.`marsh_lists` b on `a`.`det_id` = `b`.`det_id` ";
             DB->SendCommand(sql.str().c_str());
