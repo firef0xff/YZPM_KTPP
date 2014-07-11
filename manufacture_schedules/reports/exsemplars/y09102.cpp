@@ -247,6 +247,7 @@ void Y09102::BuildReport()
                         {
                             const std::string &s = *it;
                             xl.toCells(row + ofset, 1, s.c_str());
+                            ++ofset;
                         }
 
                         row += rows_count;

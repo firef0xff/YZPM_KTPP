@@ -70,7 +70,7 @@ private:
         }
         double getDelta         (double sm) const
         {
-            return boost::math::round((getMaximimLoad(sm) - plan)*1000)/1000;;
+            return boost::math::round((getMaximimLoad(sm) - dificit)*1000)/1000;;
         }
 
         std::list<std::string> getZakazStrings(void) const
