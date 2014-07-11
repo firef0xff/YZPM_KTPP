@@ -22,30 +22,18 @@ class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
 	TPageControl *PageControl1;
-	TTabSheet *TabSheet1;
-	TTabSheet *ts;
-	TTabSheet *ts2;
-	TEdit *Edit1;
-	TButton *Button1;
 	TADOConnection *ADC;
-	TMemo *Memo1;
-	TTabSheet *ts1;
-	TComboBox *ComboBox1;
-	TButton *Button2;
-	TButton *Button3;
-	TButton *Button4;
-	TButton *Button5;
-	TButton *Button6;
-	TButton *Button7;
-	TButton *Button8;
 	TOpenDialog *OD;
-	TTabSheet *ts3;
-	TTabSheet *TabSheet4;
 	TTabSheet *TabSheet2;
-	TEdit *Edit2;
-	TButton *Button9;
-	void __fastcall Button2Click(TObject *Sender);
-	void __fastcall Button9Click(TObject *Sender);
+	TEdit *Obd;
+	TButton *RepStart;
+	TButton *ClearLog;
+	TButton *GetLog;
+	TMemo *Log;
+	TEdit *RepNo;
+	void __fastcall GetLogClick(TObject *Sender);
+	void __fastcall RepStartClick(TObject *Sender);
+	void __fastcall ClearLogClick(TObject *Sender);
 
 
 
