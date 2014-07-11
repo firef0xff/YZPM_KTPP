@@ -1582,16 +1582,18 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
         rez->First();
     }
 
+	String cex;
+	String utch;
     do
     {
         bool newpage=true;
-        //получим список материалов для цеха
-        String cex;
-        String utch;
+		//получим список материалов для цеха
         if (rez)
         {
-            cex=rez->FieldByName("cex")->Value;
-            utch=rez->FieldByName("utch")->Value;
+			if (!rez->FieldByName("cex")->Value.IsNull())
+                cex=rez->FieldByName("cex")->Value;
+            if (!rez->FieldByName("utch")->Value.IsNull())
+                utch=rez->FieldByName("utch")->Value;
         }
         sql = "Call temporary_tables.Get_Materials_Order('"+GostToInt(obd)+"',"+String(kol)+",'"+cex+"','"+utch+"')";
         TADOQuery *rez2=DB->SendSQL(sql);
@@ -1691,7 +1693,7 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
             rez->Next();
         }
     }
-    while (rez&&!rez->Eof);
+    while (rez&&!rez->Eof && cex!="" && utch!="" );
     if (rez)
     {
         delete rez;
@@ -1732,7 +1734,7 @@ void cReports::Trebovanie_Standart    (String obd,String zak,int kol)
     AnsiString file=Templates+"materials_trb.xlt";
     XL->Connect();
     XL->DisplayAlerts(false);
-    //XL->Visible(true);
+//    XL->Visible(true);
     OpenTemplate(file);
     const int row_start=19, row_end=25, head_row=11, org_row=7;
     int Lcount=0,ofset=-1;
