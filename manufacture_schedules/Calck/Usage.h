@@ -122,11 +122,11 @@ public:
     {
         std::stringstream sql;
                 sql << "insert ignore into `manufacture`.`new_orders_queue_tmp` (zakaz, det_id, obd, kol, percent, ceh, utch) "
-                " select `c`.`zakaz`,`a`.`id`, `b`.`obd`, '"<<kol<<"', '"<<persent<<"', '"<<ceh<<"', '"<<utch<<"' "
-                " from `market`.`zakaz` a "
-                " join  `constructions`.`det_names` b on a.id = b.id "
-                " join  `market`.`orders` c on a.zakaz_id = c.zakaz_id "
-                " where a.zakaz_id = '"<<zak_id<<"' and a.id = '"<<det_id<<"'";
+                " select ifnull(`c`.`zakaz`,'н/а'),`a`.`id`, `a`.`obd`, '"<<kol<<"', '"<<persent<<"', '"<<ceh<<"', '"<<utch<<"' "
+                " from  `constructions`.`det_names` a "
+                " left join  `market`.`zakaz` b on a.id = b.id and b.zakaz_id = '"<<zak_id<<"'"
+                " left join  `market`.`orders` c on b.zakaz_id = c.zakaz_id "
+                " where a.id = '"<<det_id<<"'";
         DB->SendCommand(sql.str().c_str());
     }
     void Clear (void)

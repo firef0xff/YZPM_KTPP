@@ -22,6 +22,10 @@ object ResourceUsage: TResourceUsage
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = #1047#1072#1087#1091#1097#1077#1085#1085#1099#1077' '#1079#1072#1082#1072#1079#1099
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ManufactureTree: TTreeView
         Left = 0
         Top = 73
@@ -82,6 +86,10 @@ object ResourceUsage: TResourceUsage
     object TabSheet2: TTabSheet
       Caption = #1053#1086#1074#1099#1077' '#1079#1072#1082#1072#1079#1099
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object DevelopTree: TTreeView
         Left = 0
         Top = 73
@@ -144,6 +152,10 @@ object ResourceUsage: TResourceUsage
     TabOrder = 1
     object TabSheet3: TTabSheet
       Caption = #1053#1072#1073#1086#1088' '#1076#1083#1103' '#1088#1072#1089#1095#1077#1090#1072
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Splitter2: TSplitter
         Left = 0
         Top = 277
@@ -163,12 +175,11 @@ object ResourceUsage: TResourceUsage
         object Label1: TLabel
           Left = 1
           Top = 1
-          Width = 494
+          Width = 150
           Height = 13
           Align = alTop
           Alignment = taCenter
           Caption = #1055#1083#1072#1085' '#1087#1086' '#1079#1072#1087#1091#1097#1077#1085#1085#1099#1084' '#1079#1072#1082#1072#1079#1072#1084
-          ExplicitWidth = 150
         end
         object zap_sg: TStringGrid
           Left = 1
@@ -195,12 +206,11 @@ object ResourceUsage: TResourceUsage
         object Label2: TLabel
           Left = 1
           Top = 1
-          Width = 494
+          Width = 118
           Height = 13
           Align = alTop
           Alignment = taCenter
           Caption = #1055#1083#1072#1085' '#1087#1086' '#1085#1086#1074#1099#1084' '#1079#1072#1082#1072#1079#1072#1084
-          ExplicitWidth = 118
         end
         object plan_sg: TStringGrid
           Left = 1
@@ -221,6 +231,10 @@ object ResourceUsage: TResourceUsage
     object TabSheet4: TTabSheet
       Caption = #1056#1072#1089#1095#1077#1090
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel5: TPanel
         Left = 0
         Top = 0

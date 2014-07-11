@@ -146,11 +146,12 @@ void __fastcall TResourceUsage::FindNewClick(TObject *Sender)
 */
     std::stringstream sql;
     sql << " select "
-           " a.kol, b.zakaz_id, b.zakaz, c.id, c.obd "
-           " from `market`.`zakaz` a "
-           " join `market`.`orders` b on a.zakaz_id = b.zakaz_id"
-           " join `constructions`.`det_names` c on a.id = c.id "
-           " where b.zakaz like '%"<<AnsiString(NewParams->Text).c_str()<<"%' or c.obd like '%"<<GostToInt(NewParams->Text).c_str()<<"%'";
+           " ifnull(a.kol,1) kol, ifnull(b.zakaz_id,0) zakaz_id, ifnull(b.zakaz,'н/а') zakaz, c.id, c.obd "
+           " from `constructions`.`det_names` c "
+           " left join `market`.`zakaz` a on a.id = c.id "
+           " left  join `market`.`orders` b on a.zakaz_id = b.zakaz_id"
+           " where b.zakaz like '%"<<AnsiString(NewParams->Text).c_str()<<"%' or c.obd like '%"<<GostToInt(NewParams->Text).c_str()<<"%'"
+           " order by zakaz, c.obd";
 
 	DevelopTree->Items->Clear();
 
