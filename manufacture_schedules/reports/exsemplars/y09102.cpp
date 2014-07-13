@@ -124,7 +124,7 @@ void Y09102::BuildReport()
 //           "CONVERT(g2.npodr, CHAR)     as utch_name, "
 //           "CONVERT(c.cex, CHAR)        as cex, "
 //           "CONVERT(c.utch, CHAR)       as utch, "
-           "CONVERT(IFNULL(f.name, ''), CHAR)       as obo_group, "
+           "CONVERT(IFNULL(f.name, 'Неизвестная группа'), CHAR)       as obo_group, "
            "CONVERT(a.zakaz, CHAR)      as zakaz_no, "
            "CONVERT(a.part_no, CHAR)    as part_no, "
            "CONVERT(c.oboID, CHAR)      as oboid, "
@@ -138,8 +138,8 @@ void Y09102::BuildReport()
            "join `manufacture`.`orders` d1  on `d1`.`operation_id` = `c`.`OpUUID` "
 
            /*left*/" join `equipment`.`obor_list` e     on `e`.`oboID` = `c`.`oboID` "
-           /*left*/" join `equipment`.`obor_groups` e1  on `e1`.`oboID` = `e`.`oboID` "
-           /*left*/" join `equipment`.`groups` f        on `f`.`group_id` = `e1`.`group_id` "
+           "left join `equipment`.`obor_groups` e1  on `e1`.`oboID` = `e`.`oboID` "
+           "left join `equipment`.`groups` f        on `f`.`group_id` = `e1`.`group_id` "
 
            "left join `catalogs`.`podr_list` g1     on `g1`.`cex` = `c`.`cex` and `g1`.`utch` = '' "
            "left join `catalogs`.`podr_list` g2     on `g2`.`cex` = `c`.`cex` and `g2`.`utch` = `c`.`utch` "

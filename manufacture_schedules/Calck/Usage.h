@@ -795,7 +795,7 @@ private:
                "g2.npodr     as utch_name, "
                "c.cex        as cex, "
                "c.utch       as utch, "
-               "IFNULL(f.name, '')       as obo_group, "
+               "IFNULL(f.name, 'Неизвестная группа')       as obo_group, "
                "a.zakaz      as zakaz_no, "
                "a.part_no    as part_no, "
                "c.oboID      as oboid, "
@@ -809,11 +809,11 @@ private:
                "join `manufacture`.`orders` d1  on `d1`.`operation_id` = `c`.`OpUUID` "
 
                " join `equipment`.`obor_list` e     on `e`.`oboID` = `c`.`oboID` "
-               " join `equipment`.`obor_groups` e1  on `e1`.`oboID` = `e`.`oboID` "
-               " join `equipment`.`groups` f        on `f`.`group_id` = `e1`.`group_id` "
+               " left join `equipment`.`obor_groups` e1  on `e1`.`oboID` = `e`.`oboID` "
+               " left join `equipment`.`groups` f        on `f`.`group_id` = `e1`.`group_id` "
 
-               "left join `catalogs`.`podr_list` g1     on `g1`.`cex` = `c`.`cex` and `g1`.`utch` = '' "
-               "left join `catalogs`.`podr_list` g2     on `g2`.`cex` = `c`.`cex` and `g2`.`utch` = `c`.`utch` "
+               " left join `catalogs`.`podr_list` g1     on `g1`.`cex` = `c`.`cex` and `g1`.`utch` = '' "
+               " left join `catalogs`.`podr_list` g2     on `g2`.`cex` = `c`.`cex` and `g2`.`utch` = `c`.`utch` "
                "where if(a.ceh !='', c.cex = a.ceh, 1) and if(a.utch !='', c.utch = a.utch, 1) "
                "group by c.cex,c.utch,f.name, c.oboID, a.zakaz, a.part_no";
         DB->SendCommand(sql.str().c_str());
@@ -864,7 +864,7 @@ private:
                "g2.npodr     as utch_name, "
                "c.cex        as cex, "
                "c.utch       as utch, "
-               "IFNULL(f.name, '')       as obo_group, "
+               "IFNULL(f.name, 'Неизвестная группа')       as obo_group, "
                "a.zakaz      as zakaz_no, "
                "a.part_no    as part_no, "
                "c.oboID      as oboid, "
@@ -877,11 +877,11 @@ private:
                "join `technologic`.`operation_norms` d  on `d`.`OpUUID` = `c`.`OpUUID` "
 
                " join `equipment`.`obor_list` e     on `e`.`oboID` = `c`.`oboID` "
-               " join `equipment`.`obor_groups` e1  on `e1`.`oboID` = `e`.`oboID` "
-               " join `equipment`.`groups` f        on `f`.`group_id` = `e1`.`group_id` "
+               " left join `equipment`.`obor_groups` e1  on `e1`.`oboID` = `e`.`oboID` "
+               " left join `equipment`.`groups` f        on `f`.`group_id` = `e1`.`group_id` "
 
-               "left join `catalogs`.`podr_list` g1     on `g1`.`cex` = `c`.`cex` and `g1`.`utch` = '' "
-               "left join `catalogs`.`podr_list` g2     on `g2`.`cex` = `c`.`cex` and `g2`.`utch` = `c`.`utch` "
+               " left join `catalogs`.`podr_list` g1     on `g1`.`cex` = `c`.`cex` and `g1`.`utch` = '' "
+               " left join `catalogs`.`podr_list` g2     on `g2`.`cex` = `c`.`cex` and `g2`.`utch` = `c`.`utch` "
                "where if(a.ceh !='', c.cex = a.ceh, 1) and if(a.utch !='', c.utch = a.utch, 1) "
                "group by c.cex,c.utch,f.name, c.oboID, a.zakaz, a.part_no";
         DB->SendCommand(sql.str().c_str());
