@@ -840,6 +840,14 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
         return;
     } // активация
 
+    String name;
+    TADOQuery *rez_nm = DB->SendSQL("select a.namd from `constructions`.`det_names` a where obd = '"+obd+"'");
+    if (rez_nm)
+    {
+        name = rez_nm->FieldByName("namd")->Value;
+        delete rez_nm;
+    }
+
     AnsiString file=Templates+"materials.xlt";
     XL->Connect();
     // XL->Visible(true);
@@ -867,7 +875,8 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
             XL->Range_Copy(XL->GetRows(14, 19));
             XL->Range_Paste(XL->GetRows(8, 13));
             // запись шапки/
-            XL->toCells(2, 5, VinToGost(obd)+" "+parametr->zak->Text);
+            XL->toCells(2, 3, VinToGost(obd)+" "+parametr->zak->Text);
+            XL->toCells(2, 4, name);
             XL->toCells(1, 7, "Лист "+IntToStr(Lcount));
             newpage=false;
         }
@@ -929,7 +938,8 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
             XL->Range_Copy(XL->GetRows(8, 10));
             XL->Range_Paste(XL->GetRows(5, 7));
             // запись шапки/
-            XL->toCells(1, 3, VinToGost(obd));
+            XL->toCells(1, 1, VinToGost(obd));
+            XL->toCells(1, 2, name);
             XL->toCells(1, 9, parametr->zak->Text);
             XL->toCells(1, 10, "Лист "+IntToStr(Lcount));
             newpage=false;
