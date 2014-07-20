@@ -799,8 +799,14 @@ private:
                "a.zakaz      as zakaz_no, "
                "a.part_no    as part_no, "
                "c.oboID      as oboid, "
-               "ROUND(sum(IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*d1.kol_request+`d`.`tpz`,0)*a.percent/100),3) as plan, "
-               "ROUND(sum(IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*d1.kol_unmaked+`d`.`tpz`,0)*a.percent/100),3) as deficit, "
+               "ROUND(sum( "
+               "if (`c`.`cex` = '03' and `c`.`utch` = '04', "
+               "IFNULL(`d`.`tsht`*ceil(d1.kol_request/ifnull(`h`.`kdz`,1))/d1.kol_request*d1.kol_request+if(d1.kol_request>0,`d`.`tpz`,0),0)*a.percent/100, "
+               "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*d1.kol_request+if(d1.kol_request>0,`d`.`tpz`,0),0)*a.percent/100)),3) as plan, "
+               "ROUND(sum( "
+               "if (`c`.`cex` = '03' and `c`.`utch` = '04', "
+               "IFNULL(`d`.`tsht`*ceil(d1.kol_request/ifnull(`h`.`kdz`,1))/d1.kol_request*(d1.kol_request - d1.kol_maked)+if((d1.kol_request - d1.kol_maked)>0,`d`.`tpz`,0),0)*a.percent/100, "
+               "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*(d1.kol_request - d1.kol_maked)+if((d1.kol_request - d1.kol_maked)>0,`d`.`tpz`,0),0)*a.percent/100)),3) as deficit, "
                "e.ksme as ksm "
 
                "from `manufacture`.`step_1` a "
@@ -814,6 +820,7 @@ private:
 
                " left join `catalogs`.`podr_list` g1     on `g1`.`cex` = `c`.`cex` and `g1`.`utch` = '' "
                " left join `catalogs`.`podr_list` g2     on `g2`.`cex` = `c`.`cex` and `g2`.`utch` = `c`.`utch` "
+               " left join `manufacture`.`det_info` h    on `h`.`det_id` = `a`.`det_id` "
                "where if(a.ceh !='', c.cex = a.ceh, 1) and if(a.utch !='', c.utch = a.utch, 1) "
                "group by c.cex,c.utch,f.name, c.oboID, a.zakaz, a.part_no";
         DB->SendCommand(sql.str().c_str());
@@ -868,8 +875,17 @@ private:
                "a.zakaz      as zakaz_no, "
                "a.part_no    as part_no, "
                "c.oboID      as oboid, "
-               "ROUND(sum(IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*a.kol+`d`.`tpz`,0)*a.percent/100),3) as plan, "
-               "ROUND(sum(IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*a.kol+`d`.`tpz`,0)*a.percent/100),3) as deficit, "
+
+               "ROUND(sum( "
+               "if (`c`.`cex` = '03' and `c`.`utch` = '04', "
+               "IFNULL(`d`.`tsht`*ceil(a.kol/ifnull(`h`.`kdz`,1))/a.kol*a.kol+if(a.kol>0,`d`.`tpz`,0),0)*a.percent/100, "
+               "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*a.kol+if(da.kol>0,`d`.`tpz`,0),0)*a.percent/100)),3) as plan, "
+
+               "ROUND(sum( "
+               "if (`c`.`cex` = '03' and `c`.`utch` = '04', "
+               "IFNULL(`d`.`tsht`*ceil(a.kol/ifnull(`h`.`kdz`,1))/a.kol*a.kol+if(a.kol>0,`d`.`tpz`,0),0)*a.percent/100, "
+               "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*a.kol+if(a.kol>0,`d`.`tpz`,0),0)*a.percent/100)),3) as deficit, "
+
                "e.ksme as ksm "
 
                "from `manufacture`.`step_1` a "
@@ -882,6 +898,7 @@ private:
 
                " left join `catalogs`.`podr_list` g1     on `g1`.`cex` = `c`.`cex` and `g1`.`utch` = '' "
                " left join `catalogs`.`podr_list` g2     on `g2`.`cex` = `c`.`cex` and `g2`.`utch` = `c`.`utch` "
+               " left join `technologic`.`det_info` h    on `h`.`id` = `a`.`det_id` "
                "where if(a.ceh !='', c.cex = a.ceh, 1) and if(a.utch !='', c.utch = a.utch, 1) "
                "group by c.cex,c.utch,f.name, c.oboID, a.zakaz, a.part_no";
         DB->SendCommand(sql.str().c_str());
