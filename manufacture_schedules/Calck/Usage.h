@@ -331,7 +331,7 @@ public:
         void AddRow(const std::string &obo, const std::string &part, double ksm, double plan_, double dificit_)
         {
             obo_data[obo] = ksm;
-            zakaz_data[part] += plan_;
+            zakaz_data[part] += dificit_;
             plan += plan_;
             dificit += dificit_;
         }
