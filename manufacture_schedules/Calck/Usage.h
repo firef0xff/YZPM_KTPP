@@ -879,7 +879,7 @@ private:
                "ROUND(sum( "
                "if (`c`.`cex` = '03' and `c`.`utch` = '04', "
                "IFNULL(`d`.`tsht`*ceil(a.kol/ifnull(`h`.`kdz`,1))/a.kol*a.kol+if(a.kol>0,`d`.`tpz`,0),0)*a.percent/100, "
-               "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*a.kol+if(da.kol>0,`d`.`tpz`,0),0)*a.percent/100)),3) as plan, "
+               "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*a.kol+if(a.kol>0,`d`.`tpz`,0),0)*a.percent/100)),3) as plan, "
 
                "ROUND(sum( "
                "if (`c`.`cex` = '03' and `c`.`utch` = '04', "
