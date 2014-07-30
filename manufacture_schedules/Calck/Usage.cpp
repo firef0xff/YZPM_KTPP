@@ -144,6 +144,11 @@ void __fastcall TResourceUsage::FindNewClick(TObject *Sender)
  * Получаем список всех заказов с составом по номеру заказа или обозначению детали
  * разворачивать дерево дальше второго уровня смысла пока не вижу
 */
+    if (NewParams->Text == "")
+    {
+        MessageBox(Handle,_T("Необходимо указать условие поиска"),_T("Внимание!"),MB_ICONWARNING|MB_OK);
+        return;
+    }
     std::stringstream sql;
     sql << " select "
            " ifnull(a.kol,1) kol, ifnull(b.zakaz_id,0) zakaz_id, ifnull(b.zakaz,'н/а') zakaz, c.id, c.obd "
