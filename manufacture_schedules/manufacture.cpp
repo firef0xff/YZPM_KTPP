@@ -66,6 +66,7 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
     N2->Enabled = Run_at_manufacture;
     N3->Enabled = Run_at_manufacture;
     N4->Enabled = Run_at_manufacture;
+    N10->Enabled = Run_at_manufacture;
     MenuItem1->Enabled = Run_at_manufacture;
     MenuItem2->Enabled = Run_at_manufacture;
     MenuItem3->Enabled = Run_at_manufacture;
