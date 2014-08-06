@@ -32,6 +32,14 @@ private:
         std::string ei_name;
     };
     typedef std::list<ReportData> DataList;
+    struct ReportHead
+    {
+        std::string obd;
+        std::string name;
+        std::string kol;
+    };
+    typedef std::list<ReportHead> HeadList;
+
 
     //соединение в бд
     cSQL *DB;

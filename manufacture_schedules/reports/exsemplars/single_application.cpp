@@ -6,7 +6,7 @@ namespace rep
 
 SingleApplication::SingleApplication (int set): rep::Report("Материальная ведомость: Единичная заявка",set),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_materials.xlt")
+    cur_lists(0),templ("manufacture_forms.xlt")
 {
     params[REPORT_PATH];
     params[REPORT_LIST_COUNT] = "10";
@@ -18,7 +18,7 @@ SingleApplication::~SingleApplication()
 
 SingleApplication::SingleApplication(const SingleApplication &r):rep::Report(r),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_materials.xlt")
+    cur_lists(0),templ("manufacture_forms.xlt")
 {
 
 }
@@ -198,7 +198,8 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
             "from `manufacture`.`step_2` a "
             "join `manufacture`.`det_names` b on `b`.`det_id` = `a`.`obm_id` "
             "left join `manufacture`.`materials` c on `c`.`obmid` = `a`.`obm_id` "
-            "left join `catalogs`.`dimensionality` d on `d`.`kodei` = `a`.`ei` ";
+            "left join `catalogs`.`dimensionality` d on `d`.`kodei` = `a`.`ei` "
+            "where b.obd != '000000000000000'";
 
     if (!pp.empty())
         sql <<  "where b.pp = '"<<pp<<"' ";
@@ -235,7 +236,7 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
             size_t cur_row = 0;
             size_t start_row = 5, end_row = 35, row_size = 1,
                     template_row = 5;
-            size_t template_page = 1;
+            size_t template_page = 15;
             size_t max_page_no=0;
 
             size_t file_no = 0;
@@ -271,6 +272,31 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                 ++need_rows;
                 data.push_back(tmp);
             }
+            std::stringstream sql1;
+            sql1 << "select "
+                    "CONVERT(IFNULL(a.kol,''), CHAR) kol, "
+                    "b.obd, "
+                    "b.name "
+                    "from `manufacture`.`part_content` a "
+                    "join `manufacture`.`det_names` b on a.det_id = b.det_id "
+                    "where a.part_id = '"<<part_id<<"'";
+            TADOQuery *rez3 = DB->SendSQL(sql1.str().c_str());
+            HeadList heads;
+            if (rez3)
+            {
+                for (rez3->First(); !rez3->Eof; rez3->Next())
+                {
+                    ReportHead tmp;
+                    tmp.obd    = VinToGost(rez3->FieldByName("obd")->Value.operator AnsiString()).c_str();
+                    tmp.name    = (rez3->FieldByName("name")->Value.operator AnsiString()).c_str();
+                    tmp.kol    = (rez3->FieldByName("kol")->Value.operator AnsiString()).c_str();
+
+                    ++need_rows;
+                    heads.push_back(tmp);
+                }
+                delete rez3;
+            }
+
             //пробежаться по списку структур, заполнить шаблон
             max_page_no = need_rows/(end_row-start_row);
             if (need_rows%(end_row-start_row))
@@ -280,6 +306,7 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
 
             size_t pp_no(0);
             size_t page_no(0);
+            bool first = true;
             for (DataList::const_iterator it = data.begin(), end = data.end() ; it!=end; ++it)
             {
                 ++pp_no;
@@ -298,6 +325,7 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                         }
                     }
                     new_page = false;
+
                     //создать страницу
                     xl.Sheet_Copy(xl.GetSheet(cur_lists+template_page), xl.GetSheet(cur_lists+1), Variant().NoParam());
                     cur_lists++ ;
@@ -322,7 +350,35 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
                     xl.toCells(2,   6,  zakaz.c_str()   );
                     xl.toCells(2,   8,  part_no.c_str() );
 
-                    cur_row = start_row;
+
+                    size_t ofset(0);
+                    if (first)
+                    {
+                        for (HeadList::const_iterator it = heads.begin(), end = heads.end(); it!=end; ++it)
+                        {
+                            const ReportHead &lnk1 = *it;
+                            //вставить строку в отчет
+                            // копирование
+                            xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), 3, 3));
+                            // вставка
+                            xl.Sheet_activate();
+                            xl.Range_Paste(xl.GetRows(3 + ofset, 3 + ofset));
+
+                            xl.toCells(3 + ofset,     3,  lnk1.obd.c_str()    );
+                            xl.toCells(3 + ofset,     4,  lnk1.name.c_str()   );
+                            xl.toCells(3 + ofset,     7,  lnk1.kol.c_str()    );
+                        }
+                    }
+
+                    //вставить строку в отчет
+                    // копирование
+                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), 4, 4));
+                    // вставка
+                    xl.Sheet_activate();
+                    xl.Range_Paste(xl.GetRows(start_row + ofset - 1, start_row + ofset - 1));
+
+                    cur_row = start_row + ofset;
+                    first = false;
                 }
 
                 //вставить строку в отчет

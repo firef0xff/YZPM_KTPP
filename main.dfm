@@ -2,8 +2,8 @@ object mForm: TmForm
   Left = 0
   Top = 0
   Caption = #1050#1086#1085#1089#1090#1088#1091#1082#1090#1086#1088#1089#1082#1086' '#1090#1077#1093#1085#1086#1083#1086#1075#1080#1095#1077#1089#1082#1072#1103' '#1087#1086#1076#1075#1086#1090#1086#1074#1082#1072' '#1087#1088#1086#1080#1079#1074#1086#1076#1089#1090#1074#1072
-  ClientHeight = 503
-  ClientWidth = 697
+  ClientHeight = 499
+  ClientWidth = 696
   Color = clBtnFace
   DragMode = dmAutomatic
   Font.Charset = DEFAULT_CHARSET
@@ -23,7 +23,7 @@ object mForm: TmForm
     Left = 257
     Top = 25
     Width = 5
-    Height = 461
+    Height = 457
     Color = clBtnFace
     Constraints.MaxWidth = 5
     Constraints.MinWidth = 5
@@ -35,7 +35,7 @@ object mForm: TmForm
     Left = 0
     Top = 25
     Width = 257
-    Height = 461
+    Height = 457
     Cursor = crHandPoint
     Align = alLeft
     Constraints.MinWidth = 1
@@ -50,13 +50,13 @@ object mForm: TmForm
     OnMouseLeave = PCMouseLeave
     OnMouseMove = PCMouseMove
     OnMouseUp = PCMouseUp
-    ExplicitHeight = 455
+    ExplicitHeight = 461
   end
   object RightPC: TPageControl
     Left = 262
     Top = 25
-    Width = 435
-    Height = 461
+    Width = 434
+    Height = 457
     Cursor = crHandPoint
     ActivePage = InfoTab
     Align = alClient
@@ -77,32 +77,32 @@ object mForm: TmForm
     OnMouseLeave = PCMouseLeave
     OnMouseMove = PCMouseMove
     OnMouseUp = PCMouseUp
-    ExplicitWidth = 411
-    ExplicitHeight = 455
+    ExplicitWidth = 435
+    ExplicitHeight = 461
     object InfoTab: TTabSheet
       Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103'      '
       ImageIndex = 8
-      ExplicitWidth = 403
-      ExplicitHeight = 426
+      ExplicitWidth = 427
+      ExplicitHeight = 432
       object Info: TMemo
         Left = 0
         Top = 0
-        Width = 427
-        Height = 432
+        Width = 426
+        Height = 428
         Align = alClient
         Lines.Strings = (
           '')
         ReadOnly = True
         TabOrder = 0
-        ExplicitWidth = 403
-        ExplicitHeight = 426
+        ExplicitWidth = 427
+        ExplicitHeight = 432
       end
     end
   end
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 697
+    Width = 696
     Height = 25
     ButtonHeight = 25
     ButtonWidth = 25
@@ -116,7 +116,7 @@ object mForm: TmForm
     ParentShowHint = False
     ShowHint = True
     TabOrder = 2
-    ExplicitWidth = 673
+    ExplicitWidth = 697
     object TreeBTN: TToolButton
       Left = 0
       Top = 0
@@ -127,7 +127,7 @@ object mForm: TmForm
       OnClick = TreeBTNClick
     end
     object TechnologicBTN: TToolButton
-      Left = 25
+      Left = 23
       Top = 0
       Cursor = crHandPoint
       Hint = #1044#1086#1073#1072#1074#1080#1090#1100' '#1088#1077#1076#1072#1082#1090#1086#1088' '#1090#1077#1093#1085#1086#1083#1086#1075#1080#1081
@@ -136,7 +136,7 @@ object mForm: TmForm
       OnClick = TechnologicBTNClick
     end
     object TechnologicVievBTN: TToolButton
-      Left = 50
+      Left = 46
       Top = 0
       Cursor = crHandPoint
       Hint = #1044#1086#1073#1072#1074#1080#1090#1100' '#1087#1088#1086#1089#1084#1086#1090#1088' '#1090#1077#1093#1085#1086#1083#1086#1075#1080#1081
@@ -145,7 +145,7 @@ object mForm: TmForm
       OnClick = TechnologicVievBTNClick
     end
     object SearchBTN: TToolButton
-      Left = 75
+      Left = 69
       Top = 0
       Cursor = crHandPoint
       Hint = #1044#1086#1073#1072#1074#1080#1090#1100' '#1086#1082#1085#1086' '#1087#1086#1080#1089#1082#1072
@@ -154,14 +154,14 @@ object mForm: TmForm
       OnClick = SearchBTNClick
     end
     object OrdersBTN: TToolButton
-      Left = 100
+      Left = 92
       Top = 0
       Caption = 'OrdersBTN'
       ImageIndex = 10
       OnClick = OrdersBTNClick
     end
     object ShowInfo: TToolButton
-      Left = 125
+      Left = 115
       Top = 0
       Hint = #1055#1086#1082#1072#1079#1072#1090#1100' '#1080#1085#1092#1086#1088#1084#1072#1094#1080#1102' '
       Caption = 'info'
@@ -169,7 +169,7 @@ object mForm: TmForm
       OnClick = ShowInfoClick
     end
     object ToolButton1: TToolButton
-      Left = 150
+      Left = 138
       Top = 0
       Width = 8
       Caption = 'ToolButton1'
@@ -177,14 +177,14 @@ object mForm: TmForm
       Style = tbsSeparator
     end
     object ProcessingBTN: TToolButton
-      Left = 158
+      Left = 146
       Top = 0
       Hint = #1054#1073#1088#1072#1073#1086#1090#1082#1072' '#1076#1072#1085#1085#1099#1093
       ImageIndex = 9
       OnClick = ProcessingBTNClick
     end
     object ToolButton2: TToolButton
-      Left = 183
+      Left = 169
       Top = 0
       Width = 8
       Caption = 'ToolButton2'
@@ -192,13 +192,13 @@ object mForm: TmForm
       Style = tbsSeparator
     end
     object ManufactureBTN: TToolButton
-      Left = 191
+      Left = 177
       Top = 0
       ImageIndex = 10
       OnClick = ManufactureBTNClick
     end
     object ResourceUsageBTN: TToolButton
-      Left = 216
+      Left = 200
       Top = 0
       ImageIndex = 11
       OnClick = ResourceUsageBTNClick
@@ -206,16 +206,16 @@ object mForm: TmForm
   end
   object Indikators: TPanel
     Left = 0
-    Top = 486
-    Width = 697
+    Top = 482
+    Width = 696
     Height = 17
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 3
-    ExplicitTop = 480
-    ExplicitWidth = 673
+    ExplicitTop = 486
+    ExplicitWidth = 697
     object MailPannel: TPanel
-      Left = 647
+      Left = 646
       Top = 0
       Width = 50
       Height = 17
@@ -225,7 +225,7 @@ object mForm: TmForm
       ParentBackground = False
       TabOrder = 0
       OnClick = MailPannelClick
-      ExplicitLeft = 623
+      ExplicitLeft = 647
     end
   end
   object XPManifest1: TXPManifest
@@ -436,7 +436,7 @@ object mForm: TmForm
     Left = 160
     Top = 128
     Bitmap = {
-      494C01010C000E00540010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010C000E00580010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -977,7 +977,7 @@ object mForm: TmForm
     Left = 64
     Top = 232
     Bitmap = {
-      494C0101020004003C000D000D00FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010200040040000D000D00FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000340000000D0000000100200000000000900A
       0000000000000000000000000000000000000000000026262600242424002424
       2400242424002424240024242400262626002424240024242400242424002626

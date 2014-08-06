@@ -6,7 +6,7 @@ namespace rep
 
 MaterialsDetail::MaterialsDetail (int set): rep::Report("Материальная ведомость: Подетальная",set),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_materials.xlt")
+    cur_lists(0),templ("manufacture_forms.xlt")
 {
     params[REPORT_PATH];
     params[REPORT_LIST_COUNT] = "10";
@@ -19,7 +19,7 @@ MaterialsDetail::~MaterialsDetail()
 
 MaterialsDetail::MaterialsDetail(const MaterialsDetail &r):rep::Report(r),
     DB(0),path(""),use_listing(false),lists_by_file(0),object(""),element(""),type(""),template_path(""),
-    cur_lists(0),templ("manufacture_materials.xlt")
+    cur_lists(0),templ("manufacture_forms.xlt")
 {
 
 }
@@ -252,7 +252,7 @@ void MaterialsDetail::BuildData      (std::string part_id, std::string zakaz, st
                     template_row = 6,
                     template_group_start_row = 5,
                     template_group_end_row = 7;
-            size_t template_page = 2;
+            size_t template_page = 14;
             size_t max_page_no=0;
 
             size_t file_no = 0;
