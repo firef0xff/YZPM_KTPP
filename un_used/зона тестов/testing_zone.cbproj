@@ -25,10 +25,10 @@
 		<PropertyGroup Condition="'$(Base)'!=''">
 			<LinkPackageStatics>rtl.lib;vcl.lib;dbrtl.lib;adortl.lib;vclactnband.lib;vclx.lib</LinkPackageStatics>
 			<OutputExt>exe</OutputExt>
-			<ILINK_LibraryPath>..\..\reports\;F:\mylib\SQL\;F:\mylib\Excel\;..\..\common\;..\интерфейс запусков\;..\подготовка списка деталей\;..\маркетинг\продукция\;..\маркетинг\;..\маркетинг\договора\;..\маркетинк\договора\;..\отчетность\;..\редактор спецификаций\;..\технология\классы данных\;..\технология\;..\поиск\;..\дерево спецификации\работа с файлами\;..\дерево спецификации\состояния\;..\дерево спецификации\;..\общие функции и классы\;..\..\мои классы\;..\;..\общие функции\;..\..\проекты\Файловая база 3\зона тестов\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<ILINK_LibraryPath>E:\mylib\Excel\;E:\mylib\SQL\;..\..\reports\;F:\mylib\SQL\;F:\mylib\Excel\;..\..\common\;..\интерфейс запусков\;..\подготовка списка деталей\;..\маркетинг\продукция\;..\маркетинг\;..\маркетинг\договора\;..\маркетинк\договора\;..\отчетность\;..\редактор спецификаций\;..\технология\классы данных\;..\технология\;..\поиск\;..\дерево спецификации\работа с файлами\;..\дерево спецификации\состояния\;..\дерево спецификации\;..\общие функции и классы\;..\..\мои классы\;..\;..\общие функции\;..\..\проекты\Файловая база 3\зона тестов\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
 			<PackageImports>vclimg.bpi;vcl.bpi;vclx.bpi;dbrtl.bpi;Rave90VCL.bpi;bdertl.bpi;rtl.bpi;bcbie.bpi;xmlrtl.bpi;vclactnband.bpi;bcbsmp.bpi;VclSmp.bpi;svnui.bpi;svn.bpi;TeeUI.bpi;TeeDB.bpi;Tee.bpi;vcldb.bpi;vcldbx.bpi;vcltouch.bpi;dsnap.bpi;dsnapcon.bpi;vclib.bpi;ibxpress.bpi;adortl.bpi;IndyCore.bpi;IndySystem.bpi;IndyProtocols.bpi;inet.bpi;intrawebdb_110_150.bpi;Intraweb_110_150.bpi;vclie.bpi;websnap.bpi;webdsnap.bpi;inetdb.bpi;inetdbbde.bpi;inetdbxpress.bpi;soaprtl.bpi;vclribbon.bpi;dbexpress.bpi;DbxCommonDriver.bpi;DataSnapIndy10ServerTransport.bpi;DataSnapProviderClient.bpi;DbxClientDriver.bpi;DataSnapClient.bpi;dbxcds.bpi;DataSnapServer.bpi;AzureCloud.bpi;DBXInterBaseDriver.bpi;DBXMySQLDriver.bpi;DBXFirebirdDriver.bpi;DBXSybaseASEDriver.bpi;DBXSybaseASADriver.bpi;DBXOracleDriver.bpi;DBXMSSQLDriver.bpi;DBXInformixDriver.bpi;DBXDb2Driver.bpi;CodeSiteExpressVcl.bpi;volo.bpi</PackageImports>
 			<Multithreaded>true</Multithreaded>
-			<IncludePath>..\..\reports\;F:\mylib\SQL\;F:\mylib\Excel\;..\..\common\;..\интерфейс запусков\;..\подготовка списка деталей\;..\маркетинг\продукция\;..\маркетинг\;..\маркетинг\договора\;..\маркетинк\договора\;..\отчетность\;..\редактор спецификаций\;..\технология\классы данных\;..\технология\;..\поиск\;..\дерево спецификации\работа с файлами\;..\дерево спецификации\состояния\;..\дерево спецификации\;..\общие функции и классы\;..\..\мои классы\;..\;..\общие функции\;..\..\проекты\Файловая база 3\зона тестов\;$(IncludePath)</IncludePath>
+			<IncludePath>E:\mylib\Excel\;E:\mylib\SQL\;..\..\reports\;F:\mylib\SQL\;F:\mylib\Excel\;..\..\common\;..\интерфейс запусков\;..\подготовка списка деталей\;..\маркетинг\продукция\;..\маркетинг\;..\маркетинг\договора\;..\маркетинк\договора\;..\отчетность\;..\редактор спецификаций\;..\технология\классы данных\;..\технология\;..\поиск\;..\дерево спецификации\работа с файлами\;..\дерево спецификации\состояния\;..\дерево спецификации\;..\общие функции и классы\;..\..\мои классы\;..\;..\общие функции\;..\..\проекты\Файловая база 3\зона тестов\;$(IncludePath)</IncludePath>
 			<AllPackageLibs>rtl.lib;vcl.lib;dbrtl.lib;adortl.lib;vclactnband.lib;vclx.lib</AllPackageLibs>
 			<ProjectType>CppVCLApplication</ProjectType>
 			<_TCHARMapping>wchar_t</_TCHARMapping>
@@ -66,12 +66,12 @@
 			<TASM_Debugging>None</TASM_Debugging>
 		</PropertyGroup>
 		<ItemGroup>
-			<CppCompile Include="F:\mylib\Excel\Excel.cpp">
-				<DependentOn>F:\mylib\Excel\Excel.h</DependentOn>
-				<BuildOrder>19</BuildOrder>
+			<CppCompile Include="E:\mylib\Excel\Excel.cpp">
+				<DependentOn>E:\mylib\Excel\Excel.h</DependentOn>
+				<BuildOrder>21</BuildOrder>
 			</CppCompile>
-			<CppCompile Include="F:\mylib\SQL\SQL.cpp">
-				<DependentOn>F:\mylib\SQL\SQL.h</DependentOn>
+			<CppCompile Include="E:\mylib\SQL\SQL.cpp">
+				<DependentOn>E:\mylib\SQL\SQL.h</DependentOn>
 				<BuildOrder>20</BuildOrder>
 			</CppCompile>
 			<CppCompile Include="..\..\common\functions.cpp">
@@ -166,19 +166,19 @@
 				<DependentOn>..\маркетинг\продукция\Select_params_prod.h</DependentOn>
 				<BuildOrder>14</BuildOrder>
 			</CppCompile>
-			<FormResources Include="..\маркетинг\продукция\Agrements_select.dfm"/>
+			<FormResources Include="..\маркетинг\contractors.dfm"/>
+			<FormResources Include="..\..\reports\trb_params.dfm"/>
+			<FormResources Include="test.dfm"/>
+			<FormResources Include="..\маркетинг\договора\agreements_main.dfm"/>
 			<FormResources Include="..\маркетинг\продукция\products.dfm"/>
 			<FormResources Include="..\маркетинг\продукция\Select_params_prod.dfm"/>
-			<FormResources Include="..\маркетинг\продукция\Add_zak.dfm"/>
-			<FormResources Include="test.dfm"/>
-			<FormResources Include="..\маркетинг\contractors.dfm"/>
-			<FormResources Include="..\маркетинг\договора\agreements_main.dfm"/>
+			<FormResources Include="..\маркетинг\продукция\Agrements_select.dfm"/>
 			<FormResources Include="..\маркетинг\договора\Select_params_agr.dfm"/>
+			<FormResources Include="..\маркетинг\продукция\Add_zak.dfm"/>
 			<FormResources Include="..\..\reports\kol_det.dfm"/>
-			<FormResources Include="..\..\reports\komplect.dfm"/>
-			<FormResources Include="..\..\reports\params.dfm"/>
 			<FormResources Include="..\..\reports\pp_start_params.dfm"/>
-			<FormResources Include="..\..\reports\trb_params.dfm"/>
+			<FormResources Include="..\..\reports\params.dfm"/>
+			<FormResources Include="..\..\reports\komplect.dfm"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>

@@ -1,8 +1,8 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  ClientHeight = 639
-  ClientWidth = 877
+  ClientHeight = 599
+  ClientWidth = 770
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,183 +15,85 @@ object Form1: TForm1
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 877
-    Height = 639
+    Width = 770
+    Height = 599
     ActivePage = TabSheet2
     Align = alClient
     TabOrder = 0
-    object TabSheet1: TTabSheet
-      Caption = 'TabSheet1'
-      DesignSize = (
-        869
-        611)
-      object Edit1: TEdit
-        Left = 3
-        Top = 572
-        Width = 753
-        Height = 21
-        Anchors = [akLeft, akRight, akBottom]
-        TabOrder = 0
-        Text = 'Edit1'
-      end
-      object Button1: TButton
-        Left = 791
-        Top = 91
-        Width = 75
-        Height = 25
-        Anchors = [akRight, akBottom]
-        Caption = 'Button1'
-        TabOrder = 1
-      end
-      object Memo1: TMemo
-        Left = 3
-        Top = 3
-        Width = 782
-        Height = 563
-        Anchors = [akLeft, akTop, akRight, akBottom]
-        Lines.Strings = (
-          'Memo1')
-        ScrollBars = ssBoth
-        TabOrder = 2
-      end
-      object Button2: TButton
-        Left = 791
-        Top = 122
-        Width = 75
-        Height = 25
-        Anchors = [akRight, akBottom]
-        Caption = 'Button1'
-        TabOrder = 3
-        OnClick = Button2Click
-      end
-      object Button3: TButton
-        Left = 791
-        Top = 153
-        Width = 75
-        Height = 25
-        Anchors = [akRight, akBottom]
-        Caption = 'Button1'
-        TabOrder = 4
-      end
-      object Button4: TButton
-        Left = 791
-        Top = 184
-        Width = 75
-        Height = 25
-        Anchors = [akRight, akBottom]
-        Caption = 'Button1'
-        TabOrder = 5
-      end
-      object Button5: TButton
-        Left = 791
-        Top = 215
-        Width = 75
-        Height = 25
-        Anchors = [akRight, akBottom]
-        Caption = 'Button1'
-        TabOrder = 6
-      end
-      object Button6: TButton
-        Left = 791
-        Top = 246
-        Width = 75
-        Height = 25
-        Anchors = [akRight, akBottom]
-        Caption = 'Button1'
-        TabOrder = 7
-      end
-      object Button7: TButton
-        Left = 791
-        Top = 277
-        Width = 75
-        Height = 25
-        Anchors = [akRight, akBottom]
-        Caption = 'Button1'
-        TabOrder = 8
-      end
-      object Button8: TButton
-        Left = 791
-        Top = 308
-        Width = 75
-        Height = 25
-        Anchors = [akRight, akBottom]
-        Caption = 'Button1'
-        TabOrder = 9
-      end
-    end
-    object ts: TTabSheet
-      Caption = 'ts'
-      ImageIndex = 1
-      object ComboBox1: TComboBox
-        Left = 16
-        Top = 200
-        Width = 145
-        Height = 21
-        Style = csDropDownList
-        Enabled = False
-        ItemIndex = 5
-        TabOrder = 0
-        Text = '4'
-        Items.Strings = (
-          '1'
-          '2'
-          '2'
-          '34'
-          '23'
-          '4'
-          '54'
-          '5'
-          '5')
-      end
-    end
-    object ts2: TTabSheet
-      Caption = 'ts2'
-      ImageIndex = 2
-    end
-    object ts1: TTabSheet
-      Caption = 'ts1'
-      ImageIndex = 3
-    end
-    object ts3: TTabSheet
-      Caption = 'ts3'
-      ImageIndex = 5
-    end
-    object TabSheet4: TTabSheet
-      Caption = 'TabSheet4'
-      ImageIndex = 6
-    end
+    ExplicitWidth = 877
+    ExplicitHeight = 639
     object TabSheet2: TTabSheet
       Caption = 'TabSheet2'
       ImageIndex = 6
-      object Edit2: TEdit
-        Left = 208
-        Top = 152
+      ExplicitLeft = 0
+      ExplicitTop = 28
+      ExplicitWidth = 869
+      ExplicitHeight = 611
+      DesignSize = (
+        762
+        571)
+      object Obd: TEdit
+        Left = 3
+        Top = 3
         Width = 121
         Height = 21
         TabOrder = 0
-        Text = 'Edit2'
+        Text = '971171000000000'
       end
-      object Button9: TButton
-        Left = 384
-        Top = 216
-        Width = 75
+      object RepStart: TButton
+        Left = 194
+        Top = 1
+        Width = 87
         Height = 25
-        Caption = 'Button9'
+        Caption = #1047#1072#1087#1091#1082' '#1086#1090#1095#1077#1090#1072
         TabOrder = 1
-        OnClick = Button9Click
+        OnClick = RepStartClick
+      end
+      object ClearLog: TButton
+        Left = 287
+        Top = 1
+        Width = 87
+        Height = 25
+        Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1083#1086#1075
+        TabOrder = 2
+        OnClick = ClearLogClick
+      end
+      object GetLog: TButton
+        Left = 380
+        Top = 1
+        Width = 87
+        Height = 25
+        Caption = #1051#1086#1075
+        TabOrder = 3
+        OnClick = GetLogClick
+      end
+      object Log: TMemo
+        Left = 3
+        Top = 32
+        Width = 756
+        Height = 537
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        TabOrder = 4
+        ExplicitWidth = 863
+        ExplicitHeight = 577
+      end
+      object RepNo: TEdit
+        Left = 130
+        Top = 3
+        Width = 58
+        Height = 21
+        NumbersOnly = True
+        TabOrder = 5
+        Text = '8'
       end
     end
   end
   object ADC: TADOConnection
-    ConnectionString = 
-      'FILE NAME=C:\Users\ghost\Desktop\prg\'#1060#1072#1081#1083#1086#1074#1072#1103' '#1073#1072#1079#1072' 3_yzpm\Debug\' +
-      'Win32\lib\connect.udl'
+    ConnectionString = 'FILE NAME=E:\YZPM_KTPP\Debug\Win32\lib\connect.udl'
     LoginPrompt = False
-    Provider = 
-      'C:\Users\ghost\Desktop\prg\'#1060#1072#1081#1083#1086#1074#1072#1103' '#1073#1072#1079#1072' 3_yzpm\Debug\Win32\lib\' +
-      'connect.udl'
-    Left = 160
-    Top = 56
+    Provider = 'E:\YZPM_KTPP\Debug\Win32\lib\connect.udl'
+    Left = 72
+    Top = 104
   end
   object OD: TOpenDialog
     Left = 424
