@@ -25,6 +25,7 @@
 #include "Settings_wnd.h"
 #include <Graphics.hpp>
 #include <Buttons.hpp>
+#include "otchetnost.h"
 
 class TmForm : public TForm
 {
@@ -150,8 +151,9 @@ void         CloseTab     (TTabSheet *tab);
 
 typedef bool (*RepStart_func)(AnsiString type,AnsiString param);
 typedef void (*init_func)(AnsiString user,cSQL *DbWork);
-RepStart_func RepStart;
-init_func      RepInit;
+/*RepStart_func RepStart;
+init_func      RepInit;*/
+cReports *reports;
 public:
     __fastcall TmForm(TComponent* Owner);
     __fastcall ~TmForm(void);

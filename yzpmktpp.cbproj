@@ -395,10 +395,39 @@
 				<DependentOn>professions\professions.h</DependentOn>
 				<BuildOrder>67</BuildOrder>
 			</CppCompile>
+			<CppCompile Include="reports\kol_det.cpp">
+				<Form>koldet</Form>
+				<DependentOn>reports\kol_det.h</DependentOn>
+				<BuildOrder>100</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="reports\komplect.cpp">
+				<Form>komplekt</Form>
+				<DependentOn>reports\komplect.h</DependentOn>
+				<BuildOrder>101</BuildOrder>
+			</CppCompile>
 			<CppCompile Include="reports\otchethost.cpp">
 				<Form>Otchet</Form>
 				<DependentOn>reports\otchethost.h</DependentOn>
-				<BuildOrder>67</BuildOrder>
+				<BuildOrder>102</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="reports\otchetnost.cpp">
+				<DependentOn>reports\otchetnost.h</DependentOn>
+				<BuildOrder>103</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="reports\params.cpp">
+				<Form>parametr</Form>
+				<DependentOn>reports\params.h</DependentOn>
+				<BuildOrder>104</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="reports\pp_start_params.cpp">
+				<Form>PP_params</Form>
+				<DependentOn>reports\pp_start_params.h</DependentOn>
+				<BuildOrder>105</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="reports\trb_params.cpp">
+				<Form>TrbOptions</Form>
+				<DependentOn>reports\trb_params.h</DependentOn>
+				<BuildOrder>106</BuildOrder>
 			</CppCompile>
 			<CppCompile Include="searcher\SearchModule.cpp">
 				<Form>Search</Form>
@@ -489,13 +518,13 @@
 			<ResFiles Include="yzpmktpp.res">
 				<BuildOrder>1</BuildOrder>
 			</ResFiles>
-			<FormResources Include="manufacture_schedules\report_params.dfm"/>
 			<FormResources Include="manufacture_schedules\surcharge\surcharge_list.dfm"/>
 			<FormResources Include="manufacture_schedules\workers.dfm"/>
-			<FormResources Include="orders_editor\OrderContent_set.dfm"/>
 			<FormResources Include="manufacture_schedules\ZakazCreator.dfm"/>
-			<FormResources Include="manufacture_schedules\ZapCreator.dfm"/>
+			<FormResources Include="manufacture_schedules\report_params.dfm"/>
+			<FormResources Include="orders_editor\OrderContent_set.dfm"/>
 			<FormResources Include="orders_editor\Orders.dfm"/>
+			<FormResources Include="manufacture_schedules\ZapCreator.dfm"/>
 			<FormResources Include="technology\support_modules\catalog_workpieces\zagotovk.dfm"/>
 			<FormResources Include="technology\support_modules\instrument.dfm"/>
 			<FormResources Include="technology\support_modules\symblos.dfm"/>
@@ -506,7 +535,6 @@
 			<FormResources Include="technology\technology.dfm"/>
 			<FormResources Include="prepare_products_list\select_params.dfm"/>
 			<FormResources Include="professions\professions.dfm"/>
-			<FormResources Include="reports\otchethost.dfm"/>
 			<FormResources Include="orders_editor\Order_set.dfm"/>
 			<FormResources Include="prepare_products_list\Izd_Unroll.dfm"/>
 			<FormResources Include="prepare_products_list\List_add.dfm"/>
@@ -524,20 +552,26 @@
 			<FormResources Include="boom_tree\contents\Conditions.dfm"/>
 			<FormResources Include="boom_editor\SPEdit.dfm"/>
 			<FormResources Include="boom_editor\sp_params.dfm"/>
-			<FormResources Include="manufacture_schedules\IzdAppender.dfm"/>
 			<FormResources Include="manufacture_schedules\manufacture.dfm"/>
 			<FormResources Include="manufacture_schedules\ReportBuilder.dfm"/>
-			<FormResources Include="manufacture_schedules\EditWorkerGroup.dfm"/>
+			<FormResources Include="manufacture_schedules\IzdAppender.dfm"/>
+			<FormResources Include="Login\dialogs\Input_wnd.dfm"/>
 			<FormResources Include="Login\dialogs\NextStateSelector.dfm"/>
 			<FormResources Include="Login\dialogs\RightSelect.dfm"/>
-			<FormResources Include="Login\dialogs\User_Data.dfm"/>
 			<FormResources Include="log.dfm"/>
 			<FormResources Include="Login\dialogs\GTUSdialog.dfm"/>
-			<FormResources Include="Login\dialogs\Input_wnd.dfm"/>
+			<FormResources Include="main.dfm"/>
 			<FormResources Include="manufacture_schedules\EditWorkerData.dfm"/>
+			<FormResources Include="manufacture_schedules\EditWorkerGroup.dfm"/>
+			<FormResources Include="Login\dialogs\User_Data.dfm"/>
 			<FormResources Include="Login\loginwin.dfm"/>
 			<FormResources Include="Login\Settings_wnd.dfm"/>
-			<FormResources Include="main.dfm"/>
+			<FormResources Include="reports\kol_det.dfm"/>
+			<FormResources Include="reports\komplect.dfm"/>
+			<FormResources Include="reports\otchethost.dfm"/>
+			<FormResources Include="reports\params.dfm"/>
+			<FormResources Include="reports\pp_start_params.dfm"/>
+			<FormResources Include="reports\trb_params.dfm"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
@@ -566,7 +600,7 @@
 						<VersionInfo Name="MajorVer">3</VersionInfo>
 						<VersionInfo Name="MinorVer">0</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">11</VersionInfo>
+						<VersionInfo Name="Build">12</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -578,7 +612,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName"/>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">3.0.0.11</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">3.0.0.12</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName"/>
 						<VersionInfoKeys Name="LegalCopyright"/>
 						<VersionInfoKeys Name="LegalTrademarks"/>

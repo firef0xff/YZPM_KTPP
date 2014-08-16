@@ -841,7 +841,7 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
     } // активация
 
     String name;
-    TADOQuery *rez_nm = DB->SendSQL("select a.namd from `constructions`.`det_names` a where obd = '"+obd+"'");
+    TADOQuery *rez_nm = DB->SendSQL("select a.namd from `constructions`.`det_names` a where obd = '"+GostToVin(obd)+"'");
     if (rez_nm)
     {
         name = rez_nm->FieldByName("namd")->Value;

@@ -2,12 +2,13 @@
 #pragma hdrstop
 
 #include "main.h"
+
 // ---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TmForm *mForm;
 
-__fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
+__fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0),reports(0)
 {
 #ifndef NODB
     ADC->ConnectionString="FILE NAME="+ExtractFileDir(Application->ExeName)+
@@ -16,6 +17,8 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
     ADC->Connected=true;
 #endif
     DB=new cSQL(ADC);
+    reports = new cReports(DB);
+
     TLogIn *wnd=new TLogIn(this, DB);
     wnd->ShowModal();
     selected=0;
@@ -25,6 +28,7 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
         IcoData=new IconsData(this);
         LoadIL();
         UserID=wnd->Get_UserID();
+        reports->user = UserID;
         // настройка содержимого
         String sql="call administration.Get_Rights('"+String(UserID)+"')";
         TADOQuery *rez=DB->SendSQL(sql);
@@ -132,7 +136,7 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
             name=rez->FieldByName("name")->Value;
         }
         delete rez;
-        HINSTANCE Reports=LoadLibrary(String("lib\\Reports.dll").c_str());
+        /*HINSTANCE Reports=LoadLibrary(String("lib\\Reports.dll").c_str());
         // загружаем длл
         if(Reports)
         {
@@ -143,7 +147,7 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
                 RepStart=(RepStart_func)GetProcAddress(Reports, "_Report");
                 // получаем указатель на функцию
             }
-        }
+        }*/
     }
     else
     {
@@ -1349,9 +1353,13 @@ void __fastcall TmForm::otchet(TObject *Sender)
         {
             if(Item->Tag)
             {
-                if(RepStart)
+                /*if(RepStart)
                 {
                     RepStart(Item->Tag, wnd->LE1->Text.Trim());
+                }*/
+                if (reports)
+                {
+                    reports->CreateReport(Item->Tag, wnd->LE1->Text.Trim());
                 }
             }
         }
