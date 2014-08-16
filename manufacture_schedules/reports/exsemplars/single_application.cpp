@@ -202,7 +202,7 @@ void SingleApplication::BuildData      (std::string part_id, std::string zakaz, 
             "where b.obd != '000000000000000'";
 
     if (!pp.empty())
-        sql <<  "where b.pp = '"<<pp<<"' ";
+        sql <<  "and b.pp = '"<<pp<<"' ";
     sql <<  "GROUP BY `b`.`id`,`a`.`ei` order by `b`.`obd`";
 }
 
