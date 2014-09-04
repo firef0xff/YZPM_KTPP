@@ -263,6 +263,9 @@
 				<DependentOn>manufacture_schedules\ReportBuilder.h</DependentOn>
 				<BuildOrder>68</BuildOrder>
 			</CppCompile>
+			<CppCompile Include="manufacture_schedules\reports\exsemplars\complects.cpp">
+				<BuildOrder>103</BuildOrder>
+			</CppCompile>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\f_140003.cpp">
 				<BuildOrder>82</BuildOrder>
 			</CppCompile>

@@ -17,6 +17,7 @@
 #include <reports/exsemplars/zakaz_trud_report.h>
 #include <reports/exsemplars/making_details.h>
 #include <reports/exsemplars/making_summary.h>
+#include <reports/exsemplars/complects.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -34,6 +35,7 @@ rep::TrudReport2 rep_8 (STARTUP|ORDER|PART);
 rep::ZakazTrudReport2 rep_9 (STARTUP|ORDER|PART);
 rep::MakingDetails rep_10 (STARTUP|ORDER|PART);
 rep::MakingSummary rep_11 (STARTUP|ORDER|PART);
+rep::Complect05    rep12  (STARTUP|ORDER|PART);
 
 //fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
 
