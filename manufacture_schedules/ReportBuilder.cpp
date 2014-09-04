@@ -36,6 +36,7 @@ rep::ZakazTrudReport2 rep_9 (STARTUP|ORDER|PART);
 rep::MakingDetails rep_10 (STARTUP|ORDER|PART);
 rep::MakingSummary rep_11 (STARTUP|ORDER|PART);
 rep::Complect05    rep12  (STARTUP|ORDER|PART);
+rep::Complect06    rep13  (STARTUP|ORDER|PART);
 
 //fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
 
