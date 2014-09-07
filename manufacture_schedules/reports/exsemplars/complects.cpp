@@ -81,7 +81,7 @@ void Complect05::BuildReport()
 {
     //получить список маршрутных листов по заданию
     std::stringstream sql;
-	sql <<  "select `a`.`det_id`, `c`.`obd`, `c`.`name`,`d`.`zakaz`,`b`.`part_no` "
+    sql <<  "select `a`.`det_id`, `c`.`obd`, `c`.`name`,`d`.`zakaz`,`b`.`part_no`,`a`.`kol` "
 				"from `manufacture`.`part_content` a "
 				"join `manufacture`.`parts` b on `b`.`part_id` = `a`.`part_id` "
 				"join `manufacture`.`det_names` c on `c`.`det_id` = `a`.`det_id` "
@@ -116,7 +116,8 @@ void Complect05::BuildReport()
 
                 std::string zakaz =     (rez->FieldByName("zakaz")->Value.operator AnsiString()).c_str();
                 std::string part_no =   (rez->FieldByName("part_no")->Value.operator AnsiString()).c_str();
-                BuildData(det_id, obd, name, zakaz, part_no);
+                int kol = rez->FieldByName("kol")->Value;
+                BuildData(det_id, obd, name, zakaz, part_no, kol);
             }
         }
         delete rez;
@@ -127,7 +128,7 @@ void Complect05::BuildReport()
     }
 }
 void Complect05::BuildData      (std::string det_id, std::string obd, std::string name,
-                                 std::string zakaz, std::string part_no)
+                                 std::string zakaz, std::string part_no, int izd_kol)
 {
     cur_lists = 0;
 
@@ -137,12 +138,14 @@ void Complect05::BuildData      (std::string det_id, std::string obd, std::strin
                                  "`c2`.`obd` as obd, "
                                  "`c2`.`name`, "
                                  "sum(`b`.`kol_using`) as kol, "
-                                 "concat(`c3`.`prma`,' ', `c3`.`gopr`) as sort "
+                                 "concat(`c3`.`prma`,' ', `c3`.`gopr`) as sort, "
+                                 "ifnull(`d1`.`snameei`,'') as ei "
                                  "from `manufacture`.output a "
                                  "join `manufacture`.`det_tree` b on `b`.`inst_idc` = `a`.`inst_id` "
                                  "join `manufacture`.`det_names` c1 on `c1`.`det_id` = `b`.`det_idp` "
                                  "join `manufacture`.`det_names` c2 on `c2`.`det_id` = `a`.`det_id` "
                                  "join `manufacture`.`materials` c3 on `c3`.`obmid` = `a`.`det_id` "
+                                 "left join `catalogs`.`dimensionality` d1 on `d1`.`kodei` = `b`.`ei` "
                                  "where `c2`.`pp` = '05' and `b`.`using` = '1' "
                                  "GROUP BY `c2`.`obd`,`c1`.`obd`");
 
@@ -163,8 +166,8 @@ void Complect05::BuildData      (std::string det_id, std::string obd, std::strin
 
             bool new_page = true;
             size_t cur_row = 0;
-            size_t row_size = 1, start_row = 9, end_row = 39,
-                    template_row = 9;
+            size_t row_size = 1, start_row = 6, end_row = 39,
+                    template_row = 6;
             size_t template_page = 16;
             size_t max_page_no=0;
 
@@ -189,6 +192,7 @@ void Complect05::BuildData      (std::string det_id, std::string obd, std::strin
                 ReportData::ObuData &obu_tmp = lnk.obu_list[obu];
                 obu_tmp.obu = obu;
                 obu_tmp.kol = rez->FieldByName("kol")->Value.operator double();
+                obu_tmp.ei    = (rez->FieldByName("ei")->Value.operator AnsiString()).c_str();
 
 
 
@@ -219,7 +223,7 @@ void Complect05::BuildData      (std::string det_id, std::string obd, std::strin
                 double summary(0.0);
 
                 CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
-                          zakaz, obd, name, part_no, cur_row, file_no, list_no, xl);
+                          zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
 
                 //вставить строку в отчет
                 // копирование
@@ -236,25 +240,31 @@ void Complect05::BuildData      (std::string det_id, std::string obd, std::strin
                 {
                     const ReportData::ObuData obu_lnk = it1->second;
                     CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
-                              zakaz, obd, name, part_no, cur_row, file_no, list_no, xl);
+                              zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
                     //вывод детализации
-                    xl.toCells(cur_row, 6, obu_lnk.obu.c_str());
-                    xl.toCells(cur_row, 4, obu_lnk.kol);
+                    xl.toCells(cur_row, 7, obu_lnk.obu.c_str());
+                    xl.toCells(cur_row, 5, AnsiString(obu_lnk.kol) + " " + obu_lnk.ei.c_str());
 					summary += obu_lnk.kol;
-					++cur_row;
-                    //вставить строку в отчет
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
-                    // вставка
-                    xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
+                    ++cur_row;
+                    if (lnk.obu_list.size() > 1)
+                    {
+                        //вставить строку в отчет
+                        // копирование
+                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                        // вставка
+                        xl.Sheet_activate();
+                        xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
+                    }
                 }
                 //суммарная информация
-                CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
-                          zakaz, obd, name, part_no, cur_row, file_no, list_no, xl);
-                xl.toCells(cur_row,3, "Итого");
-				xl.toCells(cur_row,4, summary);
-				++cur_row;
+                if (lnk.obu_list.size() > 1)
+                {
+                    CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
+                              zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
+                    xl.toCells(cur_row,3, "Итого");
+                    xl.toCells(cur_row,5, summary);
+                    ++cur_row;
+                }
             }
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
             {
@@ -286,6 +296,7 @@ void Complect05::CheckList      (bool &new_page,
                                  const std::string &obd,
                                  const std::string &name,
                                  const std::string &part_no,
+                                 const int &izd_kol,
 
                                  size_t &cur_row,
                                  size_t &file_no,
@@ -316,13 +327,15 @@ void Complect05::CheckList      (bool &new_page,
         xl.Set_Sheet_Name(xl.GetSheet(cur_lists),("Лист-"+buf.str()).c_str());
 
         //заполнить шапку
-        xl.toCells(3,   7,  zakaz.c_str()  );
-        xl.toCells(4,   1,  VinToGost(obd.c_str()));
-        xl.toCells(4,   3,  name.c_str()   );
-        xl.toCells(6,   7,  part_no.c_str());
+        xl.toCells(1,   3,  "Детали комплектующие");
+        xl.toCells(2,   5,  zakaz.c_str()  );
+        xl.toCells(3,   1,  VinToGost(obd.c_str()));
+        xl.toCells(3,   3,  name.c_str()   );
+        xl.toCells(2,   8,  part_no.c_str());
+        xl.toCells(3,   8,  izd_kol);
 
-        xl.toCells(1,   7,  list_no        );
-        xl.toCells(1,   9,  max_page_no    );
+        xl.toCells(1,   8,  list_no        );
+        xl.toCells(1,   10, max_page_no    );
         cur_row = start_row;
     }
 
@@ -406,7 +419,7 @@ void Complect06::BuildReport()
 {
     //получить список маршрутных листов по заданию
     std::stringstream sql;
-    sql <<  "select `a`.`det_id`, `c`.`obd`, `c`.`name`,`d`.`zakaz`,`b`.`part_no` "
+    sql <<  "select `a`.`det_id`, `c`.`obd`, `c`.`name`,`d`.`zakaz`,`b`.`part_no`,`a`.`kol` "
                 "from `manufacture`.`part_content` a "
                 "join `manufacture`.`parts` b on `b`.`part_id` = `a`.`part_id` "
                 "join `manufacture`.`det_names` c on `c`.`det_id` = `a`.`det_id` "
@@ -441,7 +454,8 @@ void Complect06::BuildReport()
 
                 std::string zakaz =     (rez->FieldByName("zakaz")->Value.operator AnsiString()).c_str();
                 std::string part_no =   (rez->FieldByName("part_no")->Value.operator AnsiString()).c_str();
-                BuildData(det_id, obd, name, zakaz, part_no);
+                int kol = rez->FieldByName("kol")->Value;
+                BuildData(det_id, obd, name, zakaz, part_no, kol);
             }
         }
         delete rez;
@@ -452,7 +466,7 @@ void Complect06::BuildReport()
     }
 }
 void Complect06::BuildData      (std::string det_id, std::string obd, std::string name,
-                                 std::string zakaz, std::string part_no)
+                                 std::string zakaz, std::string part_no, int izd_kol)
 {
     cur_lists = 0;
 
@@ -461,13 +475,15 @@ void Complect06::BuildData      (std::string det_id, std::string obd, std::strin
                                  "`c1`.`obd` as obu, "
                                  "`c2`.`obd` as obd, "
                                  "`c2`.`name`, "
-                                 "sum(`b`.`kol_using`) as kol, "
-                                 "concat(`c3`.`prma`,' ', `c3`.`gopr`) as sort "
+                                 "sum(`b`.`kol_using`) as kol, "                                 
+                                 "concat(`c3`.`prma`,' ', `c3`.`gopr`) as sort, "
+                                 "ifnull(`d1`.`snameei`,'') as ei "
                                  "from `manufacture`.output a "
                                  "join `manufacture`.`det_tree` b on `b`.`inst_idc` = `a`.`inst_id` "
                                  "join `manufacture`.`det_names` c1 on `c1`.`det_id` = `b`.`det_idp` "
                                  "join `manufacture`.`det_names` c2 on `c2`.`det_id` = `a`.`det_id` "
                                  "join `manufacture`.`materials` c3 on `c3`.`obmid` = `a`.`det_id` "
+                                 "left join `catalogs`.`dimensionality` d1 on `d1`.`kodei` = `b`.`ei` "
                                  "where `c2`.`pp` = '06' and `b`.`using` = '1' "
                                  "GROUP BY `c2`.`obd`,`c1`.`obd`");
 
@@ -488,8 +504,8 @@ void Complect06::BuildData      (std::string det_id, std::string obd, std::strin
 
             bool new_page = true;
             size_t cur_row = 0;
-            size_t row_size = 1, start_row = 9, end_row = 39,
-                    template_row = 9;
+            size_t row_size = 1, start_row = 6, end_row = 39,
+                    template_row = 6;
             size_t template_page = 16;
             size_t max_page_no=0;
 
@@ -514,7 +530,7 @@ void Complect06::BuildData      (std::string det_id, std::string obd, std::strin
                 ReportData::ObuData &obu_tmp = lnk.obu_list[obu];
                 obu_tmp.obu = obu;
                 obu_tmp.kol = rez->FieldByName("kol")->Value.operator double();
-
+                obu_tmp.ei    = (rez->FieldByName("ei")->Value.operator AnsiString()).c_str();
 
 
                 //считать все данные в структуры спрогнозировать разметку
@@ -544,7 +560,7 @@ void Complect06::BuildData      (std::string det_id, std::string obd, std::strin
                 double summary(0.0);
 
                 CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
-                          zakaz, obd, name, part_no, cur_row, file_no, list_no, xl);
+                          zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
 
                 //вставить строку в отчет
                 // копирование
@@ -561,25 +577,31 @@ void Complect06::BuildData      (std::string det_id, std::string obd, std::strin
                 {
                     const ReportData::ObuData obu_lnk = it1->second;
                     CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
-                              zakaz, obd, name, part_no, cur_row, file_no, list_no, xl);
+                              zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
                     //вывод детализации
-                    xl.toCells(cur_row, 6, obu_lnk.obu.c_str());
-                    xl.toCells(cur_row, 4, obu_lnk.kol);
+                    xl.toCells(cur_row, 7, obu_lnk.obu.c_str());
+                    xl.toCells(cur_row, 5, AnsiString(obu_lnk.kol) + " " + obu_lnk.ei.c_str());
                     summary += obu_lnk.kol;
                     ++cur_row;
-                    //вставить строку в отчет
-                    // копирование
-                    xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
-                    // вставка
-                    xl.Sheet_activate();
-                    xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
+                    if (lnk.obu_list.size() > 1)
+                    {
+                        //вставить строку в отчет
+                        // копирование
+                        xl.Range_Copy(xl.GetRows(xl.GetSheet(cur_lists+template_page), template_row, template_row + row_size - 1));
+                        // вставка
+                        xl.Sheet_activate();
+                        xl.Range_Paste(xl.GetRows(cur_row, cur_row + row_size-1));
+                    }
                 }
                 //суммарная информация
-                CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
-                          zakaz, obd, name, part_no, cur_row, file_no, list_no, xl);
-                xl.toCells(cur_row,3, "Итого");
-                xl.toCells(cur_row,4, summary);
-                ++cur_row;
+                if (lnk.obu_list.size() > 1)
+                {
+                    CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
+                              zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
+                    xl.toCells(cur_row,3, "Итого");
+                    xl.toCells(cur_row,5, summary);
+                    ++cur_row;
+                }
             }
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
             {
@@ -610,6 +632,7 @@ void Complect06::CheckList      (bool &new_page,
                                  const std::string &obd,
                                  const std::string &name,
                                  const std::string &part_no,
+                                 const int &izd_kol,
 
                                  size_t &cur_row,
                                  size_t &file_no,
@@ -641,13 +664,14 @@ void Complect06::CheckList      (bool &new_page,
 
         //заполнить шапку
         xl.toCells(1,   3,  "Детали резиновые");
-        xl.toCells(3,   7,  zakaz.c_str()  );
-        xl.toCells(4,   1,  VinToGost(obd.c_str()));
-        xl.toCells(4,   3,  name.c_str()   );
-        xl.toCells(6,   7,  part_no.c_str());
+        xl.toCells(2,   5,  zakaz.c_str()  );
+        xl.toCells(3,   1,  VinToGost(obd.c_str()));
+        xl.toCells(3,   3,  name.c_str()   );
+        xl.toCells(2,   8,  part_no.c_str());
+        xl.toCells(3,   8,  izd_kol);
 
-        xl.toCells(1,   7,  list_no        );
-        xl.toCells(1,   9,  max_page_no    );
+        xl.toCells(1,   8,  list_no        );
+        xl.toCells(1,   10, max_page_no    );
         cur_row = start_row;
     }
 

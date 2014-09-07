@@ -25,6 +25,7 @@ private:
 		{
 			std::string obu;
             double kol;
+            std::string ei;
         };
 		typedef std::map<std::string, ObuData> ObuDataList;
 
@@ -59,7 +60,7 @@ private:
     void LoadSettings   (void);
     void BuildReport    (void);
     void BuildData      (std::string det_id, std::string obd, std::string name,
-                         std::string zakaz, std::string part_no);
+                         std::string zakaz, std::string part_no, int izd_kol);
     void CheckList      (bool &new_page,
                          const size_t row_size,
                          const size_t start_row,
@@ -74,6 +75,7 @@ private:
                          const std::string &obd,
                          const std::string &name,
                          const std::string &part_no,
+                         const int &izd_kol,
 
                          size_t &cur_row,
                          size_t &file_no,
@@ -99,6 +101,7 @@ private:
         {
             std::string obu;
             double kol;
+            std::string ei;
         };
         typedef std::map<std::string, ObuData> ObuDataList;
 
@@ -133,7 +136,7 @@ private:
     void LoadSettings   (void);
     void BuildReport    (void);
     void BuildData      (std::string det_id, std::string obd, std::string name,
-                         std::string zakaz, std::string part_no);
+                         std::string zakaz, std::string part_no, int izd_kol);
     void CheckList      (bool &new_page,
                          const size_t row_size,
                          const size_t start_row,
@@ -148,6 +151,7 @@ private:
                          const std::string &obd,
                          const std::string &name,
                          const std::string &part_no,
+                         const int &izd_kol,
 
                          size_t &cur_row,
                          size_t &file_no,
