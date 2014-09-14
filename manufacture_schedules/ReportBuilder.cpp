@@ -18,6 +18,7 @@
 #include <reports/exsemplars/making_details.h>
 #include <reports/exsemplars/making_summary.h>
 #include <reports/exsemplars/complects.h>
+#include <reports/exsemplars/statements_set.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -37,6 +38,7 @@ rep::MakingDetails rep_10 (STARTUP|ORDER|PART);
 rep::MakingSummary rep_11 (STARTUP|ORDER|PART);
 rep::Complect05    rep12  (STARTUP|ORDER|PART);
 rep::Complect06    rep13  (STARTUP|ORDER|PART);
+rep::StatementsSet rep14  (STARTUP|ORDER|PART);
 
 //fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
 

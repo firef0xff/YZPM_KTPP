@@ -220,7 +220,7 @@ void Complect05::BuildData      (std::string det_id, std::string obd, std::strin
             {
                 const ReportData &lnk = it->second;
 
-                double summary(0.0);
+                std::map<const std::string, double> summary;
 
                 CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
                           zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
@@ -244,7 +244,7 @@ void Complect05::BuildData      (std::string det_id, std::string obd, std::strin
                     //вывод детализации
                     xl.toCells(cur_row, 7, obu_lnk.obu.c_str());
                     xl.toCells(cur_row, 5, AnsiString(obu_lnk.kol) + " " + obu_lnk.ei.c_str());
-					summary += obu_lnk.kol;
+                    summary[obu_lnk.ei] += obu_lnk.kol;
                     ++cur_row;
                     if (lnk.obu_list.size() > 1)
                     {
@@ -259,11 +259,14 @@ void Complect05::BuildData      (std::string det_id, std::string obd, std::strin
                 //суммарная информация
                 if (lnk.obu_list.size() > 1)
                 {
-                    CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
-                              zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
-                    xl.toCells(cur_row,3, "Итого");
-                    xl.toCells(cur_row,5, summary);
-                    ++cur_row;
+                    for (std::map<const std::string, double>::const_iterator it = summary.begin(); it!=summary.end(); ++it)
+                    {
+                        CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
+                                  zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
+                        xl.toCells(cur_row,3, "Итого");
+                        xl.toCells(cur_row,5, AnsiString(it->second) + " " + it->first.c_str());
+                        ++cur_row;
+                    }
                 }
             }
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
@@ -557,7 +560,7 @@ void Complect06::BuildData      (std::string det_id, std::string obd, std::strin
             {
                 const ReportData &lnk = it->second;
 
-                double summary(0.0);
+                std::map<const std::string, double> summary;
 
                 CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
                           zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
@@ -581,7 +584,7 @@ void Complect06::BuildData      (std::string det_id, std::string obd, std::strin
                     //вывод детализации
                     xl.toCells(cur_row, 7, obu_lnk.obu.c_str());
                     xl.toCells(cur_row, 5, AnsiString(obu_lnk.kol) + " " + obu_lnk.ei.c_str());
-                    summary += obu_lnk.kol;
+                    summary[obu_lnk.ei] += obu_lnk.kol;
                     ++cur_row;
                     if (lnk.obu_list.size() > 1)
                     {
@@ -596,11 +599,14 @@ void Complect06::BuildData      (std::string det_id, std::string obd, std::strin
                 //суммарная информация
                 if (lnk.obu_list.size() > 1)
                 {
-                    CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
-                              zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
-                    xl.toCells(cur_row,3, "Итого");
-                    xl.toCells(cur_row,5, summary);
-                    ++cur_row;
+                    for (std::map<const std::string, double>::const_iterator it = summary.begin(); it!=summary.end(); ++it)
+                    {
+                        CheckList(new_page, row_size, start_row, end_row, template_page, max_page_no, file_name, teml_file,
+                                  zakaz, obd, name, part_no, izd_kol, cur_row, file_no, list_no, xl);
+                        xl.toCells(cur_row,3, "Итого");
+                        xl.toCells(cur_row,5, AnsiString(it->second) + " " + it->first.c_str());
+                        ++cur_row;
+                    }
                 }
             }
             if (!path.empty())//закрываем Excel в зависимости от опции сохранения в файл
