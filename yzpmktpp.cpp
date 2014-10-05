@@ -8,9 +8,9 @@
 USEFORM("manufacture_schedules\report_params.cpp", RepParams);
 USEFORM("manufacture_schedules\surcharge\surcharge_list.cpp", SurchargeList);
 USEFORM("manufacture_schedules\workers.cpp", WorkersSettings); /* TFrame: File Type */
-USEFORM("orders_editor\OrderContent_set.cpp", ZakazContent_set);
 USEFORM("manufacture_schedules\ZakazCreator.cpp", ZakazWnd);
 USEFORM("manufacture_schedules\ZapCreator.cpp", ZapuskWnd);
+USEFORM("orders_editor\OrderContent_set.cpp", ZakazContent_set);
 USEFORM("technology\support_modules\catalog_workpieces\redaktor_formul.cpp", Fomul_Editor);
 USEFORM("technology\support_modules\catalog_workpieces\zagotovk.cpp", zagotovka);
 USEFORM("technology\support_modules\instrument.cpp", instr);
@@ -40,22 +40,22 @@ USEFORM("boom_editor\SPEdit.cpp", SPEditor);
 USEFORM("boom_tree\contents\Conditions.cpp", Cond);
 USEFORM("boom_editor\sp_params.cpp", spparams);
 USEFORM("boom_tree\BomTree.cpp", SpTree); /* TFrame: File Type */
-USEFORM("manufacture_schedules\IzdAppender.cpp", IzdAppenderWnd);
+USEFORM("log.cpp", LogForm);
 USEFORM("manufacture_schedules\manufacture.cpp", ManufactureControl); /* TFrame: File Type */
 USEFORM("manufacture_schedules\ReportBuilder.cpp", Reports);
-USEFORM("Login\dialogs\NextStateSelector.cpp", Next_State_Selector);
 USEFORM("Login\dialogs\RightSelect.cpp", fselRight);
 USEFORM("Login\dialogs\User_Data.cpp", UserData);
-USEFORM("log.cpp", LogForm);
+USEFORM("Login\loginwin.cpp", LogIn);
 USEFORM("Login\dialogs\GTUSdialog.cpp", GTUSGroupSelector);
 USEFORM("Login\dialogs\Input_wnd.cpp", newItem);
-USEFORM("Login\loginwin.cpp", LogIn);
-USEFORM("manufacture_schedules\Calck\Usage.cpp", ResourceUsage); /* TFrame: File Type */
+USEFORM("Login\dialogs\NextStateSelector.cpp", Next_State_Selector);
+USEFORM("Login\Settings_wnd.cpp", Settings);
 USEFORM("manufacture_schedules\EditWorkerData.cpp", WorkerData);
 USEFORM("manufacture_schedules\EditWorkerGroup.cpp", WorkerGroup);
-USEFORM("Login\Settings_wnd.cpp", Settings);
+USEFORM("manufacture_schedules\IzdAppender.cpp", IzdAppenderWnd);
 USEFORM("main.cpp", mForm);
 USEFORM("manufacture_schedules\Calck\add_data_wnd.cpp", CalckAddParams);
+USEFORM("manufacture_schedules\Calck\Usage.cpp", ResourceUsage); /* TFrame: File Type */
 //---------------------------------------------------------------------------
 WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

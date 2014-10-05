@@ -299,6 +299,12 @@
 			<None Include="manufacture_schedules\reports\exsemplars\making_summary.h">
 				<BuildOrder>95</BuildOrder>
 			</None>
+			<CppCompile Include="manufacture_schedules\reports\exsemplars\manufacturing_details.cpp">
+				<BuildOrder>107</BuildOrder>
+			</CppCompile>
+			<None Include="manufacture_schedules\reports\exsemplars\manufacturing_details.h">
+				<BuildOrder>108</BuildOrder>
+			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\materaials_detail.cpp">
 				<BuildOrder>86</BuildOrder>
 			</CppCompile>
@@ -515,9 +521,9 @@
 			<FormResources Include="manufacture_schedules\report_params.dfm"/>
 			<FormResources Include="manufacture_schedules\surcharge\surcharge_list.dfm"/>
 			<FormResources Include="manufacture_schedules\workers.dfm"/>
-			<FormResources Include="orders_editor\OrderContent_set.dfm"/>
 			<FormResources Include="manufacture_schedules\ZakazCreator.dfm"/>
 			<FormResources Include="manufacture_schedules\ZapCreator.dfm"/>
+			<FormResources Include="orders_editor\OrderContent_set.dfm"/>
 			<FormResources Include="technology\support_modules\catalog_workpieces\redaktor_formul.dfm"/>
 			<FormResources Include="technology\support_modules\catalog_workpieces\zagotovk.dfm"/>
 			<FormResources Include="technology\support_modules\instrument.dfm"/>
@@ -547,22 +553,22 @@
 			<FormResources Include="boom_tree\contents\Conditions.dfm"/>
 			<FormResources Include="boom_editor\sp_params.dfm"/>
 			<FormResources Include="boom_tree\BomTree.dfm"/>
-			<FormResources Include="manufacture_schedules\IzdAppender.dfm"/>
+			<FormResources Include="log.dfm"/>
 			<FormResources Include="manufacture_schedules\manufacture.dfm"/>
 			<FormResources Include="manufacture_schedules\ReportBuilder.dfm"/>
-			<FormResources Include="Login\dialogs\NextStateSelector.dfm"/>
 			<FormResources Include="Login\dialogs\RightSelect.dfm"/>
 			<FormResources Include="Login\dialogs\User_Data.dfm"/>
-			<FormResources Include="log.dfm"/>
+			<FormResources Include="Login\loginwin.dfm"/>
 			<FormResources Include="Login\dialogs\GTUSdialog.dfm"/>
 			<FormResources Include="Login\dialogs\Input_wnd.dfm"/>
-			<FormResources Include="Login\loginwin.dfm"/>
-			<FormResources Include="manufacture_schedules\Calck\Usage.dfm"/>
+			<FormResources Include="Login\dialogs\NextStateSelector.dfm"/>
+			<FormResources Include="Login\Settings_wnd.dfm"/>
 			<FormResources Include="manufacture_schedules\EditWorkerData.dfm"/>
 			<FormResources Include="manufacture_schedules\EditWorkerGroup.dfm"/>
-			<FormResources Include="Login\Settings_wnd.dfm"/>
+			<FormResources Include="manufacture_schedules\IzdAppender.dfm"/>
 			<FormResources Include="main.dfm"/>
 			<FormResources Include="manufacture_schedules\Calck\add_data_wnd.dfm"/>
+			<FormResources Include="manufacture_schedules\Calck\Usage.dfm"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
