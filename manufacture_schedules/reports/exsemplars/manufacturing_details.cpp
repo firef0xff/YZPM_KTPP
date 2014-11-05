@@ -104,10 +104,10 @@ void ManufacturingDetails::BuildReport()
     {
         if (rez->RecordCount)
         {
-            DataList data;
             ObectData obj;
             for (rez->First(); !rez->Eof; rez->Next())
             {
+                DataList data;
                 cur_lists = 0;
                 obj.det_id =    (rez->FieldByName("det_id")->Value.operator AnsiString()).c_str();
                 obj.part_id =   (rez->FieldByName("part_id")->Value.operator AnsiString()).c_str();
@@ -119,8 +119,8 @@ void ManufacturingDetails::BuildReport()
                 obj.izd_kol =   rez->FieldByName("kol")->Value;
 
                 BuildData(&data, obj);
+                DataToExcel(data, obj);
             }
-            DataToExcel(data, obj);
         }
         delete rez;
     }
@@ -172,7 +172,7 @@ void ManufacturingDetails::DataToExcel    (const DataList &data, const ObectData
         xl.DisplayAlerts(false);
 
         std::string teml_file = template_path + templ;
-        std::string file_name = path + "(" + obj.zakaz + /*" - " + obj.part_no + */")";
+        std::string file_name = path + "(" + obj.zakaz + " - " + obj.part_no + ")";
         std::string title = "Перечень выдаваемой документации";
 
         OpenTemplate(xl, teml_file);
@@ -273,10 +273,10 @@ void ManufacturingDetails::CheckList   (bool &new_page,
         //заполнить шапку
         xl.toCells(1,   5,  Now().FormatString("dd.mm.yyyy"));
         xl.toCells(1,   2,  title.c_str());
-//        xl.toCells(2,   2,  VinToGost(obj.obd.c_str()));
-//        xl.toCells(2,   4,  obj.name.c_str());
+        xl.toCells(2,   2,  VinToGost(obj.obd.c_str()));
+        xl.toCells(2,   4,  obj.name.c_str());
         xl.toCells(2,   7,  obj.zakaz.c_str());
-//        xl.toCells(2,   10, obj.part_no.c_str());
+        xl.toCells(2,   10, obj.part_no.c_str());
 
         xl.toCells(1, 8, list_no);
         xl.toCells(1, 10, max_page_no);
