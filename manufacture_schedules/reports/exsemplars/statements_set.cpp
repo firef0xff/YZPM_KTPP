@@ -162,11 +162,11 @@ void StatementsSet::BuildDataCooperation   (const ObectData &obj)
 
     DB->SendCommand(std::string("insert into `manufacture`.`itog` (det_id, kol) "
                     "select "
-                    "`a`.`det_id`, "
-                    "`a`.`kol_det` "
-                    "from `manufacture`.`marsh_lists` a "
-                    "join `manufacture`.`output` b on `a`.`det_id` = `b`.`det_id` "
-                    "where `a`.`part_id` = " + obj.part_id).c_str() );
+                    "`a`.`det_idc`, "
+                    "sum(`a`.`kol_using`) "
+                    "from `manufacture`.`det_tree` a "
+                    "join `manufacture`.`output` b on `a`.`det_idc` = `b`.`det_id` and a.`inst_idc` = b.`inst_id` "
+                    "group by `a`.`det_idc` ").c_str() );
 
 
     DB->SendCommand("CREATE TEMPORARY table `manufacture`.`opr_l_filter` "
