@@ -19,6 +19,7 @@ AnsiString GetOnlyNum(String st);
 bool   ischar (const char ch);
 bool   isdigit(const char ch);
 
+extern bool use_convertation;
 AnsiString GostToVin(AnsiString Gost);
 AnsiString GostToInt(AnsiString Gost);
 AnsiString VinToGost (AnsiString Vin);

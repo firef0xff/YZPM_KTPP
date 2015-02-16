@@ -1329,11 +1329,11 @@ bool TTechWnd::GreedDataControl(int ACol, int ARow)
             it_int=false;
             break;
         }
-    case 6:
+	case 6:
         {
-            Length=5;
+            Length=10;
             it_double=false;
-            it_int=true;
+            it_int=false;
             break;
         }
     case 7:

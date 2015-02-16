@@ -25,6 +25,7 @@
 #include "Settings_wnd.h"
 #include <Graphics.hpp>
 #include <Buttons.hpp>
+#include "otchetnost.h"
 
 class TmForm : public TForm
 {
@@ -60,7 +61,6 @@ __published:
     TMenuItem *N31;
     TMenuItem *N32;
     TPageControl *LeftPC;
-    TImageList *Img;
     TImageList *btns;
     TMenuItem *N26;
     TMenuItem *N27;
@@ -93,6 +93,7 @@ __published:
 	TToolButton *ResourceUsageBTN;
 	TMenuItem *N38;
 	TMenuItem *N39;
+	TImageList *Img;
     
     void __fastcall PCDrawTab(TCustomTabControl *Control, int TabIndex, const TRect &Rect,
           bool Active);
@@ -154,8 +155,9 @@ void         CloseTab     (TTabSheet *tab);
 
 typedef bool (*RepStart_func)(AnsiString type,AnsiString param);
 typedef void (*init_func)(AnsiString user,cSQL *DbWork);
-RepStart_func RepStart;
-init_func      RepInit;
+/*RepStart_func RepStart;
+init_func      RepInit;*/
+cReports *reports;
 public:
     __fastcall TmForm(TComponent* Owner);
     __fastcall ~TmForm(void);

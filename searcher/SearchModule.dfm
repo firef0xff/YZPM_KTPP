@@ -254,8 +254,6 @@ object Search: TSearch
       TabOrder = 0
       OnClick = MainTreeClick
       OnDblClick = MainTreeDblClick
-      ExplicitLeft = -4
-      ExplicitTop = 77
     end
     object Panel6: TPanel
       Left = 0
@@ -453,6 +451,7 @@ object Search: TSearch
       BorderStyle = bsNone
       Indent = 19
       MultiSelectStyle = [msControlSelect, msShiftSelect, msVisibleOnly, msSiblingOnly]
+      PopupMenu = PAB
       TabOrder = 0
       OnClick = TreeClick
       OnDblClick = MainTreeDblClick
@@ -588,6 +587,7 @@ object Search: TSearch
     end
   end
   object PAB: TPopupActionBar
+    Images = ImageList1
     MenuAnimation = [maLeftToRight]
     Left = 176
     Top = 192
@@ -628,7 +628,7 @@ object Search: TSearch
     Left = 96
     Top = 152
     Bitmap = {
-      494C010105000F00100010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000F00080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

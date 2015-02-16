@@ -2,12 +2,13 @@
 #pragma hdrstop
 
 #include "main.h"
+
 // ---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TmForm *mForm;
 
-__fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
+__fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0),reports(0)
 {
 #ifndef NODB
     ADC->ConnectionString="FILE NAME="+ExtractFileDir(Application->ExeName)+
@@ -16,16 +17,31 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
     ADC->Connected=true;
 #endif
     DB=new cSQL(ADC);
+    reports = new cReports(DB);
+
     TLogIn *wnd=new TLogIn(this, DB);
     wnd->ShowModal();
     selected=0;
+
+	TADOQuery *rez=DB->SendSQL("select lower(value) value  from administration.settings where property='designation_convert'");
+	if (rez&&!rez->FieldByName("value")->IsNull&&rez->FieldByName("value")->Value.operator UnicodeString()=="enabled")
+	{
+		use_convertation =true;
+	}
+	else
+	{
+		use_convertation =false;
+	}
+
     if(wnd->ModalResult==mrOk)
     {
         Tabs.clear();
         IcoData=new IconsData(this);
         LoadIL();
         UserID=wnd->Get_UserID();
+        reports->user = UserID;
         // настройка содержимого
+
         String sql="call administration.Get_Rights('"+String(UserID)+"')";
         TADOQuery *rez=DB->SendSQL(sql);
         bool SpView=false, TehRead=false, TehEdit=false, NormEdit=false, plan_pr_va_det=false,
@@ -108,7 +124,9 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
         N34->Visible=manufacture_view;
         N34->Enabled=manufacture_view;
         N35->Visible=manufacture_view;
-        N35->Enabled=manufacture_view;
+		N35->Enabled=manufacture_view;
+		//N38->Visible=manufacture_view;
+		//N38->Enabled=manufacture_view;
         ManufactureBTN->Visible = manufacture_view;
         N36->Visible=manufacture_view;
         N37->Visible=manufacture_view;
@@ -122,6 +140,7 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
          } */
         AddSearch(RightPC);
 
+
         String name=""; //добавить запрос на получение имени для отчета
         sql="call administration.Get_Name('"+String(UserID)+"')";
         rez=DB->SendSQL(sql);
@@ -130,7 +149,7 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
             name=rez->FieldByName("name")->Value;
         }
         delete rez;
-        HINSTANCE Reports=LoadLibrary(String("lib\\Reports.dll").c_str());
+        /*HINSTANCE Reports=LoadLibrary(String("lib\\Reports.dll").c_str());
         // загружаем длл
         if(Reports)
         {
@@ -141,12 +160,13 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
                 RepStart=(RepStart_func)GetProcAddress(Reports, "_Report");
                 // получаем указатель на функцию
             }
-        }
+        }*/
     }
     else
     {
         Application->Terminate();
     }
+
     /* динамический вызов
      typedef bool (*InetIsOffline_func)(int);
      InetIsOffline_func InetIsOffline;
@@ -1383,24 +1403,25 @@ void __fastcall TmForm::N10Click(TObject *Sender)
 
 void __fastcall TmForm::otchet(TObject *Sender)
 {
-    TMenuItem *Item=(TMenuItem *)Sender;
+	TMenuItem *Item=(TMenuItem *)Sender;
     if(Item)
     {
         /* int type=0;
-         switch (Item->Tag)
-         {
+		 switch (Item->Tag)
+		 {
          case 1:{type=1;break;}//развертка дерева
          case 2:{type=2;break;}//список состовляющих
          case 3:{type=3;break;}//план производстка
          case 4:{type=4;break;}//поиск по цеху
          case 5:{type=5;break;}//материалка основная
-         case 6:{type=6;break;}//технология
-         case 7:{type=7;break;}//материалки
-         case 8:{type=8;break;}//требование материала
+		 case 6:{type=6;break;}//технология
+		 case 7:{type=7;break;}//материалки
+		 case 8:{type=8;break;}//требование материала
          case 9:{type=9;break;}//ведомость котельных сборок
          case 10:{type=10;break;}//план производства для участка
-         case 11:{type=11;break;}//план производства для участка (ЧПУ)
-         default:return;
+		 case 11:{type=11;break;}//план производства для участка (ЧПУ)
+		 case 12:{type=12;break;}//требование покупных из нпо
+		 default:return;
          } */
         // получить обозначение
         String obd="";
@@ -1421,9 +1442,13 @@ void __fastcall TmForm::otchet(TObject *Sender)
         {
             if(Item->Tag)
             {
-                if(RepStart)
+                /*if(RepStart)
                 {
                     RepStart(Item->Tag, wnd->LE1->Text.Trim());
+                }*/
+                if (reports)
+                {
+                    reports->CreateReport(Item->Tag, wnd->LE1->Text.Trim());
                 }
             }
         }
@@ -1506,4 +1531,4 @@ void _ShowTree(const Obd *Det)
     }
 }
 //временные
-//---------------------------------------------------------------------------
+

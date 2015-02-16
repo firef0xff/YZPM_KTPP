@@ -3,6 +3,7 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 
+extern bool use_convertation=true;
 
 void MkPjDir(AnsiString subpart,AnsiString part)
 {
@@ -155,6 +156,10 @@ if (str.Pos(LowerCase(ch)))
 
 AnsiString GostToVin(AnsiString Gost)
 {
+	if (!use_convertation)
+	{
+    	return Gost;
+	}
 String tmp=Gost;
 Gost=Replace(Gost," ","");
 bool isp=false;    // показывает может ли отсутствовать исполнение в обозначении
@@ -211,6 +216,10 @@ if (Trim(Gost)==""){return "";} else
 }
 AnsiString GostToInt(AnsiString Gost)
 {
+	if (!use_convertation)
+	{
+    	return Gost;
+	}
 String tmp=Gost;
 Gost=Replace(Gost," ","");    // показывает может ли отсутствовать исполнение в обозначении
 if (Trim(Gost)==""){return "";} else
@@ -266,6 +275,10 @@ return st;
 }
 AnsiString VinToGost (AnsiString Vin)
 {
+	if (!use_convertation)
+	{
+    	return Vin;
+	}
 if (Vin.Length()!=15||GetOnlyNum(Vin).Length()!=Vin.Length()) {return Vin;}
 if (Vin.SubString(1,6)=="000000")
     {
