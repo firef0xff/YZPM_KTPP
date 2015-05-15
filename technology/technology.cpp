@@ -2514,7 +2514,7 @@ void __fastcall TTechWnd::operationsKeyDown(TObject *Sender, WORD &Key,
 
 void __fastcall TTechWnd::printbtnClick(TObject *Sender)
 {
-    TLogForm *wnd=new TLogForm(this, log);
+	TLogForm *wnd=new TLogForm(this, DB);
     wnd->ShowModal();
     delete wnd;
 }

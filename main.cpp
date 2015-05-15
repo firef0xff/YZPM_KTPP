@@ -1374,7 +1374,7 @@ void __fastcall TmForm::gonawayTimer(TObject *Sender)
 }
 void __fastcall TmForm::MailPannelClick(TObject *Sender)
 {
-    TLogForm *wnd=new TLogForm(this, DB->Get_log());
+    TLogForm *wnd=new TLogForm(this, DB);
     wnd->ShowModal();
     delete wnd;
 }
