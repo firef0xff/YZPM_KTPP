@@ -257,7 +257,7 @@ void __fastcall TSettings::UserAddClick(TObject *Sender)
 }
 void __fastcall TSettings::UserUpdateClick(TObject *Sender)
 {//закончена
-    if (sgUsers->RowCount&&(_UserEdit||_ChangePSWD&&sgUsers->Cells[USERIDCOL][sgUsers->Row]==String(LUser)))
+	if (sgUsers->RowCount&&(_UserEdit||_ChangePSWD&&sgUsers->Cells[USERIDCOL][sgUsers->Row]==String(LUser)))
     {
         //проверка наличия логина в базе
         TADOQuery *rez=DB->SendSQL("Select login,name,family,Otch,Levelacss from administration.logins where logID=\'"+sgUsers->Cells[USERIDCOL][sgUsers->Row]+"\'");
@@ -273,19 +273,26 @@ void __fastcall TSettings::UserUpdateClick(TObject *Sender)
                 int id=rez->FieldByName("Levelacss")->Value.IsNull()?0:rez->FieldByName("Levelacss")->Value.operator int();
                 wnd->cbGroup->ItemIndex=wnd->cbGroup->Items->IndexOfObject((TObject*)id);
                 if (wnd->ShowModal()==mrOk)
-                {
+				{
+					// Если введен непустой пароль, сохраняем его
+					String updatePassSql = "";
+					if (wnd->lePass->Text.Trim() != "")
+					{
+						updatePassSql = ",Pass=PASSWORD('" + wnd->lePass->Text.Trim() + "') ";
+					}
 
                     //составление запроса
                     String sql=    "update administration.logins set Login='"+wnd->leLogin->Text.Trim()+"',"
-                                "Name='"+wnd->leName->Text.Trim()+"',"
-                                "Family='"+wnd->leFam->Text.Trim()+"',"
-                                "Otch='"+wnd->leOtch->Text.Trim()+"',"
-                                "Pass=PASSWORD('"+wnd->lePass->Text.Trim()+"') ";
-                                if (_UserEdit)
-                                {
-                                    sql+=",Levelacss='"+String(int(wnd->cbGroup->Items->Objects[wnd->cbGroup->ItemIndex]))+"' ";
-                                }
-                                sql+="where LogID='"+sgUsers->Cells[USERIDCOL][sgUsers->Row]+"'";
+						+ "Name='"+wnd->leName->Text.Trim()+"',"
+						+ "Family='"+wnd->leFam->Text.Trim()+"',"
+						+ "Otch='"+wnd->leOtch->Text.Trim()+"'"
+						+ updatePassSql;
+
+					if (_UserEdit)
+					{
+						sql+=",Levelacss='"+String(int(wnd->cbGroup->Items->Objects[wnd->cbGroup->ItemIndex]))+"' ";
+					}
+					sql+="where LogID='"+sgUsers->Cells[USERIDCOL][sgUsers->Row]+"'";
 
                     //обновление данных пользователя
                     DB->SendCommand(sql);
