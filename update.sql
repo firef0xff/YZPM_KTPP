@@ -1,0 +1,1 @@
+insert into `administration`.`rights` (`id`, `name`, `progName`) values (41, 'Редактирование нарядов производства', 'manufacture_orders_edit'); 

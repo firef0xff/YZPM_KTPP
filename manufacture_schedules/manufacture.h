@@ -15,7 +15,9 @@
 #include <Tabs.hpp>
 #include <ActnPopup.hpp>
 #include <Menus.hpp>
+#include <Types.hpp>
 #include <PlatformDefaultStyleActnCtrls.hpp>
+#include "orders_history.h"
 
 #include "SQL.h"
 #include "IconsData.h"
@@ -263,7 +265,9 @@ __published:    // IDE-managed Components
 	TEdit *surch_reason;
 	TCheckBox *Show_Closed;
 	TMenuItem *N10;
-    void __fastcall CreateZapusk(TObject *Sender);
+	TPopupMenu *PMenuEditOrdersHistory;
+	TMenuItem *N11;
+	void __fastcall CreateZapusk(TObject *Sender);
     void __fastcall RemoveZapusk(TObject *Sender);
     void __fastcall InWorkZapusk(TObject *Sender);
     void __fastcall ToEditZapusk(TObject *Sender);
@@ -312,6 +316,7 @@ __published:    // IDE-managed Components
 	void __fastcall N9Click(TObject *Sender);
 	void __fastcall N8Click(TObject *Sender);
 	void __fastcall N10Click(TObject *Sender);
+	void __fastcall N11Click(TObject *Sender);
 
 
 
@@ -345,16 +350,26 @@ private:    // User declarations
     void UpdateOrderStatus (void);
     void UpdatePartsStatus (void);
 
-    void NarUpdate (int Row);
+
+    void NarListReloadWithSearch ();
+
+    // Проверяет, есть ли несохраненные данные в таблице нарядов
+    bool checkIfNeedSave();
 
     int **selected;
 
     const int &LUser;
     static IconsData *IcoData;
     static int count;
-    static cSQL *DB;
+	static cSQL *DB;
+
+	// Хранит последние координаты правого клика мышки на списке нарядов
+	TPoint SGNarListLastRightMouse;
+
+    bool manufacture_orders_edit;
 
 public:        // User declarations
+	void NarUpdate (int Row);
     __fastcall TManufactureControl(TComponent* Owner,TWinControl *_p, int &_LUser,cSQL *db,IconsData *_IcoData,int **_selected);
     __fastcall ~TManufactureControl(void);
 };

@@ -23,8 +23,8 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
 {
     if (count==0)
     {
-        DB=db;
-        IcoData=_IcoData;
+		DB=db;
+		IcoData=_IcoData;
     }
     count++;
     // расположение
@@ -36,12 +36,15 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
     {
         ((TTabSheet*)Parent)->Caption="Запуски     ";
     }
-    contentTV->Images=IcoData->GetImgList();
+	contentTV->Images=IcoData->GetImgList();
 
     // настройка содержимого
     std::stringstream sql; sql<<"call administration.Get_Rights('"<<LUser<<"')";
     TADOQuery *rez=DB->SendSQL(sql.str().c_str());
-    bool manufacture_orders=false,Run_at_manufacture=false,manufacture_view=false;
+    bool manufacture_orders=false,
+        Run_at_manufacture=false,
+        manufacture_view=false;
+    manufacture_orders_edit=false;
     if(rez)
     {
         for (rez->First(); !rez->Eof; rez->Next())
@@ -58,6 +61,10 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
             if (val=="manufacture_view")
             {
                 manufacture_view=true;
+            }
+            if (val=="manufacture_orders_edit")
+            {
+                manufacture_orders_edit=true;
             }
         }
         delete rez;
@@ -90,7 +97,7 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
     detSG->Cells[5][0] = "Труд.";
     detSG->Cells[6][0] = "Изготовлено";
     detSG->Cells[7][0] = "Брак";
-    AutoWidthSG(detSG);
+	AutoWidthSG(detSG);
 
     operSG->Cells[1][0] = "Подр.";
     operSG->Cells[2][0] = "№ ОП";
@@ -142,15 +149,15 @@ __fastcall TManufactureControl::TManufactureControl(TComponent* Owner,TWinContro
     detDetails->Cells[8][0] = "Брак";
     AutoWidthSG(detDetails);
 
-    SGNarList->Cells[1][0] = "Наряд";
-    SGNarList->Cells[2][0] = "Изгот.";
+	SGNarList->Cells[1][0] = "Наряд";
+	SGNarList->Cells[2][0] = "Изгот.";
     SGNarList->Cells[3][0] = "Брак";
     SGNarList->Cells[4][0] = "Таб №";
     SGNarList->Cells[5][0] = "Рабочий";
     SGNarList->Cells[6][0] = "Задание";
     SGNarList->Cells[7][0] = "Остаток";
     SGNarList->Cells[8][0] = "Деталь";
-    SGNarList->Cells[9][0] = "Операция";
+	SGNarList->Cells[9][0] = "Операция";
     SGNarList->Cells[10][0] = "Оборудование";
 	AutoWidthSG(SGNarList);
 
@@ -182,84 +189,84 @@ __fastcall    TManufactureControl::~TManufactureControl(void)
     if (count==0)
     {
         DB=0;
-        IcoData=0;
-    }
+		IcoData=0;
+	}
 }
 
 void TManufactureControl::LoadZapusk(String zapusk, String zakaz, String det)
 {
-    SGClear(zapSG,2);
-    zakTV->Items->Clear();
-    contentTV->Items->Clear();
+	SGClear(zapSG,2);
+	zakTV->Items->Clear();
+	contentTV->Items->Clear();
 
-    String zap_sql = "select distinct a.name, a.begin, a.end, a.zap_id, (a.in_work is not null) started from manufacture.manufacture_orders a "
-                     " left join manufacture.parts b on a.zap_id = b.zap_id ";
-    if (zakaz.Length() || det.Length())
-    {
-        if (zakaz.Length())
-        {
-            zap_sql +=  " join manufacture.zakaz_list e on b.zak_id = e.zak_id ";
-        }
+	String zap_sql = "select distinct a.name, a.begin, a.end, a.zap_id, (a.in_work is not null) started from manufacture.manufacture_orders a "
+					 " left join manufacture.parts b on a.zap_id = b.zap_id ";
+	if (zakaz.Length() || det.Length())
+	{
+		if (zakaz.Length())
+		{
+			zap_sql +=  " join manufacture.zakaz_list e on b.zak_id = e.zak_id ";
+		}
 
-        if (det.Length())
-        {
-            zap_sql +=  " join manufacture.part_content c on b.part_id = c.part_id "
-                        " join manufacture.det_names d on d.det_id = c.det_id ";
-        }
+		if (det.Length())
+		{
+			zap_sql +=  " join manufacture.part_content c on b.part_id = c.part_id "
+						" join manufacture.det_names d on d.det_id = c.det_id ";
+		}
 	}
 
-    String where = "where 1 ";
-    if (!Show_Closed->Checked)
+	String where = "where 1 ";
+	if (!Show_Closed->Checked)
 		where += " and b.close_date is null ";
-    else
-        where += " and b.close_date is not null ";
+	else
+		where += " and b.close_date is not null ";
 
-    if (zapusk.Length())
-    {
-        where += " and a.name like '%"+zapusk+"%' ";
-    }
-    if (zakaz.Length())
-    {
-        where += " and e.zakaz like '%"+zakaz+"%' ";
-    }
-    if (det.Length())
-    {
-        where += " and d.obd like '%"+GostToVin(det)+"%' ";
-    }
-    String order = "order by a.name";
-    TADOQuery *rez = DB->SendSQL(zap_sql+where+order);
-    if (rez && rez->RecordCount)
-    {
-        for (rez->First(); !rez->Eof; rez->Next())
-        {
-            int row = zapSG->RowCount - 1;
-            zapSG->Cells[1][row] = rez->FieldByName("name")->Value;
-            zapSG->Cells[2][row] = rez->FieldByName("begin")->Value;
-            zapSG->Cells[3][row] = rez->FieldByName("end")->Value;
-            zapSG->Cells[ZAP_ID_COL][row] = rez->FieldByName("zap_id")->Value;
-            zapSG->Cells[ZAP_IN_WORK_COL][row] = rez->FieldByName("started")->Value;
-            zapSG->RowCount ++;
-        }
-        if (zapSG->RowCount > 2)
-        {
-            zapSG->RowCount--;
-        }
-    }
-    delete rez;
-    AutoWidthSG(zapSG);
-    bool t;
-    zapSGSelectCell(this, zapSG->Col, zapSG->Row, t); 
+	if (zapusk.Length())
+	{
+		where += " and a.name like '%"+zapusk+"%' ";
+	}
+	if (zakaz.Length())
+	{
+		where += " and e.zakaz like '%"+zakaz+"%' ";
+	}
+	if (det.Length())
+	{
+		where += " and d.obd like '%"+GostToVin(det)+"%' ";
+	}
+	String order = "order by a.name";
+	TADOQuery *rez = DB->SendSQL(zap_sql+where+order);
+	if (rez && rez->RecordCount)
+	{
+		for (rez->First(); !rez->Eof; rez->Next())
+		{
+			int row = zapSG->RowCount - 1;
+			zapSG->Cells[1][row] = rez->FieldByName("name")->Value;
+			zapSG->Cells[2][row] = rez->FieldByName("begin")->Value;
+			zapSG->Cells[3][row] = rez->FieldByName("end")->Value;
+			zapSG->Cells[ZAP_ID_COL][row] = rez->FieldByName("zap_id")->Value;
+			zapSG->Cells[ZAP_IN_WORK_COL][row] = rez->FieldByName("started")->Value;
+			zapSG->RowCount ++;
+		}
+		if (zapSG->RowCount > 2)
+		{
+			zapSG->RowCount--;
+		}
+	}
+	delete rez;
+	AutoWidthSG(zapSG);
+	bool t;
+	zapSGSelectCell(this, zapSG->Col, zapSG->Row, t);
 }
 void TManufactureControl::LoadZakaz (String zap_id, String zakaz, String det)
 {
-    zakTV->Items->Clear();
+	zakTV->Items->Clear();
 
-    String zap_sql = "select a.zap_id, a.zak_id, a.part_no, a.part_id, b.zakaz, (a.in_work is not null) started  from manufacture.parts a "
-                     " join manufacture.zakaz_list b on a.zak_id = b.zak_id ";
-    if (zap_id.Length())
-    {
-        zap_sql +=     " join manufacture.manufacture_orders c on a.zap_id = c.zap_id ";
-    }
+	String zap_sql = "select a.zap_id, a.zak_id, a.part_no, a.part_id, b.zakaz, (a.in_work is not null) started  from manufacture.parts a "
+					 " join manufacture.zakaz_list b on a.zak_id = b.zak_id ";
+	if (zap_id.Length())
+	{
+		zap_sql +=     " join manufacture.manufacture_orders c on a.zap_id = c.zap_id ";
+	}
     if (det.Length())
     {
         zap_sql +=  " join manufacture.part_content d on a.part_id = d.part_id "
@@ -1029,7 +1036,7 @@ void __fastcall TManufactureControl::CreateZapusk(TObject *Sender)
         DB->SendCommand("insert into manufacture.manufacture_orders (begin,end,user,name) "
                     "values ('"+wnd->dtStart->Date.FormatString("yyyy-mm-dd")+"','"
                     +wnd->dtEnd->Date.FormatString("yyyy-mm-dd")+"','"+"user"+"','"+wnd->name->Text+"')");
-        LoadZapusk(wnd->name->Text,"","");
+		LoadZapusk(wnd->name->Text,"","");
     }
     delete wnd;
     return;
@@ -1271,7 +1278,7 @@ void __fastcall TManufactureControl::zakTVMouseDown(TObject *Sender, TMouseButto
                 LoadDetailData("", 0, ptr->getPartID(), 0,0);
             }
         }
-        else if (Button == TMouseButton::mbRight)
+		else if (Button == TMouseButton::mbRight)
         {
             NodeData *ptr = (NodeData *)node->Data;
             if (ptr)
@@ -1429,7 +1436,7 @@ void __fastcall TManufactureControl::contentTVExpanding(TObject *Sender, TTreeNo
 
 void __fastcall TManufactureControl::FindClick(TObject *Sender)
 {
-    LoadZapusk(Zap_name->Text,Zakaz->Text,Obozn->Text);
+	LoadZapusk(Zap_name->Text,Zakaz->Text,Obozn->Text);
     return;
 }
 void __fastcall TManufactureControl::ClearZpusk(TObject *Sender)
@@ -1678,178 +1685,23 @@ void __fastcall TManufactureControl::N7Click(TObject *Sender)
 //____________________________________________Закрытие нарядов_____________________________________________________
 void __fastcall TManufactureControl::btSearchClick(TObject *Sender)
 {
-    bool need_save = false;
-    for (size_t i = 0; i < SGNarList->RowCount && !need_save; ++i)
-    {
-        need_save = SGNarList->Cells[1][i] != "" && (SGNarList->Cells[2][i].ToIntDef(0) + SGNarList->Cells[3][i].ToIntDef(0))!=0;
-    }
-    if (need_save)
-    {
+
+    if (true == checkIfNeedSave() ) {
         if ( MessageBoxA(this->Handle, "Сохранить изменения?", "Сохранить изменения?",MB_YESNO|MB_ICONQUESTION) == mrYes )
+        {
             btSave->Click();
-    }
-    SGClear(SGNarList);
-
-    bool use_step1 = false;
-    bool use_step2 = false;
-    bool use_step3 = false;
-    bool use_step4 = false;
-
-    std::string step1_cleaner = "Drop temporary table if exists `manufacture`.`step1`";
-    std::string step3_cleaner = "Drop temporary table if exists `manufacture`.`step3`";
-    std::string step4_cleaner = "Drop temporary table if exists `manufacture`.`step4`";
-    if (leZak->Text.Length() || lePart->Text.Length())
-    {
-        use_step1 = true;
-        std::string sql = "Create temporary table if not exists `manufacture`.`step1` (det_id bigint(20) unsigned, key det_id(`det_id`)) as"
-                          " Select `a`.`det_id` from `manufacture`.`marsh_lists` a "
-                          " join `manufacture`.`parts` b on `b`.`part_id` = `a`.`part_id` "
-                          " join `manufacture`.`zakaz_list` c on `c`.`zak_id` = `b`.`zak_id` "
-                          " where true ";
-        if (leZak->Text.Length())
-        {
-            sql = sql + " and `c`.`zakaz` = '" + AnsiString(leZak->Text.Trim()).c_str() + "' ";
-        }
-        if (lePart->Text.Length())
-        {
-            sql = sql + " and `b`.`part_no` = '" + AnsiString(lePart->Text.Trim()).c_str() + "' ";
-        }
-
-        DB->SendCommand(step1_cleaner.c_str());
-        DB->SendCommand(sql.c_str());
-    }
-
-    if (leIzd->Text.Length())
-    {
-        use_step2 = true;
-        std::string sql = " Select convert(`a`.`det_id`,CHAR) det_id from `manufacture`.`part_content` a "
-                          " join `manufacture`.`det_names` b on `b`.`det_id` = `a`.`det_id` "
-                          " where b.obd = '"+std::string(GostToVin(leIzd->Text.Trim()).c_str())+"' ";
-        TADOQuery *rez = DB->SendSQL(sql.c_str());
-        if (rez)
-        {
-            if (rez->RecordCount)
-            {
-                std::string sql = "Call `manufacture`.`GetContentFull`('"+std::string((rez->FieldByName("det_id")->Value.operator AnsiString()).c_str())+"')";
-                DB->SendCommand(sql.c_str());
-            }
-            else
-            {
-                delete rez;
-                return;
-            }
-            delete rez;
         }
     }
 
-    if (leDet->Text.Length())
-    {
-        use_step3 = true;
-        std::string sql =   "Create temporary table if not exists `manufacture`.`step3` (det_id bigint(20) unsigned, key det_id(`det_id`)) as"
-                            " Select `a`.`det_id` from `manufacture`.`marsh_lists` a "
-                            " join `manufacture`.`det_names` b on `b`.`det_id` = `a`.`det_id` "
-                            " where b.obd = '"+std::string(GostToVin(leDet->Text.Trim()).c_str())+"' ";
-        DB->SendCommand(step3_cleaner.c_str());
-        DB->SendCommand(sql.c_str());
-    }
-
-    if (leNar->Text.Length())
-    {
-        use_step4 = true;
-        std::string sql =   "Create temporary table if not exists `manufacture`.`step4` (det_id bigint(20) unsigned, key det_id(`det_id`)) as"
-                            " Select `a`.`det_id` from `manufacture`.`marsh_lists` a "
-                            " join `manufacture`.`operation_list` b on `b`.`det_id` = `a`.`det_id` "
-                            " join `manufacture`.`orders` c on `c`.`operation_id` = `b`.`OpUUID` "
-                            " where c.order_id = '"+std::string(AnsiString(leNar->Text.Trim()).c_str())+"' ";
-        DB->SendCommand(step4_cleaner.c_str());
-        DB->SendCommand(sql.c_str());
-    }
-
-    if (use_step1 || use_step2 || use_step3 || use_step4)
-    {
-        std::string sql =   "select "
-                            " convert( `a`.`order_id` ,CHAR) as order_id, "
-                            " convert( `a`.`kol_request` ,CHAR) as kol_request, "
-                            " convert( `a`.`kol_unmaked` ,CHAR) as kol_unmaked, "
-                            " convert( `d`.`obd` ,CHAR) as obd, "
-                            " convert( trim(concat(`b`.`opr`,' ',IFNULL(`b`.`oprid`,''),' ',IFNULL(`e`.`name`,''))) ,CHAR) as oper, "
-                            " convert( trim(concat(IFNULL(`b`.`oboid`,''),' ',IFNULL(`f`.`name`,''))) ,CHAR) as obor  "
-                            " from `manufacture`.`orders` a "
-                            " join `manufacture`.`operation_list` b on `b`.`OpUUID` = `a`.`operation_id` "
-                            " join `manufacture`.`marsh_lists` c on `c`.`det_id` = `b`.`det_id` "
-                            " join `manufacture`.`det_names` d on `d`.`det_id` = `c`.`det_id` "
-                            " left join `equipment`.`opr_names` e on `e`.`OprID` = `b`.`oprid` "
-                            " left join `equipment`.`obor_list` f on `f`.`oboID` = `b`.`oboID` ";
-        if (use_step1)
-        {
-            sql += " join `manufacture`.`step1` s1 on `s1`.`det_id` = `c`.`det_id` ";
-        }
-        if (use_step2)
-        {
-            sql += " join `manufacture`.`output` s2 on `s2`.`det_id` = `c`.`det_id` ";
-        }
-        if (use_step3)
-        {
-            sql += " join `manufacture`.`step3` s3 on `s3`.`det_id` = `c`.`det_id` ";
-        }
-        if (use_step4)
-        {
-            sql += " join `manufacture`.`step4` s4 on `s4`.`det_id` = `c`.`det_id` ";
-        }
-
-        sql += " where true ";
-        switch (RG2->ItemIndex)
-        {
-            case 1:
-            {
-                sql += " and `a`.`kol_unmaked` = '0' ";
-                break;
-            }
-            case 2:
-            {
-                sql += " and `a`.`kol_unmaked` != '0' ";
-                break;
-            }
-            default: break;
-        }
-        sql += "order by `d`.`det_id`, `b`.`opr`, `b`.`oboid` ";
-
-        sql = sql + "LIMIT "+AnsiString(E2->Text.ToIntDef(0)*E3->Text.ToIntDef(0)-E3->Text.ToIntDef(0)).c_str()+","+AnsiString(E3->Text).c_str()+" ";
-
-
-        TADOQuery *rez = DB->SendSQL(sql.c_str());
-
-        DB->SendCommand(step1_cleaner.c_str());
-        DB->SendCommand(step3_cleaner.c_str());
-        DB->SendCommand(step4_cleaner.c_str());
-        if (rez)
-        {
-            for (rez->First(); !rez->Eof; rez->Next())
-            {
-                int row = SGNarList->RowCount-1;
-              SGNarList->Cells[1][row] = rez->FieldByName("order_id")->Value;
-//                SGNarList->Cells[2][row] = "Изгот.";
-//                SGNarList->Cells[3][row] = "Брак";
-//                SGNarList->Cells[4][row] = "Таб №";
-//                SGNarList->Cells[5][row] = "Рабочий";
-                SGNarList->Cells[6][row] = rez->FieldByName("kol_request")->Value;
-                SGNarList->Cells[7][row] = rez->FieldByName("kol_unmaked")->Value;
-                SGNarList->Cells[8][row] = VinToGost(rez->FieldByName("obd")->Value);
-                SGNarList->Cells[9][row] = rez->FieldByName("oper")->Value;
-                SGNarList->Cells[10][row]= rez->FieldByName("obor")->Value;
-
-                ++SGNarList->RowCount;
-            }
-            if (SGNarList->RowCount > 2)
-                --SGNarList->RowCount;
-            delete rez;
-        }
-    }
-    AutoWidthSG(SGNarList);
+    NarListReloadWithSearch();
 }
 void __fastcall TManufactureControl::SGNarListMouseDown(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y)
 {
+	if(Button == TMouseButton::mbRight) {
+		SGNarListLastRightMouse.X = X;
+		SGNarListLastRightMouse.Y = Y;
+	}
 //
 }
 void __fastcall TManufactureControl::SGNarListSelectCell(TObject *Sender, int ACol,
@@ -2059,7 +1911,7 @@ void __fastcall TManufactureControl::SGNarListSetEditText(TObject *Sender, int A
                 if (rez->RecordCount)
                 {
                     sg->Cells[5][ARow] = rez->FieldByName("fio")->Value;
-                    AutoWidthSG(SGNarList);
+					AutoWidthSG(SGNarList);
                 }
                 delete rez;
             }
@@ -2142,4 +1994,214 @@ void __fastcall TManufactureControl::N8Click(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+
+
+void __fastcall TManufactureControl::N11Click(TObject *Sender)
+{
+	int ACol,ARow;
+	SGNarList->MouseToCell(SGNarListLastRightMouse.X,SGNarListLastRightMouse.Y,ACol,ARow);
+
+	if(ARow < 1) {
+		return;
+	}
+
+    if(!manufacture_orders_edit) { // недостаточно прав
+        return;
+    }
+
+    if (true == checkIfNeedSave() ) {
+        if ( MessageBoxA(this->Handle, "Сохранить изменения в списке перед редактированием записи?", "Сохранить изменения?", MB_YESNO|MB_ICONQUESTION) == mrYes )
+        {
+            btSave->Click();
+        }
+        NarListReloadWithSearch();
+    }
+
+	int orderNum = SGNarList->Cells[1][ARow].ToIntDef(0);
+
+    if(orderNum < 1) {
+        return;
+    }
+
+	TwinEditOrdersHistory *wnd=new TwinEditOrdersHistory(this, DB, orderNum, ARow);
+	wnd->ShowModal();
+	delete wnd;
+}
+//---------------------------------------------------------------------------
+
+bool TManufactureControl::checkIfNeedSave() 
+{
+    bool need_save = false;
+    for (size_t i = 0; i < SGNarList->RowCount && !need_save; ++i)
+    {
+        need_save = SGNarList->Cells[1][i] != "" && (SGNarList->Cells[2][i].ToIntDef(0) + SGNarList->Cells[3][i].ToIntDef(0))!=0;
+    }
+    return need_save;
+}
+
+void TManufactureControl::NarListReloadWithSearch()
+{
+    SGClear(SGNarList);
+
+    bool use_step1 = false;
+    bool use_step2 = false;
+    bool use_step3 = false;
+    bool use_step4 = false;
+
+    std::string step1_cleaner = "Drop temporary table if exists `manufacture`.`step1`";
+    std::string step3_cleaner = "Drop temporary table if exists `manufacture`.`step3`";
+    std::string step4_cleaner = "Drop temporary table if exists `manufacture`.`step4`";
+    if (leZak->Text.Length() || lePart->Text.Length())
+    {
+        use_step1 = true;
+        std::string sql = "Create temporary table if not exists `manufacture`.`step1` (det_id bigint(20) unsigned, key det_id(`det_id`)) as"
+                          " Select `a`.`det_id` from `manufacture`.`marsh_lists` a "
+                          " join `manufacture`.`parts` b on `b`.`part_id` = `a`.`part_id` "
+                          " join `manufacture`.`zakaz_list` c on `c`.`zak_id` = `b`.`zak_id` "
+                          " where true ";
+        if (leZak->Text.Length())
+        {
+            sql = sql + " and `c`.`zakaz` = '" + AnsiString(leZak->Text.Trim()).c_str() + "' ";
+        }
+        if (lePart->Text.Length())
+        {
+            sql = sql + " and `b`.`part_no` = '" + AnsiString(lePart->Text.Trim()).c_str() + "' ";
+        }
+
+        DB->SendCommand(step1_cleaner.c_str());
+        DB->SendCommand(sql.c_str());
+    }
+
+    if (leIzd->Text.Length())
+    {
+        use_step2 = true;
+        std::string sql = " Select convert(`a`.`det_id`,CHAR) det_id from `manufacture`.`part_content` a "
+                          " join `manufacture`.`det_names` b on `b`.`det_id` = `a`.`det_id` "
+                          " where b.obd = '"+std::string(GostToVin(leIzd->Text.Trim()).c_str())+"' ";
+        TADOQuery *rez = DB->SendSQL(sql.c_str());
+        if (rez)
+        {
+            if (rez->RecordCount)
+            {
+                std::string sql = "Call `manufacture`.`GetContentFull`('"+std::string((rez->FieldByName("det_id")->Value.operator AnsiString()).c_str())+"')";
+                DB->SendCommand(sql.c_str());
+            }
+            else
+            {
+                delete rez;
+                return;
+            }
+            delete rez;
+        }
+    }
+
+    if (leDet->Text.Length())
+    {
+        use_step3 = true;
+        std::string sql =   "Create temporary table if not exists `manufacture`.`step3` (det_id bigint(20) unsigned, key det_id(`det_id`)) as"
+                            " Select `a`.`det_id` from `manufacture`.`marsh_lists` a "
+                            " join `manufacture`.`det_names` b on `b`.`det_id` = `a`.`det_id` "
+                            " where b.obd = '"+std::string(GostToVin(leDet->Text.Trim()).c_str())+"' ";
+        DB->SendCommand(step3_cleaner.c_str());
+        DB->SendCommand(sql.c_str());
+    }
+
+    if (leNar->Text.Length())
+    {
+        use_step4 = true;
+        std::string sql =   "Create temporary table if not exists `manufacture`.`step4` (det_id bigint(20) unsigned, key det_id(`det_id`)) as"
+                            " Select `a`.`det_id` from `manufacture`.`marsh_lists` a "
+                            " join `manufacture`.`operation_list` b on `b`.`det_id` = `a`.`det_id` "
+                            " join `manufacture`.`orders` c on `c`.`operation_id` = `b`.`OpUUID` "
+                            " where c.order_id = '"+std::string(AnsiString(leNar->Text.Trim()).c_str())+"' ";
+        DB->SendCommand(step4_cleaner.c_str());
+        DB->SendCommand(sql.c_str());
+    }
+
+    if (use_step1 || use_step2 || use_step3 || use_step4)
+    {
+        std::string sql =   "select "
+                            " convert( `a`.`order_id` ,CHAR) as order_id, "
+                            " convert( `a`.`kol_request` ,CHAR) as kol_request, "
+                            " convert( `a`.`kol_unmaked` ,CHAR) as kol_unmaked, "
+                            " convert( `d`.`obd` ,CHAR) as obd, "
+                            " convert( trim(concat(`b`.`opr`,' ',IFNULL(`b`.`oprid`,''),' ',IFNULL(`e`.`name`,''))) ,CHAR) as oper, "
+                            " convert( trim(concat(IFNULL(`b`.`oboid`,''),' ',IFNULL(`f`.`name`,''))) ,CHAR) as obor  "
+                            " from `manufacture`.`orders` a "
+                            " join `manufacture`.`operation_list` b on `b`.`OpUUID` = `a`.`operation_id` "
+                            " join `manufacture`.`marsh_lists` c on `c`.`det_id` = `b`.`det_id` "
+                            " join `manufacture`.`det_names` d on `d`.`det_id` = `c`.`det_id` "
+                            " left join `equipment`.`opr_names` e on `e`.`OprID` = `b`.`oprid` "
+                            " left join `equipment`.`obor_list` f on `f`.`oboID` = `b`.`oboID` ";
+        if (use_step1)
+        {
+            sql += " join `manufacture`.`step1` s1 on `s1`.`det_id` = `c`.`det_id` ";
+        }
+        if (use_step2)
+        {
+            sql += " join `manufacture`.`output` s2 on `s2`.`det_id` = `c`.`det_id` ";
+        }
+        if (use_step3)
+        {
+            sql += " join `manufacture`.`step3` s3 on `s3`.`det_id` = `c`.`det_id` ";
+        }
+        if (use_step4)
+        {
+            sql += " join `manufacture`.`step4` s4 on `s4`.`det_id` = `c`.`det_id` ";
+        }
+
+        sql += " where true ";
+        switch (RG2->ItemIndex)
+        {
+            case 1:
+            {
+                sql += " and `a`.`kol_unmaked` = '0' ";
+                break;
+            }
+            case 2:
+            {
+                sql += " and `a`.`kol_unmaked` != '0' ";
+                break;
+            }
+            default: break;
+        }
+        sql += "order by `d`.`det_id`, `b`.`opr`, `b`.`oboid` ";
+
+        sql = sql + "LIMIT "+AnsiString(E2->Text.ToIntDef(0)*E3->Text.ToIntDef(0)-E3->Text.ToIntDef(0)).c_str()+","+AnsiString(E3->Text).c_str()+" ";
+
+
+        TADOQuery *rez = DB->SendSQL(sql.c_str());
+
+        DB->SendCommand(step1_cleaner.c_str());
+        DB->SendCommand(step3_cleaner.c_str());
+        DB->SendCommand(step4_cleaner.c_str());
+        if (rez)
+        {
+            for (rez->First(); !rez->Eof; rez->Next())
+            {
+                int row = SGNarList->RowCount-1;
+                SGNarList->Cells[1][row] = rez->FieldByName("order_id")->Value;
+                // SGNarList->Cells[2][row] = "Изгот.";
+                // SGNarList->Cells[3][row] = "Брак";
+                // SGNarList->Cells[4][row] = "Таб №";
+                // SGNarList->Cells[5][row] = "Рабочий";
+                SGNarList->Cells[6][row] = rez->FieldByName("kol_request")->Value;
+                SGNarList->Cells[7][row] = rez->FieldByName("kol_unmaked")->Value;
+                SGNarList->Cells[8][row] = VinToGost(rez->FieldByName("obd")->Value);
+                SGNarList->Cells[9][row] = rez->FieldByName("oper")->Value;
+                SGNarList->Cells[10][row]= rez->FieldByName("obor")->Value;
+
+                ++SGNarList->RowCount;
+            }
+            if (SGNarList->RowCount > 2)
+                --SGNarList->RowCount;
+            delete rez;
+        }
+    }
+    AutoWidthSG(SGNarList);
+}
+
+    
+
+
 

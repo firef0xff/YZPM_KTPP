@@ -79,10 +79,6 @@ object mForm: TmForm
     object InfoTab: TTabSheet
       Caption = #1048#1085#1092#1086#1088#1084#1072#1094#1080#1103'      '
       ImageIndex = 8
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Info: TMemo
         Left = 0
         Top = 0
@@ -93,6 +89,8 @@ object mForm: TmForm
           '')
         ReadOnly = True
         TabOrder = 0
+        ExplicitLeft = 2
+        ExplicitTop = -2
       end
     end
   end
