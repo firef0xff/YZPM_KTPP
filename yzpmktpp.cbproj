@@ -523,7 +523,6 @@
 			<FormResources Include="manufacture_schedules\workers.dfm"/>
 			<FormResources Include="manufacture_schedules\ZakazCreator.dfm"/>
 			<FormResources Include="manufacture_schedules\ZapCreator.dfm"/>
-			<FormResources Include="orders_editor\OrderContent_set.dfm"/>
 			<FormResources Include="technology\support_modules\catalog_workpieces\redaktor_formul.dfm"/>
 			<FormResources Include="technology\support_modules\catalog_workpieces\zagotovk.dfm"/>
 			<FormResources Include="technology\support_modules\instrument.dfm"/>
@@ -532,20 +531,22 @@
 			<FormResources Include="technology\support_modules\tara_and_strop.dfm"/>
 			<FormResources Include="technology\support_modules\tecniksave.dfm"/>
 			<FormResources Include="technology\technology.dfm"/>
+			<FormResources Include="prepare_products_list\Izd_Unroll.dfm"/>
 			<FormResources Include="prepare_products_list\List_add.dfm"/>
 			<FormResources Include="prepare_products_list\select_params.dfm"/>
-			<FormResources Include="professions\professions.dfm"/>
+			<FormResources Include="orders_editor\OrderContent_set.dfm"/>
 			<FormResources Include="orders_editor\Orders.dfm"/>
 			<FormResources Include="orders_editor\Order_set.dfm"/>
-			<FormResources Include="prepare_products_list\Izd_Unroll.dfm"/>
-			<FormResources Include="reports\otchethost.dfm"/>
+			<FormResources Include="professions\professions.dfm"/>
+			<FormResources Include="sklad\material.dfm"/>
 			<FormResources Include="sklad\Mater_zam.dfm"/>
+			<FormResources Include="reports\otchethost.dfm"/>
 			<FormResources Include="searcher\SearchModule.dfm"/>
 			<FormResources Include="sklad\Add_mat.dfm"/>
-			<FormResources Include="sklad\material.dfm"/>
 			<FormResources Include="common\DetSelector.dfm"/>
-			<FormResources Include="boom_tree\contents\selector.dfm"/>
 			<FormResources Include="boom_tree\file_working\files.dfm"/>
+			<FormResources Include="log.dfm"/>
+			<FormResources Include="boom_tree\contents\selector.dfm"/>
 			<FormResources Include="boom_editor\Isp_editor.dfm"/>
 			<FormResources Include="boom_editor\Obd_edt.dfm"/>
 			<FormResources Include="boom_editor\razdel.dfm"/>
@@ -553,9 +554,8 @@
 			<FormResources Include="boom_tree\contents\Conditions.dfm"/>
 			<FormResources Include="boom_editor\sp_params.dfm"/>
 			<FormResources Include="boom_tree\BomTree.dfm"/>
-			<FormResources Include="log.dfm"/>
-			<FormResources Include="manufacture_schedules\manufacture.dfm"/>
 			<FormResources Include="manufacture_schedules\ReportBuilder.dfm"/>
+			<FormResources Include="manufacture_schedules\manufacture.dfm"/>
 			<FormResources Include="Login\dialogs\RightSelect.dfm"/>
 			<FormResources Include="Login\dialogs\User_Data.dfm"/>
 			<FormResources Include="Login\loginwin.dfm"/>
@@ -597,7 +597,7 @@
 						<VersionInfo Name="MajorVer">3</VersionInfo>
 						<VersionInfo Name="MinorVer">0</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">14</VersionInfo>
+						<VersionInfo Name="Build">17</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -609,7 +609,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName"/>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">3.0.0.14</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">3.0.0.17</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName"/>
 						<VersionInfoKeys Name="LegalCopyright"/>
 						<VersionInfoKeys Name="LegalTrademarks"/>

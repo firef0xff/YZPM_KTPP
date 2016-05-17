@@ -1399,7 +1399,8 @@ void __fastcall TmForm::otchet(TObject *Sender)
          case 8:{type=8;break;}//требование материала
          case 9:{type=9;break;}//ведомость котельных сборок
          case 10:{type=10;break;}//план производства для участка
-         case 11:{type=11;break;}//план производства для участка (ЧПУ)
+		 case 11:{type=11;break;}//план производства для участка (ЧПУ)
+		 case 12:{type=12;break;}//перечень оригинальных документов
          default:return;
          } */
         // получить обозначение

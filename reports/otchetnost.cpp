@@ -102,8 +102,10 @@ bool cReports::CreateReport(int type, String param)
         {
             modalresult=parametr->ShowModal();
             break;
-        }
-    default:
+		}
+	case 12:
+			break;
+	default:
         {
             sql="";
             return false;
@@ -130,8 +132,8 @@ bool cReports::CreateReport(int type, String param)
                 break;
             }
         case 4:
-            {
-                Showlist(DB->SendSQL(sql));
+			{
+				Showlist(DB->SendSQL(sql));
                 break;
             }
         case 5:
@@ -170,8 +172,13 @@ bool cReports::CreateReport(int type, String param)
             {
                 Cpu_Operation_Timing(param,parametr->zak->Text,parametr->kol->Text.ToInt(),parametr->cex->Text,parametr->part->Text);
                 break;
-            }
-        default:
+			}
+		case 12:
+			{
+				OriginDets( param );
+				break;
+			}
+		default:
             return false;
         }
         return true;
@@ -181,20 +188,20 @@ bool cReports::CreateReport(int type, String param)
 
 void cReports::Showlist(TADOQuery *rez)
 {
-    if(rez==0)
-    {
+	if(rez==0)
+	{
         ShowMessage("Ошибка формирования запроса/Пустой набор данных.");
         return;
     }
     XL->Connect();
-    XL->DisplayAlerts(false);
+	XL->DisplayAlerts(false);
     XL->SetActiveBooks(XL->Books_New());
     XL->SetActiveBook(XL->GetFirstBook());
     XL->SetActiveSheets(XL->GetSheets());
     XL->SetActiveSheet(XL->GetFirstSheet());
-    SQL_To_XL(rez);
+	SQL_To_XL(rez);
     XL->Visible(true);
-    delete rez;
+	delete rez;
 }
 
 void cReports::SQL_To_XL(TADOQuery *rez)
@@ -202,14 +209,14 @@ void cReports::SQL_To_XL(TADOQuery *rez)
     if(rez==0)
     {
         ShowMessage("Ошибка формирования запроса/Пустой набор данных.");
-        return;
-    }
-    int i;
+		return;
+	}
+	int i;
     for(i=0; i<rez->FieldCount; i++)
     {
         XL->toCells(1, i+1, rez->Fields->operator[](i)->FieldName.Trim());
         XL->Set_format(XL->GetColumn(i+1), "\@");
-    }
+	}
     rez->First();
     while(!rez->Eof)
     {
@@ -219,8 +226,8 @@ void cReports::SQL_To_XL(TADOQuery *rez)
                 Trim(rez->FieldByName(rez->Fields->operator[](i)->FieldName)
                 ->Value));
         }
-        rez->Next();
-    }
+		rez->Next();
+	}
 }
 
 void cReports::PlanPrDet(String obd, String kol)
@@ -2502,4 +2509,111 @@ String cReports::Get_Rascex(String obd)
     }
 
     return result.Trim();
+}
+
+void   cReports::OriginDets (String obd)
+{
+	TADOQuery *rez = DB->SendSQL( "Call temporary_tables.det_origin ('"+GostToVin(obd)+"')" );
+
+    if(rez==0)
+	{
+        ShowMessage("Ошибка формирования запроса/Пустой набор данных.");
+        return;
+    }
+
+	//получить расположение папки с шаблонами
+	AnsiString file="";
+	TADOQuery *rez2=DB->SendSQL("Select value from administration.settings where property='template'");
+	if (rez2&&rez2->RecordCount)
+	{
+		file=rez2->FieldByName("value")->Value.operator UnicodeString()+"orig_doc.xlt";
+	}
+	delete rez2;
+	if (file=="")
+	{
+		ShowMessage("потеряна директория с шаблонами");
+		return;
+	}
+
+
+	XL->Connect();
+	XL->DisplayAlerts(false);
+	XL->SetActiveBooks(XL->Books_Open(file));
+	// Инициализация переменных указателей на итемы екселя
+	XL->SetActiveBook(XL->GetFirstBook());
+	XL->SetActiveSheets(XL->GetSheets());
+	XL->SetActiveSheet(XL->GetFirstSheet());
+	//перебор строк по массиву
+	XL->Visible(false);
+
+	//инициализация переменных для вывода
+	int end=27,//номер последней строки листа
+		start=3, //номер первой строки листа
+		nl=32;//строка вывода обозначения
+	int list=2; //номер текущего листа
+	XL->SetActiveSheet(XL->GetFirstSheet());
+	list=1;
+	int ppp=0,Razd=-1,ofset=0,k=1;
+
+	rez->First();
+	for (int j=start;!rez->Eof; j++,rez->Next())
+	{
+		if (j>end)
+		{
+			XL->toCells(nl,11,VinToGost(obd));
+			if (list==1)
+			{
+				XL->toCells(35,11,"Перечень оригинальных документов.");
+				XL->toCells(36,17,list);
+				nl=37;
+			}else
+			{
+				XL->toCells(38,19,list);
+			}
+			end=30;
+			list++;
+			XL->SetActiveSheet(XL->GetSheet(list));
+			XL->Sheet_Copy(XL->GetSheet(list),XL->GetSheet(list+1));
+			XL->Set_Sheet_Name(XL->GetSheet(list+1),"Лист"+String(list+1));
+			j=start;
+		}
+		XL->toCells(j,4,VinToGost(rez->FieldByName("format")->Value)); //обозначение
+		XL->toCells(j,8,VinToGost(rez->FieldByName("obd")->Value)); //обозначение
+
+		String name=VinToGost(rez->FieldByName("name")->Value);
+		int cnt=30;       //перенос
+		while (name.Length()>cnt)
+		{
+			int pos=cnt;
+			while (name.operator [](pos)!=' '&&pos>1)
+			{
+				pos--;
+			}
+			if (pos==1)
+			{
+				pos=cnt;
+			}
+			XL->toCells(j,12,name.SubString(1,pos));
+			name.Delete(1,pos);
+			j++;
+		}
+		XL->toCells(j,12,name);
+	}
+
+	XL->toCells(nl,11, VinToGost(obd));
+	if (list==1)
+	{
+		XL->toCells(35,11,"Перечень оригинальных документов.");
+		XL->toCells(36,17,list);
+		nl=37;
+	}else
+	{
+		XL->toCells(38,19,list);
+	}
+	XL->SetActiveSheet(XL->GetFirstSheet());
+	XL->Sheet_activate();
+	XL->toCells(36,19,list);
+	XL->Visible(true);
+
+	delete rez;
 }

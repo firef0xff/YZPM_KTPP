@@ -93,6 +93,7 @@ __published:
 	TToolButton *ResourceUsageBTN;
 	TMenuItem *N38;
 	TMenuItem *N39;
+	TMenuItem *N40;
     
     void __fastcall PCDrawTab(TCustomTabControl *Control, int TabIndex, const TRect &Rect,
           bool Active);

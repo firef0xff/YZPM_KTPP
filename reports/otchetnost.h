@@ -76,6 +76,9 @@ void    Boiler_Assemblies    (String obd,String zak,int kol,String ceu,String pa
 void    Operation_Timing    (String obd,String zak,int kol,String ceu,String part);//140006
 void    Cpu_Operation_Timing(String obd,String zak,int kol,String ceu,String part);//1400061
 String     Get_Rascex        (String obd);
+
+void    OriginDets			(String obd);
+
 public:
 void    WordWrap        (std::vector<String> &out,String in,const int max_len,String delimeter=" ");
     Tkoldet *koldet;
