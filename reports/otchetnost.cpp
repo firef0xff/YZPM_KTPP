@@ -2578,7 +2578,8 @@ void   cReports::OriginDets (String obd)
 			j=start;
 		}
 		XL->toCells(j,4,VinToGost(rez->FieldByName("format")->Value)); //обозначение
-		XL->toCells(j,8,VinToGost(rez->FieldByName("obd")->Value)); //обозначение
+		AnsiString obd = VinToGost(rez->FieldByName("obd")->Value);
+		XL->toCells(j,8, obd); //обозначение
 
 		String name=VinToGost(rez->FieldByName("name")->Value);
 		int cnt=30;       //перенос
@@ -2598,6 +2599,8 @@ void   cReports::OriginDets (String obd)
 			j++;
 		}
 		XL->toCells(j,12,name);
+		if ( obd.SubString( obd.Length() - 1, 2 ) == "00" )
+			j++;
 	}
 
 	XL->toCells(nl,11, VinToGost(obd));
