@@ -2599,7 +2599,7 @@ void   cReports::OriginDets (String obd)
 			j++;
 		}
 		XL->toCells(j,12,name);
-		if ( obd.SubString( obd.Length() - 1, 2 ) == "00" )
+		if ( obd.SubString( obd.Length() - 3, 4 ) == "0-00" )
 			j++;
 	}
 
