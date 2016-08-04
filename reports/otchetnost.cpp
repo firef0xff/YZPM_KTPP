@@ -37,8 +37,7 @@ bool cReports::CreateReport(int type, String param)
     switch(type)
     {
     case 1:
-        {
-            sql="Call temporary_tables.det_list ('"+GostToVin(param)+"')";
+        {            
             break;
         }
     case 2:
@@ -117,8 +116,8 @@ bool cReports::CreateReport(int type, String param)
         switch(type)
         {
         case 1:
-            {
-                ShowSostIzd(DB->SendSQL(sql));
+            {            
+                ShowSostIzd( param );
                 break;
             }
         case 2:
@@ -727,8 +726,9 @@ void cReports::ShowDetInside(TADOQuery *rez)
     XL->Visible(true);
 }
 
-void cReports::ShowSostIzd(TADOQuery *rez)
+void cReports::ShowSostIzd( String obd )
 {
+    TADOQuery *rez = DB->SendSQL("Call temporary_tables.det_list ('"+GostToVin(obd)+"')" );
     if(rez==0)
     {
         ShowMessage("Ошибка формирования запроса");
@@ -762,7 +762,7 @@ void cReports::ShowSostIzd(TADOQuery *rez)
     XL->Range_ColWidth(XL->GetRange(1, 3, 1, 4), 15);
     XL->Set_format(XL->GetColumn(1), "\@");
     row=3;
-    SostIzd(rez, row, 0, ""); // вывод массива данных  рекурсивный
+    SostIzd(rez, row, 0,1); // вывод массива данных  рекурсивный
     XL->Range_Merge(XL->GetRange(1, 1, 1, 3));
     XL->HorizontalAlignment(XL->GetRange(1, 1, 1, 3), -4108);
     /* тут рисовка сетки на полуившийся лист */
@@ -781,20 +781,8 @@ void cReports::ShowSostIzd(TADOQuery *rez)
     XL->Visible(true);
 }
 
-void cReports::SostIzd(TADOQuery *rez, int &row, int lvl, String obd)
+void cReports::SostIzd(TADOQuery *rez, int &row, int lvl, int base_kol)
 {
-    if(rez==0)
-    {
-        ShowMessage("Ошибка формирования запроса");
-        return;
-    }
-    if(!rez->RecordCount)
-    {
-        ShowMessage("Пустой набор данных.");
-        delete rez;
-        return;
-    } // активация
-    int tmprow;
     String tab="";
     while(tab.Length()<lvl*5)
     {
@@ -802,21 +790,25 @@ void cReports::SostIzd(TADOQuery *rez, int &row, int lvl, String obd)
     }
     rez->First();
     while(!rez->Eof)
-    {
-        if(Trim(rez->FieldByName("obu")->Value)==obd&&Trim
-            (rez->FieldByName("lvl")->Value)==lvl)
+	{
+		String obd = Trim(VinToGost(rez->FieldByName("obd")->Value));
+		XL->toCells(row, 1,tab+obd);
+        if(!rez->FieldByName("namd")->Value.IsNull())
         {
-            XL->toCells(row, 1,
-                tab+Trim(VinToGost(rez->FieldByName("obd")->Value)));
-            if(!rez->FieldByName("namd")->Value.IsNull())
+            XL->toCells(row, 2, Trim(rez->FieldByName("namd")->Value));
+		}
+		int kol = Trim(rez->FieldByName("kol")->Value).ToIntDef(1)*base_kol;
+		XL->toCells(row, 3, String(kol));
+        row++ ;
+
+        TADOQuery *rez2 = DB->SendSQL("Call temporary_tables.det_list ('"+GostToVin(obd)+"')" );
+        if(rez2)
+        {
+            if(rez2->RecordCount)
             {
-                XL->toCells(row, 2, Trim(rez->FieldByName("namd")->Value));
+                SostIzd(rez2, row, lvl+1, kol);
+                delete rez2;
             }
-            XL->toCells(row, 3, Trim(rez->FieldByName("kol")->Value));
-            row++ ;
-            tmprow=rez->RecNo;
-            SostIzd(rez, row, lvl+1, Trim(rez->FieldByName("obd")->Value));
-            rez->RecNo=tmprow;
         }
         rez->Next();
     }

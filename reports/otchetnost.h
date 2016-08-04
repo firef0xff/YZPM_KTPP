@@ -58,8 +58,8 @@ void    TrimFile        (String file_name,String file_ext,String templ, int &Lco
 
 void      ShowDetInside    (TADOQuery *rez);
 
-void    ShowSostIzd        (TADOQuery *rez);
-void    SostIzd            (TADOQuery *rez,int &row, int lvl,String obd);
+void    ShowSostIzd        (String obd);
+void    SostIzd            (TADOQuery *rez,int &row, int lvl, int base_kol);
 
 void      Mat_report        (TADOQuery *rez,String obd);
 
