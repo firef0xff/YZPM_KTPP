@@ -95,7 +95,7 @@ __published:
     TMenuItem *N38;
     TMenuItem *N39;
     TMenuItem *N40;
-    MenuItem *N381;
+    TMenuItem *N381;
     
     void __fastcall PCDrawTab(TCustomTabControl *Control, int TabIndex, const TRect &Rect,
           bool Active);

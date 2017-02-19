@@ -26,10 +26,10 @@
 			<BCC_SelectedOptimizations>true</BCC_SelectedOptimizations>
 			<OutputExt>exe</OutputExt>
 			<LinkPackageStatics>rtl.lib;vcl.lib;adortl.lib;dbrtl.lib;vclactnband.lib;vclx.lib;vcldb.lib</LinkPackageStatics>
-			<ILINK_LibraryPath>E:\mylib\SQL\;E:\mylib\Excel\;manufacture_schedules\Calck\;manufacture_schedules\surcharge\;manufacture_schedules\reports\exsemplars\;manufacture_schedules\reports\;technology\support_modules\catalog_workpieces\;technology\support_modules\;technology\data_classes\;technology\;professions\;boom_editor\;orders_editor\;searcher\;prepare_products_list\;reports\;common\;sklad\;manufacture_schedules\;boom_tree\contents\;boom_tree\file_working\;boom_tree\;Login\dialogs\;Login\;F:\mylib\Excel\;F:\mylib\SQL\;интерфейс запусков\;редактор заказов\;Логин\диалоги\;подготовка списка деталей\;на асу\;отчетность\;справочник профессий\;редактор спецификаций\;технология\вспомогательные модули\справочник заготовок\;материалы\;Логин\;технология\вспомогательные модули\;..\..\RAD Studio\8.0\Imports\;технология\классы данных\;поиск\;технология\;дерево спецификации\работа с файлами\;дерево спецификации\;общие функции и классы\;дерево спецификации\состояния\;общие функции\;..\мои классы\;..\..\проекты\Файловая база 3\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<ILINK_LibraryPath>D:\mylib\SQL\;D:\mylib\Excel\;E:\mylib\SQL\;E:\mylib\Excel\;manufacture_schedules\Calck\;manufacture_schedules\surcharge\;manufacture_schedules\reports\exsemplars\;manufacture_schedules\reports\;technology\support_modules\catalog_workpieces\;technology\support_modules\;technology\data_classes\;technology\;professions\;boom_editor\;orders_editor\;searcher\;prepare_products_list\;reports\;common\;sklad\;manufacture_schedules\;boom_tree\contents\;boom_tree\file_working\;boom_tree\;Login\dialogs\;Login\;F:\mylib\Excel\;F:\mylib\SQL\;интерфейс запусков\;редактор заказов\;Логин\диалоги\;подготовка списка деталей\;на асу\;отчетность\;справочник профессий\;редактор спецификаций\;технология\вспомогательные модули\справочник заготовок\;материалы\;Логин\;технология\вспомогательные модули\;..\..\RAD Studio\8.0\Imports\;технология\классы данных\;поиск\;технология\;дерево спецификации\работа с файлами\;дерево спецификации\;общие функции и классы\;дерево спецификации\состояния\;общие функции\;..\мои классы\;..\..\проекты\Файловая база 3\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
 			<PackageImports>vclimg.bpi;vcl.bpi;vclx.bpi;dbrtl.bpi;Rave90VCL.bpi;bdertl.bpi;rtl.bpi;bcbie.bpi;xmlrtl.bpi;vclactnband.bpi;bcbsmp.bpi;VclSmp.bpi;svnui.bpi;svn.bpi;TeeUI.bpi;TeeDB.bpi;Tee.bpi;vcldb.bpi;vcldbx.bpi;vcltouch.bpi;dsnap.bpi;dsnapcon.bpi;vclib.bpi;ibxpress.bpi;adortl.bpi;IndyCore.bpi;IndySystem.bpi;IndyProtocols.bpi;inet.bpi;intrawebdb_110_150.bpi;Intraweb_110_150.bpi;vclie.bpi;websnap.bpi;webdsnap.bpi;inetdb.bpi;inetdbbde.bpi;inetdbxpress.bpi;soaprtl.bpi;vclribbon.bpi;dbexpress.bpi;DbxCommonDriver.bpi;DataSnapIndy10ServerTransport.bpi;DataSnapProviderClient.bpi;DbxClientDriver.bpi;DataSnapClient.bpi;dbxcds.bpi;DataSnapServer.bpi;AzureCloud.bpi;DBXInterBaseDriver.bpi;DBXMySQLDriver.bpi;DBXFirebirdDriver.bpi;DBXSybaseASEDriver.bpi;DBXSybaseASADriver.bpi;DBXOracleDriver.bpi;DBXMSSQLDriver.bpi;DBXInformixDriver.bpi;DBXDb2Driver.bpi;CodeSiteExpressVcl.bpi;volo.bpi</PackageImports>
 			<Multithreaded>true</Multithreaded>
-			<IncludePath>E:\mylib\SQL\;E:\mylib\Excel\;manufacture_schedules\Calck\;manufacture_schedules\surcharge\;manufacture_schedules\reports\exsemplars\;manufacture_schedules\reports\;technology\support_modules\catalog_workpieces\;technology\support_modules\;technology\data_classes\;technology\;professions\;boom_editor\;orders_editor\;searcher\;prepare_products_list\;reports\;common\;sklad\;manufacture_schedules\;boom_tree\contents\;boom_tree\file_working\;boom_tree\;Login\dialogs\;Login\;F:\mylib\Excel\;F:\mylib\SQL\;интерфейс запусков\;редактор заказов\;Логин\диалоги\;подготовка списка деталей\;на асу\;отчетность\;справочник профессий\;редактор спецификаций\;технология\вспомогательные модули\справочник заготовок\;материалы\;Логин\;технология\вспомогательные модули\;..\..\RAD Studio\8.0\Imports\;технология\классы данных\;поиск\;технология\;дерево спецификации\работа с файлами\;дерево спецификации\;общие функции и классы\;дерево спецификации\состояния\;общие функции\;..\мои классы\;..\..\проекты\Файловая база 3\;$(IncludePath)</IncludePath>
+			<IncludePath>D:\mylib\SQL\;D:\mylib\Excel\;E:\mylib\SQL\;E:\mylib\Excel\;manufacture_schedules\Calck\;manufacture_schedules\surcharge\;manufacture_schedules\reports\exsemplars\;manufacture_schedules\reports\;technology\support_modules\catalog_workpieces\;technology\support_modules\;technology\data_classes\;technology\;professions\;boom_editor\;orders_editor\;searcher\;prepare_products_list\;reports\;common\;sklad\;manufacture_schedules\;boom_tree\contents\;boom_tree\file_working\;boom_tree\;Login\dialogs\;Login\;F:\mylib\Excel\;F:\mylib\SQL\;интерфейс запусков\;редактор заказов\;Логин\диалоги\;подготовка списка деталей\;на асу\;отчетность\;справочник профессий\;редактор спецификаций\;технология\вспомогательные модули\справочник заготовок\;материалы\;Логин\;технология\вспомогательные модули\;..\..\RAD Studio\8.0\Imports\;технология\классы данных\;поиск\;технология\;дерево спецификации\работа с файлами\;дерево спецификации\;общие функции и классы\;дерево спецификации\состояния\;общие функции\;..\мои классы\;..\..\проекты\Файловая база 3\;$(IncludePath)</IncludePath>
 			<AllPackageLibs>rtl.lib;vcl.lib;adortl.lib;dbrtl.lib;vclactnband.lib;vclx.lib;vcldb.lib</AllPackageLibs>
 			<ProjectType>CppVCLApplication</ProjectType>
 			<_TCHARMapping>wchar_t</_TCHARMapping>
@@ -66,13 +66,13 @@
 			<TASM_Debugging>None</TASM_Debugging>
 		</PropertyGroup>
 		<ItemGroup>
-			<CppCompile Include="E:\mylib\Excel\Excel.cpp">
-				<DependentOn>E:\mylib\Excel\Excel.h</DependentOn>
-				<BuildOrder>99</BuildOrder>
+			<CppCompile Include="D:\mylib\Excel\Excel.cpp">
+				<DependentOn>D:\mylib\Excel\Excel.h</DependentOn>
+				<BuildOrder>108</BuildOrder>
 			</CppCompile>
-			<CppCompile Include="E:\mylib\SQL\SQL.cpp">
-				<DependentOn>E:\mylib\SQL\SQL.h</DependentOn>
-				<BuildOrder>100</BuildOrder>
+			<CppCompile Include="D:\mylib\SQL\SQL.cpp">
+				<DependentOn>D:\mylib\SQL\SQL.h</DependentOn>
+				<BuildOrder>108</BuildOrder>
 			</CppCompile>
 			<CppCompile Include="boom_editor\IspData.cpp">
 				<DependentOn>boom_editor\IspData.h</DependentOn>

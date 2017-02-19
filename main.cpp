@@ -113,8 +113,8 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0),reports(0)
         N34->Enabled=manufacture_view;
         N35->Visible=manufacture_view;
         N35->Enabled=manufacture_view;
-        N38->Visible=manufacture_view;
-        N38->Enabled=manufacture_view;
+		N381->Visible=manufacture_view;
+        N381->Enabled=manufacture_view;
         ManufactureBTN->Visible = manufacture_view;
         N36->Visible=manufacture_view;
         N37->Visible=manufacture_view;
