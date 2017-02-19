@@ -343,7 +343,7 @@ if (condition.Pos(" zakaz "))
     {
     //добавить вхождение в заказы
     sql+="right join market.zakaz c on c.id=a.id ";
-    sql+="right join market.Orders c1 on c.zakaz_id=c1.zakaz_id ";
+    sql+="right join market.orders c1 on c.zakaz_id=c1.zakaz_id ";
     }
 if (condition.Pos(" obmid "))
     {

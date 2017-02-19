@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+﻿//---------------------------------------------------------------------------
 
 #ifndef otchetnostH
 #define otchetnostH
@@ -71,6 +71,7 @@ void    Mat_Ved_Komplect    (String obd,String zak,int kol);
 void    Mat_Ved_razd        (TADOQuery *rez,const String &obd,const String &zak,const String &Title,int &list);
 
 void    Trebovanie_Materialov    (String obd,String zak,int kol);
+void    Trebovanie_Standart    (String obd,String zak,int kol);
 
 void    Boiler_Assemblies    (String obd,String zak,int kol,String ceu,String part);
 void    Operation_Timing    (String obd,String zak,int kol,String ceu,String part);//140006

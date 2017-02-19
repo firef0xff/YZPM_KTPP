@@ -25,6 +25,7 @@
 #include "Settings_wnd.h"
 #include <Graphics.hpp>
 #include <Buttons.hpp>
+#include "otchetnost.h"
 
 class TmForm : public TForm
 {
@@ -90,10 +91,11 @@ __published:
     TToolButton *ToolButton2;
     TMenuItem *N36;
     TMenuItem *N37;
-	TToolButton *ResourceUsageBTN;
-	TMenuItem *N38;
-	TMenuItem *N39;
-	TMenuItem *N40;
+    TToolButton *ResourceUsageBTN;
+    TMenuItem *N38;
+    TMenuItem *N39;
+    TMenuItem *N40;
+    MenuItem *N381;
     
     void __fastcall PCDrawTab(TCustomTabControl *Control, int TabIndex, const TRect &Rect,
           bool Active);
@@ -136,8 +138,8 @@ __published:
     void __fastcall OrdersClick(TObject *Sender);
     void __fastcall ManufactureBTNClick(TObject *Sender);
     void __fastcall ManufactureClick(TObject *Sender);
-	void __fastcall ResourceUsageBTNClick(TObject *Sender);
-	void __fastcall ResourceUsageClick(TObject *Sender);
+    void __fastcall ResourceUsageBTNClick(TObject *Sender);
+    void __fastcall ResourceUsageClick(TObject *Sender);
 
     
 
@@ -155,8 +157,9 @@ void         CloseTab     (TTabSheet *tab);
 
 typedef bool (*RepStart_func)(AnsiString type,AnsiString param);
 typedef void (*init_func)(AnsiString user,cSQL *DbWork);
-RepStart_func RepStart;
-init_func      RepInit;
+/*RepStart_func RepStart;
+init_func      RepInit;*/
+cReports *reports;
 public:
     __fastcall TmForm(TComponent* Owner);
     __fastcall ~TmForm(void);

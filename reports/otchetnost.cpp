@@ -102,10 +102,15 @@ bool cReports::CreateReport(int type, String param)
         {
             modalresult=parametr->ShowModal();
             break;
-		}
-	case 12:
-			break;
-	default:
+        }
+    case 12:
+        break;
+    case 13:
+        {
+            modalresult=parametr->ShowModal();
+            break;
+        }
+    default:
         {
             sql="";
             return false;
@@ -132,8 +137,8 @@ bool cReports::CreateReport(int type, String param)
                 break;
             }
         case 4:
-			{
-				Showlist(DB->SendSQL(sql));
+            {
+                Showlist(DB->SendSQL(sql));
                 break;
             }
         case 5:
@@ -172,13 +177,19 @@ bool cReports::CreateReport(int type, String param)
             {
                 Cpu_Operation_Timing(param,parametr->zak->Text,parametr->kol->Text.ToInt(),parametr->cex->Text,parametr->part->Text);
                 break;
-			}
-		case 12:
-			{
-				OriginDets( param );
-				break;
-			}
-		default:
+            }
+        case 12:
+           {
+               OriginDets( param );
+               break;
+           }
+        case 13:
+            {
+                Trebovanie_Standart(param, parametr->zak->Text,
+                                    parametr->kol->Text.ToInt());
+                break;
+            }
+        default:
             return false;
         }
         return true;
@@ -188,20 +199,20 @@ bool cReports::CreateReport(int type, String param)
 
 void cReports::Showlist(TADOQuery *rez)
 {
-	if(rez==0)
-	{
+    if(rez==0)
+    {
         ShowMessage("Ошибка формирования запроса/Пустой набор данных.");
         return;
     }
     XL->Connect();
-	XL->DisplayAlerts(false);
+    XL->DisplayAlerts(false);
     XL->SetActiveBooks(XL->Books_New());
     XL->SetActiveBook(XL->GetFirstBook());
     XL->SetActiveSheets(XL->GetSheets());
     XL->SetActiveSheet(XL->GetFirstSheet());
-	SQL_To_XL(rez);
+    SQL_To_XL(rez);
     XL->Visible(true);
-	delete rez;
+    delete rez;
 }
 
 void cReports::SQL_To_XL(TADOQuery *rez)
@@ -209,14 +220,14 @@ void cReports::SQL_To_XL(TADOQuery *rez)
     if(rez==0)
     {
         ShowMessage("Ошибка формирования запроса/Пустой набор данных.");
-		return;
-	}
-	int i;
+        return;
+    }
+    int i;
     for(i=0; i<rez->FieldCount; i++)
     {
         XL->toCells(1, i+1, rez->Fields->operator[](i)->FieldName.Trim());
         XL->Set_format(XL->GetColumn(i+1), "\@");
-	}
+    }
     rez->First();
     while(!rez->Eof)
     {
@@ -226,8 +237,8 @@ void cReports::SQL_To_XL(TADOQuery *rez)
                 Trim(rez->FieldByName(rez->Fields->operator[](i)->FieldName)
                 ->Value));
         }
-		rez->Next();
-	}
+        rez->Next();
+    }
 }
 
 void cReports::PlanPrDet(String obd, String kol)
@@ -836,6 +847,14 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
         return;
     } // активация
 
+    String name;
+    TADOQuery *rez_nm = DB->SendSQL("select a.namd from `constructions`.`det_names` a where obd = '"+GostToVin(obd)+"'");
+    if (rez_nm)
+    {
+        name = rez_nm->FieldByName("namd")->Value;
+        delete rez_nm;
+    }
+
     AnsiString file=Templates+"materials.xlt";
     XL->Connect();
     // XL->Visible(true);
@@ -863,7 +882,8 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
             XL->Range_Copy(XL->GetRows(14, 19));
             XL->Range_Paste(XL->GetRows(8, 13));
             // запись шапки/
-            XL->toCells(2, 5, VinToGost(obd)+" "+parametr->zak->Text);
+            XL->toCells(2, 3, VinToGost(obd)+" "+parametr->zak->Text);
+            XL->toCells(2, 4, name);
             XL->toCells(1, 7, "Лист "+IntToStr(Lcount));
             newpage=false;
         }
@@ -925,7 +945,8 @@ void cReports::Mat_report(TADOQuery *rez, String obd)
             XL->Range_Copy(XL->GetRows(8, 10));
             XL->Range_Paste(XL->GetRows(5, 7));
             // запись шапки/
-            XL->toCells(1, 3, VinToGost(obd));
+            XL->toCells(1, 1, VinToGost(obd));
+            XL->toCells(1, 2, name);
             XL->toCells(1, 9, parametr->zak->Text);
             XL->toCells(1, 10, "Лист "+IntToStr(Lcount));
             newpage=false;
@@ -1578,16 +1599,18 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
         rez->First();
     }
 
+	String cex;
+	String utch;
     do
     {
         bool newpage=true;
         //получим список материалов для цеха
-        String cex;
-        String utch;
         if (rez)
         {
-            cex=rez->FieldByName("cex")->Value;
-            utch=rez->FieldByName("utch")->Value;
+            if (!rez->FieldByName("cex")->Value.IsNull())
+                cex=rez->FieldByName("cex")->Value;
+            if (!rez->FieldByName("utch")->Value.IsNull())
+                utch=rez->FieldByName("utch")->Value;
         }
         sql = "Call temporary_tables.Get_Materials_Order('"+GostToInt(obd)+"',"+String(kol)+",'"+cex+"','"+utch+"')";
         TADOQuery *rez2=DB->SendSQL(sql);
@@ -1687,11 +1710,204 @@ void cReports::Trebovanie_Materialov    (String obd,String zak,int kol)
             rez->Next();
         }
     }
-    while (rez&&!rez->Eof);
+    while (rez&&!rez->Eof && cex!="" && utch!="" );
     if (rez)
     {
         delete rez;
     }
+
+
+    if (trb_params->save_to_file.Length())
+    {
+        if (trb_params->trim_file)
+        {
+            TrimFile(trb_params->save_to_file,trb_params->file_ext,file,Lcount,Lcount);
+        }
+        else
+        {
+            SaveFile(trb_params->save_to_file,trb_params->file_ext,Lcount);
+        }
+        XL->Book_Close(XL->GetBook(1));
+        XL->Disconnect();
+    }
+    else
+    {
+        while(Lcount&&Lcount<XL->GetSheetsCount())
+        {
+            XL->Sheet_Del(XL->GetSheet(XL->GetSheetsCount()));
+        }
+        XL->Sheet_activate(XL->GetFirstSheet());
+        XL->Visible(true);
+    }
+}
+
+void cReports::Trebovanie_Standart    (String obd,String zak,int kol)
+{
+    if (trb_params->ShowModal()!=mrOk)
+    {
+        return;
+    }
+    //инициализация
+    AnsiString file=Templates+"materials_trb.xlt";
+    XL->Connect();
+    XL->DisplayAlerts(false);
+//    XL->Visible(true);
+    OpenTemplate(file);
+    const int row_start=19, row_end=25, head_row=11, org_row=7;
+    int Lcount=0,ofset=-1;
+    //получим список цехов
+
+    TADOQuery *rez=0;
+    //получить полную развертку по узлу
+    DB->SendCommand(" set @id=0");
+    DB->SendCommand(" select a.id into @id from constructions.det_names a where a.obd=" + GostToVin(obd));
+    DB->SendCommand(" Call constructions.GetAllUzel(@id)");
+
+
+    DB->SendCommand(" Drop TEMPORARY TABLE if EXISTS tmp_kompl;");
+    //отсавляем только стандартные
+    DB->SendCommand(" CREATE TEMPORARY TABLE tmp_kompl as"
+                    " select a.idp,a.idc from constructions.output a "
+                    " join constructions.det_names c on c.id=a.idc"
+                    " where c.razdSPID in (5,6);");
+
+
+    DB->SendCommand(" DROP TEMPORARY TABLE if EXISTS summary");
+    DB->SendCommand(" create TEMPORARY table if not EXISTS summary("
+                    " id	int(11)unsigned not NULL,"
+                    " ei  char(3) DEFAULT null,"
+                    " nrm double NOT NULL,"
+                    " ei_d  char(3) DEFAULT null,"
+                    " nrm_d double NOT NULL,"
+                    " tag tinyint(1), "
+                    " key `id`(`id`)"
+                    " ) ENGINE=memory;");
+
+    DB->SendCommand(" insert into summary"
+                    " select a.idc, IFNULL(c.ei,'401'),sum(b.kol)*"+String(kol)+",IFNULL(c.ei,'401'),sum(b.kol)*"+String(kol)+",0"
+                    " from tmp_kompl a"
+                    " join constructions.output b on a.idp=b.idp and a.idc=b.idc"
+                    " join constructions.det_tree c on c.idchild=a.idc and c.idparent=a.idp"
+                    " GROUP BY a.idc;");
+
+    rez=DB->SendSQL(    " select"
+                        " IFNULL(c.sklad,'')'Склад',"
+                        " IFNULL(c.bs,'') 	'Балансовый счет',"
+                        " IFNULL(c.ss,'') 	'Субсчет',"
+                        " IFNULL(c.cena,0)	'Цена',"
+                        " IFNULL(round(a.nrm,3),0)   'Норма на изделие',"
+                        " IFNULL(round(a.nrm*c.cena,3),0) 'Сумма',"
+                        " IFNULL(b.obd,'')  'Код',"
+
+                        " IFNULL(Concat(Trim(c.prma),' ',trim(c.gopr)),if(b.razdSPID in(5,6,7),IFNULL(trim(b.namd),''),'')) 'Сортамент',"
+                        " IFNULL(Concat(Trim(c.nama),' ',trim(c.goma)),'') 'Материал',"
+
+                        " a.ei,"
+                        " a.ei_d,"
+                        " a.nrm_d,"
+                        " IFNULL(d.snameei,'') 'Единицы измерения',"
+
+                        " b.razdSPID"
+                        " from summary a"
+                        " join constructions.det_names b on b.id=a.id"
+                        " left join sklad.materials c on c.obmid=a.id"
+                        " left JOIN catalogs.dimensionality d on a.ei=d.kodei"
+                        " order by c.sklad,b.razdSPID,c.prma,`Код`,c.nama");
+
+    DB->SendCommand("DROP TEMPORARY TABLE if EXISTS summary");
+    DB->SendCommand("Drop TEMPORARY TABLE if EXISTS tmp_kompl;");
+    if (rez)
+    {
+        String old_sklad="";
+        int row=0;
+        bool newpage=true;
+        for (rez->First(); !rez->Eof; rez->Next())
+        {
+            String date=Now().FormatString("dd.mm.yy");
+            String sklad=rez->FieldByName("Склад")->Value;
+            String podr=trb_params->MatReceiver;
+
+            String ss=rez->FieldByName("Балансовый счет")->Value;
+            String material1=Trim(rez->FieldByName("Сортамент")->Value);
+            String material2=Trim(rez->FieldByName("Материал")->Value);
+            String kod=VinToGost(rez->FieldByName("Код")->Value);
+            String eik="";
+            if (!rez->FieldByName("ei")->Value.IsNull())
+                eik=rez->FieldByName("ei")->Value;
+            String ei=rez->FieldByName("Единицы измерения")->Value;
+            String request=rez->FieldByName("Норма на изделие")->Value;
+//            String price=rez->FieldByName("Цена")->Value;
+//            double cost=rez->FieldByName("Сумма")->Value;
+            if (old_sklad!=sklad)
+            {
+                newpage=true;
+                old_sklad=sklad;
+            }
+
+            if(newpage)
+            {
+                if (ofset)
+                {
+                    ofset=0;
+                }
+                else
+                {
+                    ofset=30;
+                }
+                if (!ofset)
+                {
+                    XL->Sheet_Copy(XL->GetSheet(Lcount+1),XL->GetSheet(Lcount+1), Variant().NoParam());
+                    Lcount++ ;
+                    XL->SetActiveSheet(XL->GetSheet(Lcount));
+
+                    XL->Set_Sheet_Name(XL->GetSheet(Lcount), "ТРЕБ-"+IntToStr(Lcount));
+                }
+                // запись шапки/
+                XL->toCells(head_row+ofset, 1, date);
+                XL->toCells(head_row+ofset, 5, sklad);
+                XL->toCells(head_row+ofset, 8, podr);
+                if (trb_params->Organization!="")
+                {
+                    XL->toCells(org_row+ofset, 4, trb_params->Organization);
+                }
+                newpage=false;
+                row=row_start;
+            }
+            //построение
+            XL->toCells(row+ofset, 1, ss);
+            XL->toCells(row+ofset, 2, zak);
+            if (24<(material1.Length()+material2.Length()))
+            {
+                XL->toCells(row+ofset, 4, material1);
+                row++;
+                XL->toCells(row+ofset, 4, material2);
+            }
+            else
+            {
+                XL->toCells(row+ofset, 4, material1+" "+material2);
+            }
+            XL->toCells(row+ofset, 7, kod);
+            XL->toCells(row+ofset, 8, eik);
+            XL->toCells(row+ofset, 9, ei);
+            XL->toCells(row+ofset, 10, request);
+            //XL->toCells(row+ofset, 13, price);
+            //XL->toCells(row+ofset, 14, cost);
+            row++;
+            if (row>row_end||trb_params->OneRow->Checked)
+            {
+                newpage=true;
+                if (trb_params->trim_file&&ofset)
+                {
+                    TrimFile(trb_params->save_to_file,trb_params->file_ext,file,Lcount,trb_params->lists_in_file);
+                }
+            }
+        }
+        delete rez;
+    }
+
+
+
+
 
 
     if (trb_params->save_to_file.Length())
