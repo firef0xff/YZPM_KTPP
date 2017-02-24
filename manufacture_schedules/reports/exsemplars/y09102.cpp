@@ -131,13 +131,13 @@ void Y09102::BuildReport()
 
            "CONVERT(ROUND(sum( "
            "if (`c`.`cex` = '03' and `c`.`utch` = '04', "
-           "IFNULL(`d`.`tsht`*ceil(d1.kol_request/ifnull(`h`.`kdz`,1))/d1.kol_request*d1.kol_request+if(d1.kol_request>0,`d`.`tpz`,0),0)*a.percent/100, "
-           "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*d1.kol_request+if(d1.kol_request>0,`d`.`tpz`,0),0)*a.percent/100)),3),DECIMAL(40,6)) as plan, "
+           "IFNULL(`d`.`tsht`*ceil(d1.kol_request/ifnull(`h`.`kdz`,1))/d1.kol_request*d1.kol_request+if(d1.kol_request>0,`d`.`tpz`,0),0), "
+           "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*d1.kol_request+if(d1.kol_request>0,`d`.`tpz`,0),0))),3),DECIMAL(40,6)) as plan, "
 
            "CONVERT(ROUND(sum( "
            "if (`c`.`cex` = '03' and `c`.`utch` = '04', "
-           "IFNULL(`d`.`tsht`*ceil(d1.kol_request/ifnull(`h`.`kdz`,1))/d1.kol_request*(d1.kol_request - d1.kol_maked)+if((d1.kol_request - d1.kol_maked)>0,`d`.`tpz`,0),0)*a.percent/100, "
-           "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*(d1.kol_request - d1.kol_maked)+if((d1.kol_request - d1.kol_maked)>0,`d`.`tpz`,0),0)*a.percent/100)),3),DECIMAL(40,6)) as deficit, "
+           "IFNULL(`d`.`tsht`*ceil(d1.kol_request/ifnull(`h`.`kdz`,1))/d1.kol_request*(d1.kol_request - d1.kol_maked)+if((d1.kol_request - d1.kol_maked)>0,`d`.`tpz`,0),0), "
+           "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*(d1.kol_request - d1.kol_maked)+if((d1.kol_request - d1.kol_maked)>0,`d`.`tpz`,0),0))),3),DECIMAL(40,6)) as deficit, "
 
            "CONVERT(e.ksme,DECIMAL(40,6)) as ksm "
 
