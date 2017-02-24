@@ -129,7 +129,8 @@ void Y09102::BuildReport()
            "CONVERT(a.part_no, CHAR)    as part_no, "
            "CONVERT(c.oboID, CHAR)      as oboid, "
 
-           "CONVERT(if (`c`.`cex` = '03' and `c`.`utch` = '04', "
+           "CONVERT(ROUND(sum( "
+           "if (`c`.`cex` = '03' and `c`.`utch` = '04', "
            "IFNULL(`d`.`tsht`*ceil(d1.kol_request/ifnull(`h`.`kdz`,1))/d1.kol_request*d1.kol_request+if(d1.kol_request>0,`d`.`tpz`,0),0)*a.percent/100, "
            "IFNULL(`d`.`tsht`*`d`.`ksht`*`d`.`krop`/`d`.`kolod`*d1.kol_request+if(d1.kol_request>0,`d`.`tpz`,0),0)*a.percent/100)),3),DECIMAL(40,6)) as plan, "
 
