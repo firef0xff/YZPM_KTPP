@@ -26,10 +26,10 @@
 			<BCC_SelectedOptimizations>true</BCC_SelectedOptimizations>
 			<OutputExt>exe</OutputExt>
 			<LinkPackageStatics>rtl.lib;vcl.lib;adortl.lib;dbrtl.lib;vclactnband.lib;vclx.lib;vcldb.lib</LinkPackageStatics>
-			<ILINK_LibraryPath>D:\mylib\SQL\;D:\mylib\Excel\;E:\mylib\SQL\;E:\mylib\Excel\;manufacture_schedules\Calck\;manufacture_schedules\surcharge\;manufacture_schedules\reports\exsemplars\;manufacture_schedules\reports\;technology\support_modules\catalog_workpieces\;technology\support_modules\;technology\data_classes\;technology\;professions\;boom_editor\;orders_editor\;searcher\;prepare_products_list\;reports\;common\;sklad\;manufacture_schedules\;boom_tree\contents\;boom_tree\file_working\;boom_tree\;Login\dialogs\;Login\;F:\mylib\Excel\;F:\mylib\SQL\;интерфейс запусков\;редактор заказов\;Логин\диалоги\;подготовка списка деталей\;на асу\;отчетность\;справочник профессий\;редактор спецификаций\;технология\вспомогательные модули\справочник заготовок\;материалы\;Логин\;технология\вспомогательные модули\;..\..\RAD Studio\8.0\Imports\;технология\классы данных\;поиск\;технология\;дерево спецификации\работа с файлами\;дерево спецификации\;общие функции и классы\;дерево спецификации\состояния\;общие функции\;..\мои классы\;..\..\проекты\Файловая база 3\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<ILINK_LibraryPath>..\mylib\SQL\;..\mylib\Excel\;D:\mylib\SQL\;D:\mylib\Excel\;E:\mylib\SQL\;E:\mylib\Excel\;manufacture_schedules\Calck\;manufacture_schedules\surcharge\;manufacture_schedules\reports\exsemplars\;manufacture_schedules\reports\;technology\support_modules\catalog_workpieces\;technology\support_modules\;technology\data_classes\;technology\;professions\;boom_editor\;orders_editor\;searcher\;prepare_products_list\;reports\;common\;sklad\;manufacture_schedules\;boom_tree\contents\;boom_tree\file_working\;boom_tree\;Login\dialogs\;Login\;F:\mylib\Excel\;F:\mylib\SQL\;интерфейс запусков\;редактор заказов\;Логин\диалоги\;подготовка списка деталей\;на асу\;отчетность\;справочник профессий\;редактор спецификаций\;технология\вспомогательные модули\справочник заготовок\;материалы\;Логин\;технология\вспомогательные модули\;..\..\RAD Studio\8.0\Imports\;технология\классы данных\;поиск\;технология\;дерево спецификации\работа с файлами\;дерево спецификации\;общие функции и классы\;дерево спецификации\состояния\;общие функции\;..\мои классы\;..\..\проекты\Файловая база 3\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
 			<PackageImports>vclimg.bpi;vcl.bpi;vclx.bpi;dbrtl.bpi;Rave90VCL.bpi;bdertl.bpi;rtl.bpi;bcbie.bpi;xmlrtl.bpi;vclactnband.bpi;bcbsmp.bpi;VclSmp.bpi;svnui.bpi;svn.bpi;TeeUI.bpi;TeeDB.bpi;Tee.bpi;vcldb.bpi;vcldbx.bpi;vcltouch.bpi;dsnap.bpi;dsnapcon.bpi;vclib.bpi;ibxpress.bpi;adortl.bpi;IndyCore.bpi;IndySystem.bpi;IndyProtocols.bpi;inet.bpi;intrawebdb_110_150.bpi;Intraweb_110_150.bpi;vclie.bpi;websnap.bpi;webdsnap.bpi;inetdb.bpi;inetdbbde.bpi;inetdbxpress.bpi;soaprtl.bpi;vclribbon.bpi;dbexpress.bpi;DbxCommonDriver.bpi;DataSnapIndy10ServerTransport.bpi;DataSnapProviderClient.bpi;DbxClientDriver.bpi;DataSnapClient.bpi;dbxcds.bpi;DataSnapServer.bpi;AzureCloud.bpi;DBXInterBaseDriver.bpi;DBXMySQLDriver.bpi;DBXFirebirdDriver.bpi;DBXSybaseASEDriver.bpi;DBXSybaseASADriver.bpi;DBXOracleDriver.bpi;DBXMSSQLDriver.bpi;DBXInformixDriver.bpi;DBXDb2Driver.bpi;CodeSiteExpressVcl.bpi;volo.bpi</PackageImports>
 			<Multithreaded>true</Multithreaded>
-			<IncludePath>D:\mylib\SQL\;D:\mylib\Excel\;E:\mylib\SQL\;E:\mylib\Excel\;manufacture_schedules\Calck\;manufacture_schedules\surcharge\;manufacture_schedules\reports\exsemplars\;manufacture_schedules\reports\;technology\support_modules\catalog_workpieces\;technology\support_modules\;technology\data_classes\;technology\;professions\;boom_editor\;orders_editor\;searcher\;prepare_products_list\;reports\;common\;sklad\;manufacture_schedules\;boom_tree\contents\;boom_tree\file_working\;boom_tree\;Login\dialogs\;Login\;F:\mylib\Excel\;F:\mylib\SQL\;интерфейс запусков\;редактор заказов\;Логин\диалоги\;подготовка списка деталей\;на асу\;отчетность\;справочник профессий\;редактор спецификаций\;технология\вспомогательные модули\справочник заготовок\;материалы\;Логин\;технология\вспомогательные модули\;..\..\RAD Studio\8.0\Imports\;технология\классы данных\;поиск\;технология\;дерево спецификации\работа с файлами\;дерево спецификации\;общие функции и классы\;дерево спецификации\состояния\;общие функции\;..\мои классы\;..\..\проекты\Файловая база 3\;$(IncludePath)</IncludePath>
+			<IncludePath>..\mylib\SQL\;..\mylib\Excel\;D:\mylib\SQL\;D:\mylib\Excel\;E:\mylib\SQL\;E:\mylib\Excel\;manufacture_schedules\Calck\;manufacture_schedules\surcharge\;manufacture_schedules\reports\exsemplars\;manufacture_schedules\reports\;technology\support_modules\catalog_workpieces\;technology\support_modules\;technology\data_classes\;technology\;professions\;boom_editor\;orders_editor\;searcher\;prepare_products_list\;reports\;common\;sklad\;manufacture_schedules\;boom_tree\contents\;boom_tree\file_working\;boom_tree\;Login\dialogs\;Login\;F:\mylib\Excel\;F:\mylib\SQL\;интерфейс запусков\;редактор заказов\;Логин\диалоги\;подготовка списка деталей\;на асу\;отчетность\;справочник профессий\;редактор спецификаций\;технология\вспомогательные модули\справочник заготовок\;материалы\;Логин\;технология\вспомогательные модули\;..\..\RAD Studio\8.0\Imports\;технология\классы данных\;поиск\;технология\;дерево спецификации\работа с файлами\;дерево спецификации\;общие функции и классы\;дерево спецификации\состояния\;общие функции\;..\мои классы\;..\..\проекты\Файловая база 3\;$(IncludePath)</IncludePath>
 			<AllPackageLibs>rtl.lib;vcl.lib;adortl.lib;dbrtl.lib;vclactnband.lib;vclx.lib;vcldb.lib</AllPackageLibs>
 			<ProjectType>CppVCLApplication</ProjectType>
 			<_TCHARMapping>wchar_t</_TCHARMapping>
@@ -66,12 +66,12 @@
 			<TASM_Debugging>None</TASM_Debugging>
 		</PropertyGroup>
 		<ItemGroup>
-			<CppCompile Include="D:\mylib\Excel\Excel.cpp">
-				<DependentOn>D:\mylib\Excel\Excel.h</DependentOn>
-				<BuildOrder>108</BuildOrder>
+			<CppCompile Include="..\mylib\Excel\Excel.cpp">
+				<DependentOn>..\mylib\Excel\Excel.h</DependentOn>
+				<BuildOrder>107</BuildOrder>
 			</CppCompile>
-			<CppCompile Include="D:\mylib\SQL\SQL.cpp">
-				<DependentOn>D:\mylib\SQL\SQL.h</DependentOn>
+			<CppCompile Include="..\mylib\SQL\SQL.cpp">
+				<DependentOn>..\mylib\SQL\SQL.h</DependentOn>
 				<BuildOrder>108</BuildOrder>
 			</CppCompile>
 			<CppCompile Include="boom_editor\IspData.cpp">
@@ -311,6 +311,12 @@
 			<None Include="manufacture_schedules\reports\exsemplars\materaials_detail.h">
 				<BuildOrder>87</BuildOrder>
 			</None>
+			<CppCompile Include="manufacture_schedules\reports\exsemplars\rep16.cpp">
+				<BuildOrder>115</BuildOrder>
+			</CppCompile>
+			<None Include="manufacture_schedules\reports\exsemplars\rep16.h">
+				<BuildOrder>116</BuildOrder>
+			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\routelist.cpp">
 				<BuildOrder>72</BuildOrder>
 			</CppCompile>
@@ -424,10 +430,39 @@
 				<DependentOn>professions\professions.h</DependentOn>
 				<BuildOrder>67</BuildOrder>
 			</CppCompile>
+			<CppCompile Include="reports\kol_det.cpp">
+				<Form>koldet</Form>
+				<DependentOn>reports\kol_det.h</DependentOn>
+				<BuildOrder>109</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="reports\komplect.cpp">
+				<Form>komplekt</Form>
+				<DependentOn>reports\komplect.h</DependentOn>
+				<BuildOrder>110</BuildOrder>
+			</CppCompile>
 			<CppCompile Include="reports\otchethost.cpp">
 				<Form>Otchet</Form>
 				<DependentOn>reports\otchethost.h</DependentOn>
-				<BuildOrder>67</BuildOrder>
+				<BuildOrder>111</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="reports\otchetnost.cpp">
+				<DependentOn>reports\otchetnost.h</DependentOn>
+				<BuildOrder>112</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="reports\params.cpp">
+				<Form>parametr</Form>
+				<DependentOn>reports\params.h</DependentOn>
+				<BuildOrder>113</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="reports\pp_start_params.cpp">
+				<Form>PP_params</Form>
+				<DependentOn>reports\pp_start_params.h</DependentOn>
+				<BuildOrder>114</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="reports\trb_params.cpp">
+				<Form>TrbOptions</Form>
+				<DependentOn>reports\trb_params.h</DependentOn>
+				<BuildOrder>108</BuildOrder>
 			</CppCompile>
 			<CppCompile Include="searcher\SearchModule.cpp">
 				<Form>Search</Form>
@@ -518,57 +553,62 @@
 			<ResFiles Include="yzpmktpp.res">
 				<BuildOrder>1</BuildOrder>
 			</ResFiles>
-			<FormResources Include="manufacture_schedules\report_params.dfm"/>
-			<FormResources Include="manufacture_schedules\surcharge\surcharge_list.dfm"/>
 			<FormResources Include="manufacture_schedules\workers.dfm"/>
 			<FormResources Include="manufacture_schedules\ZakazCreator.dfm"/>
 			<FormResources Include="manufacture_schedules\ZapCreator.dfm"/>
+			<FormResources Include="manufacture_schedules\surcharge\surcharge_list.dfm"/>
+			<FormResources Include="manufacture_schedules\report_params.dfm"/>
+			<FormResources Include="orders_editor\Orders.dfm"/>
+			<FormResources Include="orders_editor\Order_set.dfm"/>
+			<FormResources Include="prepare_products_list\Izd_Unroll.dfm"/>
+			<FormResources Include="orders_editor\OrderContent_set.dfm"/>
 			<FormResources Include="technology\support_modules\catalog_workpieces\redaktor_formul.dfm"/>
 			<FormResources Include="technology\support_modules\catalog_workpieces\zagotovk.dfm"/>
 			<FormResources Include="technology\support_modules\instrument.dfm"/>
-			<FormResources Include="technology\support_modules\symblos.dfm"/>
 			<FormResources Include="technology\TechnologyView.dfm"/>
+			<FormResources Include="technology\technology.dfm"/>
+			<FormResources Include="technology\support_modules\symblos.dfm"/>
 			<FormResources Include="technology\support_modules\tara_and_strop.dfm"/>
 			<FormResources Include="technology\support_modules\tecniksave.dfm"/>
-			<FormResources Include="technology\technology.dfm"/>
-			<FormResources Include="prepare_products_list\Izd_Unroll.dfm"/>
+			<FormResources Include="reports\komplect.dfm"/>
+			<FormResources Include="reports\otchethost.dfm"/>
+			<FormResources Include="reports\kol_det.dfm"/>
 			<FormResources Include="prepare_products_list\List_add.dfm"/>
 			<FormResources Include="prepare_products_list\select_params.dfm"/>
-			<FormResources Include="orders_editor\OrderContent_set.dfm"/>
-			<FormResources Include="orders_editor\Orders.dfm"/>
-			<FormResources Include="orders_editor\Order_set.dfm"/>
 			<FormResources Include="professions\professions.dfm"/>
+			<FormResources Include="sklad\Add_mat.dfm"/>
 			<FormResources Include="sklad\material.dfm"/>
 			<FormResources Include="sklad\Mater_zam.dfm"/>
-			<FormResources Include="reports\otchethost.dfm"/>
 			<FormResources Include="searcher\SearchModule.dfm"/>
-			<FormResources Include="sklad\Add_mat.dfm"/>
+			<FormResources Include="reports\params.dfm"/>
+			<FormResources Include="reports\pp_start_params.dfm"/>
+			<FormResources Include="reports\trb_params.dfm"/>
 			<FormResources Include="common\DetSelector.dfm"/>
-			<FormResources Include="boom_tree\file_working\files.dfm"/>
 			<FormResources Include="log.dfm"/>
-			<FormResources Include="boom_tree\contents\selector.dfm"/>
-			<FormResources Include="boom_editor\Isp_editor.dfm"/>
+			<FormResources Include="Login\dialogs\GTUSdialog.dfm"/>
+			<FormResources Include="Login\dialogs\Input_wnd.dfm"/>
+			<FormResources Include="boom_tree\file_working\files.dfm"/>
 			<FormResources Include="boom_editor\Obd_edt.dfm"/>
 			<FormResources Include="boom_editor\razdel.dfm"/>
 			<FormResources Include="boom_editor\SPEdit.dfm"/>
+			<FormResources Include="boom_editor\Isp_editor.dfm"/>
 			<FormResources Include="boom_tree\contents\Conditions.dfm"/>
+			<FormResources Include="boom_tree\contents\selector.dfm"/>
 			<FormResources Include="boom_editor\sp_params.dfm"/>
 			<FormResources Include="boom_tree\BomTree.dfm"/>
-			<FormResources Include="manufacture_schedules\ReportBuilder.dfm"/>
-			<FormResources Include="manufacture_schedules\manufacture.dfm"/>
-			<FormResources Include="Login\dialogs\RightSelect.dfm"/>
-			<FormResources Include="Login\dialogs\User_Data.dfm"/>
-			<FormResources Include="Login\loginwin.dfm"/>
-			<FormResources Include="Login\dialogs\GTUSdialog.dfm"/>
-			<FormResources Include="Login\dialogs\Input_wnd.dfm"/>
-			<FormResources Include="Login\dialogs\NextStateSelector.dfm"/>
 			<FormResources Include="Login\Settings_wnd.dfm"/>
-			<FormResources Include="manufacture_schedules\EditWorkerData.dfm"/>
-			<FormResources Include="manufacture_schedules\EditWorkerGroup.dfm"/>
-			<FormResources Include="manufacture_schedules\IzdAppender.dfm"/>
 			<FormResources Include="main.dfm"/>
 			<FormResources Include="manufacture_schedules\Calck\add_data_wnd.dfm"/>
+			<FormResources Include="Login\loginwin.dfm"/>
+			<FormResources Include="Login\dialogs\NextStateSelector.dfm"/>
+			<FormResources Include="Login\dialogs\RightSelect.dfm"/>
+			<FormResources Include="Login\dialogs\User_Data.dfm"/>
+			<FormResources Include="manufacture_schedules\manufacture.dfm"/>
+			<FormResources Include="manufacture_schedules\ReportBuilder.dfm"/>
+			<FormResources Include="manufacture_schedules\IzdAppender.dfm"/>
 			<FormResources Include="manufacture_schedules\Calck\Usage.dfm"/>
+			<FormResources Include="manufacture_schedules\EditWorkerData.dfm"/>
+			<FormResources Include="manufacture_schedules\EditWorkerGroup.dfm"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
@@ -597,7 +637,7 @@
 						<VersionInfo Name="MajorVer">3</VersionInfo>
 						<VersionInfo Name="MinorVer">0</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">18</VersionInfo>
+						<VersionInfo Name="Build">21</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -609,7 +649,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName"/>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">3.0.0.18</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">3.0.0.21</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName"/>
 						<VersionInfoKeys Name="LegalCopyright"/>
 						<VersionInfoKeys Name="LegalTrademarks"/>

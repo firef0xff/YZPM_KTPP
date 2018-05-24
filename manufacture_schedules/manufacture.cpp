@@ -848,9 +848,9 @@ void TManufactureControl::LoadDetailSurCharge    (String zap_id, __uint64 zak_id
 
     //входные параметры нужно свести к набору part_id + obd
 
-    std::string step_1_drop = "Drop temporary table if exists step_1";
-    std::string step_1 = "Create temporary table if not exists step_1 "
-                         "("
+	std::string step_1_drop = "Drop temporary table if exists `manufacture`.`step_1`";
+	std::string step_1 = "Create temporary table if not exists `manufacture`.`step_1` "
+						 "("
                          "part_id bigint(20) unsigned not null,"
                          "key part_id(`part_id`)"
                          ")engine = MEMORY";
@@ -893,7 +893,7 @@ void TManufactureControl::LoadDetailSurCharge    (String zap_id, __uint64 zak_id
     if (!where.str().empty())
     {
         std::stringstream step_1_fill;
-        step_1_fill << "insert into step_1 (part_id) "
+        step_1_fill << "insert into `manufacture`.`step_1` (part_id) "
                        "select `a`.`part_id` "
                        "from `manufacture`.`parts` a "
                        <<joins.str()<<
@@ -937,7 +937,7 @@ void TManufactureControl::LoadDetailSurCharge    (String zap_id, __uint64 zak_id
            "CONVERT(`a`.`tfact`, CHAR) tfact,   "//cells
            "CONVERT(`a`.`descr`, CHAR)  descr   "
            "from manufacture.surcharge a "
-           "join step_1 a1 on a.part_id = a1.part_id "
+           "join manufacture.step_1 a1 on a.part_id = a1.part_id "
            "join manufacture.zakaz_list b on a.zak_id = b.zak_id "
            "join manufacture.parts c on a.part_id = c.part_id "
            "join manufacture.orders c1 on c1.surcharge_id = a.record_id "

@@ -366,6 +366,10 @@ object List_Editor: TList_Editor
       TabOrder = 1
       object TS1: TTabSheet
         Caption = #1057#1087#1080#1089#1086#1082' '#1086#1073#1088#1072#1073#1086#1090#1082#1080
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Kol: TGroupBox
           Left = 0
           Top = 0
@@ -452,6 +456,10 @@ object List_Editor: TList_Editor
       object TS2: TTabSheet
         Caption = #1054#1073#1085#1072#1088#1091#1078#1077#1085#1085#1099#1077' '#1086#1096#1080#1073#1082#1080
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Splitter2: TSplitter
           Left = 0
           Top = 333
