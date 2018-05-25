@@ -1,6 +1,7 @@
 ﻿#include <reports/exsemplars/rep16.h>
 #include "functions.h"
 #include "boost/lexical_cast.hpp"
+#include "functions.h"
 
 namespace rep
 {
@@ -130,7 +131,7 @@ void Rep16::BuildReport()
 		  "`c`.`utch`  utch, "
 		  "if( `c`.`cex` = 16, 1, 0) as koop, "
 		  "IFNULL(round(sum(`f`.`tpz`), 3), '') tpz, "
-		  "replace(IFNULL(round(sum(`f`.`tsht`*`f`.`ksht`*`f`.`krop`/`f`.`kolod`), 3), ''),'.',',') tsht "
+		  "replace(IFNULL(round(sum(`f`.`tsht`*`f`.`ksht`*`f`.`krop`/`f`.`kolod`)*IFNULL(`b`.`kol_det`, 0), 3), ''),'.',',') tsht "
 		  "from        `manufacture`.`det_names` a "
 		  "join 	   `manufacture`.`step_1` a1 		 on a.det_id=a1.det_id "
 		  "join        `manufacture`.`marsh_lists` b 	 on `b`.`det_id` = `a`.`det_id` and `b`.`part_id` = a1.part_id "
@@ -166,7 +167,7 @@ void Rep16::BuildReport()
 				do //добваление деталей
 				{
 					Data d;
-					d.obd = (rez->FieldByName("det_code")->Value.operator AnsiString()).c_str();
+					d.obd = ( VinToGost( rez->FieldByName("det_code")->Value.operator AnsiString() ) ).c_str();
 					d.name = (rez->FieldByName("det_name")->Value.operator AnsiString()).c_str();
 					d.mater = (rez->FieldByName("mat_name")->Value.operator AnsiString()).c_str();
 					d.raz_zag = (rez->FieldByName("razz")->Value.operator AnsiString()).c_str();
