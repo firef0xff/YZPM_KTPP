@@ -576,11 +576,11 @@ TTreeView *tv=0;
 if (MainTree->Focused()) {tv=MainTree;}
 if (SupportTree->Focused()) {tv=SupportTree;}
 if (tv)
-    {
-    if (tv->Selected)
-        {
-        Obd *data=(Obd *)tv->Selected->Data;
-        if (data)
+	{
+	if (tv->Selected)
+		{
+		Obd *data=(Obd *)tv->Selected->Data;
+		if (data)
             {
             OpenTree(data);
             }
@@ -617,7 +617,7 @@ if (node)
 }
 void __fastcall  TSearch::TreeClick(TObject *Sender)
 {
-    TTreeView *tv=(TTreeView *)Sender;
+	TTreeView *tv=(TTreeView *)Sender;
     if (*selected)
     {
         delete []*selected;
@@ -628,7 +628,7 @@ void __fastcall  TSearch::TreeClick(TObject *Sender)
         *selected =new int[tv->SelectionCount+1];
         **selected=tv->SelectionCount; //первое значение массива это номер последнего элемента
         for (size_t i=1; i <= tv->SelectionCount; i++)
-        {
+		{
             Obd *det=(Obd*)tv->Selections[i-1]->Data;
             if (det&&det->CanUse())
             {
@@ -639,6 +639,26 @@ void __fastcall  TSearch::TreeClick(TObject *Sender)
             }
         }
     }
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TSearch::N3Click(TObject *Sender)
+{
+	TTreeView *tv=(TTreeView *)Sender;
+	if (MainTree->Focused()) {tv=MainTree;}
+	if (SupportTree->Focused()) {tv=SupportTree;}
+	if (tv)
+	{
+		if (tv->Selected)
+		{
+			Obd *data=(Obd *)tv->Selected->Data;
+			int id = data->Get_ID();
+			TLocationForm *wnd=new TLocationForm(this, id, DB);
+			wnd->ShowModal();
+			delete wnd;
+		}
+	}
 }
 //---------------------------------------------------------------------------
 

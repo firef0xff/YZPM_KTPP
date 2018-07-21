@@ -5,6 +5,7 @@
 
 #include "Obd.h"
 #include "IconsData.h"
+#include "Location.h"
 
 #include <Buttons.hpp>
 #include <Classes.hpp>
@@ -71,6 +72,7 @@ __published:
     TMenuItem *N1;
     TMenuItem *N2;
     TImageList *ImageList1;
+	TMenuItem *N3;
     
     void __fastcall RepaintPannels(TObject *Sender);
     
@@ -93,6 +95,7 @@ __published:
     void __fastcall N2Click(TObject *Sender);
     void __fastcall TechAction(TObject *Sender);
     void __fastcall TreeClick(TObject *Sender);
+	void __fastcall N3Click(TObject *Sender);
 private:
     String conditions;
     Obd *LastChild;

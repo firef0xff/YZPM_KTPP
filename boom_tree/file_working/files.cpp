@@ -83,8 +83,8 @@ switch (type)
             break;
             }
     case 1:    {
-            SaveToPc();
-            if (!grid.size())
+			SaveToPc();
+			if (!grid.size())
                 {
                 ShowMessage("Файлы получены успешно.");
                 this->Close();
@@ -112,7 +112,7 @@ void __fastcall TFileDisigner::ClearClick(TObject *Sender)
 {
 if (grid.size())
     {
-    vector <FRowData>::iterator i,j;
+	vector <FRowData>::iterator i,j;
     i=grid.begin()+SG->Selection.Top-1;
     j=grid.begin()+SG->Selection.Bottom;
     grid.erase(i,j);
@@ -237,8 +237,8 @@ if (SD->FileName.Length()&&result)
     for (vector <FRowData>::iterator i=grid.begin(); i!=grid.end(); i++)
         {
         if (i->Get_Action()=="Получить")
-            {
-            if (i->SaveToPC(path))
+			{
+			if (i->SaveToPC(path))
                 {
                 i=grid.erase(i);
                 i--;
@@ -665,3 +665,35 @@ if (Key==13)
     SGDblClick(Sender);
     }
 }
+
+//Возвращает полный путь к временной папке
+const AnsiString GetFullTempPath() {
+    char chBuffer[MAX_PATH];
+    GetTempPathA(MAX_PATH,chBuffer);
+    AnsiString sTempPath = chBuffer;
+    // если получилось сокращённое имя, получаем полное
+    GetLongPathNameA(sTempPath.c_str(),chBuffer,MAX_PATH);
+    sTempPath =chBuffer;
+    return sTempPath;
+}
+
+void __fastcall TFileDisigner::N5Click(TObject *Sender)
+{
+	if(SG->Selection.Top == SG->Selection.Bottom)
+	{
+		grid[SG->Selection.Top-1].SaveToPC(GetFullTempPath() + "yzpmktpp\\", true);
+		String filepath = GetFullTempPath() + "yzpmktpp\\" + grid[SG->Selection.Top-1].Get_FileName();
+
+		int error = reinterpret_cast<int>(ShellExecute(this->Handle, _T("open"), filepath.w_str(), NULL, NULL, SW_RESTORE));
+		if(error <= 32)
+		{
+			ShowMessage("Невозможно открыть файл для просмотра!");
+		}
+	}
+	else
+	{
+		ShowMessage("Для просмотра необходимо выбрать только 1 файл!");
+	}
+}
+//---------------------------------------------------------------------------
+

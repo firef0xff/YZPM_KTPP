@@ -3,6 +3,7 @@
 #pragma hdrstop
 
 #include "Add_mat.h"
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -43,6 +44,19 @@ if (ei->ItemIndex&&(LE1->Text.Trim()!=""||LE2->Text.Trim()!=""||LE3->Text.Trim()
 void __fastcall TMater_add::ei_optClick(TObject *Sender)
 {
 Load_support_info();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMater_add::bAddSymbolClick(TObject *Sender)
+{
+	TSymbol *wnd=new TSymbol(this);
+	wnd->ShowModal();
+	if(wnd->ModalResult==mrOk)
+	{
+		LE1->Text = LE1->Text + wnd->E1->Text.Trim();
+	}
+	delete wnd;
 }
 //---------------------------------------------------------------------------
 

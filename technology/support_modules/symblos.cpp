@@ -61,7 +61,7 @@ SG1->Cells[0][4]="¦";
 SG1->Cells[1][4]="©";
 SG1->Cells[2][4]="™";
 SG1->Cells[3][4]="љ";
-SG1->Cells[4][4]="";
+SG1->Cells[4][4]=L"Ø"; //диаметр(большая Ø, маленькая ø)
 SG1->Cells[5][4]="";
 SG1->Cells[6][4]="";
 SG1->Cells[7][4]="";
@@ -84,8 +84,8 @@ if (sg->Cells[sg->Selection.Left][sg->Selection.Top]!="")
     if (E1->Text!="")
         {
         int pos=E1->SelStart+1;
-        int cur=E1->SelStart;
-        UnicodeString msg=sg->Cells[sg->Selection.Left][sg->Selection.Top];
+		int cur=E1->SelStart;
+		UnicodeString msg=sg->Cells[sg->Selection.Left][sg->Selection.Top];
         E1->Text=E1->Text.Insert(msg,pos);
         } else
         {

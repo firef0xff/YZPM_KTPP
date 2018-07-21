@@ -11,7 +11,7 @@ public:
     void UpdateVal(String obd);
     void UpdateVal(int id);
     bool SaveToBase(void);
-    bool SaveToPC(const String &path);
+    bool SaveToPC(const String &path, bool temp=false);
     bool Delete(void);
 
     

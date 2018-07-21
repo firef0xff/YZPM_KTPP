@@ -207,80 +207,81 @@ String sql;
 sql="Call constructions.LoadDet('"+String(_id)+"','"+String(LUser)+"')";  //загрузка информации о детали формировавние раздела документация
 rez=DB->SendSQL(sql);
 if (rez&&rez->RecordCount)
-    {
-    int id,idparent,sprazd,pp,ppp,ei,state,userid;
-    String obd,obu,name,sprazdname,format,pos,prim,zona,ppname,einame,user,condname,detcreator,
-    detupdater,rowcreator,rowupdater;
-    double kol;
-    bool arhive,canchild,accept;
-    TDateTime  detcreated,detupdated,rowcreated,rowupdated;
+	{
+	int id,idparent,sprazd,pp,ppp,ei,state,userid;
+	String obd,obu,name,sprazdname,format,pos,prim,zona,ppname,einame,user,condname,detcreator,
+	detupdater,rowcreator,rowupdater;
+	double kol;
+	bool arhive,canchild,accept;
+	TDateTime  detcreated,detupdated,rowcreated,rowupdated;
 
-    rez->First();
-    row=new TreeRow(DB,LUser);
+	rez->First();
+	row=new TreeRow(DB,LUser);
 
-    id=rez->FieldByName("idchild")->Value;
-    idparent=rez->FieldByName("idparent")->Value;
-    sprazd=rez->FieldByName("razdSPID")->Value;
-    pp=rez->FieldByName("pp")->Value.operator UnicodeString().ToInt();
-    ppp=rez->FieldByName("ppp")->Value.operator UnicodeString().ToInt();
-    ei=rez->FieldByName("ei")->Value.operator UnicodeString().ToInt();
-    state=rez->FieldByName("state")->Value;
-    userid=rez->FieldByName("UserID")->Value;
-    obd=rez->FieldByName("obd")->Value;
-    obu=rez->FieldByName("obu")->Value;
-    name=rez->FieldByName("name")->Value;
-    sprazdname=rez->FieldByName("Razdname")->Value;
-    format=rez->FieldByName("format")->Value;
-    pos=rez->FieldByName("pos")->Value;
-    prim=rez->FieldByName("prim")->Value;
+	id=rez->FieldByName("idchild")->Value;
+	idparent=rez->FieldByName("idparent")->Value;
+	sprazd=rez->FieldByName("razdSPID")->Value;
+	pp=rez->FieldByName("pp")->Value.operator UnicodeString().ToInt();
+	ppp=rez->FieldByName("ppp")->Value.operator UnicodeString().ToInt();
+	ei=rez->FieldByName("ei")->Value.operator UnicodeString().ToInt();
+	state=rez->FieldByName("state")->Value;
+	userid=rez->FieldByName("UserID")->Value;
+	obd=rez->FieldByName("obd")->Value;
+	obu=rez->FieldByName("obu")->Value;
+	name=rez->FieldByName("name")->Value;
+	sprazdname=rez->FieldByName("Razdname")->Value;
+	format=rez->FieldByName("format")->Value;
+	pos=rez->FieldByName("pos")->Value;
+	prim=rez->FieldByName("prim")->Value;
     zona=rez->FieldByName("zona")->Value;
     ppname=rez->FieldByName("ppName")->Value;
-    einame=rez->FieldByName("eiName")->Value;
-    user=rez->FieldByName("User")->Value;
+	einame=rez->FieldByName("eiName")->Value;
+	user=rez->FieldByName("User")->Value;
     condname=rez->FieldByName("CondName")->Value;
     detcreator=rez->FieldByName("DetCreator")->Value;
     detupdater=rez->FieldByName("DetUpdater")->Value;
-    rowcreator=rez->FieldByName("RowCreator")->Value;
+	rowcreator=rez->FieldByName("RowCreator")->Value;
     rowupdater=rez->FieldByName("RowUpdater")->Value;
     kol=rez->FieldByName("kol")->Value;
     arhive=rez->FieldByName("arhive")->Value;
-    canchild=rez->FieldByName("CanChild")->Value;
+	canchild=rez->FieldByName("CanChild")->Value;
     accept=rez->FieldByName("Accept")->Value;
     if (!rez->FieldByName("DetCreated")->Value.IsNull()){detcreated=rez->FieldByName("DetCreated")->Value.operator TDateTime();}else{detcreated=0;}
-    if (!rez->FieldByName("DetUpdated")->Value.IsNull()){detupdated=rez->FieldByName("DetUpdated")->Value.operator TDateTime();}else{detupdated=0;}
-    if (!rez->FieldByName("RowCreated")->Value.IsNull()){rowcreated=rez->FieldByName("RowCreated")->Value.operator TDateTime();}else{rowcreated=0;}
+	if (!rez->FieldByName("DetUpdated")->Value.IsNull()){detupdated=rez->FieldByName("DetUpdated")->Value.operator TDateTime();}else{detupdated=0;}
+	if (!rez->FieldByName("RowCreated")->Value.IsNull()){rowcreated=rez->FieldByName("RowCreated")->Value.operator TDateTime();}else{rowcreated=0;}
     if (!rez->FieldByName("RowUpdated")->Value.IsNull()){rowupdated=rez->FieldByName("RowUpdated")->Value.operator TDateTime();}else{rowupdated=0;}
     row->SetData(id,idparent,sprazd,pp,ppp,ei,state,userid,obd,obu,name,
                 sprazdname,format,pos,prim,zona,ppname,einame,user,
-                condname,detcreator,detupdater,rowcreator,rowupdater,
+				condname,detcreator,detupdater,rowcreator,rowupdater,
                 kol,arhive,canchild,accept,detcreated,detupdated,rowcreated,
-                rowupdated);
-    //создание узла
-    node=Tree->Items->AddObject(0,row->Get_Text(),(void*)row);
-    node->ImageIndex=IcoData->GetInList(row->Get_SpRazd(),true,1);
+				rowupdated);
+	//создание узла
+	node=Tree->Items->AddObject(0,row->Get_Text(),(void*)row);
+	node->ImageIndex=IcoData->GetInList(row->Get_SpRazd(),true,1);
     node->SelectedIndex=node->ImageIndex;
     node->ExpandedImageIndex=node->ImageIndex;
-    node->StateIndex=IcoData->GetInList(row->Get_state(),row->Get_Accept(),0);
-    if (row->Get_CanChild())
+	node->StateIndex=IcoData->GetInList(row->Get_state(),row->Get_Accept(),0);
+	if (row->Get_CanChild())
         {
-        Obd *r=new Obd(*((Obd*)row));
-        r->SetData(r->Get_ID(),1,r->Get_Obd(false),r->Get_Name(),"Документация"); //создание раздела документация, прикрепление к нему фыйлов
-        node=Tree->Items->AddChildObject(node,r->Get_SpRazdName(),(void*)r);
-        node->ImageIndex=IcoData->GetInList(r->Get_SpRazd(),true,1);
-        node->SelectedIndex=node->ImageIndex;
-        node->ExpandedImageIndex=node->ImageIndex;
-        node->StateIndex=-1;
-        }
-    LoadFiles(node);
-    if (row->Get_CanChild())
-        {
-        LoadBranch(Tree->Items->GetFirstNode());// если кен чилд то LoadBranch
-        }
-    }
+		Obd *r=new Obd(*((Obd*)row));
+		r->SetData(r->Get_ID(),1,r->Get_Obd(false),r->Get_Name(),"Документация"); //создание раздела документация, прикрепление к нему фыйлов
+		node=Tree->Items->AddChildObject(node,r->Get_SpRazdName(),(void*)r);
+		node->ImageIndex=IcoData->GetInList(r->Get_SpRazd(),true,1);
+		node->SelectedIndex=node->ImageIndex;
+		node->ExpandedImageIndex=node->ImageIndex;
+		node->StateIndex=-1;
+		}
+	LoadFiles(node);
+	if (row->Get_CanChild())
+		{
+		LoadBranch(Tree->Items->GetFirstNode());// если кен чилд то LoadBranch
+		}
+	}
 if (Tree->Items->GetFirstNode())
-    {
-    Tree->Items->GetFirstNode()->Expand(false);
-    }
+	{
+	Tree->Items->GetFirstNode()->Expand(false);
+	}
+	//Tree->Items->operator [](0)->Collapse(false);
 delete rez;
 }
 void              TSpTree::LoadTree (TTreeNode *Node)
@@ -288,136 +289,136 @@ void              TSpTree::LoadTree (TTreeNode *Node)
 Obd* bag=(Obd*)Node->Data;
 if (!bag) {return;}
 if (bag->TrueClassName()=="TreeRow")
-    {
-    TreeRow *row=(TreeRow*)bag;
-    TTreeNode *node=Node;
-    bool force=row->Get_Force();
-    row->UpdateVal();
-    node->ImageIndex=IcoData->GetInList(row->Get_SpRazd(),true,1);
-    node->SelectedIndex=node->ImageIndex;
-    node->ExpandedImageIndex=node->ImageIndex;
-    node->StateIndex=IcoData->GetInList(row->Get_state(),row->Get_Accept(),0);
-    if (row->Get_CanChild()||force) //создание раздела документация, прикрепление к нему фaйлов
-        {   //добавить в контейнер обд и тут оперировать им
-        Obd *r=new Obd(*((Obd*)row));
-        r->SetData(r->Get_ID(),1,r->Get_Obd(false),r->Get_Name(),"Документация"); //создание раздела документация, прикрепление к нему фыйлов
-        node=Tree->Items->AddChildObject(node,r->Get_SpRazdName(),(void*)r);
-        node->ImageIndex=IcoData->GetInList(r->Get_SpRazd(),true,1);
-        node->SelectedIndex=node->ImageIndex;
-        node->ExpandedImageIndex=node->ImageIndex;
-        node->StateIndex=-1;
-        }
-    LoadFiles(node);  // если кен чилд то LoadBranch
-    if (row->Get_CanChild()||force)
-        {
-        LoadBranch(Node);
-        }
-    }
+	{
+	TreeRow *row=(TreeRow*)bag;
+	TTreeNode *node=Node;
+	bool force=row->Get_Force();
+	row->UpdateVal();
+	node->ImageIndex=IcoData->GetInList(row->Get_SpRazd(),true,1);
+	node->SelectedIndex=node->ImageIndex;
+	node->ExpandedImageIndex=node->ImageIndex;
+	node->StateIndex=IcoData->GetInList(row->Get_state(),row->Get_Accept(),0);
+	if (row->Get_CanChild()||force) //создание раздела документация, прикрепление к нему фaйлов
+		{   //добавить в контейнер обд и тут оперировать им
+		Obd *r=new Obd(*((Obd*)row));
+		r->SetData(r->Get_ID(),1,r->Get_Obd(false),r->Get_Name(),"Документация"); //создание раздела документация, прикрепление к нему фыйлов
+		node=Tree->Items->AddChildObject(node,r->Get_SpRazdName(),(void*)r);
+		node->ImageIndex=IcoData->GetInList(r->Get_SpRazd(),true,1);
+		node->SelectedIndex=node->ImageIndex;
+		node->ExpandedImageIndex=node->ImageIndex;
+		node->StateIndex=-1;
+		}
+	LoadFiles(node);  // если кен чилд то LoadBranch
+	if (row->Get_CanChild()||force)
+		{
+		LoadBranch(Node);
+		}
+	}
 }
 void              TSpTree::LoadBranch(TTreeNode *Node)
 {  // продолжение отдельной функцией получения состава
 Obd* t=(Obd*)Node->Data;
 if (!t) {return;}
 if (t->TrueClassName()=="TreeRow")
-    { //загрузка информации о составе детали формирования остальных разделов
-    TreeRow *row=(TreeRow*)t;
-    int id=row->Get_ID();
-    String sql="Call constructions.LoadTree('"+String(id)+"','"+String(LUser)+"')";
-    TADOQuery *rez=DB->SendSQL(sql);
-    if (rez&&rez->RecordCount)
-        {
-        rez->First();
-        String CurRazd="";
-        TTreeNode *node,*pnode;
-        int id,idparent,sprazd,pp,ppp,ei,state,userid;
-        String obd,obu,name,sprazdname,format,pos,prim,zona,ppname,einame,user,condname,detcreator,
-        detupdater,rowcreator,rowupdater;
-        double kol;
-        bool arhive,canchild,accept;
-        TDateTime  detcreated,detupdated,rowcreated,rowupdated;
-        while (!rez->Eof)
-            {
-            row=new TreeRow(DB,LUser);
-            id=rez->FieldByName("idchild")->Value;
-            idparent=rez->FieldByName("idparent")->Value;
-            sprazd=rez->FieldByName("razdSPID")->Value;
-            pp=rez->FieldByName("pp")->Value.operator UnicodeString().ToInt();
-            ppp=rez->FieldByName("ppp")->Value.operator UnicodeString().ToInt();
-            ei=rez->FieldByName("ei")->Value.operator UnicodeString().ToInt();
-            state=rez->FieldByName("state")->Value;
-            userid=rez->FieldByName("UserID")->Value;
-            obd=rez->FieldByName("obd")->Value;
-            obu=rez->FieldByName("obu")->Value;
-            name=rez->FieldByName("name")->Value;
-            sprazdname=rez->FieldByName("Razdname")->Value;
-            format=rez->FieldByName("format")->Value;
-            pos=rez->FieldByName("pos")->Value;
-            prim=rez->FieldByName("prim")->Value;
-            zona=rez->FieldByName("zona")->Value;
-            ppname=rez->FieldByName("ppName")->Value;
-            einame=rez->FieldByName("eiName")->Value;
-            user=rez->FieldByName("User")->Value;
-            condname=rez->FieldByName("CondName")->Value;
-            detcreator=rez->FieldByName("DetCreator")->Value;
-            detupdater=rez->FieldByName("DetUpdater")->Value;
-            rowcreator=rez->FieldByName("RowCreator")->Value;
-            rowupdater=rez->FieldByName("RowUpdater")->Value;
-            kol=rez->FieldByName("kol")->Value;
-            arhive=rez->FieldByName("arhive")->Value;
-            canchild=rez->FieldByName("CanChild")->Value;
-            accept=rez->FieldByName("Accept")->Value;
-            if (!rez->FieldByName("DetCreated")->Value.IsNull()){detcreated=rez->FieldByName("DetCreated")->Value.operator TDateTime();}else{detcreated=0;}
-            if (!rez->FieldByName("DetUpdated")->Value.IsNull()){detupdated=rez->FieldByName("DetUpdated")->Value.operator TDateTime();}else{detupdated=0;}
-            if (!rez->FieldByName("RowCreated")->Value.IsNull()){rowcreated=rez->FieldByName("RowCreated")->Value.operator TDateTime();}else{rowcreated=0;}
-            if (!rez->FieldByName("RowUpdated")->Value.IsNull()){rowupdated=rez->FieldByName("RowUpdated")->Value.operator TDateTime();}else{rowupdated=0;}
-            row->SetData(id,idparent,sprazd,pp,ppp,ei,state,userid,obd,obu,name,
-                        sprazdname,format,pos,prim,zona,ppname,einame,user,
-                        condname,detcreator,detupdater,rowcreator,rowupdater,
-                        kol,arhive,canchild,accept,detcreated,detupdated,rowcreated,
-                        rowupdated);
-            if (CurRazd!=row->Get_SpRazdName())
-                {
-                pnode=Node->Owner->AddChildObject(Node,row->Get_SpRazdName(),0);
-                pnode->ImageIndex=IcoData->GetInList(row->Get_SpRazd(),true,1);
-                pnode->SelectedIndex=pnode->ImageIndex;
-                pnode->ExpandedImageIndex=pnode->ImageIndex;
-                pnode->StateIndex=-1;
-                CurRazd=row->Get_SpRazdName();
-                }
-            node=Node->Owner->AddChildObject(pnode,row->Get_Text(),(void*)row);
-            node->ImageIndex=IcoData->GetInList(row->Get_SpRazd(),true,1);
-            node->SelectedIndex=node->ImageIndex;
-            node->ExpandedImageIndex=node->ImageIndex;
-            node->StateIndex=IcoData->GetInList(row->Get_state(),row->Get_Accept(),0);
-            if (row->Get_CanChild()) //создание раздела документация, прикрепление к нему фaйлов
-                {   //добавить в контейнер обд и тут оперировать им
-                Obd *r=new Obd(*((Obd*)row));
-                r->SetData(r->Get_ID(),1,r->Get_Obd(false),r->Get_Name(),"Документация"); //создание раздела документация, прикрепление к нему фыйлов
-                node=Tree->Items->AddChildObject(node,r->Get_SpRazdName(),(void*)r);
-                node->ImageIndex=IcoData->GetInList(r->Get_SpRazd(),true,1);
-                node->SelectedIndex=node->ImageIndex;
-                node->ExpandedImageIndex=node->ImageIndex;
-                node->StateIndex=-1;
-                }
-            LoadFiles(node);
-            rez->Next();
-            }
-        }
-    delete rez;
-    }
+	{ //загрузка информации о составе детали формирования остальных разделов
+	TreeRow *row=(TreeRow*)t;
+	int id=row->Get_ID();
+	String sql="Call constructions.LoadTree('"+String(id)+"','"+String(LUser)+"')";
+	TADOQuery *rez=DB->SendSQL(sql);
+	if (rez&&rez->RecordCount)
+		{
+		rez->First();
+		String CurRazd="";
+		TTreeNode *node,*pnode;
+		int id,idparent,sprazd,pp,ppp,ei,state,userid;
+		String obd,obu,name,sprazdname,format,pos,prim,zona,ppname,einame,user,condname,detcreator,
+		detupdater,rowcreator,rowupdater;
+		double kol;
+		bool arhive,canchild,accept;
+		TDateTime  detcreated,detupdated,rowcreated,rowupdated;
+		while (!rez->Eof)
+			{
+			row=new TreeRow(DB,LUser);
+			id=rez->FieldByName("idchild")->Value;
+			idparent=rez->FieldByName("idparent")->Value;
+			sprazd=rez->FieldByName("razdSPID")->Value;
+			pp=rez->FieldByName("pp")->Value.operator UnicodeString().ToInt();
+			ppp=rez->FieldByName("ppp")->Value.operator UnicodeString().ToInt();
+			ei=rez->FieldByName("ei")->Value.operator UnicodeString().ToInt();
+			state=rez->FieldByName("state")->Value;
+			userid=rez->FieldByName("UserID")->Value;
+			obd=rez->FieldByName("obd")->Value;
+			obu=rez->FieldByName("obu")->Value;
+			name=rez->FieldByName("name")->Value;
+			sprazdname=rez->FieldByName("Razdname")->Value;
+			format=rez->FieldByName("format")->Value;
+			pos=rez->FieldByName("pos")->Value;
+			prim=rez->FieldByName("prim")->Value;
+			zona=rez->FieldByName("zona")->Value;
+			ppname=rez->FieldByName("ppName")->Value;
+			einame=rez->FieldByName("eiName")->Value;
+			user=rez->FieldByName("User")->Value;
+			condname=rez->FieldByName("CondName")->Value;
+			detcreator=rez->FieldByName("DetCreator")->Value;
+			detupdater=rez->FieldByName("DetUpdater")->Value;
+			rowcreator=rez->FieldByName("RowCreator")->Value;
+			rowupdater=rez->FieldByName("RowUpdater")->Value;
+			kol=rez->FieldByName("kol")->Value;
+			arhive=rez->FieldByName("arhive")->Value;
+			canchild=rez->FieldByName("CanChild")->Value;
+			accept=rez->FieldByName("Accept")->Value;
+			if (!rez->FieldByName("DetCreated")->Value.IsNull()){detcreated=rez->FieldByName("DetCreated")->Value.operator TDateTime();}else{detcreated=0;}
+			if (!rez->FieldByName("DetUpdated")->Value.IsNull()){detupdated=rez->FieldByName("DetUpdated")->Value.operator TDateTime();}else{detupdated=0;}
+			if (!rez->FieldByName("RowCreated")->Value.IsNull()){rowcreated=rez->FieldByName("RowCreated")->Value.operator TDateTime();}else{rowcreated=0;}
+			if (!rez->FieldByName("RowUpdated")->Value.IsNull()){rowupdated=rez->FieldByName("RowUpdated")->Value.operator TDateTime();}else{rowupdated=0;}
+			row->SetData(id,idparent,sprazd,pp,ppp,ei,state,userid,obd,obu,name,
+						sprazdname,format,pos,prim,zona,ppname,einame,user,
+						condname,detcreator,detupdater,rowcreator,rowupdater,
+						kol,arhive,canchild,accept,detcreated,detupdated,rowcreated,
+						rowupdated);
+			if (CurRazd!=row->Get_SpRazdName())
+				{
+				pnode=Node->Owner->AddChildObject(Node,row->Get_SpRazdName(),0);
+				pnode->ImageIndex=IcoData->GetInList(row->Get_SpRazd(),true,1);
+				pnode->SelectedIndex=pnode->ImageIndex;
+				pnode->ExpandedImageIndex=pnode->ImageIndex;
+				pnode->StateIndex=-1;
+				CurRazd=row->Get_SpRazdName();
+				}
+			node=Node->Owner->AddChildObject(pnode,row->Get_Text(),(void*)row);
+			node->ImageIndex=IcoData->GetInList(row->Get_SpRazd(),true,1);
+			node->SelectedIndex=node->ImageIndex;
+			node->ExpandedImageIndex=node->ImageIndex;
+			node->StateIndex=IcoData->GetInList(row->Get_state(),row->Get_Accept(),0);
+			if (row->Get_CanChild()) //создание раздела документация, прикрепление к нему фaйлов
+				{   //добавить в контейнер обд и тут оперировать им
+				Obd *r=new Obd(*((Obd*)row));
+				r->SetData(r->Get_ID(),1,r->Get_Obd(false),r->Get_Name(),"Документация"); //создание раздела документация, прикрепление к нему фыйлов
+				node=Tree->Items->AddChildObject(node,r->Get_SpRazdName(),(void*)r);
+				node->ImageIndex=IcoData->GetInList(r->Get_SpRazd(),true,1);
+				node->SelectedIndex=node->ImageIndex;
+				node->ExpandedImageIndex=node->ImageIndex;
+				node->StateIndex=-1;
+				}
+			LoadFiles(node);
+			rez->Next();
+			}
+		}
+	delete rez;
+	}
 }
 void              TSpTree::UpdateBranch(TTreeNode *Node,bool force=false)
 {
 Obd *bag=(Obd *)Node->Data;
 if (bag&&bag->TrueClassName()=="TreeRow")
-    {
-    TreeRow *Row=(TreeRow*)bag;
-    Row->Set_Force(force);
-    Node->Owner->AddChildObject(Node,"",0);
-    //Node->Expand(false);
-    BranchClear(Node);
-    LoadTree(Node);
-    }
+	{
+	TreeRow *Row=(TreeRow*)bag;
+	Row->Set_Force(force);
+	Node->Owner->AddChildObject(Node,"",0);
+	//Node->Expand(false);
+	BranchClear(Node);
+	LoadTree(Node);
+	}
 }
 void              TSpTree::LoadFiles(TTreeNode *Node)
 {
@@ -427,32 +428,32 @@ int _id=((Obd*)Node->Data)->Get_ID();
 String sql="Call constructions.LoadFiles('"+String(_id)+"','"+String(LUser)+"')";
 TADOQuery *rez=DB->SendSQL(sql);
 if (rez&&rez->RecordCount)
-    {
-    rez->First();
-    int id,sprazd,icoid;
-    String obd,name,sprazdname,filename,filepath,creator,updater;
-    bool accept;
-    TDateTime dateofcreate,dateofupdate;
-    while (!rez->Eof)
-        {
-        file=new FileRow(DB,LUser); //создание ксаса свойств
-        //заполнение свойств файла
-        id=rez->FieldByName("id")->Value;
-        sprazd=rez->FieldByName("razdSPID")->Value;
-        icoid=rez->FieldByName("icoID")->Value;
-        obd=rez->FieldByName("obd")->Value;
-        name=rez->FieldByName("namd")->Value;
-        sprazdname=rez->FieldByName("Razdname")->Value;
-        filename=rez->FieldByName("FileName")->Value;
-        filepath=rez->FieldByName("FilePath")->Value;
-        creator=rez->FieldByName("Creator")->Value;
-        updater=rez->FieldByName("Updater")->Value;
-        accept=rez->FieldByName("Accept")->Value;
-        if (!rez->FieldByName("DateOfCreate")->Value.IsNull()){dateofcreate=rez->FieldByName("DateOfCreate")->Value.operator TDateTime();}else{dateofcreate=0;}
-        if (!rez->FieldByName("DateOfUpdate")->Value.IsNull()){dateofupdate=rez->FieldByName("DateOfUpdate")->Value.operator TDateTime();}else{dateofupdate=0;}
-        file->SetData    (id,sprazd,obd,name,sprazdname,icoid,
-                        filename,filepath,creator,updater,accept,
-                        dateofcreate,dateofupdate);
+	{
+	rez->First();
+	int id,sprazd,icoid;
+	String obd,name,sprazdname,filename,filepath,creator,updater;
+	bool accept;
+	TDateTime dateofcreate,dateofupdate;
+	while (!rez->Eof)
+		{
+		file=new FileRow(DB,LUser); //создание ксаса свойств
+		//заполнение свойств файла
+		id=rez->FieldByName("id")->Value;
+		sprazd=rez->FieldByName("razdSPID")->Value;
+		icoid=rez->FieldByName("icoID")->Value;
+		obd=rez->FieldByName("obd")->Value;
+		name=rez->FieldByName("namd")->Value;
+		sprazdname=rez->FieldByName("Razdname")->Value;
+		filename=rez->FieldByName("FileName")->Value;
+		filepath=rez->FieldByName("FilePath")->Value;
+		creator=rez->FieldByName("Creator")->Value;
+		updater=rez->FieldByName("Updater")->Value;
+		accept=rez->FieldByName("Accept")->Value;
+		if (!rez->FieldByName("DateOfCreate")->Value.IsNull()){dateofcreate=rez->FieldByName("DateOfCreate")->Value.operator TDateTime();}else{dateofcreate=0;}
+		if (!rez->FieldByName("DateOfUpdate")->Value.IsNull()){dateofupdate=rez->FieldByName("DateOfUpdate")->Value.operator TDateTime();}else{dateofupdate=0;}
+		file->SetData    (id,sprazd,obd,name,sprazdname,icoid,
+						filename,filepath,creator,updater,accept,
+						dateofcreate,dateofupdate);
         node=Node->Owner->AddChildObject(Node,file->Get_Text(),(void*)file);
         node->ImageIndex=IcoData->GetInList(file->Get_icoID(),true,2);
         node->SelectedIndex=node->ImageIndex;

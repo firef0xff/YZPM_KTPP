@@ -174,14 +174,14 @@ if (Action=="Обновить")
         }
     }
 }
-bool     FRowData::SaveToPC(const String &path)
+bool     FRowData::SaveToPC(const String &path, bool temp)
 {
 String from="",to="";
 from=base+FilePath+inBaseFileName;
 to=path+FileName;
-if(CopyFile(from.c_str(),to.c_str(),true))//false=замена существующего
-    {
-    return true;
+if(CopyFile(from.c_str(),to.c_str(),!temp))//было true //false=замена существующего
+	{
+	return true;
     }else
     {
     return false;  // вероятно ошибка связи возвращаем фолс чтоб файл остался в списке

@@ -2,7 +2,7 @@ object Symbol: TSymbol
   Left = 0
   Top = 0
   Caption = #1057#1087#1077#1094'. '#1089#1080#1084#1074#1086#1083#1099
-  ClientHeight = 260
+  ClientHeight = 256
   ClientWidth = 422
   Color = clBtnFace
   Constraints.MaxHeight = 290
@@ -19,14 +19,14 @@ object Symbol: TSymbol
   OnShow = FormShow
   DesignSize = (
     422
-    260)
+    256)
   PixelsPerInch = 96
   TextHeight = 13
   object SG1: TStringGrid
     Left = 0
     Top = 0
     Width = 422
-    Height = 220
+    Height = 216
     Anchors = [akLeft, akTop, akRight, akBottom]
     ColCount = 10
     DefaultColWidth = 40
@@ -44,7 +44,7 @@ object Symbol: TSymbol
   end
   object BitBtn1: TBitBtn
     Left = 344
-    Top = 227
+    Top = 223
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -57,7 +57,7 @@ object Symbol: TSymbol
   end
   object BitBtn2: TBitBtn
     Left = 263
-    Top = 227
+    Top = 223
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -70,9 +70,9 @@ object Symbol: TSymbol
   end
   object E1: TEdit
     Left = 8
-    Top = 226
+    Top = 222
     Width = 249
-    Height = 27
+    Height = 26
     Anchors = [akLeft, akRight, akBottom]
     Font.Charset = RUSSIAN_CHARSET
     Font.Color = clWindowText

@@ -4,7 +4,7 @@ object materials: Tmaterials
   BorderStyle = bsSizeToolWin
   Caption = #1042#1099#1073#1086#1088' '#1084#1072#1090#1077#1088#1080#1072#1083#1072
   ClientHeight = 464
-  ClientWidth = 540
+  ClientWidth = 896
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,7 +18,7 @@ object materials: Tmaterials
   object Splitter1: TSplitter
     Left = 0
     Top = 301
-    Width = 540
+    Width = 896
     Height = 3
     Cursor = crVSplit
     Align = alBottom
@@ -26,7 +26,7 @@ object materials: Tmaterials
     ExplicitWidth = 256
   end
   object Panel1: TPanel
-    Left = 336
+    Left = 692
     Top = 0
     Width = 204
     Height = 301
@@ -217,10 +217,11 @@ object materials: Tmaterials
   object SG: TStringGrid
     Left = 0
     Top = 304
-    Width = 540
+    Width = 896
     Height = 160
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
+    ColCount = 7
     DefaultColWidth = 16
     DefaultRowHeight = 16
     FixedCols = 0
@@ -231,7 +232,7 @@ object materials: Tmaterials
   object TV: TTreeView
     Left = 0
     Top = 0
-    Width = 336
+    Width = 692
     Height = 301
     Align = alClient
     Indent = 19

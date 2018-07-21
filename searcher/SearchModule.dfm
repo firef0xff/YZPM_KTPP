@@ -254,8 +254,6 @@ object Search: TSearch
       TabOrder = 0
       OnClick = MainTreeClick
       OnDblClick = MainTreeDblClick
-      ExplicitLeft = -4
-      ExplicitTop = 77
     end
     object Panel6: TPanel
       Left = 0
@@ -622,6 +620,10 @@ object Search: TSearch
         ImageIndex = 3
         OnClick = TechAction
       end
+    end
+    object N3: TMenuItem
+      Caption = #1052#1077#1089#1090#1086#1088#1072#1089#1087#1086#1083#1086#1078#1077#1085#1080#1077
+      OnClick = N3Click
     end
   end
   object ImageList1: TImageList

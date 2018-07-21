@@ -8,12 +8,12 @@
 #pragma package(smart_init)
 #pragma resource "*.dfm"
  __fastcall Tmaterials::Tmaterials(TComponent* Owner,cSQL *db,bool ReadOnly,const int &_LUser)
-    : TForm(Owner),DB(db),LUser(_LUser)
+	: TForm(Owner),DB(db),LUser(_LUser)
 {
     obm="";
     SQL="";
     LE1->Text=_obm;
-    LE2->Text=_name;
+	LE2->Text=_name;
     LE3->Text=_prof;
     if (_obm!=""||_name!=""||_prof!="")
     {
@@ -36,10 +36,12 @@
     SG->Cells[1][0]="Наименование";
     SG->Cells[2][0]="ГОСТ";
     SG->Cells[3][0]="Профиль";
-    SG->Cells[4][0]="ГОСТ на профиль";
+	SG->Cells[4][0]="ГОСТ на профиль";
+	SG->Cells[5][0]="Единицы измерения";
+	SG->Cells[6][0]="Раздел";
     AutoWidthSG(SG);
     if (ReadOnly)
-    {
+	{
         //Add->Hide();
         Button2->Hide();
         BB1->Hide();
@@ -81,7 +83,7 @@ if (rez&&rez->RecordCount)
     ke=rez->FieldByName("ke")->Value;
     }
 delete rez; rez=0;
-SQL="Select a.obd,b.nama,b.goma,b.prma,b.gopr from constructions.det_names a join sklad.materials b on a.id=b.obmid where left(a.obd,9)='000000000' and left(a.obd,9+"+String(kl)+")*1 between '"+(String)kb+"' and '"+(String)ke+"'";
+SQL="Select a.obd,b.nama,b.goma,b.prma,b.gopr,c.nameei from constructions.det_names a join sklad.materials b on a.id=b.obmid join catalogs.dimensionality c on b.eic=c.kodei where left(a.obd,9)='000000000' and left(a.obd,9+"+String(kl)+")*1 between '"+(String)kb+"' and '"+(String)ke+"'";
 if (E2->Text!="1") {E2->Text="1";} else {Find();}
 }
 void __fastcall Tmaterials::Find(void)
@@ -93,26 +95,44 @@ switch (RG->ItemIndex)
     case 0 : SQL=SQL+" order by a.obd,b.prma"; break;
     case 1 : SQL=SQL+" order by b.prma,b.nama"; break;
     case 2 : SQL=SQL+" order by b.nama,b.prma"; break;
-    case 3 : SQL=SQL+" order by b.gopr,b.prma"; break;
+	case 3 : SQL=SQL+" order by b.gopr,b.prma"; break;
     default: break;
     }
 if (SQL.Pos(" limit")){SQL.Delete(SQL.Pos(" limit"),SQL.Length()+1-SQL.Pos(" limit"));}
 SQL=SQL+" limit "+IntToStr(E2->Text.ToInt()*E3->Text.ToInt()-E3->Text.ToInt())+","+E3->Text;
 TADOQuery *rez=DB->SendSQL(SQL);
+int razdel;
+TADOQuery *rez2;
 if (rez)
     {
     SGClear(SG,0);
-    if (rez->RecordCount) {SG->RowCount=rez->RecordCount+1;} else {SG->RowCount=2;}
-    while (!rez->Eof)
-        {
-        if (!rez->FieldByName("obd")->Value.IsNull()){SG->Cells[0][rez->RecNo]=VinToGost(rez->FieldByName("obd")->Value);}
-        if (!rez->FieldByName("nama")->Value.IsNull()){SG->Cells[1][rez->RecNo]=Trim(rez->FieldByName("nama")->Value);}
-        if (!rez->FieldByName("goma")->Value.IsNull()){SG->Cells[2][rez->RecNo]=Trim(rez->FieldByName("goma")->Value);}
-        if (!rez->FieldByName("prma")->Value.IsNull()){SG->Cells[3][rez->RecNo]=Trim(rez->FieldByName("prma")->Value);}
-        if (!rez->FieldByName("gopr")->Value.IsNull()){SG->Cells[4][rez->RecNo]=Trim(rez->FieldByName("gopr")->Value);}
-        rez->Next();
-        }
-    delete rez;rez=0;
+	if (rez->RecordCount) {SG->RowCount=rez->RecordCount*3+1;} else {SG->RowCount=2;}
+	while (!rez->Eof)
+		{
+		if (!rez->FieldByName("obd")->Value.IsNull()){SG->Cells[0][rez->RecNo*3-2]=VinToGost(rez->FieldByName("obd")->Value);}
+		if (!rez->FieldByName("nama")->Value.IsNull()){SG->Cells[1][rez->RecNo*3-2]=Trim(rez->FieldByName("nama")->Value);}
+		if (!rez->FieldByName("goma")->Value.IsNull()){SG->Cells[2][rez->RecNo*3-2]=Trim(rez->FieldByName("goma")->Value);}
+		if (!rez->FieldByName("prma")->Value.IsNull()){SG->Cells[3][rez->RecNo*3-2]=Trim(rez->FieldByName("prma")->Value);}
+		if (!rez->FieldByName("gopr")->Value.IsNull()){SG->Cells[4][rez->RecNo*3-2]=Trim(rez->FieldByName("gopr")->Value);}
+		if (!rez->FieldByName("nameei")->Value.IsNull()){SG->Cells[5][rez->RecNo*3-2]=Trim(rez->FieldByName("nameei")->Value);}
+			razdel = -1;
+			if (!rez->FieldByName("obd")->Value.IsNull()) razdel = (int)(rez->FieldByName("obd")->Value) / 1000;
+			SQL = "Select `ngrup`, `parent` from sklad.mat_tree where `kb`<="+(String)razdel+" and `ke`>="+(String)razdel+" and `kl`=3";
+			rez2=DB->SendSQL(SQL);
+			if (!rez2->FieldByName("ngrup")->Value.IsNull()){SG->Cells[6][rez->RecNo*3-2]=Trim(rez2->FieldByName("ngrup")->Value);}
+			if (!rez2->FieldByName("parent")->Value.IsNull()) razdel = (int)rez2->FieldByName("parent")->Value;
+
+			SQL = "Select `ngrup`, `parent` from sklad.mat_tree where `key`="+(String)razdel;
+			rez2=DB->SendSQL(SQL);
+			if (!rez2->FieldByName("ngrup")->Value.IsNull()){SG->Cells[6][rez->RecNo*3-1]=Trim(rez2->FieldByName("ngrup")->Value);}
+			if (!rez2->FieldByName("parent")->Value.IsNull()) razdel = (int)rez2->FieldByName("parent")->Value;
+
+			SQL = "Select `ngrup` from sklad.mat_tree where `key`="+(String)razdel;
+			rez2=DB->SendSQL(SQL);
+			if (!rez2->FieldByName("ngrup")->Value.IsNull()){SG->Cells[6][rez->RecNo*3]=Trim(rez2->FieldByName("ngrup")->Value);}
+		rez->Next();
+		}
+	delete rez;rez=0;
     AutoWidthSG(SG);
     }
 
@@ -131,7 +151,7 @@ _name=LE2->Text.Trim();
 _prof=LE3->Text.Trim();
 if (LE1->Text.Trim()!=""||LE2->Text.Trim()!=""||LE3->Text.Trim()!="")
     {
-    SQL="Select a.obd,b.nama,b.goma,b.prma,b.gopr from constructions.det_names a join sklad.materials b on a.id=b.obmid";
+	SQL="Select a.obd,b.nama,b.goma,b.prma,b.gopr,c.nameei from constructions.det_names a join sklad.materials b on a.id=b.obmid join catalogs.dimensionality c on b.eic=c.kodei";
         if (LE1->Text.Trim()!="")
             {
             if (LE1->Text.SubString(1,2).UpperCase()=="NA")

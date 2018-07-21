@@ -134,10 +134,11 @@ void __fastcall TSPEditor::ExportClick        (TObject *Sender)
 }
 void __fastcall TSPEditor::SeveToBaseClick(TObject *Sender)
 {
+//ShowMessage("Спецификация сохранена в базе");FomBaseClick(0);
 if (SaveToBase())
-    {ShowMessage("Спецификация сохранена в базе");FomBaseClick(0);}
-    else
-    {ShowMessage("Неполадки при сохранении спецификации");ShowSP();}
+	{ShowMessage("Спецификация сохранена в базе");FomBaseClick(0);}
+	else
+	{ShowMessage("Неполадки при сохранении спецификации");ShowSP();}
 
 }
 void __fastcall TSPEditor::RemoveClick        (TObject *Sender)
@@ -1777,7 +1778,7 @@ if (Object)
             id=rez->FieldByName("id")->Value;
             }
         delete rez;
-        if (!id||GostToVin(LE1->Text.Trim())==Obu_old /*и не находится в списке исполнений*/)
+		if (!id||GostToVin(LE1->Text.Trim())==Obu_old /*и не находится в списке исполнений*/)
             {//в этом режиме не допускается пересечение с деталями которые уже есть в базе
             if (Action_det!="ins")
                 {
@@ -1812,7 +1813,7 @@ if (Object)
                 }
             //загруженное обозначение изменяетcя
             Object->SetData(Object->Get_ID(),Object->Get_SpRazd(),LE1->Text.Trim(),Object->Get_Name(),Object->Get_SpRazdName());
-            }
+			}
         }
     //возврат обозначения к обозначению из структуры
     LE1->Text=Object->Get_Obd(true);
@@ -2086,22 +2087,22 @@ void            TSPEditor::GetXL    (void)
 {
 //вывод в эксель
 if (!(SPList&&SPList->size()))
-    {
-    ShowMessage("Спецификация пуста");
-    return;
-    }
+	{
+	ShowMessage("Спецификация пуста");
+	return;
+	}
 //получить расположение папки с шаблонами
 AnsiString file="";
 TADOQuery *rez=DB->SendSQL("Select value from administration.settings where property='template'");
 if (rez&&rez->RecordCount)
-    {
+	{
     file=rez->FieldByName("value")->Value.operator UnicodeString()+"sptemplate.xlt";
-    }
+	}
 if (file=="")
-    {
-    ShowMessage("потеряна директория с шаблонами");
-    return;
-    }
+	{
+	ShowMessage("потеряна директория с шаблонами");
+	return;
+	}
 cExcel *to=new cExcel();
 to->Connect();
 to->DisplayAlerts(false);
@@ -2129,106 +2130,113 @@ for (int i=0,j=start;i<SPList->size(); i++,j++)
     if (list==1&&j==start) //ВНИМАНИЕ ЗАПЛАТКА !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         {                  //ВНИМАНИЕ ЗАПЛАТКА !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         j=10;//пустые строчки перед началом печати списка
-        }                  //ВНИМАНИЕ ЗАПЛАТКА !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		}                  //ВНИМАНИЕ ЗАПЛАТКА !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if (ppp!=SPList->operator [](i)->Get_ppp())
         {
         ppp=SPList->operator [](i)->Get_ppp();
         j+=2;
-        to->toCells(j,8,"Переменные данные");
+		to->toCells(j,8,"Переменные данные");
         to->toCells(j,12,"для исполнений:");
         to->GetRange(j,8,j,8).OlePropertySet("HorizontalAlignment",-4152); //право
         to->GetRange(j,12,j,12).OlePropertySet("HorizontalAlignment",-4131);//лево
         to->GetRange(j,8,j,12).OlePropertyGet("Font").OlePropertySet("Bold",true);
-        j++;
+		j++;
         _obu=SPList->operator [](i)->Get_Obu(true);
         to->toCells(j,12,_obu);//сразу пишем обу чтобы не мудрить
         to->GetRange(j,12,j,12).OlePropertyGet("Font").OlePropertySet("Bold",true);
         to->GetRange(j,12,j,12).OlePropertyGet("Font").OlePropertySet("Underline",3);
-        to->GetRange(j,12,j,12).OlePropertySet("HorizontalAlignment",-4108); //центр
+		to->GetRange(j,12,j,12).OlePropertySet("HorizontalAlignment",-4108); //центр
         j++;
         Razd=0;//сброс чтобы разделы прописались с начала
         }
     if (/*ppp&&*/_obu!=SPList->operator [](i)->Get_Obu(true))//проверяет отличия обу (при включеном ppp )
-        {
+		{
         _obu=SPList->operator [](i)->Get_Obu(true);
         j+=2;
         to->toCells(j,12,_obu);//сразу пишем обу чтобы не мудрить
         to->GetRange(j,12,j,12).OlePropertyGet("Font").OlePropertySet("Bold",true);
-        to->GetRange(j,12,j,12).OlePropertyGet("Font").OlePropertySet("Underline",3);
+		to->GetRange(j,12,j,12).OlePropertyGet("Font").OlePropertySet("Underline",3);
         to->GetRange(j,12,j,12).OlePropertySet("HorizontalAlignment",-4108); //центр
         j++;
         }
     if (SPList->operator [](i)->Get_SpRazd()!=Razd)//сравнить раздел записи с текущим разделом
-        {
+		{
         j++;
         Razd=SPList->operator [](i)->Get_SpRazd();
         to->toCells(j,12,SPList->operator [](i)->Get_SpRazdName());
         to->GetRange(j,12,j,12).OlePropertyGet("Font").OlePropertySet("Bold",true);
-        to->GetRange(j,12,j,12).OlePropertySet("HorizontalAlignment",-4108); //центр
+		to->GetRange(j,12,j,12).OlePropertySet("HorizontalAlignment",-4108); //центр
         to->GetRange(j,12,j,12).OlePropertyGet("Font").OlePropertySet("Underline",3);
         j+=2;
         }
 
-    if (j>end)
+	if (j>end)
         {
         to->toCells(nl,11,Object->Get_Obd(true));
         if (list==1)
             {
-            to->toCells(35,11,Object->Get_Name());
+			to->toCells(35,11,Object->Get_Name());
             to->toCells(36,17,list);
             nl=37;
             }else
             {
-            to->toCells(38,19,list);
+			to->toCells(38,19,list);
             }
         end=30;
         list++;
         to->SetActiveSheet(to->GetSheet(list));
-        to->Sheet_Copy(to->GetSheet(list),to->GetSheet(list+1));
+		to->Sheet_Copy(to->GetSheet(list),to->GetSheet(list+1));
         to->Set_Sheet_Name(to->GetSheet(list+1),"Лист"+String(list+1));
         j=start;
         }
      to->toCells(j,4,SPList->operator [](i)->Get_format());//1=4
-     to->toCells(j,5,SPList->operator [](i)->Get_zona());
-     to->toCells(j,7,SPList->operator [](i)->Get_pos());
-     to->toCells(j,8,SPList->operator [](i)->Get_Obd(true)); //обозначение
+	 to->toCells(j,5,SPList->operator [](i)->Get_zona());
+	 to->toCells(j,7,SPList->operator [](i)->Get_pos());
+	 String Obd = SPList->operator [](i)->Get_Obd(true);
+	 to->toCells(j,8,Obd); //обозначение
      String name=SPList->operator [](i)->Get_Name();
-     int cnt=30;       //перенос
+	 int cnt=30;       //перенос
      while (name.Length()>cnt)
         {
         int pos=cnt;
         while (name.operator [](pos)!=' '&&pos>1)
-            {
+			{
             pos--;
             }
         if (pos==1)
             {
-            pos=cnt;
+			pos=cnt;
             }
         to->toCells(j,12,name.SubString(1,pos));
         name.Delete(1,pos);
         j++;
-        }
-     to->toCells(j,12,name);
+		}
+	 to->toCells(j,12,name);
      to->toCells(j,17,SPList->operator [](i)->Get_kol());
      String kod=(String)SPList->operator [](i)->Get_pp();
      while (kod.Length()<2)
-        {
+		{
         kod="0"+kod;
         }
      to->toCells(j,18,kod);
-     to->toCells(j,19,SPList->operator [](i)->Get_prim());
-    }
+	 to->toCells(j,19,SPList->operator [](i)->Get_prim());
+
+	 //Добавление пустой строки
+	 if(SameText(Obd.SubString(Obd.Length()-3, 4), "0-00"))
+	 {
+	 	j++;
+	 }
+	}
 to->toCells(nl,11,Object->Get_Obd(true));
 if (list==1)
     {
-    to->toCells(35,11,Object->Get_Name());
-    to->toCells(36,17,list);
-    nl=37;
-    }else
-    {
-    to->toCells(38,19,list);
-    }
+	to->toCells(35,11,Object->Get_Name());
+	to->toCells(36,17,list);
+	nl=37;
+	}else
+	{
+	to->toCells(38,19,list);
+	}
 to->SetActiveSheet(to->GetFirstSheet());
 to->Sheet_activate();
 to->toCells(36,19,list);

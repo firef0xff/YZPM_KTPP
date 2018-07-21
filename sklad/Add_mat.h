@@ -12,8 +12,11 @@
 #include <ADODB.hpp>
 #include <DB.hpp>
 
+#include "symblos.h"
+
 #include "SQL.h"
 #include "functions.h"
+#include <Menus.hpp>
 //---------------------------------------------------------------------------
 class TMater_add : public TForm
 {
@@ -29,8 +32,10 @@ __published:    // IDE-managed Components
     TLabel *Label2;
     TComboBox *ei_opt;
     TComboBox *ei;
+	TButton *bAddSymbol;
     void __fastcall BitBtn1Click(TObject *Sender);
     void __fastcall ei_optClick(TObject *Sender);
+	void __fastcall bAddSymbolClick(TObject *Sender);
 private:    // User declarations
 cSQL *  const DB;
 const int &LUser;

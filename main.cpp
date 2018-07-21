@@ -7,6 +7,17 @@
 #pragma resource "*.dfm"
 TmForm *mForm;
 
+//Возвращает полный путь к временной папке
+const AnsiString GetFullTempPath() {
+    char chBuffer[MAX_PATH];
+    GetTempPathA(MAX_PATH,chBuffer);
+    AnsiString sTempPath = chBuffer;
+    // если получилось сокращённое имя, получаем полное
+    GetLongPathNameA(sTempPath.c_str(),chBuffer,MAX_PATH);
+    sTempPath =chBuffer;
+    return sTempPath;
+}
+
 __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
 {
 #ifndef NODB
@@ -22,7 +33,7 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
     if(wnd->ModalResult==mrOk)
     {
         Tabs.clear();
-        IcoData=new IconsData(this);
+		IcoData=new IconsData(this);
         LoadIL();
         UserID=wnd->Get_UserID();
         // настройка содержимого
@@ -163,7 +174,11 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
      bool result=InetIsOffline(Flag);
      //освобождение библиотеки
      FreeLibrary(LibHeader);
-     */
+	 */
+
+	 //Создание каталога для временных файлов, если его нет
+	 String pathToTemp = GetFullTempPath() + "yzpmktpp\\";
+	 CreateDirectory(pathToTemp.c_str(), NULL);
 }
 
 __fastcall TmForm::~TmForm(void)
@@ -174,7 +189,19 @@ __fastcall TmForm::~TmForm(void)
     if (selected)
     {
         delete []selected;
-    }
+	}
+
+	//Удаление временных файлов
+	String pathToTemp = GetFullTempPath() + "yzpmktpp\\";
+	TSearchRec sr;
+	if (FindFirst(pathToTemp + "*.*", faAnyFile, sr) == 0)
+	{
+		do
+		{
+			DeleteFile(pathToTemp + sr.Name);
+		}while (FindNext(sr) == 0);
+		FindClose(sr);
+	}
 }
 
 void __fastcall TmForm::FormClose(TObject *Sender, TCloseAction &Action)
@@ -936,7 +963,7 @@ void TmForm::AddResourceUsage(TPageControl *Page)
     tab->ImageIndex=11;
     tab->PageControl=Page; // прикрепление щита
     // создание дерева //прикрепление дерева
-    ResourceUsage=new TResourceUsage(this, tab, UserID, DB,IcoData);
+	ResourceUsage=new TResourceUsage(this, tab, UserID, DB,IcoData);
 
     // регистрация щита и дерева
     t->tab=tab;
@@ -1446,8 +1473,8 @@ void __fastcall TmForm::MailPannelClick(TObject *Sender)
 
 void __fastcall TmForm::N14Click(TObject *Sender)
 {//
-    TSettings* wnd=new TSettings(this,DB,UserID);
-    delete wnd;
+	TSettings* wnd=new TSettings(this,DB,UserID);
+	delete wnd;
 }
 
 void _AddTexTab(const Obd *Det)
@@ -1492,19 +1519,20 @@ void _ShowTree(const Obd *Det)
 {
     if(Det)
     {
-        Obd *tmp=new Obd(*Det);
-        Tab *t=mForm->GetTab(mForm->GetLastTab(0));
-        if(t)
-        {
-            ((ClassConnector *)(((TreeTab *)t)->module))->Load_sel(tmp);
-            return;
-        }
-        else
-        {
-            mForm->AddTree(mForm->LeftPC, tmp, mForm->Info);
-            return;
-        }
-    }
+		Obd *tmp=new Obd(*Det);
+		Tab *t=mForm->GetTab(mForm->GetLastTab(0));
+		if(t)
+		{
+			((ClassConnector *)(((TreeTab *)t)->module))->Load_sel(tmp);
+			return;
+		}
+		else
+		{
+			mForm->AddTree(mForm->LeftPC, tmp, mForm->Info);
+			return;
+		}
+	}
 }
 //временные
 //---------------------------------------------------------------------------
+

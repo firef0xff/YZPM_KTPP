@@ -99,6 +99,12 @@ object FileDisigner: TFileDisigner
       ImageIndex = 0
       OnClick = ClearAllClick
     end
+    object ViewDoc: TToolButton
+      Left = 92
+      Top = 0
+      ImageIndex = 1
+      OnClick = N5Click
+    end
   end
   object OD: TOpenDialog
     Filter = 
@@ -539,6 +545,11 @@ object FileDisigner: TFileDisigner
       Caption = #1054#1095#1080#1089#1090#1080#1090#1100' '#1086#1095#1077#1088#1077#1076#1100
       ImageIndex = 0
       OnClick = ClearAllClick
+    end
+    object N5: TMenuItem
+      Caption = #1055#1088#1086#1089#1084#1086#1090#1088
+      ImageIndex = 1
+      OnClick = N5Click
     end
   end
   object SD: TSaveDialog

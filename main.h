@@ -20,6 +20,7 @@
 #include "material.h"
 #include "zagotovk.h"
 #include "professions.h"
+#include "BomTree.h"
 #include "log.h"
 #include "otchethost.h"
 #include "Settings_wnd.h"

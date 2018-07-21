@@ -14,7 +14,7 @@ __fastcall Tzagotovka::Tzagotovka(TComponent* Owner,cSQL *db,bool ReadOnly,const
 {
 if (srtby==-1)
     {
-    srtby=RG1->ItemIndex;
+	srtby=RG1->ItemIndex;
     }else
     {
     RG1->ItemIndex=srtby;
@@ -42,32 +42,38 @@ catch (...){}
 FillTree();
 if (ReadOnly)
     {
-    BB1->Hide();
+	BB1->Hide();
     }
     String sql="call administration.Get_Rights('"+String(LUser)+"')";
     TADOQuery *rez=DB->SendSQL(sql);
-    bool ZFormEdit=false;
+	bool ZFormEdit=false;
+	bool ZagCodeAdd=false;
     if(rez&&rez->RecordCount)
     {
         for (rez->First(); !rez->Eof; rez->Next())
         {
             const String val=rez->FieldByName("progname")->Value;
-            if (val=="ZFormEdit")
-            {
-                ZFormEdit=true;
-                break;
-            }
+			if (val=="ZFormEdit")
+			{
+				ZFormEdit=true;
+			}
+
+			if (val=="ZagCodeAdd")
+			{
+				ZagCodeAdd=true;
+			}
         }
     }
     delete rez;
-    Button1->Visible=ZFormEdit;
+	Button1->Visible=ZFormEdit;
+	bAddZag->Visible=ZagCodeAdd;
 }
 void             Tzagotovka::FillTree(void)
 {
 TV->Items->Clear();
 String sql;
 switch (RG1->ItemIndex)
-    {
+	{
     case 0: {sql="select kod,name from billets.vz_tree where parent=0 order by name"; break;}
     case 1: {sql="select vz_grp_id as kod,name from billets.vz_groups order by name"; break;}
     default: sql="select kod,name from billets.vz_tree where parent=0 order by name";
@@ -218,3 +224,18 @@ TFomul_Editor *wnd=new TFomul_Editor(this,DB,E1->Text.Trim());
 wnd->ShowModal();
 delete wnd;
 }
+
+
+void __fastcall Tzagotovka::bAddZagClick(TObject *Sender)
+{
+	if ((TV->Selected) && (TV->Selected->Data) && (RG1->ItemIndex == 0))
+	{
+		TFormAddZagCode *wnd=new TFormAddZagCode(this, DB, (int)TV->Selected->Data);
+		wnd->ShowModal();
+
+		if(wnd->ModalResult==mrOk) FillTree(); //обновление данных дерева
+		delete wnd;
+	}
+}
+//---------------------------------------------------------------------------
+

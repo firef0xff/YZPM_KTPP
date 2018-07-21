@@ -66,7 +66,7 @@ object zagotovka: Tzagotovka
       object BB1: TBitBtn
         Left = 6
         Top = 7
-        Width = 107
+        Width = 147
         Height = 22
         Caption = #1042' '#1090#1077#1093#1085#1086#1083#1086#1075#1080#1102
         Default = True
@@ -95,9 +95,9 @@ object zagotovka: Tzagotovka
         OnClick = BB1Click
       end
       object BitBtn1: TBitBtn
-        Left = 78
+        Left = 6
         Top = 242
-        Width = 75
+        Width = 147
         Height = 25
         Anchors = [akLeft, akBottom]
         Caption = #1056#1072#1089#1089#1095#1080#1090#1072#1090#1100
@@ -154,6 +154,15 @@ object zagotovka: Tzagotovka
         EditLabel.Caption = #1053#1086#1088#1084#1072' '#1088#1072#1089#1093#1086#1076#1072
         TabOrder = 6
       end
+    end
+    object bAddZag: TButton
+      Left = 6
+      Top = 274
+      Width = 147
+      Height = 25
+      Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+      TabOrder = 2
+      OnClick = bAddZagClick
     end
   end
   object Panel1: TPanel
@@ -224,5 +233,9 @@ object zagotovka: Tzagotovka
       OnDblClick = TVDblClick
       OnExpanding = TVExpanding
     end
+  end
+  object SQLTable1: TSQLTable
+    Left = 216
+    Top = 40
   end
 end

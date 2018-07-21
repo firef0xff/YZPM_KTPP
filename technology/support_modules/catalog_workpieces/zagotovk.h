@@ -15,6 +15,9 @@
 #include <Buttons.hpp>
 
 #include "redaktor_formul.h"
+#include "FormAddZag.h"
+#include <FMTBcd.hpp>
+#include <SqlExpr.hpp>
 //---------------------------------------------------------------------------
 class Tzagotovka : public TForm
 {
@@ -37,6 +40,8 @@ __published:    // IDE-managed Components
     TLabeledEdit *LE1;
     TTreeView *TV;
     TPanel *Panel4;
+	TButton *bAddZag;
+	TSQLTable *SQLTable1;
     void __fastcall TVExpanding(TObject *Sender, TTreeNode *Node, bool &AllowExpansion);
     void __fastcall RG1Click(TObject *Sender);
     void __fastcall TVDblClick(TObject *Sender);
@@ -44,6 +49,7 @@ __published:    // IDE-managed Components
     void __fastcall BitBtn1Click(TObject *Sender);
     void __fastcall CB1Click(TObject *Sender);
     void __fastcall Button1Click(TObject *Sender);
+	void __fastcall bAddZagClick(TObject *Sender);
 
 private:    // User declarations
 cSQL * const DB;

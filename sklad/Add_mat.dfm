@@ -48,7 +48,7 @@ object Mater_add: TMater_add
   object LE1: TLabeledEdit
     Left = 8
     Top = 24
-    Width = 186
+    Width = 165
     Height = 21
     EditLabel.Width = 73
     EditLabel.Height = 13
@@ -134,5 +134,14 @@ object Mater_add: TMater_add
     Height = 21
     Style = csDropDownList
     TabOrder = 7
+  end
+  object bAddSymbol: TButton
+    Left = 172
+    Top = 24
+    Width = 21
+    Height = 21
+    Caption = 'S'
+    TabOrder = 8
+    OnClick = bAddSymbolClick
   end
 end

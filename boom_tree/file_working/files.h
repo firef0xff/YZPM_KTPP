@@ -38,6 +38,8 @@ __published:
     TMenuItem *N3;
     TMenuItem *N4;
     TSaveDialog *SD;
+	TMenuItem *N5;
+	TToolButton *ViewDoc;
     void __fastcall ClearAllClick(TObject *Sender);
     void __fastcall OpenClick(TObject *Sender);
     void __fastcall SGDrawCell(TObject *Sender, int ACol, int ARow, TRect &Rect, TGridDrawState State);
@@ -50,6 +52,7 @@ __published:
     void __fastcall EDKeyPress(TObject *Sender, wchar_t &Key);
     void __fastcall ClearClick(TObject *Sender);
     void __fastcall SGKeyPress(TObject *Sender, wchar_t &Key);
+	void __fastcall N5Click(TObject *Sender);
 
 
 private:    
