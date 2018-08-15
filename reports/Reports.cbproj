@@ -26,12 +26,12 @@
 			<LinkPackageStatics>rtl.lib;vcl.lib;adortl.lib;dbrtl.lib</LinkPackageStatics>
 			<ProjectType>CppDynamicLibrary</ProjectType>
 			<PackageImports>vclimg.bpi;vcl.bpi;vclx.bpi;dbrtl.bpi;Rave90VCL.bpi;bdertl.bpi;rtl.bpi;bcbie.bpi;xmlrtl.bpi;vclactnband.bpi;bcbsmp.bpi;VclSmp.bpi;svnui.bpi;svn.bpi;TeeUI.bpi;TeeDB.bpi;Tee.bpi;vcldb.bpi;vcldbx.bpi;vcltouch.bpi;dsnap.bpi;dsnapcon.bpi;vclib.bpi;ibxpress.bpi;adortl.bpi;IndyCore.bpi;IndySystem.bpi;IndyProtocols.bpi;inet.bpi;intrawebdb_110_150.bpi;Intraweb_110_150.bpi;vclie.bpi;websnap.bpi;webdsnap.bpi;inetdb.bpi;inetdbbde.bpi;inetdbxpress.bpi;soaprtl.bpi;vclribbon.bpi;dbexpress.bpi;DbxCommonDriver.bpi;DataSnapIndy10ServerTransport.bpi;DataSnapProviderClient.bpi;DbxClientDriver.bpi;DataSnapClient.bpi;dbxcds.bpi;DataSnapServer.bpi;AzureCloud.bpi;DBXInterBaseDriver.bpi;DBXMySQLDriver.bpi;DBXFirebirdDriver.bpi;DBXSybaseASEDriver.bpi;DBXSybaseASADriver.bpi;DBXOracleDriver.bpi;DBXMSSQLDriver.bpi;DBXInformixDriver.bpi;DBXDb2Driver.bpi;CodeSiteExpressVcl.bpi;volo.bpi</PackageImports>
-			<IncludePath>E:\mylib\SQL\;E:\mylib\Excel\;F:\mylib\SQL\;..\common\;F:\mylib\Excel\;..\общие функции и классы\;..\..\мои классы\;..\;..\общие функции\;..\..\проекты\файловая база 2\отчетность\;$(IncludePath)</IncludePath>
+			<IncludePath>..\..\mylib\SQL\;..\..\mylib\Excel\;E:\mylib\SQL\;E:\mylib\Excel\;F:\mylib\SQL\;..\common\;F:\mylib\Excel\;..\общие функции и классы\;..\..\мои классы\;..\;..\общие функции\;..\..\проекты\файловая база 2\отчетность\;$(IncludePath)</IncludePath>
 			<ILINK_GenerateImportLibrary>true</ILINK_GenerateImportLibrary>
 			<_TCHARMapping>wchar_t</_TCHARMapping>
 			<Multithreaded>true</Multithreaded>
 			<AllPackageLibs>rtl.lib;vcl.lib;adortl.lib;dbrtl.lib</AllPackageLibs>
-			<ILINK_LibraryPath>E:\mylib\SQL\;E:\mylib\Excel\;F:\mylib\SQL\;..\common\;F:\mylib\Excel\;..\общие функции и классы\;..\..\мои классы\;..\;..\общие функции\;..\..\проекты\файловая база 2\отчетность\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<ILINK_LibraryPath>..\..\mylib\SQL\;..\..\mylib\Excel\;E:\mylib\SQL\;E:\mylib\Excel\;F:\mylib\SQL\;..\common\;F:\mylib\Excel\;..\общие функции и классы\;..\..\мои классы\;..\;..\общие функции\;..\..\проекты\файловая база 2\отчетность\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
 			<DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
 			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE</DCC_UnitAlias>
 			<DynamicRTL>true</DynamicRTL>
@@ -67,12 +67,12 @@
 			<TASM_Debugging>None</TASM_Debugging>
 		</PropertyGroup>
 		<ItemGroup>
-			<CppCompile Include="E:\mylib\Excel\Excel.cpp">
-				<DependentOn>E:\mylib\Excel\Excel.h</DependentOn>
-				<BuildOrder>9</BuildOrder>
+			<CppCompile Include="..\..\mylib\Excel\Excel.cpp">
+				<DependentOn>..\..\mylib\Excel\Excel.h</DependentOn>
+				<BuildOrder>8</BuildOrder>
 			</CppCompile>
-			<CppCompile Include="E:\mylib\SQL\SQL.cpp">
-				<DependentOn>E:\mylib\SQL\SQL.h</DependentOn>
+			<CppCompile Include="..\..\mylib\SQL\SQL.cpp">
+				<DependentOn>..\..\mylib\SQL\SQL.h</DependentOn>
 				<BuildOrder>9</BuildOrder>
 			</CppCompile>
 			<CppCompile Include="..\common\functions.cpp">

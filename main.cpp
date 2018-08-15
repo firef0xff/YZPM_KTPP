@@ -149,9 +149,9 @@ __fastcall TmForm::TmForm(TComponent *Owner):TForm(Owner), UserID(0)
             if(RepInit)
             {
                 RepInit(name, DB);
-                RepStart=(RepStart_func)GetProcAddress(Reports, "_Report");
+				RepStart=(RepStart_func)GetProcAddress(Reports, "_Report");
                 // получаем указатель на функцию
-            }
+			}
         }
     }
     else
@@ -1451,7 +1451,7 @@ void __fastcall TmForm::otchet(TObject *Sender)
             {
                 if(RepStart)
                 {
-                    RepStart(Item->Tag, wnd->LE1->Text.Trim());
+					RepStart(Item->Tag, wnd->LE1->Text.Trim());
                 }
             }
         }

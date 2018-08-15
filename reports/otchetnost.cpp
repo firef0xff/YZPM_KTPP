@@ -26,7 +26,7 @@ cReports::~cReports()
 
 bool cReports::CreateReport(int type, String param)
 {
-    String sql;
+	String sql;
     int modalresult=mrOk;
     TADOQuery *rez=DB->SendSQL
         ("select value from administration.settings where property='template'");
@@ -183,7 +183,7 @@ bool cReports::CreateReport(int type, String param)
         }
         return true;
     }
-    return false;
+	return false;
 }
 
 void cReports::Showlist(TADOQuery *rez)
@@ -214,7 +214,7 @@ void cReports::SQL_To_XL(TADOQuery *rez)
 	int i;
     for(i=0; i<rez->FieldCount; i++)
     {
-        XL->toCells(1, i+1, rez->Fields->operator[](i)->FieldName.Trim());
+		XL->toCells(1, i+1, rez->Fields->operator[](i)->FieldName.Trim());
         XL->Set_format(XL->GetColumn(i+1), "\@");
 	}
     rez->First();
@@ -222,10 +222,10 @@ void cReports::SQL_To_XL(TADOQuery *rez)
     {
         for(i=0; i<rez->FieldCount; i++)
         {
-            XL->toCells(rez->RecNo+1, i+1,
+			XL->toCells(rez->RecNo+1, i+1,
                 Trim(rez->FieldByName(rez->Fields->operator[](i)->FieldName)
-                ->Value));
-        }
+				->Value));
+		}
 		rez->Next();
 	}
 }
@@ -443,7 +443,7 @@ int cReports::AddML(String obd, String name, String name_mat, String prof_mat,
                     kolzag=ceil(double(kol)/rez->FieldByName("kdz")
                         ->Value.operator int());
                 }
-                // запись шапки/
+				// запись шапки/
                 XL->toCells(3, 3, "К М/Л "+IntToStr(mlnumber)+" от "+Date()+" "+
                     VinToGost(obd)+" "+parametr->zak->Text+" "+
                     parametr->part->Text);
@@ -679,9 +679,9 @@ void cReports::ShowDetInside(TADOQuery *rez)
     size_t count=0;
     double kol=0;
     while(!rez->Eof)
-    {
-        String Obd=VinToGost(rez->FieldByName("obd")->Value);
-        if(Obd!=Obd_old)
+	{
+		String Obd=VinToGost(rez->FieldByName("obd")->Value);
+		if(Obd!=Obd_old)
         {
             if (Obd_old!="")
             {
@@ -693,13 +693,13 @@ void cReports::ShowDetInside(TADOQuery *rez)
                 }
                 row++;
             }
-            XL->toCells(row, 1, Obd);
-            Obd_old=Obd;
+			XL->toCells(row, 1, Obd);
+			Obd_old=Obd;
             kol=0;
             count=1;
             if(!rez->FieldByName("namd")->Value.IsNull())
             {
-                XL->toCells(row, 2, Trim(rez->FieldByName("namd")->Value));
+				XL->toCells(row, 2, Trim(rez->FieldByName("namd")->Value));
             }
         }else
         {
@@ -707,7 +707,7 @@ void cReports::ShowDetInside(TADOQuery *rez)
         }
         kol+=(double)rez->FieldByName("kol")->Value;
         XL->toCells(row, 3, Trim(rez->FieldByName("kol")->Value));
-        XL->toCells(row, 4, VinToGost(rez->FieldByName("obu")->Value));
+		XL->toCells(row, 4, VinToGost(rez->FieldByName("obu")->Value));
         row++ ;
         rez->Next();
     }
@@ -806,8 +806,8 @@ void cReports::SostIzd(TADOQuery *rez, int &row, int lvl, String obd)
         if(Trim(rez->FieldByName("obu")->Value)==obd&&Trim
             (rez->FieldByName("lvl")->Value)==lvl)
         {
-            XL->toCells(row, 1,
-                tab+Trim(VinToGost(rez->FieldByName("obd")->Value)));
+			XL->toCells(row, 1,
+				tab+Trim(VinToGost(rez->FieldByName("obd")->Value)));
             if(!rez->FieldByName("namd")->Value.IsNull())
             {
                 XL->toCells(row, 2, Trim(rez->FieldByName("namd")->Value));
@@ -1038,7 +1038,7 @@ void cReports::Texnologic(String obd)
     XL->DisplayAlerts(false);
     XL->SetActiveBooks(XL->Books_Open(file));
     // Инициализация переменных указателей на итемы екселя
-    XL->SetActiveBook(XL->GetFirstBook());
+	XL->SetActiveBook(XL->GetFirstBook());
     XL->SetActiveSheets(XL->GetSheets());
     XL->SetActiveSheet(XL->GetFirstSheet());
     // переработака кода...

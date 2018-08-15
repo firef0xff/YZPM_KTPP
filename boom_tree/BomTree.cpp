@@ -1040,3 +1040,17 @@ void __fastcall TSpTree::TreeClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TSpTree::N30Click(TObject *Sender)
+{
+	TTreeView *tv=Tree;
+	if( tv && tv->Selected )
+	{
+		Obd *data=(Obd *)tv->Selected->Data;
+		int id = data->Get_ID();
+		TLocationForm *wnd = new TLocationForm( this, id, DB );
+		wnd->ShowModal();
+		delete wnd;
+	}
+}
+//---------------------------------------------------------------------------
+

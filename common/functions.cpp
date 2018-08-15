@@ -429,3 +429,14 @@ void    WordWrap        (std::list<std::string> &out,std::string in,const size_t
         }
     }
 }
+
+//Возвращает полный путь к временной папке
+const AnsiString GetFullTempPath() {
+    char chBuffer[MAX_PATH];
+    GetTempPathA(MAX_PATH,chBuffer);
+    AnsiString sTempPath = chBuffer;
+    // если получилось сокращённое имя, получаем полное
+    GetLongPathNameA(sTempPath.c_str(),chBuffer,MAX_PATH);
+    sTempPath =chBuffer;
+    return sTempPath;
+}

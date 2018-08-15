@@ -26,6 +26,7 @@
 #include "Settings_wnd.h"
 #include <Graphics.hpp>
 #include <Buttons.hpp>
+#include <functions.h>
 
 class TmForm : public TForm
 {

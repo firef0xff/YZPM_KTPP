@@ -33,36 +33,47 @@ __fastcall TLocationForm::TLocationForm(TComponent* Owner, int id,cSQL *db)
 
 void __fastcall TLocationForm::_bChangeLocationClick(TObject *Sender)
 {
-	if (_eLocationCab->Text == "") {
+	bool err = false;
+	if (_eLocationCab->Text == "")
+	{
 		_eLocationCab->Color = clRed;
+		err = true;
 	}
 	else
 	{
 		_eLocationCab->Color = clWindow;
-		if (_eLocationStack->Text == "") {
-			_eLocationStack->Color = clRed;
-		}
-		else
-		{
-			_eLocationStack->Color = clWindow;
-			if (_eLocationRack->Text == "") {
-			_eLocationRack->Color = clRed;
-			}
-			else
-			{
-				_eLocationRack->Color = clWindow;
-				SQL="Select `id` from constructions.location where `id`="+(String)_id;
-				TADOQuery *rez=DB->SendSQL(SQL);
-				if (!rez->FieldByName("id")->Value.IsNull())
-				{//если в базе уже есть такой
-					SQL="delete from constructions.location where `id`="+(String)_id;
-					rez=DB->SendSQL(SQL);
-				}
-				SQL="insert into constructions.location (id,cab,stack,rack) select "+(String)_id+","+(String)_eLocationCab->Text+","+(String)_eLocationStack->Text+","+(String)_eLocationRack->Text;
-				rez=DB->SendSQL(SQL);
-				_bChangeLocation->Caption = "Редактировать (Успешно)";
-			}
-		}
-    }
+	}
+	if (_eLocationStack->Text == "")
+	{
+		_eLocationStack->Color = clRed;
+		err = true;
+	}
+	else
+	{
+		_eLocationStack->Color = clWindow;
+	}
+	if (_eLocationRack->Text == "")
+	{
+		_eLocationRack->Color = clRed;
+		err = true;
+	}
+	else
+	{
+		_eLocationRack->Color = clWindow;
+	}
+
+	if( err )
+		return;
+
+	SQL = "Select `id` from constructions.location where `id`="+(String)_id;
+	TADOQuery *rez=DB->SendSQL(SQL);
+	if( !rez->FieldByName("id")->Value.IsNull() )
+	{//если в базе уже есть такой
+		SQL="delete from constructions.location where `id`="+(String)_id;
+		rez=DB->SendSQL(SQL);
+	}
+	SQL="insert into constructions.location (id,cab,stack,rack) select "+(String)_id+","+(String)_eLocationCab->Text+","+(String)_eLocationStack->Text+","+(String)_eLocationRack->Text;
+	rez=DB->SendSQL(SQL);
+	_bChangeLocation->Caption = "Редактировать (Успешно)";
 }
 //---------------------------------------------------------------------------

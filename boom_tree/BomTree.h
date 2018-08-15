@@ -17,6 +17,7 @@
 #include "Conditions.h"
 #include "files.h"
 #include "SPEdit.h"
+#include "Location.h"
 typedef void (*Tech)(Obd *Det);
 class TSpTree : public TFrame,public ClassConnector
 {
@@ -58,6 +59,7 @@ __published:
     TMenuItem *N27;
     TMenuItem *N28;
     TMenuItem *N29;
+	TMenuItem *N30;
     void __fastcall TreeExpanding(TObject *Sender, TTreeNode *Node, bool &AllowExpansion);
     void __fastcall TreeMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);
@@ -87,6 +89,7 @@ __published:
           TCustomDrawState State, TCustomDrawStage Stage, bool &PaintImages,
           bool &DefaultDraw);
     void __fastcall TreeClick(TObject *Sender);
+	void __fastcall N30Click(TObject *Sender);
 private:    
     void  Init        (void);
     

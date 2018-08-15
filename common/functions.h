@@ -66,4 +66,6 @@ class Transaction
 
 void    WordWrap        (std::list<std::string> &out,std::string in,const size_t max_len, std::string delimeter);
 
+const AnsiString GetFullTempPath(void);
+
 #endif

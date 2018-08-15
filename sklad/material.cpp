@@ -103,6 +103,7 @@ SQL=SQL+" limit "+IntToStr(E2->Text.ToInt()*E3->Text.ToInt()-E3->Text.ToInt())+"
 TADOQuery *rez=DB->SendSQL(SQL);
 int razdel;
 TADOQuery *rez2;
+String SQL2;
 if (rez)
     {
     SGClear(SG,0);
@@ -117,18 +118,18 @@ if (rez)
 		if (!rez->FieldByName("nameei")->Value.IsNull()){SG->Cells[5][rez->RecNo*3-2]=Trim(rez->FieldByName("nameei")->Value);}
 			razdel = -1;
 			if (!rez->FieldByName("obd")->Value.IsNull()) razdel = (int)(rez->FieldByName("obd")->Value) / 1000;
-			SQL = "Select `ngrup`, `parent` from sklad.mat_tree where `kb`<="+(String)razdel+" and `ke`>="+(String)razdel+" and `kl`=3";
-			rez2=DB->SendSQL(SQL);
+			SQL2 = "Select `ngrup`, `parent` from sklad.mat_tree where `kb`<="+(String)razdel+" and `ke`>="+(String)razdel+" and `kl`=3";
+			rez2=DB->SendSQL(SQL2);
 			if (!rez2->FieldByName("ngrup")->Value.IsNull()){SG->Cells[6][rez->RecNo*3-2]=Trim(rez2->FieldByName("ngrup")->Value);}
 			if (!rez2->FieldByName("parent")->Value.IsNull()) razdel = (int)rez2->FieldByName("parent")->Value;
 
-			SQL = "Select `ngrup`, `parent` from sklad.mat_tree where `key`="+(String)razdel;
-			rez2=DB->SendSQL(SQL);
+			SQL2 = "Select `ngrup`, `parent` from sklad.mat_tree where `key`="+(String)razdel;
+			rez2=DB->SendSQL(SQL2);
 			if (!rez2->FieldByName("ngrup")->Value.IsNull()){SG->Cells[6][rez->RecNo*3-1]=Trim(rez2->FieldByName("ngrup")->Value);}
 			if (!rez2->FieldByName("parent")->Value.IsNull()) razdel = (int)rez2->FieldByName("parent")->Value;
 
-			SQL = "Select `ngrup` from sklad.mat_tree where `key`="+(String)razdel;
-			rez2=DB->SendSQL(SQL);
+			SQL2 = "Select `ngrup` from sklad.mat_tree where `key`="+(String)razdel;
+			rez2=DB->SendSQL(SQL2);
 			if (!rez2->FieldByName("ngrup")->Value.IsNull()){SG->Cells[6][rez->RecNo*3]=Trim(rez2->FieldByName("ngrup")->Value);}
 		rez->Next();
 		}
