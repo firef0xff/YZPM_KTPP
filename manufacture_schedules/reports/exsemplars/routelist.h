@@ -26,7 +26,12 @@ private:
     //объект построения отчета
     std::string object;
     std::string element;
-    std::string type;
+	std::string type;
+
+	std::string date_from;
+	std::string date_to;
+	std::string ceh;
+	std::string utch;
 
     //шаблоны
     std::string template_path;//путь к файлу шаблона

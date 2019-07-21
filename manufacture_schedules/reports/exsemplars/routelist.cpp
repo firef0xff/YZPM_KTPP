@@ -11,7 +11,12 @@ RouteList::RouteList (int set): rep::Report("Маршрутные листы",se
 {
     params[REPORT_PATH];
     params[REPORT_LIST_COUNT] = "10";
-    params[REPORT_USE_LISTING] = REP_TRUE;
+	params[REPORT_USE_LISTING] = REP_TRUE;
+
+	params["Цех"];
+	params["Участок"];
+	params["Начало периода"];
+	params["Окончание периода"];
 }
 RouteList::~RouteList()
 {}
@@ -58,6 +63,27 @@ void RouteList::ParseParams(void)
     type   = params[REPORT_OBJECT_TYPE];
     element = params[REPORT_ELEMENT_ID];
 
+
+	date_from = params["Начало периода"];
+	date_to = params["Окончание периода"];
+
+	if( !date_from.empty() || !date_to.empty() )
+	{
+		try
+		{
+			TDateTime(date_to.c_str());
+			TDateTime(date_from.c_str());
+			type = "0";
+		}
+		catch (...)
+		{
+			throw std::runtime_error("Неверный формат даты. Нужно указать дату начала и дату окончания периода");
+		}
+	}
+
+	ceh = params["Цех"];
+	utch = params["Участок"];
+
     if (object.empty())
         throw std::runtime_error("Не указан объект для построения отчета");
     if (type.empty())
@@ -85,8 +111,8 @@ void RouteList::BuildReport()
     std::stringstream sql;
     sql << "select a.part_id, a.det_id, a.list_no, b.part_no, c.zakaz from manufacture.marsh_lists a "
         << "join manufacture.parts b on a.part_id = b.part_id "
-        << "join manufacture.zakaz_list c on b.zak_id = c.zak_id "
-        << "join manufacture.det_names d on d.det_id = a.det_id ";
+		<< "join manufacture.zakaz_list c on b.zak_id = c.zak_id "
+		<< "join manufacture.det_names d on d.det_id = a.det_id ";
     if (type == "1")
     {//запуск
         sql << "where b.zap_id = '"<< object <<"'";
@@ -102,9 +128,17 @@ void RouteList::BuildReport()
     else if (type == "8")
 	{//продукт
         sql << "where a.det_id = '"<< object <<"'";
-    }
-    else
-        throw std::runtime_error("Не известный тип объекта");
+	}
+	else if ( type == "0")
+	{
+		sql <<" join manufacture.operation_list e on e.det_id = a.det_id and e.cex = '"<< ceh << "' and e.utch = '"<< utch <<"' ";
+		sql << "where b.in_work <='"<<AnsiString(TDateTime(date_to.c_str()).FormatString("yyyy-mm-dd")).c_str()<<
+		"' and b.in_work >='"<<AnsiString(TDateTime(date_from.c_str()).FormatString("yyyy-mm-dd")).c_str()<<"' ";
+		sql << "group by d.obd, a.list_no ";
+	}
+	else
+		throw std::runtime_error("Не известный тип объекта");
+
     sql << "order by d.obd, a.list_no ";
     TADOQuery *rez = DB->SendSQL(sql.str().c_str());
 	if (rez)
