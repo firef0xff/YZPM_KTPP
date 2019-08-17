@@ -790,9 +790,9 @@ private:
         std::stringstream sql;
         sql <<
                "insert into `manufacture`.`equipment_load_tmp` (cex_name, utch_name, cex, utch, obo_group, zakaz_no, part_no, oboid, plan, deficit, ksm) "
-               "select "
-               "g1.npodr     as cex_name, "
-               "g2.npodr     as utch_name, "
+			   "select "
+			   "IFNULL(g1.npodr, 'Н/а цех' )     as cex_name, "
+			   "IFNULL(g2.npodr, 'Н/а участок' )     as utch_name, "
                "c.cex        as cex, "
                "c.utch       as utch, "
                "IFNULL(f.name, 'Неизвестная группа')       as obo_group, "
@@ -867,8 +867,8 @@ private:
         sql <<
                "insert into `manufacture`.`equipment_load_tmp` (cex_name, utch_name, cex, utch, obo_group, zakaz_no, part_no, oboid, plan, deficit, ksm) "
                "select "
-               "g1.npodr     as cex_name, "
-               "g2.npodr     as utch_name, "
+			   "IFNULL(g1.npodr, 'Н/а цех' )     as cex_name, "
+			   "IFNULL(g2.npodr, 'Н/а участок' )     as utch_name, "
                "c.cex        as cex, "
                "c.utch       as utch, "
                "IFNULL(f.name, 'Неизвестная группа')       as obo_group, "
