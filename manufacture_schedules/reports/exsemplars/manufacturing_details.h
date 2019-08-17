@@ -1,5 +1,5 @@
-﻿#ifndef MANUFACTURING_DETAILS_H
-#define MANUFACTURING_DETAILS_H
+﻿#ifndef manufacturing_detailsH
+#define manufacturing_detailsH
 
 #include <reports/report.h>
 #include "functions.h"

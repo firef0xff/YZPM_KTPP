@@ -1,5 +1,5 @@
-#ifndef MAKING_DETAILS_H
-#define MAKING_DETAILS_H
+﻿#ifndef making_detailsH
+#define making_detailsH
 
 #include <reports/report.h>
 

@@ -1,5 +1,5 @@
-﻿#ifndef REP16_H
-#define REP16_H
+﻿#ifndef rep16H
+#define rep16H
 #include <reports/report.h>
 #include <xl_operations.h>
 #include "functions.h"

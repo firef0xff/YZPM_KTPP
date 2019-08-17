@@ -1,5 +1,5 @@
-#ifndef LABLE_H
-#define LABLE_H
+﻿#ifndef labelH
+#define labelH
 #include <reports/report.h>
 
 namespace rep

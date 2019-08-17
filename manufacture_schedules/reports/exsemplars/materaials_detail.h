@@ -1,5 +1,5 @@
-#ifndef MATERAIALS_DETAIL_H
-#define MATERAIALS_DETAIL_H
+﻿#ifndef materaials_detailH
+#define materaials_detailH
 
 #include <reports/report.h>
 #include "functions.h"

@@ -1,5 +1,5 @@
-#ifndef TRUD_REPORT_H
-#define TRUD_REPORT_H
+﻿#ifndef trud_reportH
+#define trud_reportH
 
 #include <reports/report.h>
 

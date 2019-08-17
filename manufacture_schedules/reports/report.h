@@ -1,5 +1,5 @@
-#ifndef REPORT_H
-#define REPORT_H
+#ifndef reportH
+#define reportH
 #include <string>
 #include <map>
 #include <set>

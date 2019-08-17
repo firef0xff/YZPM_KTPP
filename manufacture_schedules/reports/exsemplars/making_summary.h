@@ -1,5 +1,5 @@
-#ifndef MAKING_SUMMARY_H
-#define MAKING_SUMMARY_H
+﻿#ifndef making_summaryH
+#define making_summaryH
 
 #include <reports/report.h>
 

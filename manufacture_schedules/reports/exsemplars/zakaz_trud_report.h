@@ -1,5 +1,5 @@
-#ifndef ZAKAZ_TRUD_REPORT_H
-#define ZAKAZ_TRUD_REPORT_H
+﻿#ifndef zakaz_trud_reportH
+#define zakaz_trud_reportH
 
 #include <reports/report.h>
 

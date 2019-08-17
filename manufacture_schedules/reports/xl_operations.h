@@ -1,5 +1,5 @@
-#ifndef XL_OPERATIONS_H
-#define XL_OPERATIONS_H
+#ifndef xl_operationsH
+#define xl_operationsH
 #include <string>
 #include "sstream.h"
 #include "Excel.h"

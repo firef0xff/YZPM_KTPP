@@ -1,5 +1,5 @@
-#ifndef SINGLE_APPLICATION_H
-#define SINGLE_APPLICATION_H
+﻿#ifndef single_applicationH
+#define single_applicationH
 
 #include <reports/report.h>
 #include "functions.h"

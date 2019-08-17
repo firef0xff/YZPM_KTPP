@@ -266,93 +266,51 @@
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\complects.cpp">
 				<BuildOrder>103</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\complects.h">
-				<BuildOrder>104</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\f_140003.cpp">
 				<BuildOrder>82</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\f_140003.h">
-				<BuildOrder>83</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\f_140005.cpp">
 				<BuildOrder>78</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\f_140005.h">
-				<BuildOrder>79</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\label.cpp">
 				<BuildOrder>76</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\label.h">
-				<BuildOrder>77</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\making_details.cpp">
 				<BuildOrder>92</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\making_details.h">
-				<BuildOrder>93</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\making_summary.cpp">
 				<BuildOrder>94</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\making_summary.h">
-				<BuildOrder>95</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\manufacturing_details.cpp">
 				<BuildOrder>107</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\manufacturing_details.h">
-				<BuildOrder>108</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\materaials_detail.cpp">
 				<BuildOrder>86</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\materaials_detail.h">
-				<BuildOrder>87</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\rep16.cpp">
 				<BuildOrder>115</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\rep16.h">
-				<BuildOrder>116</BuildOrder>
-			</None>
+			<CppCompile Include="manufacture_schedules\reports\exsemplars\rep17.cpp">
+				<BuildOrder>117</BuildOrder>
+			</CppCompile>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\routelist.cpp">
 				<BuildOrder>72</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\routelist.h">
-				<BuildOrder>73</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\single_application.cpp">
 				<BuildOrder>84</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\single_application.h">
-				<BuildOrder>85</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\statements_set.cpp">
 				<BuildOrder>105</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\statements_set.h">
-				<BuildOrder>106</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\trud_report.cpp">
 				<BuildOrder>88</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\trud_report.h">
-				<BuildOrder>89</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\y09102.cpp">
 				<BuildOrder>80</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\y09102.h">
-				<BuildOrder>81</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\exsemplars\zakaz_trud_report.cpp">
 				<BuildOrder>90</BuildOrder>
 			</CppCompile>
-			<None Include="manufacture_schedules\reports\exsemplars\zakaz_trud_report.h">
-				<BuildOrder>91</BuildOrder>
-			</None>
 			<CppCompile Include="manufacture_schedules\reports\report.cpp">
 				<BuildOrder>70</BuildOrder>
 			</CppCompile>
@@ -553,15 +511,15 @@
 			<ResFiles Include="yzpmktpp.res">
 				<BuildOrder>1</BuildOrder>
 			</ResFiles>
+			<FormResources Include="manufacture_schedules\surcharge\surcharge_list.dfm"/>
 			<FormResources Include="manufacture_schedules\workers.dfm"/>
 			<FormResources Include="manufacture_schedules\ZakazCreator.dfm"/>
-			<FormResources Include="manufacture_schedules\ZapCreator.dfm"/>
-			<FormResources Include="manufacture_schedules\surcharge\surcharge_list.dfm"/>
 			<FormResources Include="manufacture_schedules\report_params.dfm"/>
+			<FormResources Include="orders_editor\OrderContent_set.dfm"/>
 			<FormResources Include="orders_editor\Orders.dfm"/>
 			<FormResources Include="orders_editor\Order_set.dfm"/>
+			<FormResources Include="manufacture_schedules\ZapCreator.dfm"/>
 			<FormResources Include="prepare_products_list\Izd_Unroll.dfm"/>
-			<FormResources Include="orders_editor\OrderContent_set.dfm"/>
 			<FormResources Include="technology\support_modules\catalog_workpieces\redaktor_formul.dfm"/>
 			<FormResources Include="technology\support_modules\catalog_workpieces\zagotovk.dfm"/>
 			<FormResources Include="technology\support_modules\instrument.dfm"/>
@@ -596,19 +554,19 @@
 			<FormResources Include="boom_tree\contents\selector.dfm"/>
 			<FormResources Include="boom_editor\sp_params.dfm"/>
 			<FormResources Include="boom_tree\BomTree.dfm"/>
-			<FormResources Include="Login\Settings_wnd.dfm"/>
+			<FormResources Include="Login\dialogs\NextStateSelector.dfm"/>
 			<FormResources Include="main.dfm"/>
 			<FormResources Include="manufacture_schedules\Calck\add_data_wnd.dfm"/>
-			<FormResources Include="Login\loginwin.dfm"/>
-			<FormResources Include="Login\dialogs\NextStateSelector.dfm"/>
+			<FormResources Include="manufacture_schedules\Calck\Usage.dfm"/>
+			<FormResources Include="Login\Settings_wnd.dfm"/>
 			<FormResources Include="Login\dialogs\RightSelect.dfm"/>
 			<FormResources Include="Login\dialogs\User_Data.dfm"/>
-			<FormResources Include="manufacture_schedules\manufacture.dfm"/>
+			<FormResources Include="Login\loginwin.dfm"/>
 			<FormResources Include="manufacture_schedules\ReportBuilder.dfm"/>
-			<FormResources Include="manufacture_schedules\IzdAppender.dfm"/>
-			<FormResources Include="manufacture_schedules\Calck\Usage.dfm"/>
+			<FormResources Include="manufacture_schedules\manufacture.dfm"/>
 			<FormResources Include="manufacture_schedules\EditWorkerData.dfm"/>
 			<FormResources Include="manufacture_schedules\EditWorkerGroup.dfm"/>
+			<FormResources Include="manufacture_schedules\IzdAppender.dfm"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>

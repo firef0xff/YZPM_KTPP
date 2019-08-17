@@ -1,5 +1,5 @@
-﻿#ifndef COMPLECTS_H
-#define COMPLECTS_H
+﻿#ifndef complectsH
+#define complectsH
 #include <reports/report.h>
 #include "functions.h"
 #include <xl_operations.h>
