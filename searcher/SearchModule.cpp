@@ -646,18 +646,17 @@ void __fastcall  TSearch::TreeClick(TObject *Sender)
 void __fastcall TSearch::N3Click(TObject *Sender)
 {
 	TTreeView *tv=(TTreeView *)Sender;
-	if (MainTree->Focused()) {tv=MainTree;}
-	if (SupportTree->Focused()) {tv=SupportTree;}
-	if (tv)
+	if( MainTree->Focused() )
+		tv = MainTree;
+	if( SupportTree->Focused() )
+		tv = SupportTree;
+	if( tv && tv->Selected )
 	{
-		if (tv->Selected)
-		{
-			Obd *data=(Obd *)tv->Selected->Data;
-			int id = data->Get_ID();
-			TLocationForm *wnd=new TLocationForm(this, id, DB);
-			wnd->ShowModal();
-			delete wnd;
-		}
+		Obd *data=(Obd *)tv->Selected->Data;
+		int id = data->Get_ID();
+		TLocationForm *wnd = new TLocationForm( this, id, DB );
+		wnd->ShowModal();
+		delete wnd;
 	}
 }
 //---------------------------------------------------------------------------

@@ -5,6 +5,7 @@
 
 
 #include "FRowData.h"
+#include <functions.h>
 
 #include <ActnPopup.hpp>
 #include <Classes.hpp>

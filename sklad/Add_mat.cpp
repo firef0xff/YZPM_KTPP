@@ -17,6 +17,9 @@ while (L1->Caption.Length()<15)
 {
     L1->Caption="0"+L1->Caption;
 }
+
+bAddSymbol->Visible = False;
+
 }
 void          TMater_add::Load_support_info(void)
 {

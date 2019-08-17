@@ -191,6 +191,10 @@ object SpTree: TSpTree
       Caption = #1054#1073#1085#1086#1074#1080#1090#1100
       OnClick = N23Click
     end
+    object N30: TMenuItem
+      Caption = #1052#1077#1089#1090#1086#1087#1086#1083#1086#1078#1077#1085#1080#1077
+      OnClick = N30Click
+    end
   end
   object ImageList1: TImageList
     Left = 128

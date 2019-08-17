@@ -26,10 +26,12 @@ __published:	// IDE-managed Components
 	TLabeledEdit *eName;
 	void __fastcall bOkClick(TObject *Sender);
 private:	// User declarations
-cSQL * const DB;
-int pID;
+	cSQL * const DB;
+	String pID;
+	bool editZag;
+	String lastpID;
 public:		// User declarations
-	__fastcall TFormAddZagCode(TComponent* Owner,cSQL *db, int parentID);
+	__fastcall TFormAddZagCode(TComponent* Owner,cSQL *db, String parentID, bool edit);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TFormAddZagCode *FormAddZagCode;

@@ -67,6 +67,8 @@ if (ReadOnly)
     delete rez;
 	Button1->Visible=ZFormEdit;
 	bAddZag->Visible=ZagCodeAdd;
+	bDelZag->Visible=ZagCodeAdd;
+	bEditZag->Visible=ZagCodeAdd;
 }
 void             Tzagotovka::FillTree(void)
 {
@@ -104,7 +106,7 @@ if (rez&&rez->RecordCount)
     {
     for (rez->First(); !rez->Eof; rez->Next())
         {
-        TV->Items->AddChildObject(TV->Items->AddChildObject(Node,Trim(rez->FieldByName("kod")->Value)+"-"+Trim(rez->FieldByName("name")->Value),(void*)(int)rez->FieldByName("kod")->Value),"",0);
+		TV->Items->AddChildObject(TV->Items->AddChildObject(Node,Trim(rez->FieldByName("kod")->Value)+"-"+Trim(rez->FieldByName("name")->Value),(void*)(int)rez->FieldByName("kod")->Value),"",0);
         }
     }
 delete rez; rez=0;
@@ -225,16 +227,64 @@ wnd->ShowModal();
 delete wnd;
 }
 
-
 void __fastcall Tzagotovka::bAddZagClick(TObject *Sender)
 {
-	if ((TV->Selected) && (TV->Selected->Data) && (RG1->ItemIndex == 0))
+	if ((TV->Selected) && (TV->Selected->Data) && (RG1->ItemIndex == 0) && ((int)TV->Selected->Data < 100))
 	{
-		TFormAddZagCode *wnd=new TFormAddZagCode(this, DB, (int)TV->Selected->Data);
+		TFormAddZagCode *wnd=new TFormAddZagCode(this, DB, IntToStr((int)TV->Selected->Data), false);
 		wnd->ShowModal();
 
 		if(wnd->ModalResult==mrOk) FillTree(); //обновление данных дерева
 		delete wnd;
+	}
+}
+
+void __fastcall Tzagotovka::bEditZagClick(TObject *Sender)
+{
+	if ((TV->Selected) && (TV->Selected->Data) && (RG1->ItemIndex == 0))
+	{
+		TFormAddZagCode *wnd=new TFormAddZagCode(this, DB, IntToStr((int)TV->Selected->Data), true);
+		wnd->ShowModal();
+
+		if(wnd->ModalResult==mrOk) FillTree(); //обновление данных дерева
+		delete wnd;
+	}
+}
+
+
+void __fastcall Tzagotovka::bDelZagClick(TObject *Sender)
+{
+	if ((TV->Selected) && (TV->Selected->Data) && (RG1->ItemIndex == 0))
+	{
+		String kod = IntToStr((int)TV->Selected->Data);
+
+		TADOQuery *rez=DB->SendSQL("select count(*) as num from `billets`.`vz_tree` where `parent`='" + kod + "'");
+		if (rez&&rez->RecordCount)
+		{
+			rez->First();
+
+			if(rez->FieldByName("num")->Value == 0)
+			{
+				if(MessageDlg("Вы уверены, что хотите удалить код заготовки: " + kod + "?", mtConfirmation, TMsgDlgButtons()<<mbYes<<mbNo, 0) == mrYes)
+				{
+					if(DB->SendCommand("Delete from `billets`.`vz_tree` where `kod`='" + kod + "'"))
+					{
+						ShowMessage("Код заготовки удален");
+                        FillTree(); //обновление данных дерева
+                    }
+					else
+					{
+						ShowMessage("Не удалось удалить код заготовки");
+					}
+				}
+			}
+			else
+			{
+				ShowMessage("Невозможно удалить код заготовки, так как у него есть вложенные коды");
+			}
+		}
+
+		delete rez;
 	}
 }
 //---------------------------------------------------------------------------

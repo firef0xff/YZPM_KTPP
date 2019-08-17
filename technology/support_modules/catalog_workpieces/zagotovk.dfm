@@ -3,7 +3,7 @@ object zagotovka: Tzagotovka
   Top = 0
   BorderStyle = bsSizeToolWin
   Caption = #1047#1072#1075#1086#1090#1086#1074#1082#1080
-  ClientHeight = 382
+  ClientHeight = 411
   ClientWidth = 536
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,7 +19,7 @@ object zagotovka: Tzagotovka
     Left = 376
     Top = 0
     Width = 160
-    Height = 382
+    Height = 411
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 0
@@ -40,13 +40,13 @@ object zagotovka: Tzagotovka
       Left = 0
       Top = 63
       Width = 160
-      Height = 319
+      Height = 348
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 1
       DesignSize = (
         160
-        319)
+        348)
       object Label1: TLabel
         Left = 6
         Top = 35
@@ -56,7 +56,7 @@ object zagotovka: Tzagotovka
       end
       object Label2: TLabel
         Left = 6
-        Top = 273
+        Top = 302
         Width = 77
         Height = 13
         Anchors = [akLeft, akBottom]
@@ -96,7 +96,7 @@ object zagotovka: Tzagotovka
       end
       object BitBtn1: TBitBtn
         Left = 6
-        Top = 242
+        Top = 271
         Width = 147
         Height = 25
         Anchors = [akLeft, akBottom]
@@ -117,7 +117,7 @@ object zagotovka: Tzagotovka
       end
       object CB1: TComboBox
         Left = 6
-        Top = 292
+        Top = 321
         Width = 145
         Height = 22
         Style = csOwnerDrawFixed
@@ -154,28 +154,49 @@ object zagotovka: Tzagotovka
         EditLabel.Caption = #1053#1086#1088#1084#1072' '#1088#1072#1089#1093#1086#1076#1072
         TabOrder = 6
       end
-    end
-    object bAddZag: TButton
-      Left = 6
-      Top = 274
-      Width = 147
-      Height = 25
-      Caption = #1044#1086#1073#1072#1074#1080#1090#1100
-      TabOrder = 2
-      OnClick = bAddZagClick
+      object bAddZag: TButton
+        Left = 6
+        Top = 209
+        Width = 147
+        Height = 25
+        Anchors = [akLeft, akBottom]
+        Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+        TabOrder = 7
+        OnClick = bAddZagClick
+      end
+      object bEditZag: TButton
+        Left = 6
+        Top = 240
+        Width = 147
+        Height = 25
+        Anchors = [akLeft, akBottom]
+        Caption = #1056#1077#1076#1072#1082#1090#1080#1088#1086#1074#1072#1090#1100
+        TabOrder = 8
+        OnClick = bEditZagClick
+      end
+      object bDelZag: TButton
+        Left = 6
+        Top = 178
+        Width = 147
+        Height = 25
+        Anchors = [akLeft, akBottom]
+        Caption = #1059#1076#1072#1083#1080#1090#1100
+        TabOrder = 9
+        OnClick = bDelZagClick
+      end
     end
   end
   object Panel1: TPanel
     Left = 0
     Top = 0
     Width = 376
-    Height = 382
+    Height = 411
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
     object Splitter1: TSplitter
       Left = 0
-      Top = 227
+      Top = 256
       Width = 376
       Height = 5
       Cursor = crVSplit
@@ -186,7 +207,7 @@ object zagotovka: Tzagotovka
     end
     object Panel3: TPanel
       Left = 0
-      Top = 232
+      Top = 261
       Width = 376
       Height = 150
       Align = alBottom
@@ -225,7 +246,7 @@ object zagotovka: Tzagotovka
       Left = 0
       Top = 0
       Width = 376
-      Height = 227
+      Height = 256
       Align = alClient
       Indent = 19
       ReadOnly = True

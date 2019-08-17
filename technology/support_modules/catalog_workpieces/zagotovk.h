@@ -42,6 +42,8 @@ __published:    // IDE-managed Components
     TPanel *Panel4;
 	TButton *bAddZag;
 	TSQLTable *SQLTable1;
+	TButton *bEditZag;
+	TButton *bDelZag;
     void __fastcall TVExpanding(TObject *Sender, TTreeNode *Node, bool &AllowExpansion);
     void __fastcall RG1Click(TObject *Sender);
     void __fastcall TVDblClick(TObject *Sender);
@@ -50,6 +52,8 @@ __published:    // IDE-managed Components
     void __fastcall CB1Click(TObject *Sender);
     void __fastcall Button1Click(TObject *Sender);
 	void __fastcall bAddZagClick(TObject *Sender);
+	void __fastcall bEditZagClick(TObject *Sender);
+	void __fastcall bDelZagClick(TObject *Sender);
 
 private:    // User declarations
 cSQL * const DB;
