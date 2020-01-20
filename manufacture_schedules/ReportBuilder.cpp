@@ -21,7 +21,7 @@
 #include <reports/exsemplars/statements_set.h>
 #include <reports/exsemplars/manufacturing_details.h>
 #include <reports/exsemplars/rep16.h>
-#include <reports/exsemplars/rep17.h>
+//#include <reports/exsemplars/rep17.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -44,7 +44,7 @@ rep::Complect06    rep13  (STARTUP|ORDER|PART);
 rep::StatementsSet rep14  (STARTUP|ORDER|PART);
 rep::ManufacturingDetails rep15  (STARTUP|ORDER|PART);
 rep::Rep16 rep16  (STARTUP|ORDER|PART);
-rep::Rep17 rep17  (STARTUP|ORDER|PART);
+//rep::Rep17 rep17  (STARTUP|ORDER|PART);
 //fake::FakeReport test_report0(STARTUP|ORDER|PART|PRODUCT);
 
 __fastcall TReports::TReports(TComponent* Owner,cSQL *DB, Reports_set set, __uint64  id, __uint64  sub_id )
